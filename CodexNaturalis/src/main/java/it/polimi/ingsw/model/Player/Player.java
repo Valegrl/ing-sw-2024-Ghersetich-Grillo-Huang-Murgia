@@ -16,13 +16,11 @@ public class Player {
 
 	private boolean online;
 
-	private ObjectiveCard objectiveCard;
-
 	public PlayArea start(StartCard c) {
 		return null;
 	}
 
-	public void chooseToken(List t) {
+	public void chooseToken(List<Token> t) {
 
 	}
 

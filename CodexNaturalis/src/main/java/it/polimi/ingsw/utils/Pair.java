@@ -1,5 +1,5 @@
 package it.polimi.ingsw.utils;
 
-public class Pair {
+public class Pair<C, I> {
 
 }

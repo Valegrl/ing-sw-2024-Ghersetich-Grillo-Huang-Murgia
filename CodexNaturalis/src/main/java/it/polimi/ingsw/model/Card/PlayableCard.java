@@ -8,8 +8,6 @@ public abstract class PlayableCard extends EvaluableCard {
 
 	private boolean hasConstraint;
 
-	private Item item;
-
 	public void flipCard() {
 
 	}

@@ -6,11 +6,9 @@ import it.polimi.ingsw.model.Card.Card;
 
 public class ResourceDeck implements Deck {
 
-	private List deck;
+	private List<ResourceCard> deck;
 
-	private ResourceCard visibleCards;
-
-	private ResourceCard[] resourceCard;
+	private ResourceCard[] visibleCards;
 
 
 	/**

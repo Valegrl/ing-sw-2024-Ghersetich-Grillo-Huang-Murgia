@@ -6,11 +6,9 @@ import it.polimi.ingsw.model.Card.Card;
 
 public class GoldDeck implements Deck {
 
-	private List deck;
+	private List<GoldCard> deck;
 
-	private GoldCard visibleCards;
-
-	private GoldCard[] goldCard;
+	private GoldCard[] visibleCards;
 
 
 	/**

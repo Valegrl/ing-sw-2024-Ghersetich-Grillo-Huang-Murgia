@@ -6,24 +6,17 @@ import it.polimi.ingsw.model.Card.EvaluableCard;
 import it.polimi.ingsw.model.Card.PlayableCard;
 import it.polimi.ingsw.model.Card.Card;
 import it.polimi.ingsw.model.Card.Item;
+import it.polimi.ingsw.utils.Coordinate;
 
 public class PlayArea {
 
-	private List hand;
+	private List<PlayableCard> hand;
 
-	private Map playedCards;
+	private Map<Coordinate, Card> playedCards;
 
-	private Map uncoveredItems;
+	private Map<Item, Integer> uncoveredItems;
 
 	private EvaluableCard selectedCard;
-
-	private PlayableCard[] playableCard;
-
-	private Card[] card;
-
-	private EvaluableCard evaluableCard;
-
-	private Item[] item;
 
 	public void selectCard(Card c) {
 
@@ -41,7 +34,7 @@ public class PlayArea {
 
 	}
 
-	private List newlyCoveredCards() {
+	private List<Coordinate> newlyCoveredCards() {
 		return null;
 	}
 
@@ -49,7 +42,7 @@ public class PlayArea {
 		return null;
 	}
 
-	public List getAvailablePos() {
+	public List<Coordinate> getAvailablePos() {
 		return null;
 	}
 

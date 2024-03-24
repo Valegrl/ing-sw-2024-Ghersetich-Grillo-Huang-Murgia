@@ -18,17 +18,15 @@ public class Game {
 
 	private GoldDeck goldDeck;
 
-	private List players;
+	private List<Player> players;
 
 	private int currTurn;
 
-	private Map scoreboard;
+	private Map<Player, Integer> scoreboard;
 
 	private ObjectiveCard[] commonObjectives;
 
 	private boolean finalPhase;
-
-	private ObjectiveCard[] objectiveCard;
 
 	public void gameSetup() {
 

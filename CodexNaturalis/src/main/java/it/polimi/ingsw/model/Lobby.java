@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Lobby {
 
-	private List joinedPlayers;
+	private List<String> joinedPlayers;
 
 	private int requiredPlayers;
 
