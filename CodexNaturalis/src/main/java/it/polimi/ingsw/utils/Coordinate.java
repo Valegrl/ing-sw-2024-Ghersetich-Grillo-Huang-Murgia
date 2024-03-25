@@ -4,7 +4,6 @@ package it.polimi.ingsw.utils;
  * A class to represent a coordinate in a two-dimensional space.
  */
 public class Coordinate {
-
 	/**
 	 * The x-coordinate.
 	 */
