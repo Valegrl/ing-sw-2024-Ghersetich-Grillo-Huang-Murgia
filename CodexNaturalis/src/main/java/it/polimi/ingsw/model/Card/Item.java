@@ -1,25 +1,65 @@
 package it.polimi.ingsw.model.Card;
 
+/**
+ * An enumeration that represents the game Items.
+ * They can be found in a {@link Card card} corner.
+ */
 public enum Item {
+    /**
+     * The plant kingdom resource.
+     */
+    PLANT("plant"),
 
-    ;
+    /**
+     * The animal kingdom resource.
+     */
+    ANIMAL("animal"),
 
-    public String PLANT;
+    /**
+     * The fungi kingdom resource.
+     */
+    FUNGI("fungi"),
 
-    public String ANIMAL;
+    /**
+     * The insect kingdom resource.
+     */
+    INSECT("insect"),
 
-    public String FUNGI;
+    /**
+     * The quill object.
+     */
+    QUILL("quill"),
 
-    public String INSECT;
+    /**
+     * The inkwell object.
+     */
+    INKWELL("inkwell"),
 
-    public String QUILL;
+    /**
+     * The manuscript object.
+     */
+    MANUSCRIPT("manuscript"),
 
-    public String INKWELL;
+    /**
+     * The empty corner.
+     */
+    EMPTY("empty"),
 
-    public String MANUSCRIPT;
+    /**
+     * The hidden corner.
+     */
+    HIDDEN("hidden");
 
-    public String EMPTY;
+    /**
+     * The type of item that can be found in a {@link Card card} corner.
+     */
+    private final String type;
 
-    public String HIDDEN;
-
+    /**
+     * Constructs a new Item with the given type.
+     * @param type The type of the Item.
+     */
+    private Item(String type) {
+        this.type = type;
+    }
 }
