@@ -27,7 +27,7 @@ public class PlayArea {
         return false;
     }
 
-    public void placeCard(PlayableCard c, int pos) {
+    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
 
     }
 
@@ -39,7 +39,7 @@ public class PlayArea {
         return null;
     }
 
-    public Card getCardByPos(int pos) {
+    public Card getCardByPos(Coordinate pos) {
         return null;
     }
 

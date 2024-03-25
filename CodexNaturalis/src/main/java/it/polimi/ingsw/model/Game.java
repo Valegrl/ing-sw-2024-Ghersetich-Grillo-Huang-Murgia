@@ -38,7 +38,7 @@ public class Game {
 
     }
 
-    public boolean placeCard(PlayableCard c, Coordinate coord, boolean flipped) {
+    public boolean placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
         return false;
     }
 
