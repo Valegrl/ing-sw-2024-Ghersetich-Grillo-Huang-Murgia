@@ -14,7 +14,7 @@ public class Player {
     /**
      * The player's username
      */
-    private String username;
+    private final String username;
 
     /**
      * The player's colored token which can be either red, blue, green or yellow
@@ -72,15 +72,6 @@ public class Player {
      * @param c the startCard that a player selects upon starting the game
      */
     public PlayArea start(StartCard c) {
-
-        /*clone of the paramater c into startCard if needed
-        StartCard startCard = new StartCard();
-        startCard.id = c.getID();
-        startCard.backPermanentResources = c.getBackPermanentResources();
-        startCard.corners = c.getCorners();
-        startCard.backCorners = c.getBackCorners();
-        startCard.flipped = c.isFlipped();
-         */
 
 
         Coordinate coordinate = new Coordinate(0, 0);

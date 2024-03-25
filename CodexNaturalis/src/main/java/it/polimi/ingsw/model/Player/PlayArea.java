@@ -16,11 +16,11 @@ public class PlayArea {
     /**
      *The player's hand contains the cards the player can play
      */
-    private List<PlayableCard> hand;
+    private final List<PlayableCard> hand;
 
-    private Map<Coordinate, Card> playedCards;
+    private final Map<Coordinate, Card> playedCards;
 
-    private Map<Item, Integer> uncoveredItems;
+    private final Map<Item, Integer> uncoveredItems;
 
     private EvaluableCard selectedCard;
 
@@ -33,13 +33,13 @@ public class PlayArea {
         this.playedCards = new HashMap<>();
 
         this.uncoveredItems = new HashMap<>();
-            uncoveredItems.put(Item.PLANT, 0);
-            uncoveredItems.put(Item.ANIMAL, 0);
-            uncoveredItems.put(Item.FUNGI, 0);
-            uncoveredItems.put(Item.INSECT, 0);
-            uncoveredItems.put(Item.QUILL, 0);
-            uncoveredItems.put(Item.INKWELL, 0);
-            uncoveredItems.put(Item.MANUSCRIPT, 0);
+        uncoveredItems.put(Item.PLANT, 0);
+        uncoveredItems.put(Item.ANIMAL, 0);
+        uncoveredItems.put(Item.FUNGI, 0);
+        uncoveredItems.put(Item.INSECT, 0);
+        uncoveredItems.put(Item.QUILL, 0);
+        uncoveredItems.put(Item.INKWELL, 0);
+        uncoveredItems.put(Item.MANUSCRIPT, 0);
 
         this.selectedCard = null;
     }
