@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class ObjectiveCard extends EvaluableCard {
 
-	private List<Pair<Coordinate,Item>> requiredPattern;
+    private List<Pair<Coordinate, Item>> requiredPattern;
 
-	private Map<Item, Integer> requiredItems;
+    private Map<Item, Integer> requiredItems;
 
 }

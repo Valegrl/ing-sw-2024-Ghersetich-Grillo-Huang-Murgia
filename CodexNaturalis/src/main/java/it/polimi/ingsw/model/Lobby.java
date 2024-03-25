@@ -4,20 +4,20 @@ import java.util.List;
 
 public class Lobby {
 
-	private List<String> joinedPlayers;
+    private List<String> joinedPlayers;
 
-	private int requiredPlayers;
+    private int requiredPlayers;
 
-	public boolean addPlayer() {
-		return false;
-	}
+    public boolean addPlayer() {
+        return false;
+    }
 
-	public boolean removePlayer(String p) {
-		return false;
-	}
+    public boolean removePlayer(String p) {
+        return false;
+    }
 
-	public void startGame() {
+    public void startGame() {
 
-	}
+    }
 
 }

@@ -2,8 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Deck.ResourceDeck;
 import it.polimi.ingsw.model.Deck.GoldDeck;
+
 import java.util.List;
 import java.util.Map;
+
 import it.polimi.ingsw.model.Card.ObjectiveCard;
 import it.polimi.ingsw.model.Card.PlayableCard;
 import it.polimi.ingsw.utils.Coordinate;
@@ -12,64 +14,64 @@ import it.polimi.ingsw.model.Player.Player;
 
 public class Game {
 
-	private int id;
+    private int id;
 
-	private ResourceDeck resourceDeck;
+    private ResourceDeck resourceDeck;
 
-	private GoldDeck goldDeck;
+    private GoldDeck goldDeck;
 
-	private List<Player> players;
+    private List<Player> players;
 
-	private int currTurn;
+    private int currTurn;
 
-	private Map<Player, Integer> scoreboard;
+    private Map<Player, Integer> scoreboard;
 
-	private ObjectiveCard[] commonObjectives;
+    private ObjectiveCard[] commonObjectives;
 
-	private boolean finalPhase;
+    private boolean finalPhase;
 
-	public void gameSetup() {
+    public void gameSetup() {
 
-	}
+    }
 
-	public void newTurn() {
+    public void newTurn() {
 
-	}
+    }
 
-	public boolean placeCard(PlayableCard c, Coordinate coord, boolean flipped) {
-		return false;
-	}
+    public boolean placeCard(PlayableCard c, Coordinate coord, boolean flipped) {
+        return false;
+    }
 
-	public boolean drawPlayableCard(boolean chosenDeck, int chosenCard) {
-		return false;
-	}
+    public boolean drawPlayableCard(boolean chosenDeck, int chosenCard) {
+        return false;
+    }
 
-	public void selectCard(EvaluableCard c, Player p) {
+    public void selectCard(EvaluableCard c, Player p) {
 
-	}
+    }
 
-	private void assignPoints(Player p, int points) {
+    private void assignPoints(Player p, int points) {
 
-	}
+    }
 
-	public void offlinePlayer(String p) {
+    public void offlinePlayer(String p) {
 
-	}
+    }
 
-	public void reconnectPlayer(String p) {
+    public void reconnectPlayer(String p) {
 
-	}
+    }
 
-	public void endGame() {
+    public void endGame() {
 
-	}
+    }
 
-	private int calculateObjectives(Player p) {
-		return 0;
-	}
+    private int calculateObjectives(Player p) {
+        return 0;
+    }
 
-	private Player winner() {
-		return null;
-	}
+    private Player winner() {
+        return null;
+    }
 
 }

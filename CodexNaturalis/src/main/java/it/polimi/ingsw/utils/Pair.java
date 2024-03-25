@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * A class to represent a pair of elements.
+ *
  * @param <T> The type of the key.
  * @param <U> The type of the value.
  */
@@ -20,7 +21,8 @@ public class Pair<T, U> {
 
     /**
      * Constructs a new Pair object with the given key and value elements.
-     * @param key The key element of the Pair.
+     *
+     * @param key   The key element of the Pair.
      * @param value The value element of the Pair.
      */
     public Pair(T key, U value) {
@@ -30,6 +32,7 @@ public class Pair<T, U> {
 
     /**
      * Retrieves the key element of this Pair.
+     *
      * @return The key element.
      */
     public T getKey() {
@@ -38,6 +41,7 @@ public class Pair<T, U> {
 
     /**
      * Sets the key element of this Pair.
+     *
      * @param key The new key element to set.
      */
     public void setKey(T key) {
@@ -46,6 +50,7 @@ public class Pair<T, U> {
 
     /**
      * Retrieves the value element of this Pair.
+     *
      * @return The value element.
      */
     public U getValue() {
@@ -54,6 +59,7 @@ public class Pair<T, U> {
 
     /**
      * Sets the value element of this Pair.
+     *
      * @param value The new value element to set.
      */
     public void setValue(U value) {

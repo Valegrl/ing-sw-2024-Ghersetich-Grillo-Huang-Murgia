@@ -4,16 +4,16 @@ import java.util.List;
 
 public class StartCard extends Card {
 
-	private List<Item> backPermanentResources;
+    private List<Item> backPermanentResources;
 
-	private Item[] corners;
+    private Item[] corners;
 
-	private Item[] backCorners;
+    private Item[] backCorners;
 
-	private boolean flipped;
+    private boolean flipped;
 
-	public void flipCard() {
+    public void flipCard() {
 
-	}
+    }
 
 }

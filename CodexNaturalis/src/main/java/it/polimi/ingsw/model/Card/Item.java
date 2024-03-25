@@ -2,24 +2,24 @@ package it.polimi.ingsw.model.Card;
 
 public enum Item {
 
-	;
+    ;
 
-	public String PLANT;
+    public String PLANT;
 
-	public String ANIMAL;
+    public String ANIMAL;
 
-	public String FUNGI;
+    public String FUNGI;
 
-	public String INSECT;
+    public String INSECT;
 
-	public String QUILL;
+    public String QUILL;
 
-	public String INKWELL;
+    public String INKWELL;
 
-	public String MANUSCRIPT;
+    public String MANUSCRIPT;
 
-	public String EMPTY;
+    public String EMPTY;
 
-	public String HIDDEN;
+    public String HIDDEN;
 
 }

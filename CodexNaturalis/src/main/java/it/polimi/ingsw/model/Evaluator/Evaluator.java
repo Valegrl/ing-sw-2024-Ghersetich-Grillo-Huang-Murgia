@@ -4,6 +4,6 @@ import it.polimi.ingsw.model.Player.PlayArea;
 
 public abstract class Evaluator {
 
-	public abstract int calculatePoints(PlayArea playArea);
+    public abstract int calculatePoints(PlayArea playArea);
 
 }
