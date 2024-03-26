@@ -79,7 +79,7 @@ public class Player {
         playArea.getPlayedCards().put(coordinate, c);
 
         if(c.isFlipped()){
-
+        //TODO code the methods for adding the card to PlayArea and adjourn the items
         }
         else{
 

@@ -13,6 +13,8 @@ import it.polimi.ingsw.model.Card.Item;
 import it.polimi.ingsw.utils.Coordinate;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
+import it.polimi.ingsw.model.exceptions.FullHandException;
+
 
 public class PlayArea {
 
@@ -115,9 +117,12 @@ public class PlayArea {
         return null;
     }
 
-    public void addToHand(PlayableCard c) {
-        hand.add(c);
-        //TODO handle exceptions (ie hand is bigger or equal to 3 cards)
+    public void addToHand(PlayableCard c) throws FullHandException {
+        if(this.hand.size() >= 3){
+            throw new FullHandException();
+        }
+        else
+            this.hand.add(c);
     }
 
 }
