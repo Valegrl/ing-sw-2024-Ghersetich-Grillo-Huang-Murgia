@@ -11,37 +11,40 @@ import it.polimi.ingsw.model.Card.PlayableCard;
 import it.polimi.ingsw.model.Card.Card;
 import it.polimi.ingsw.model.Card.Item;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.model.Card.StartCard;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
 
-
+/**
+ * A class to represent the {@link it.polimi.ingsw.model.Player.Player Player}'s playArea.
+ * It contains played cards and methods for the game's execution.
+ */
 public class PlayArea {
-
+//{@link it.polimi.ingsw.model.Evaluator.Evaluator }
     /**
-     *The list of cards the player can play
+     * The list of cards the player holds and can play.
      */
     private final List<PlayableCard> hand;
 
     /**
-     *The map of the cards the player played previously
+     * The map of the cards the player played previously and their respective coordinates.
      */
     private final Map<Coordinate, Card> playedCards;
 
     /**
-     *The map of the items a player possess, items covered by other cards aren't included
+     * The map of the items a player possess, items covered by other cards aren't included.
      */
     private final Map<Item, Integer> uncoveredItems;
 
     /**
-     * The card selected by the player for placing
+     * The card selected by the player for placing.
      */
     private EvaluableCard selectedCard;
 
-    public PlayArea(){
+    public PlayArea(List<PlayableCard> hand, StartCard c){
 
-        /*It should have a parameter that builds the player's hand,
-        do I build the cards in here or is it the game?'s responsability*/
+        //TODO It should have a parameter that builds the initial hand from game instead
         this.hand = new ArrayList<>();
 
         this.playedCards = new HashMap<>();
@@ -72,6 +75,10 @@ public class PlayArea {
 
     public EvaluableCard getSelectedCard(){
         return this.selectedCard;
+    }
+
+    public void flipStartCard(boolean flipped){
+    /*riceve un boolean che se è true chiama StartCard.flipCard() e aggiorna di conseguenza gli item del player*/
     }
 
     public void selectCard(Card c) {
@@ -105,6 +112,7 @@ public class PlayArea {
         }
     }
 
+    //TODO requires parameter to know what card has been just placed
     private List<Coordinate> newlyCoveredCards() {
         return null;
     }

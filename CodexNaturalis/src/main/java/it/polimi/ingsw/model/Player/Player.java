@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Card.ObjectiveCard;
 import it.polimi.ingsw.model.Card.StartCard;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.model.Card.PlayableCard;
 
 import java.util.List;
 
@@ -71,22 +72,9 @@ public class Player {
      * Initializes player's playArea
      * @param c the startCard that a player selects upon starting the game
      */
-    public PlayArea start(StartCard c) {
-
-
-        Coordinate coordinate = new Coordinate(0, 0);
-        PlayArea playArea = new PlayArea();
-        playArea.getPlayedCards().put(coordinate, c);
-
-        if(c.isFlipped()){
-        //TODO code the methods for adding the card to PlayArea and adjourn the items
-        }
-        else{
-
-        }
-
-
-        return playArea;
+    public void initPlayArea(List<PlayableCard> hand, StartCard c) {
+        //TODO check the hand (2 resource and 1 gold)
+        this.playArea = new PlayArea(hand, c);
     }
 
 
