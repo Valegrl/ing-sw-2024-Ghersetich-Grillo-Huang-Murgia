@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.Card.Card;
 import it.polimi.ingsw.model.Card.Item;
 import it.polimi.ingsw.utils.Coordinate;
 
-import it.polimi.ingsw.model.exceptions.NonCostraintCardException;
+import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 
 public class PlayArea {
 
@@ -31,6 +31,9 @@ public class PlayArea {
      */
     private final Map<Item, Integer> uncoveredItems;
 
+    /**
+     * The card selected by the player for placing
+     */
     private EvaluableCard selectedCard;
 
     public PlayArea(){
@@ -78,9 +81,9 @@ public class PlayArea {
      * @param c the card that needs to be checked for constraints
      * @return true if the player can play it, false if the player can't play it
      */
-    public boolean checkConstraint(PlayableCard c) throws NonCostraintCardException{
+    public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
         if(c.getHasConstraint() == false){
-            throw new NonCostraintCardException();
+            throw new NonConstraintCardException();
         }
         else {
             //TODO check if the player's uncovereditems can suffice for the constraint
