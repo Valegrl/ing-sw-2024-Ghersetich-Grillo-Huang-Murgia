@@ -65,6 +65,10 @@ public class PlayArea {
         return this.uncoveredItems;
     }
 
+    public EvaluableCard getSelectedCard(){
+        return this.selectedCard;
+    }
+
     public void selectCard(Card c) {
         this.selectedCard = (EvaluableCard) c;
     }
