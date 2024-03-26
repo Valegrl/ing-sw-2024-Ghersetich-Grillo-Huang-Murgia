@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import it.polimi.ingsw.model.Card.EvaluableCard;
 import it.polimi.ingsw.model.Card.PlayableCard;
@@ -11,17 +12,30 @@ import it.polimi.ingsw.model.Card.Card;
 import it.polimi.ingsw.model.Card.Item;
 import it.polimi.ingsw.utils.Coordinate;
 
+import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
+import it.polimi.ingsw.model.exceptions.FullHandException;
+
+
 public class PlayArea {
 
     /**
-     *The player's hand contains the cards the player can play
+     *The list of cards the player can play
      */
     private final List<PlayableCard> hand;
 
+    /**
+     *The map of the cards the player played previously
+     */
     private final Map<Coordinate, Card> playedCards;
 
+    /**
+     *The map of the items a player possess, items covered by other cards aren't included
+     */
     private final Map<Item, Integer> uncoveredItems;
 
+    /**
+     * The card selected by the player for placing
+     */
     private EvaluableCard selectedCard;
 
     public PlayArea(){
@@ -56,6 +70,10 @@ public class PlayArea {
         return this.uncoveredItems;
     }
 
+    public EvaluableCard getSelectedCard(){
+        return this.selectedCard;
+    }
+
     public void selectCard(Card c) {
         this.selectedCard = (EvaluableCard) c;
     }
@@ -65,9 +83,14 @@ public class PlayArea {
      * @param c the card that needs to be checked for constraints
      * @return true if the player can play it, false if the player can't play it
      */
-    public boolean checkConstraint(PlayableCard c) {
-
-        return false;
+    public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
+        if(c.getHasConstraint() == false){
+            throw new NonConstraintCardException();
+        }
+        else {
+            //TODO check if the player's uncovereditems can suffice for the constraint
+            return false;
+        }
     }
 
     public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
@@ -75,7 +98,11 @@ public class PlayArea {
     }
 
     private void removeFromHand(PlayableCard c) {
-
+        Iterator<PlayableCard> iterator = getHand().iterator();
+        PlayableCard iteratedCard = iterator.next();
+        if(iteratedCard.equals(c)){
+            iterator.remove();
+        }
     }
 
     private List<Coordinate> newlyCoveredCards() {
@@ -83,16 +110,19 @@ public class PlayArea {
     }
 
     public Card getCardByPos(Coordinate pos) {
-        return null;
+        return this.playedCards.get(pos);
     }
 
     public List<Coordinate> getAvailablePos() {
         return null;
     }
 
-    public void addToHand(PlayableCard c) {
-        hand.add(c);
-        //TODO handle exceptions (ie hand is bigger or equal to 3 cards)
+    public void addToHand(PlayableCard c) throws FullHandException {
+        if(this.hand.size() >= 3){
+            throw new FullHandException();
+        }
+        else
+            this.hand.add(c);
     }
 
 }
