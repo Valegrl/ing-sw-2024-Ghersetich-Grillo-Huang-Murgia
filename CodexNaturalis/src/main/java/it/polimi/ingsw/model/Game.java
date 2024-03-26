@@ -3,32 +3,56 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.Deck.ResourceDeck;
 import it.polimi.ingsw.model.Deck.GoldDeck;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import it.polimi.ingsw.model.Card.ObjectiveCard;
 import it.polimi.ingsw.model.Card.PlayableCard;
+import it.polimi.ingsw.model.Player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.Card.EvaluableCard;
 import it.polimi.ingsw.model.Player.Player;
 
 public class Game {
 
-    private int id;
+    private final int id;
 
-    private ResourceDeck resourceDeck;
+    private final ResourceDeck resourceDeck;
 
-    private GoldDeck goldDeck;
+    private final GoldDeck goldDeck;
 
-    private List<Player> players;
+    private final List<Player> players;
 
-    private int currTurn;
+    private int turnPlayerIndex;
 
-    private Map<Player, Integer> scoreboard;
+    private final Map<Player, Integer> scoreboard;
 
-    private ObjectiveCard[] commonObjectives;
+    private final ObjectiveCard[] commonObjectives;
 
-    private boolean finalPhase;
+    private boolean finalPhase; // TODO GameStatus?
+
+    public Game(int id, List<String> players) {
+        this.id = id;
+
+        this.resourceDeck = new ResourceDeck(); //TODO when implemented ResourceDeck constructor
+        this.goldDeck = new GoldDeck(); // TODO when implemented GoldDeck constructor
+
+        this.turnPlayerIndex = 0;
+
+        this.players = new ArrayList<>();
+        for (String user : players)
+            this.players.add(new Player(user));
+
+        this.scoreboard = new HashMap<>();
+        for (Player p : this.players)
+            this.scoreboard.put(p, 0);
+
+        this.commonObjectives = new ObjectiveCard[2];
+
+        this.finalPhase = false; //TODO
+    }
 
     public void gameSetup() {
 

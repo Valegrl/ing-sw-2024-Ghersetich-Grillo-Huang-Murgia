@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class Lobby {
     /**
+     * The Lobby's identifier.
+     */
+    private int id;
+
+    /**
      * The list of Players' usernames that joined the Lobby.
      */
     private List<String> joinedPlayers;
@@ -22,11 +27,13 @@ public class Lobby {
     private final int requiredPlayers;
 
     /**
-     * Constructs a new Lobby with the given first player's username and the number of required players.
+     * Constructs a new Lobby with the given id, first player's username and the number of required players.
+     * @param id The identifier of the lobby.
      * @param user The first player's username.
      * @param requiredPlayers The number of required players to start this Lobby's game.
      */
-    public Lobby(String user, int requiredPlayers) {
+    public Lobby(int id, String user, int requiredPlayers) {
+        this.id = id;
         this.joinedPlayers = new ArrayList<>();
         this.joinedPlayers.add(user);
         this.requiredPlayers = requiredPlayers;
@@ -87,7 +94,7 @@ public class Lobby {
     public Game startGame() throws InsufficientPlayersException {
         if (requiredPlayers < joinedPlayers.size())
             throw new InsufficientPlayersException();
-        return new Game(); // TODO update with Game constructor's attributes
+        return new Game(this.id, joinedPlayers);
     }
 
 }
