@@ -41,7 +41,7 @@ public class Lobby {
 
     /**
      * Retrieves the list of joined players in the Lobby.
-     * @return the list of joined players.
+     * @return {@link Lobby#joinedPlayers}.
      */
     public List<String> getJoinedPlayers() {
         return joinedPlayers;
@@ -49,14 +49,14 @@ public class Lobby {
 
     /**
      * Retrieves the number of required players to start this Lobby's game.
-     * @return the number of required players.
+     * @@return {@link Lobby#requiredPlayers}.
      */
     public int getRequiredPlayers() {
         return requiredPlayers;
     }
 
     /**
-     * Adds a player's username to the list of joined players in the lobby.
+     * Adds a player's username to the list of {@link Lobby#joinedPlayers} in the lobby.
      * If the lobby is already full, or if the username is not unique in the lobby,
      * corresponding exceptions will be thrown.
      *
@@ -74,7 +74,7 @@ public class Lobby {
     }
 
     /**
-     * Removes a player's username from the list of joined players in the lobby.
+     * Removes a player's username from the list of {@link Lobby#joinedPlayers} in the lobby.
      * Returns true if the player's username was present in the joined players list
      * and successfully removed, otherwise returns false.
      *
@@ -86,9 +86,9 @@ public class Lobby {
     }
 
     /**
-     * Initiates the game within the lobby and returns a reference to the newly created game.
+     * Initiates the {@link Game} within the lobby and returns a reference to the newly created game.
      *
-     * @return A reference to the newly created game.
+     * @return A reference to the newly created {@link Game}.
      * @throws InsufficientPlayersException If the lobby does not have enough players to start the game.
      */
     public Game startGame() throws InsufficientPlayersException {

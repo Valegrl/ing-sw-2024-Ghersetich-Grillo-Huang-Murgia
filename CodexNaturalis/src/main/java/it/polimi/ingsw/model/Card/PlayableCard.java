@@ -8,7 +8,7 @@ public abstract class PlayableCard extends EvaluableCard {
 
 	private Item[] corners;
 
-	private final boolean hasConstraint;
+	private final CardType cardType;
 
 
 
@@ -18,11 +18,11 @@ public abstract class PlayableCard extends EvaluableCard {
 		}
 	}
 
-	public PlayableCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, boolean hasConstraint) {
+	public PlayableCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, CardType cardType) {
 		super(id, evaluator, points);
 		this.permanentResource = permanentResource;
 		this.corners = new Item[4];
-		this.hasConstraint = hasConstraint;
+		this.cardType = cardType;
 	}
 
 	public Item getPermanentResource() {
@@ -37,8 +37,8 @@ public abstract class PlayableCard extends EvaluableCard {
 		this.corners[i] = item;
 	}
 
-	public boolean getHasConstraint() {
-		return hasConstraint;
+	public CardType getCardType() {
+		return this.cardType;
 	}
 
 
