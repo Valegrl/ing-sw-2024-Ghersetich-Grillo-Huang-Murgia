@@ -6,12 +6,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import it.polimi.ingsw.model.Card.EvaluableCard;
-import it.polimi.ingsw.model.Card.PlayableCard;
-import it.polimi.ingsw.model.Card.Card;
-import it.polimi.ingsw.model.Card.Item;
+import it.polimi.ingsw.model.Card.*;
 import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.model.Card.StartCard;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
@@ -44,8 +40,7 @@ public class PlayArea {
 
     public PlayArea(List<PlayableCard> hand, StartCard c){
 
-        //TODO It should have a parameter that builds the initial hand from game instead
-        this.hand = new ArrayList<>();
+        this.hand = hand;
 
         this.playedCards = new HashMap<>();
 
@@ -59,6 +54,22 @@ public class PlayArea {
         uncoveredItems.put(Item.MANUSCRIPT, 0);
 
         this.selectedCard = null;
+
+        Coordinate coordinate = new Coordinate(0, 0);
+        playedCards.put(coordinate, c);
+
+        //TODO Up to review...
+        int i;
+        for(Map.Entry<Item, Integer> entry : uncoveredItems.entrySet()) {
+            Item key =  entry.getKey();
+            for (i = 0; i < c.getCorners().length; i++) {
+                if(c.getCorners()[i].equals(key)){
+                    Integer value = entry.getValue();
+                    value++;
+                    uncoveredItems.put(key, value);
+                }
+            }
+        }
     }
 
     public List<PlayableCard> getHand(){
@@ -91,7 +102,7 @@ public class PlayArea {
      * @return true if the player can play it, false if the player can't play it
      */
     public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
-        if(c.getHasConstraint() == false){
+        if(c.getCardType() != CardType.GOLD){
             throw new NonConstraintCardException();
         }
         else {
@@ -105,10 +116,13 @@ public class PlayArea {
     }
 
     private void removeFromHand(PlayableCard c) {
-        Iterator<PlayableCard> iterator = getHand().iterator();
+        Iterator<PlayableCard> iterator = hand.iterator();
+
+    while(iterator.hasNext()) {
         PlayableCard iteratedCard = iterator.next();
-        if(iteratedCard.equals(c)){
+        if(iteratedCard.equals(c)) {
             iterator.remove();
+            }
         }
     }
 
@@ -129,8 +143,9 @@ public class PlayArea {
         if(this.hand.size() >= 3){
             throw new FullHandException();
         }
-        else
+        else {
             this.hand.add(c);
+        }
     }
 
 }

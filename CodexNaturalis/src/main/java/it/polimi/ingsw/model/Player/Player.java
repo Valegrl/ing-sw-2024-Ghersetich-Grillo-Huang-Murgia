@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.Player;
 
-import it.polimi.ingsw.model.Card.ObjectiveCard;
-import it.polimi.ingsw.model.Card.StartCard;
+import it.polimi.ingsw.model.Card.*;
 import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.model.Card.PlayableCard;
-
+import it.polimi.ingsw.model.exceptions.IllegalFirstHandException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,7 +53,7 @@ public class Player {
         return this.token;
     }
 
-    public boolean getStatus(){
+    public boolean getOnline(){
         return this.online;
     }
 
@@ -69,15 +68,39 @@ public class Player {
 
 
     /**
-     * Initializes player's playArea
-     * @param c the startCard that a player selects upon starting the game
+     * Initializes player's playArea which contains all the methods and data regarding the game's execution.
+     * @param hand the cards a player selects at the game's start.
+     * @param c the startCard that a player selects upon starting the game, it gets placed on the PlayArea at (0, 0).
      */
-    public void initPlayArea(List<PlayableCard> hand, StartCard c) {
-        //TODO check the hand (2 resource and 1 gold)
+    public void initPlayArea(List<PlayableCard> hand, StartCard c) throws IllegalFirstHandException {
+        if(hand.size() != 3){
+            throw new IllegalFirstHandException();
+        }
+
+        int goldCounter = 0;
+        int resourceCounter = 0;
+        Iterator<PlayableCard> iterator = hand.iterator();
+
+        while(iterator.hasNext()){
+            PlayableCard iteratedCard = iterator.next();
+            if(iteratedCard.getCardType() == CardType.GOLD) {
+                goldCounter++;
+            }
+            if(iteratedCard.getCardType() == CardType.RESOURCE) {
+                resourceCounter++;
+            }
+        }
+
+        if(goldCounter != 1 || resourceCounter != 2){
+            throw new IllegalFirstHandException();
+        }
+
         this.playArea = new PlayArea(hand, c);
     }
 
 
+
+    /*=======================================================================================================*/
     /**
      * Shows the untaken tokens and then assigns the chosen token to the player
      * @param t the list of available tokens a player can choose from
