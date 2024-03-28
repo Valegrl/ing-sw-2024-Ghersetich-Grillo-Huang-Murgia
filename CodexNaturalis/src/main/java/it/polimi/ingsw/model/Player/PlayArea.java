@@ -137,8 +137,7 @@ public class PlayArea {
         this.hand.remove(c);
     }
 
-    //TODO requires parameter to know what card has been just placed
-    private List<Coordinate> newlyCoveredCards() {
+    private List<Coordinate> newlyCoveredCards(Coordinate pos) {
         return null;
     }
 
