@@ -5,7 +5,7 @@ package it.polimi.ingsw.model.exceptions;
  * {@link it.polimi.ingsw.model.Player.PlayArea}, but it's missing.
  */
 
-public class MissingCardFromHandException extends Exception {
+public class MissingCardFromHandException extends RuntimeException {
     /**
      * Constructs a new MissingCardFromHandException with a fixed detail message.
      */
