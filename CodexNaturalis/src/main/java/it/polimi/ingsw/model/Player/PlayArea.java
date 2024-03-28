@@ -124,8 +124,14 @@ public class PlayArea {
         if(c.getCardType() == CardType.RESOURCE)
             throw new NonConstraintCardException();
         else {
-            //TODO check if the player's uncovereditems can suffice for the constraint
-            return false;
+            GoldCard goldCard = (GoldCard) c;
+            int currCheck;
+            for(Item item : goldCard.getConstraint().keySet()){
+                currCheck = this.uncoveredItems.get(item);
+                if(currCheck < goldCard.getConstraint().get(item))
+                    return false;
+            }
+            return true;
         }
     }
 
