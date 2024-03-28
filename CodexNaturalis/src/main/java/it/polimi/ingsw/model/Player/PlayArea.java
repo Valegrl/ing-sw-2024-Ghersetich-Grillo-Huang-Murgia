@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.Coordinate;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
+import it.polimi.ingsw.model.exceptions.MissingCardFromHandException;
 
 /**
  * A class to represent the {@link it.polimi.ingsw.model.Player.Player Player}'s playArea.
@@ -59,6 +60,7 @@ public class PlayArea {
         playedCards.put(coordinate, c);
     }
 
+    /*Getters should maybe give a copy? It'd be safer*/
     public List<PlayableCard> getHand(){
         return this.hand;
     }
@@ -135,12 +137,23 @@ public class PlayArea {
         }
     }
 
-    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
+    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException{
+        if((pos.getX() == 1 || pos.getX() == -1) && (pos.getY() == 1 || pos.getY() == -1)){
+            StartCard sc = (StartCard) this.playedCards.get(new Coordinate(0,0));
+            if(sc.isFlipped()){
+                //TODO implement the method
+            }
+        }
+        removeFromHand(c);
+
 
     }
 
-    private void removeFromHand(PlayableCard c) {
-        this.hand.remove(c);
+    private void removeFromHand(PlayableCard c) throws MissingCardFromHandException{
+        if(!this.hand.contains(c))
+            throw new MissingCardFromHandException();
+        else
+            this.hand.remove(c);
     }
 
     private List<Coordinate> newlyCoveredCards(Coordinate pos) {
