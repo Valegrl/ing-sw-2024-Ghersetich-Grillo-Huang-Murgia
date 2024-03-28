@@ -24,12 +24,12 @@ public class PlayArea {
     private final List<PlayableCard> hand;
 
     /**
-     * The map of the cards the player played previously and their respective coordinates.
+     * The map of the cards played in this PlayArea and their respective coordinates.
      */
     private final Map<Coordinate, Card> playedCards;
 
     /**
-     * The map of the items a player possess, items covered by other cards aren't included.
+     * The map of the items a player possesses, items covered by other cards aren't included.
      */
     private final Map<Item, Integer> uncoveredItems;
 
@@ -57,19 +57,6 @@ public class PlayArea {
 
         Coordinate coordinate = new Coordinate(0, 0);
         playedCards.put(coordinate, c);
-
-        //TODO Up to review...
-        int i;
-        for(Map.Entry<Item, Integer> entry : uncoveredItems.entrySet()) {
-            Item key =  entry.getKey();
-            for (i = 0; i < c.getCorners().length; i++) {
-                if(c.getCorners()[i].equals(key)){
-                    Integer value = entry.getValue();
-                    value++;
-                    uncoveredItems.put(key, value);
-                }
-            }
-        }
     }
 
     public List<PlayableCard> getHand(){
@@ -88,23 +75,54 @@ public class PlayArea {
         return this.selectedCard;
     }
 
+    /**
+     * Flips the start card if signaled by the given parameter.
+     * Updates uncovered items based on the visible corners of the chosen side.
+     * @param flipped flipped Indicates whether the start card should be flipped (true) or not (false).
+     */
     public void flipStartCard(boolean flipped){
-    /*riceve un boolean che se è true chiama StartCard.flipCard() e aggiorna di conseguenza gli item del player*/
-    }
 
-    public void selectCard(Card c) {
-        this.selectedCard = (EvaluableCard) c;
+        StartCard sc;
+        sc = (StartCard) this.playedCards.get(new Coordinate(0, 0));
+        if (flipped)
+            sc.flipCard();
+
+        Item[] corners;
+        int currItems;
+        if (flipped){
+            for (Item item : sc.getBackPermanentResources())
+                this.uncoveredItems.put(item, 1);
+            corners = sc.getBackCorners();
+        } else
+            corners = sc.getCorners();
+
+        for (Item item : corners) {
+            if (item != Item.EMPTY && item != Item.HIDDEN) {
+                currItems = this.uncoveredItems.get(item);
+                currItems++;
+                this.uncoveredItems.put(item, currItems);
+            }
+        }
     }
 
     /**
+     * Selects the given {@link EvaluableCard}.
+     * @param c The card to be selected.
+     */
+    public void selectCard(EvaluableCard c) {
+        this.selectedCard = c;
+    }
+
+    /**
+     * Checks if the given {@link PlayableCard}'s constraint is satisfied.
      *
-     * @param c the card that needs to be checked for constraints
-     * @return true if the player can play it, false if the player can't play it
+     * @param c The card on which the constraint will be checked.
+     * @return true if the player can play the given card, false if the player can't play it.
+     * @throws NonConstraintCardException If the given {@link PlayableCard} does not have a constraint to check.
      */
     public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
-        if(c.getCardType() != CardType.GOLD){
+        if(c.getCardType() == CardType.RESOURCE)
             throw new NonConstraintCardException();
-        }
         else {
             //TODO check if the player's uncovereditems can suffice for the constraint
             return false;
@@ -116,14 +134,7 @@ public class PlayArea {
     }
 
     private void removeFromHand(PlayableCard c) {
-        Iterator<PlayableCard> iterator = hand.iterator();
-
-    while(iterator.hasNext()) {
-        PlayableCard iteratedCard = iterator.next();
-        if(iteratedCard.equals(c)) {
-            iterator.remove();
-            }
-        }
+        this.hand.remove(c);
     }
 
     //TODO requires parameter to know what card has been just placed

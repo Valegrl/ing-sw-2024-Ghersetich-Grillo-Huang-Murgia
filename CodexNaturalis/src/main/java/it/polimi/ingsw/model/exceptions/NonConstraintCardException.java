@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.exceptions;
 
 /**
- * Exception thrown when the game checks the card for constraints but it's a resource card.
+ * Exception thrown when the game looks for the card's constraint,
+ * but it's a {@link it.polimi.ingsw.model.Card.ResourceCard}.
  */
 
 public class NonConstraintCardException extends Exception {
