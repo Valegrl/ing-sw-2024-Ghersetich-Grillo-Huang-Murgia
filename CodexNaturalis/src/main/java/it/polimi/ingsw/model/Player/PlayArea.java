@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.Player;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -138,14 +139,9 @@ public class PlayArea {
     }
 
     public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException{
-        if((pos.getX() == 1 || pos.getX() == -1) && (pos.getY() == 1 || pos.getY() == -1)){
-            StartCard sc = (StartCard) this.playedCards.get(new Coordinate(0,0));
-            if(sc.isFlipped()){
-                //TODO implement the method
-            }
-        }
+    //TODO WIP
         removeFromHand(c);
-
+        List<Coordinate> coveredCoordinates = newlyCoveredCards(pos);
 
     }
 
@@ -157,7 +153,18 @@ public class PlayArea {
     }
 
     private List<Coordinate> newlyCoveredCards(Coordinate pos) {
-        return null;
+        List<Coordinate> coveredCoordinates = new ArrayList<>();
+        int[] arrayX = {-1, -1, 1, 1};
+        int[] arrayY = {-1, 1, 1, -1};
+
+        /*The way it's implemented I check the corners of the selected card starting from the BL and ending in BR*/
+        for(int i = 0; i < arrayX.length; i++){
+            Coordinate coordinateCheck = new Coordinate(pos.getX() + arrayX[i],pos.getY() + arrayY[i]);
+            if(this.playedCards.containsKey(coordinateCheck))
+                coveredCoordinates.add(coordinateCheck);
+        }
+
+        return coveredCoordinates;
     }
 
     public Card getCardByPos(Coordinate pos) {
