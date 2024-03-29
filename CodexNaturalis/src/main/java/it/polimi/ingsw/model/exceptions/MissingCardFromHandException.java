@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.exceptions;
 
 /**
- * Exception thrown when the player removes a card from their hand in the
+ * Exception thrown when the player tries to remove a card from their hand in the
  * {@link it.polimi.ingsw.model.Player.PlayArea}, but it's missing.
  */
 

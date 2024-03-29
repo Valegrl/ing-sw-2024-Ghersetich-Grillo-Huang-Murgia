@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.Card;
 
 /**
  * An enumeration that represents the index of a corner in the corners list of a {@link PlayableCard}.
- * The index 0 is the top-right corner and the other corners are indexed clockwise.
+ * The index 0 is the top-left corner and the other corners are indexed clockwise.
  */
 public enum CornerIndex {
     /**

@@ -8,11 +8,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import it.polimi.ingsw.model.Card.*;
+import it.polimi.ingsw.model.Evaluator.CornerEvaluator;
 import it.polimi.ingsw.utils.Coordinate;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
 import it.polimi.ingsw.model.exceptions.MissingCardFromHandException;
+import it.polimi.ingsw.model.exceptions.NoCoveredCardsException;
 
 /**
  * A class to represent the {@link it.polimi.ingsw.model.Player.Player Player}'s playArea.
@@ -138,11 +140,48 @@ public class PlayArea {
         }
     }
 
-    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException{
-    //TODO WIP
+    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException,
+            NoCoveredCardsException{
+        //TODO WIP
         removeFromHand(c);
+
         List<Coordinate> coveredCoordinates = newlyCoveredCards(pos);
 
+        Iterator<Coordinate> iterator = coveredCoordinates.iterator();
+        /*Reads the cards in the list*/
+        Coordinate startCoordinate = new Coordinate(0, 0);
+
+        while(iterator.hasNext()){
+            Coordinate currCoordinate = iterator.next();
+            /*Check if the current card is the starting card*/
+            if(currCoordinate.equals(startCoordinate)){
+                StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
+                if(sc.isFlipped()){
+                    //TODO up to review corners
+                    if(pos.equals(new Coordinate(-1, 1))){
+                        Item item = sc.getBackCorners()[0];
+
+                    }
+                    else if(pos.equals(new Coordinate(1, 1))){
+
+                    }
+                    else if(pos.equals(new Coordinate(1, -1))){
+
+                    }
+                    else if(pos.equals(new Coordinate(-1, -1))) {
+
+                    }
+                }
+                else{
+                    //TODO to implement non flipped startCard
+                }
+            }
+            /*Current card is not the starting card*/
+            else {
+
+
+            }
+        }
     }
 
     private void removeFromHand(PlayableCard c) throws MissingCardFromHandException{
@@ -152,19 +191,21 @@ public class PlayArea {
             this.hand.remove(c);
     }
 
-    private List<Coordinate> newlyCoveredCards(Coordinate pos) {
+    private List<Coordinate> newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException {
         List<Coordinate> coveredCoordinates = new ArrayList<>();
-        int[] arrayX = {-1, -1, 1, 1};
-        int[] arrayY = {-1, 1, 1, -1};
+        int[] arrayX = {-1, 1, 1, -1};
+        int[] arrayY = {1, 1, -1, -1};
 
-        /*The way it's implemented I check the corners of the selected card starting from the BL and ending in BR*/
+        /*The way it's implemented I check the corners of the selected card starting from the TL and ending in BL*/
         for(int i = 0; i < arrayX.length; i++){
             Coordinate coordinateCheck = new Coordinate(pos.getX() + arrayX[i],pos.getY() + arrayY[i]);
             if(this.playedCards.containsKey(coordinateCheck))
                 coveredCoordinates.add(coordinateCheck);
         }
-
-        return coveredCoordinates;
+        if(coveredCoordinates.isEmpty())
+            throw new NoCoveredCardsException();
+        else
+            return coveredCoordinates;
     }
 
     public Card getCardByPos(Coordinate pos) {
