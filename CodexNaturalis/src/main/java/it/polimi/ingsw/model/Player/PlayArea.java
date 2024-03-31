@@ -147,19 +147,31 @@ public class PlayArea {
 
         List<Coordinate> coveredCoordinates = newlyCoveredCards(pos);
 
+        /*Variables needed for the next step*/
         Iterator<Coordinate> iterator = coveredCoordinates.iterator();
-        /*Reads the cards in the list*/
         Coordinate startCoordinate = new Coordinate(0, 0);
-
+        StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
+        int currValue;
+        Item currItem;
+        PlayableCard currCard;
+        /*Reads the cards in the list*/
         while(iterator.hasNext()){
             Coordinate currCoordinate = iterator.next();
             /*Check if the current card is the starting card*/
             if(currCoordinate.equals(startCoordinate)){
-                StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
                 if(sc.isFlipped()){
-                    //TODO up to review corners
+                    /*Could use a switch case but would need an algorithm of getX+getY and wouldn't be as easily
+                    readable, also could not need to create an object coordinate everytime and just use
+                    (currCoordinate.getX()-1)==(pos.getX()) && (currCoordinate.getY()+1)==(pos.getY())*/
                     if(pos.equals(new Coordinate(-1, 1))){
-                        Item item = sc.getBackCorners()[0];
+                        //TODO up to review the two letters standard for corners
+                        currItem = sc.getBackCorners()[0];
+                        if(currItem != Item.EMPTY && currItem != Item.HIDDEN){
+                            currValue = this.uncoveredItems.get(currItem);
+                            currValue--;
+                            this.uncoveredItems.put(currItem, currValue);
+                        }
+                        //TODO need a setter override by index for the StartCard class's array, IE: setBackCorners(int, item)
 
                     }
                     else if(pos.equals(new Coordinate(1, 1))){
@@ -174,14 +186,57 @@ public class PlayArea {
                 }
                 else{
                     //TODO to implement non flipped startCard
+                    if(pos.equals(new Coordinate(-1, 1))){
+                        //TODO up to review the two letters standard for corner
+                        currItem = sc.getCorners()[0];
+                        currValue = this.uncoveredItems.get(currItem);
+                        currValue--;
+                        this.uncoveredItems.put(currItem, currValue);
+                        //TODO need a setter override by index for the StartCard class
+                    }
+                    else if(pos.equals(new Coordinate(1, 1))){
+
+                    }
+                    else if(pos.equals(new Coordinate(1, -1))){
+
+                    }
+                    else if(pos.equals(new Coordinate(-1, -1))) {
+
+                    }
                 }
             }
-            /*Current card is not the starting card*/
-            else {
 
+            /*Current card is not the starting card*/
+            else{
+                currCard = (PlayableCard) this.playedCards.get(currCoordinate);
+                //TODO need a isFlipped() method for PlayableCard class
+                /*as if the card is flipped i dont need to change player's items*/
+                if(/*!currCard.isFlipped()*/ true){
+                    /*pos is TL compared to current card*/
+                    if ((currCoordinate.getX() - 1) == (pos.getX()) && (currCoordinate.getY() + 1) == (pos.getY())) {
+                        //TODO notation with corners
+                        currItem = currCard.getCorners()[0];
+                        if (currItem != Item.EMPTY && currItem != Item.HIDDEN) {
+                            currValue = this.uncoveredItems.get(currItem);
+                            currValue--;
+                            this.uncoveredItems.put(currItem, currValue);
+                        }
+                        //TODO need a setter override by index for the StartCard class's array, IE: setBackCorners(int, item)
+                    } else if ((currCoordinate.getX() + 1) == (pos.getX()) && (currCoordinate.getY() + 1) == (pos.getY())) {
+
+                    } else if ((currCoordinate.getX() + 1) == (pos.getX()) && (currCoordinate.getY() - 1) == (pos.getY())) {
+
+                    } else if ((currCoordinate.getX() - 1) == (pos.getX()) && (currCoordinate.getY() - 1) == (pos.getY())) {
+
+                    }
+                }
 
             }
         }
+
+
+        this.playedCards.put(new Coordinate(pos.getX(), pos.getY()), c);
+        //TODO update the uncoveredItems by the card c being flipped or not
     }
 
     private void removeFromHand(PlayableCard c) throws MissingCardFromHandException{
