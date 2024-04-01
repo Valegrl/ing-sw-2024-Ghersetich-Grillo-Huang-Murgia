@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.exceptions;
 
 /**
- * Exception thrown when a player's hand is full and it's trying to draw another card.
+ * Exception thrown when a player's hand is full, but he's still trying to draw another card.
  */
-public class FullHandException extends Exception {
+public class FullHandException extends RuntimeException {
 
     /**
      * Constructs a new FullHandException with a fixed detail message;

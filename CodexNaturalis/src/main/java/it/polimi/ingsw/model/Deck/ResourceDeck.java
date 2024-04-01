@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.Deck;
 
 import java.util.List;
 
+import it.polimi.ingsw.model.Card.PlayableCard;
 import it.polimi.ingsw.model.Card.ResourceCard;
 import it.polimi.ingsw.model.Card.Card;
 
@@ -21,9 +22,9 @@ public class ResourceDeck implements Deck {
 
 
     /**
-     * @see it.polimi.ingsw.model.Deck.Deck#drawVisible()
+     * @see it.polimi.ingsw.model.Deck.Deck#drawVisible(int)
      */
-    public Card drawVisible() {
+    public ResourceCard drawVisible(int chosenCard) {
         return null;
     }
 
@@ -31,8 +32,8 @@ public class ResourceDeck implements Deck {
     /**
      * @see it.polimi.ingsw.model.Deck.Deck#drawTop()
      */
-    public void drawTop() {
-
+    public ResourceCard drawTop() {
+        return null;
     }
 
 }

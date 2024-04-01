@@ -18,8 +18,8 @@ public class GoldCard extends PlayableCard {
 	 */
 	private Map<Item, Integer> requiredItems;
 
-	public GoldCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, boolean hasConstraint, Map<Item, Integer> constraint, Map<Item, Integer> requiredItems) {
-		super(id, evaluator, points, permanentResource, corners, hasConstraint);
+	public GoldCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, CardType cardType, Map<Item, Integer> constraint, Map<Item, Integer> requiredItems) {
+		super(id, evaluator, points, permanentResource, corners, cardType);
 		this.constraint = constraint;
 		this.requiredItems = requiredItems;
 	}

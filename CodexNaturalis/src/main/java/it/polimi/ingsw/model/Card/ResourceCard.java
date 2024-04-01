@@ -13,9 +13,9 @@ public class ResourceCard extends PlayableCard {
      * @param points A unique integer associated with each card.
      * @param permanentResource The first player's username.
      * @param corners The number of required players to start this Lobby's game.
-     * @param hasConstraint The first player's username.
+     * @param cardType The first player's username.
      */
-    public ResourceCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, boolean hasConstraint) {
-        super(id, evaluator, points, permanentResource, corners, hasConstraint);
+    public ResourceCard(int id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, CardType cardType) {
+        super(id, evaluator, points, permanentResource, corners, cardType);
     }
 }

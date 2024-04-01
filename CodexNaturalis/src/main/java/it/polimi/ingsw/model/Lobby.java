@@ -14,12 +14,12 @@ public class Lobby {
     /**
      * The Lobby's identifier.
      */
-    private int id;
+    private final int id;
 
     /**
      * The list of Players' usernames that joined the Lobby.
      */
-    private List<String> joinedPlayers;
+    private final List<String> joinedPlayers;
 
     /**
      * The minimum number of players required for this Lobby's game to start.
@@ -37,22 +37,6 @@ public class Lobby {
         this.joinedPlayers = new ArrayList<>();
         this.joinedPlayers.add(user);
         this.requiredPlayers = requiredPlayers;
-    }
-
-    /**
-     * Retrieves the list of joined players in the Lobby.
-     * @return {@link Lobby#joinedPlayers}.
-     */
-    public List<String> getJoinedPlayers() {
-        return joinedPlayers;
-    }
-
-    /**
-     * Retrieves the number of required players to start this Lobby's game.
-     * @@return {@link Lobby#requiredPlayers}.
-     */
-    public int getRequiredPlayers() {
-        return requiredPlayers;
     }
 
     /**
@@ -95,6 +79,22 @@ public class Lobby {
         if (requiredPlayers < joinedPlayers.size())
             throw new InsufficientPlayersException();
         return new Game(this.id, joinedPlayers);
+    }
+
+    /**
+     * Retrieves the list of joined players in the Lobby.
+     * @return {@link Lobby#joinedPlayers}.
+     */
+    public List<String> getJoinedPlayers() {
+        return joinedPlayers;
+    }
+
+    /**
+     * Retrieves the number of required players to start this Lobby's game.
+     * @return {@link Lobby#requiredPlayers}.
+     */
+    public int getRequiredPlayers() {
+        return requiredPlayers;
     }
 
 }

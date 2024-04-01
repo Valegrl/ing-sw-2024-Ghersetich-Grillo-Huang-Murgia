@@ -21,9 +21,9 @@ public class GoldDeck implements Deck {
 
 
     /**
-     * @see it.polimi.ingsw.model.Deck.Deck#drawVisible()
+     * @see it.polimi.ingsw.model.Deck.Deck#drawVisible(int) 
      */
-    public Card drawVisible() {
+    public GoldCard drawVisible(int chosenCard) {
         return null;
     }
 
@@ -31,8 +31,8 @@ public class GoldDeck implements Deck {
     /**
      * @see it.polimi.ingsw.model.Deck.Deck#drawTop()
      */
-    public void drawTop() {
-
+    public GoldCard drawTop() {
+        return null;
     }
 
 }

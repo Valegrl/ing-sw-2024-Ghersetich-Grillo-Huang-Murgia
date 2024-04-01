@@ -86,6 +86,100 @@ public class Game {
         this.finalPhase = false; //TODO game status enum?
     }
 
+    public void gameSetup() {
+
+    }
+
+    /**
+     * Advances the game to the next player's turn.
+     * This method increments the turnPlayerIndex to move to the next player in the player list.
+     * If the current player is the last player in the list, the turn wraps around to the first player.
+     */
+    public void newTurn() {
+        this.turnPlayerIndex = (this.turnPlayerIndex + 1) % this.players.size();
+    }
+
+    public boolean placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
+        return false;
+    }
+
+    /**
+     * TODO drawPlayableCard JavaDoc
+     *
+     * @param chosenDeck
+     * @param chosenCard
+     */
+    public void drawPlayableCard(CardType chosenDeck, int chosenCard) {
+
+        PlayableCard drawnCard;
+        if (chosenDeck.equals(CardType.GOLD)) {
+            if (chosenCard >= 0 && chosenCard < 2) // TODO CONSTANTS?
+                // TODO exceptions for empty decks?
+                drawnCard = this.goldDeck.drawVisible(chosenCard);
+            else
+                drawnCard = this.goldDeck.drawTop();
+        } else {
+            if (chosenCard >= 0 && chosenCard < 2)
+                drawnCard = this.resourceDeck.drawVisible(chosenCard);
+            else
+                drawnCard = this.resourceDeck.drawTop();
+        }
+
+        Player currPlayer = this.players.get(turnPlayerIndex);
+        currPlayer.getPlayArea().addToHand(drawnCard);
+    }
+
+    /**
+     * Selects the given {@link EvaluableCard} in the {@link PlayArea} of the specified {@link Player}.
+     *
+     * @param c The {@link EvaluableCard} that needs to be selected.
+     * @param p The {@link Player} that selected the card.
+     */
+    public void selectCard(EvaluableCard c, Player p) {
+        p.getPlayArea().selectCard(c);
+    }
+
+    /**
+     * Assigns the given points to the selected {@link Player} in the {@link Game#scoreboard}.
+     * If the updated score is at least 20, the game updates his {@link Game#finalPhase} status.
+     * The maximum score of the {@link Game#scoreboard} is 29.
+     *
+     * @param p The Player to assign the points to.
+     * @param points The number of points to assign.
+     */
+    private void assignPoints(Player p, int points) {
+
+        int currScore = this.scoreboard.get(p);
+        if (currScore == 29) return;
+
+        currScore += points;
+
+        if (currScore > 20 && !this.finalPhase) this.finalPhase = true; // TODO modify if changed GameStatus
+        if (currScore > 29) currScore = 29;
+
+        this.scoreboard.put(p, currScore);
+    }
+
+    public void offlinePlayer(String p) {
+
+    }
+
+    public void reconnectPlayer(String p) {
+
+    }
+
+    public void endGame() {
+
+    }
+
+    private int calculateObjectives(Player p) {
+        return 0;
+    }
+
+    private Player winner() {
+        return null;
+    }
+
     /**
      * Retrieves the Game id.
      * @return {@link Game#id gameId}.
@@ -147,55 +241,6 @@ public class Game {
      */
     public boolean isFinalPhase() {
         return finalPhase;
-    }
-
-    public void gameSetup() {
-
-    }
-
-    /**
-     * Advances the game to the next player's turn.
-     * This method increments the turnPlayerIndex to move to the next player in the player list.
-     * If the current player is the last player in the list, the turn wraps around to the first player.
-     */
-    public void newTurn() {
-        this.turnPlayerIndex = (this.turnPlayerIndex + 1) % this.players.size();
-    }
-
-    public boolean placeCard(PlayableCard c, Coordinate pos, boolean flipped) {
-        return false;
-    }
-
-    public boolean drawPlayableCard(CardType chosenDeck, int chosenCard) {
-        return false;
-    }
-
-    public void selectCard(EvaluableCard c, Player p) {
-
-    }
-
-    private void assignPoints(Player p, int points) {
-
-    }
-
-    public void offlinePlayer(String p) {
-
-    }
-
-    public void reconnectPlayer(String p) {
-
-    }
-
-    public void endGame() {
-
-    }
-
-    private int calculateObjectives(Player p) {
-        return 0;
-    }
-
-    private Player winner() {
-        return null;
     }
 
 }
