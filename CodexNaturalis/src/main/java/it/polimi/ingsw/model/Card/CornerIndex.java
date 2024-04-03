@@ -38,5 +38,13 @@ public enum CornerIndex {
     private CornerIndex(int index) {
         this.index = index;
     }
+
+    /**
+     * TODO
+     * @return
+     */
+    public int get() {
+        return index;
+    }
 }
 

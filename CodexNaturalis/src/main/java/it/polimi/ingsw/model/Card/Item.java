@@ -48,7 +48,12 @@ public enum Item {
     /**
      * The hidden corner.
      */
-    HIDDEN("hidden");
+    HIDDEN("hidden"),
+
+    /**
+     * The corner covered by another Card.
+     */
+    COVERED("covered");
 
     /**
      * The type of item that can be found in a {@link Card card} corner.
@@ -61,5 +66,34 @@ public enum Item {
      */
     private Item(String type) {
         this.type = type;
+    }
+
+    /**
+     * TODO
+     * @param type
+     * @return
+     */
+    public static Item getItemFromString(String type) {
+        return switch (type) {
+            case "plant" -> Item.PLANT;
+            case "animal" -> Item.ANIMAL;
+            case "fungi" -> Item.FUNGI;
+            case "insect" -> Item.INSECT;
+            case "quill" -> Item.QUILL;
+            case "inkwell" -> Item.INKWELL;
+            case "manuscript" -> Item.MANUSCRIPT;
+            case "empty" -> Item.EMPTY;
+            case "hidden" -> Item.HIDDEN;
+            case "covered" -> Item.COVERED;
+            default -> null;
+        };
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public String get() {
+        return this.type;
     }
 }
