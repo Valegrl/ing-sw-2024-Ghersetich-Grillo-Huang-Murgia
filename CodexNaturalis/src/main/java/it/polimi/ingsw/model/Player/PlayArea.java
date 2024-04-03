@@ -242,7 +242,44 @@ public class PlayArea {
     }
 
     public List<Coordinate> getAvailablePos() {
-        return null;
+        /*Don't use method newlyCoveredCards, it would be wrong logically!*/
+        int[] arrayX = {-1, 1, 1, -1};
+        int[] arrayY = {1, 1, -1, -1};
+        int i;
+        List<Coordinate> availablePos = new ArrayList<>();
+        Coordinate startCoordinate = new Coordinate(0, 0);
+        StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
+
+        for(Coordinate pos : this.playedCards.keySet()){
+            if(pos.equals(startCoordinate)){
+                if(!sc.isFlipped()){
+                    for(i = 0; i < sc.getCorners().length; i++){
+                        if(sc.getCorners()[i] != Item.HIDDEN){
+                            availablePos.add(new Coordinate(arrayX[i], arrayY[i]));
+                        }
+                    }
+                }
+                else{
+                    for(i = 0; i < sc.getBackCorners().length; i++){
+                        if(sc.getBackCorners()[i] != Item.HIDDEN){
+                            availablePos.add(new Coordinate(arrayX[i], arrayY[i]));
+                        }
+                    }
+                }
+            }
+            //If current Card is not the starting Card I have to keep in mind that current Card corners might
+            // be covering other cards' corners
+            else{
+                PlayableCard currCard = (PlayableCard) this.playedCards.get(pos);
+                for(i = 0; i < currCard.getCorners().length; i++){
+                    if(!this.playedCards.containsKey(new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]))
+                    && currCard.getCorners()[i] != Item.HIDDEN){
+                        availablePos.add(new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]));
+                    }
+                }
+            }
+        }
+        return availablePos;
     }
 
     public void addToHand(PlayableCard c) throws FullHandException {
