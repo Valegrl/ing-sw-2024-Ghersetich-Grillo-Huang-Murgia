@@ -9,7 +9,7 @@ public abstract class EvaluableCard extends Card {
 	/**
 	 * The card's specific {@link Evaluator evaluator}.
 	 */
-	private Evaluator evaluator;
+	private final Evaluator evaluator;
 
 	/**
 	 * The amount of points associated with each and every card.
@@ -17,7 +17,7 @@ public abstract class EvaluableCard extends Card {
 	private int points;
 
 	/**
-	 * Constructs a new Evaluable card with the given identifier, , amount of points.
+	 * Constructs a new Evaluable card.
 	 * @param id A unique integer associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
 	 * @param points The amount of points associated with each card.
@@ -28,20 +28,28 @@ public abstract class EvaluableCard extends Card {
 		this.points = points;
 	}
 
+	/**
+	 * Retrieves the evaluator belonging to the specific type of card.
+	 * @return The card's specific {@link Evaluator evaluator}.
+	 */
 	public Evaluator getEvaluator() {
 		return evaluator;
 	}
 
-	public void setEvaluator(Evaluator evaluator) {
-		this.evaluator = evaluator;
-	}
-
+	/**
+	 * Retrieves the points associated with an Evaluable card.
+	 * @return The amount of points associated with each and every Evaluable card.
+	 */
 	public int getPoints() {
 		return points;
 	}
 
+	/**
+	 * Sets the amount of point of an Evaluable card.
+	 * @param points The amount of points associated with each Evaluable card.
+	 */
 	public void setPoints(int points) {
 		this.points = points;
 	}
-
 }
+

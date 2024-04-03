@@ -19,10 +19,10 @@ public abstract class Card {
 
 	/**
 	 * Retrieves the identifier of a card.
-	 * @return the card id.
+	 * @return {@link Card#id}
 	 */
 	public int getId() {
 		return id;
 	}
-
 }
+
