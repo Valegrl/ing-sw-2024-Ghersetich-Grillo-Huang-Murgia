@@ -37,4 +37,12 @@ public enum Token {
     private Token(String color) {
         this.color = color;
     }
+
+    /**
+     * Retrieves the name of the color associated with this Token.
+     * @return The name of the color.
+     */
+    public String getColor() {
+        return color;
+    }
 }

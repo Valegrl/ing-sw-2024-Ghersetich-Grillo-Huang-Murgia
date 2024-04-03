@@ -69,9 +69,10 @@ public enum Item {
     }
 
     /**
-     * TODO
-     * @param type
-     * @return
+     * Retrieves the Item enum constant corresponding to the given string representation of the item.
+     *
+     * @param type The string representation of the item.
+     * @return The Item enum constant corresponding to the provided string, or null if no match is found.
      */
     public static Item getItemFromString(String type) {
         return switch (type) {
@@ -90,10 +91,10 @@ public enum Item {
     }
 
     /**
-     * TODO
-     * @return
+     * Retrieves the type of this Item, in a String representation.
+     * @return The type of Item.
      */
-    public String get() {
+    public String getType() {
         return this.type;
     }
 }

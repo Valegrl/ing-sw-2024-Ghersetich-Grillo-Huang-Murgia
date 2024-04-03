@@ -28,10 +28,10 @@ public enum CardType {
     }
 
     /**
-     * TODO
-     * @return
+     * Retrieves the type associated to this CardType, in a String representation.
+     * @return The type.
      */
-    public String get() {
+    public String getType() {
         return type;
     }
 }
