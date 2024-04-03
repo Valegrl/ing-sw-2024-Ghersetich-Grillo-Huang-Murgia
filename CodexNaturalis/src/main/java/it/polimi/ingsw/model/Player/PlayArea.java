@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import it.polimi.ingsw.model.Card.*;
 import it.polimi.ingsw.model.Evaluator.CornerEvaluator;
@@ -98,7 +97,8 @@ public class PlayArea {
             for (Item item : sc.getBackPermanentResources())
                 this.uncoveredItems.put(item, 1);
             corners = sc.getBackCorners();
-        } else
+        }
+        else
             corners = sc.getCorners();
 
         for (Item item : corners) {
@@ -142,101 +142,72 @@ public class PlayArea {
 
     public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException,
             NoCoveredCardsException{
-        //TODO WIP
-        removeFromHand(c);
+        this.removeFromHand(c);
+        Coordinate[] coveredCoordinates = this.newlyCoveredCards(pos);
 
-        List<Coordinate> coveredCoordinates = newlyCoveredCards(pos);
-
-        /*Variables needed for the next step*/
-        Iterator<Coordinate> iterator = coveredCoordinates.iterator();
         Coordinate startCoordinate = new Coordinate(0, 0);
         StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
-        int currValue;
         Item currItem;
+        int currValue;
         PlayableCard currCard;
-        /*Reads the cards in the list*/
-        while(iterator.hasNext()){
-            Coordinate currCoordinate = iterator.next();
-            /*Check if the current card is the starting card*/
-            if(currCoordinate.equals(startCoordinate)){
-                if(sc.isFlipped()){
-                    /*Could use a switch case but would need an algorithm of getX+getY and wouldn't be as easily
-                    readable, also could not need to create an object coordinate everytime and just use
-                    (currCoordinate.getX()-1)==(pos.getX()) && (currCoordinate.getY()+1)==(pos.getY())*/
-                    if(pos.equals(new Coordinate(-1, 1))){
-                        //TODO up to review the two letters standard for corners
-                        currItem = sc.getBackCorners()[0];
-                        if(currItem != Item.EMPTY && currItem != Item.HIDDEN){
-                            currValue = this.uncoveredItems.get(currItem);
-                            currValue--;
-                            this.uncoveredItems.put(currItem, currValue);
-                        }
-                        //TODO need a setter override by index for the StartCard class's array, IE: setBackCorners(int, item)
 
-                    }
-                    else if(pos.equals(new Coordinate(1, 1))){
+        //TODO up to review the two letters standard for corners
+        int i;
+        //Corresponding corners of the cards covered by selected card
+        int[] arrayCorners = {2, 3, 0, 1};
 
-                    }
-                    else if(pos.equals(new Coordinate(1, -1))){
-
-                    }
-                    else if(pos.equals(new Coordinate(-1, -1))) {
-
-                    }
-                }
-                else{
-                    //TODO to implement non flipped startCard
-                    if(pos.equals(new Coordinate(-1, 1))){
-                        //TODO up to review the two letters standard for corner
-                        currItem = sc.getCorners()[0];
+        for(i = 0; i < coveredCoordinates.length; i++){
+            if(coveredCoordinates[i] != null){
+                if(coveredCoordinates[i].equals(startCoordinate)){
+                    if(!sc.isFlipped()){
+                        currItem = sc.getCorners()[arrayCorners[i]];
                         currValue = this.uncoveredItems.get(currItem);
                         currValue--;
                         this.uncoveredItems.put(currItem, currValue);
-                        //TODO need a setter override by index for the StartCard class
+                        //TODO corner setter for startCard's array
                     }
-                    else if(pos.equals(new Coordinate(1, 1))){
-
-                    }
-                    else if(pos.equals(new Coordinate(1, -1))){
-
-                    }
-                    else if(pos.equals(new Coordinate(-1, -1))) {
-
-                    }
-                }
-            }
-
-            /*Current card is not the starting card*/
-            else{
-                currCard = (PlayableCard) this.playedCards.get(currCoordinate);
-                //TODO need a isFlipped() method for PlayableCard class
-                /*as if the card is flipped i dont need to change player's items*/
-                if(/*!currCard.isFlipped()*/ true){
-                    /*pos is TL compared to current card*/
-                    if ((currCoordinate.getX() - 1) == (pos.getX()) && (currCoordinate.getY() + 1) == (pos.getY())) {
-                        //TODO notation with corners
-                        currItem = currCard.getCorners()[0];
-                        if (currItem != Item.EMPTY && currItem != Item.HIDDEN) {
+                    else{
+                        if(sc.getBackCorners()[arrayCorners[i]] != Item.EMPTY){
+                            currItem = sc.getBackCorners()[arrayCorners[i]];
                             currValue = this.uncoveredItems.get(currItem);
                             currValue--;
                             this.uncoveredItems.put(currItem, currValue);
                         }
-                        //TODO need a setter override by index for the StartCard class's array, IE: setBackCorners(int, item)
-                    } else if ((currCoordinate.getX() + 1) == (pos.getX()) && (currCoordinate.getY() + 1) == (pos.getY())) {
-
-                    } else if ((currCoordinate.getX() + 1) == (pos.getX()) && (currCoordinate.getY() - 1) == (pos.getY())) {
-
-                    } else if ((currCoordinate.getX() - 1) == (pos.getX()) && (currCoordinate.getY() - 1) == (pos.getY())) {
-
+                        //TODO corner setter for startCard's back array
                     }
                 }
-
+                else{
+                    currCard = (PlayableCard) this.playedCards.get(coveredCoordinates[i]);
+                    if(currCard.getCorners()[arrayCorners[i]] != Item.EMPTY) {
+                        currItem = currCard.getCorners()[arrayCorners[i]];
+                        currValue = this.uncoveredItems.get(currItem);
+                        currValue--;
+                        this.uncoveredItems.put(currItem, currValue);
+                    }
+                    currCard.setCorner(Item.HIDDEN, arrayCorners[i]);
+                }
             }
         }
 
+        if(flipped){
+            currItem = c.getPermanentResource();
+            currValue = this.uncoveredItems.get(currItem);
+            currValue++;
+            this.uncoveredItems.put(currItem, currValue);
+            c.flipCard();
+        }
+        else{
+            Item[] corners = c.getCorners();
+            for(Item item : corners){
+                if(item != Item.EMPTY && item != Item.HIDDEN){
+                    currValue = this.uncoveredItems.get(item);
+                    currValue++;
+                    this.uncoveredItems.put(item, currValue);
+                }
+            }
+        }
 
         this.playedCards.put(new Coordinate(pos.getX(), pos.getY()), c);
-        //TODO update the uncoveredItems by the card c being flipped or not
     }
 
     private void removeFromHand(PlayableCard c) throws MissingCardFromHandException{
@@ -246,18 +217,21 @@ public class PlayArea {
             this.hand.remove(c);
     }
 
-    private List<Coordinate> newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException {
-        List<Coordinate> coveredCoordinates = new ArrayList<>();
+    private Coordinate[] newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException{
+        Coordinate[] coveredCoordinates = {null, null, null, null};
         int[] arrayX = {-1, 1, 1, -1};
         int[] arrayY = {1, 1, -1, -1};
+        boolean flag = false;
 
         /*The way it's implemented I check the corners of the selected card starting from the TL and ending in BL*/
         for(int i = 0; i < arrayX.length; i++){
-            Coordinate coordinateCheck = new Coordinate(pos.getX() + arrayX[i],pos.getY() + arrayY[i]);
-            if(this.playedCards.containsKey(coordinateCheck))
-                coveredCoordinates.add(coordinateCheck);
+            Coordinate coordinateCheck = new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]);
+            if(this.playedCards.containsKey(coordinateCheck)) {
+                coveredCoordinates[i] = coordinateCheck;
+                flag = true;
+            }
         }
-        if(coveredCoordinates.isEmpty())
+        if(!flag)
             throw new NoCoveredCardsException();
         else
             return coveredCoordinates;
@@ -281,3 +255,4 @@ public class PlayArea {
     }
 
 }
+
