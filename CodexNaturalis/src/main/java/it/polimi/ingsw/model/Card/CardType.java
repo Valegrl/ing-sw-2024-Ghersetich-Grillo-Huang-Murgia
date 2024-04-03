@@ -26,4 +26,12 @@ public enum CardType {
     private CardType(String type) {
         this.type = type;
     }
+
+    /**
+     * TODO
+     * @return
+     */
+    public String get() {
+        return type;
+    }
 }
