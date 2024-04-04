@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Evaluator.Evaluator;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,9 +57,9 @@ public abstract class EvaluableCard extends Card {
 	}
 
 	/**
-	 * Retrieves the list of pairs of coordinates and items required to score points.
+	 * Retrieves the array of pairs of coordinates and items required to score points.
 	 */
-	public List<Pair<Coordinate, Item>> getRequiredPattern() {
+	public Pair<Coordinate, Item>[] getRequiredPattern() {
 		return null;
 	}
 

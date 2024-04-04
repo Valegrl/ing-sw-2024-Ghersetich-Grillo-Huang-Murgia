@@ -1,12 +1,9 @@
 package it.polimi.ingsw.model.Card;
 
 import it.polimi.ingsw.model.Evaluator.Evaluator;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player.Player;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,9 +12,9 @@ import java.util.Map;
  */
 public class ObjectiveCard extends EvaluableCard {
 	/**
-	 * A list of {@link Pair Pairs} representing the pattern required to assign points.
+	 * An array of {@link Pair Pairs} representing the pattern required to assign points.
 	 */
-	private final List<Pair<Coordinate, Item>> requiredPattern;
+	private final Pair<Coordinate, Item>[] requiredPattern;
 
 	/**
 	 * A Map associating Items to the number of required visible resources of that type
@@ -31,10 +28,10 @@ public class ObjectiveCard extends EvaluableCard {
 	 * @param id A unique String associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
 	 * @param points The number of points associated with each card.
-	 * @param requiredPattern The list of {@link Pair Pairs} representing the pattern required to assign points.
+	 * @param requiredPattern The array of {@link Pair Pairs} representing the pattern required to assign points.
 	 * @param requiredItems The Map of required Items to score the number of points associated with the card.
 	 */
-	public ObjectiveCard(String id, Evaluator evaluator, int points, List<Pair<Coordinate, Item>> requiredPattern, Map<Item, Integer> requiredItems) {
+	public ObjectiveCard(String id, Evaluator evaluator, int points, Pair<Coordinate, Item>[] requiredPattern, Map<Item, Integer> requiredItems) {
 		super(id, evaluator, points);
 		this.requiredPattern = requiredPattern;
 		this.requiredItems = requiredItems;
@@ -45,7 +42,7 @@ public class ObjectiveCard extends EvaluableCard {
 	 * @return {@link ObjectiveCard#requiredPattern}.
 	 */
 	@Override
-	public List<Pair<Coordinate, Item>> getRequiredPattern() {
+	public Pair<Coordinate, Item>[] getRequiredPattern() {
 		return requiredPattern;
 	}
 
