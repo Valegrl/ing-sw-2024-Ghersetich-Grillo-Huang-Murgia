@@ -14,6 +14,7 @@ import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
 import it.polimi.ingsw.model.exceptions.MissingCardFromHandException;
 import it.polimi.ingsw.model.exceptions.NoCoveredCardsException;
+import it.polimi.ingsw.utils.Pair;
 
 /**
  * A class to represent the {@link it.polimi.ingsw.model.Player.Player Player}'s playArea.
@@ -27,9 +28,16 @@ public class PlayArea {
     private final List<PlayableCard> hand;
 
     /**
-     * The map of the cards played in this PlayArea and their respective coordinates.
+     * The StartCard chosen to start.
+     * Its Coordinate is (0,0).
      */
-    private final Map<Coordinate, Card> playedCards;
+    //TODO check for new implementation, remember that we consider the coordinate (0,0) for this card.
+    private final StartCard startCard;
+
+    /**
+     * The map of the PlayableCards played after the {@link PlayArea#startCard} in this PlayArea and their respective coordinates.
+     */
+    private final Map<Coordinate, PlayableCard> playedCards; //TODO check for new implementation
 
     /**
      * The map of the items a player possesses, items covered by other cards aren't included.
@@ -37,9 +45,9 @@ public class PlayArea {
     private final Map<Item, Integer> uncoveredItems;
 
     /**
-     * The card selected by the player for placing.
+     * The card and its Coordinate selected by the player for placing.
      */
-    private EvaluableCard selectedCard;
+    private Pair<Coordinate, EvaluableCard> selectedCard; //TODO check for new implementation
 
     public PlayArea(List<PlayableCard> hand, StartCard c){
 
@@ -58,8 +66,7 @@ public class PlayArea {
 
         this.selectedCard = null;
 
-        Coordinate coordinate = new Coordinate(0, 0);
-        playedCards.put(coordinate, c);
+        this.startCard = c;
     }
 
     /*Getters should maybe give a copy? It'd be safer*/
@@ -67,7 +74,7 @@ public class PlayArea {
         return this.hand;
     }
 
-    public Map<Coordinate, Card> getPlayedCards(){
+    public Map<Coordinate, PlayableCard> getPlayedCards(){
         return this.playedCards;
     }
 
@@ -75,7 +82,7 @@ public class PlayArea {
         return this.uncoveredItems;
     }
 
-    public EvaluableCard getSelectedCard(){
+    public Pair<Coordinate, EvaluableCard> getSelectedCard(){
         return this.selectedCard;
     }
 
@@ -114,8 +121,9 @@ public class PlayArea {
      * Selects the given {@link EvaluableCard}.
      * @param c The card to be selected.
      */
-    public void selectCard(EvaluableCard c) {
-        this.selectedCard = c;
+    public void selectCard(Coordinate pos, EvaluableCard c) {
+        this.selectedCard.setKey(pos);
+        this.selectedCard.setValue(c);
     }
 
     /**
@@ -217,7 +225,7 @@ public class PlayArea {
             this.hand.remove(c);
     }
 
-    private Coordinate[] newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException{
+    public Coordinate[] newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException{
         Coordinate[] coveredCoordinates = {null, null, null, null};
         int[] arrayX = {-1, 1, 1, -1};
         int[] arrayY = {1, 1, -1, -1};

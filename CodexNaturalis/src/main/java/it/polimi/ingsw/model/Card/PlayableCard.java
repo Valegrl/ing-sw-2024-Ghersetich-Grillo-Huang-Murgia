@@ -19,6 +19,11 @@ public abstract class PlayableCard extends EvaluableCard {
 	private Item[] corners;
 
 	/**
+	 * The PlayableCard can be {@link CardType#GOLD} or {@link CardType#RESOURCE}.
+	 */
+	private final CardType type;
+
+	/**
 	 * Sets each corner to the Item EMPTY.
 	 */
 	public void flipCard() {
@@ -33,11 +38,13 @@ public abstract class PlayableCard extends EvaluableCard {
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
 	 * @param points The amount of points associated with each card.
 	 * @param permanentResource The list of Items in each corner of the back of a Start card.
+	 * @param type Represents if a PlayableCard is {@link CardType#GOLD} or {@link CardType#RESOURCE}.
 	 */
-	public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource) {
+	public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource, CardType type) {
 		super(id, evaluator, points);
 		this.permanentResource = permanentResource;
 		this.corners = new Item[4];
+		this.type = type;
 	}
 
 	/**
@@ -71,4 +78,9 @@ public abstract class PlayableCard extends EvaluableCard {
 	public Map<Item, Integer> getConstraint() {
 		return null;
 	}
+
+	/**
+	 * Retrieves the type of the PlayableCard.
+	 */
+	public CardType getCardType() { return type;}
 }

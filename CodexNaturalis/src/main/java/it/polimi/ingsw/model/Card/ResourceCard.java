@@ -14,6 +14,6 @@ public class ResourceCard extends PlayableCard {
      * @param permanentResource The fixed resource of a Playable card, valid through the entire game.
      */
     public ResourceCard(String id, Evaluator evaluator, int points, Item permanentResource) {
-        super(id, evaluator, points, permanentResource);
+        super(id, evaluator, points, permanentResource, CardType.RESOURCE);
     }
 }

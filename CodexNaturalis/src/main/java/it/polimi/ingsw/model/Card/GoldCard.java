@@ -28,7 +28,7 @@ public class GoldCard extends PlayableCard {
 	 * @param requiredItems The condition required to get points when placing a Gold card.
 	 */
 	public GoldCard(String id, Evaluator evaluator, int points, Item permanentResource, Map<Item, Integer> constraint, Map<Item, Integer> requiredItems) {
-		super(id, evaluator, points, permanentResource);
+		super(id, evaluator, points, permanentResource, CardType.GOLD);
 		this.constraint = constraint;
 		this.requiredItems = requiredItems;
 	}

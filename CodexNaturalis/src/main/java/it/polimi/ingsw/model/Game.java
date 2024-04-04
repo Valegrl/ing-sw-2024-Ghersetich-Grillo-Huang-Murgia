@@ -136,7 +136,7 @@ public class Game {
      * @param p The {@link Player} that selected the card.
      */
     public void selectCard(EvaluableCard c, Player p) {
-        p.getPlayArea().selectCard(c);
+        p.getPlayArea().selectCard(c); //TODO check for new implementation
     }
 
     /**
