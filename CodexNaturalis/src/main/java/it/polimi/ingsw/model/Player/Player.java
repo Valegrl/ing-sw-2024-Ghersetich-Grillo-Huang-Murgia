@@ -3,8 +3,10 @@ package it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Card.*;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.exceptions.IllegalFirstHandException;
+
 import java.util.Iterator;
 import java.util.List;
+
 
 /**
  * A class to represent a player in-game
@@ -65,7 +67,17 @@ public class Player {
         return this.secretObjective;
     }
 
+    public void setToken(Token token) {
+        this.token = token;
+    }
 
+    public void setSecretObjective(ObjectiveCard secretObjective) {
+        this.secretObjective = secretObjective;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
     /**
      * Initializes player's playArea which contains all the methods and data regarding the game's execution.
@@ -79,14 +91,12 @@ public class Player {
 
         int goldCounter = 0;
         int resourceCounter = 0;
-        Iterator<PlayableCard> iterator = hand.iterator();
 
-        while(iterator.hasNext()){
-            PlayableCard iteratedCard = iterator.next();
-            if(iteratedCard.getCardType() == CardType.GOLD) {
+        for(PlayableCard currCard : this.getPlayArea().getHand()){
+            if(currCard.getCardType() == CardType.GOLD) {
                 goldCounter++;
             }
-            if(iteratedCard.getCardType() == CardType.RESOURCE) {
+            if(currCard.getCardType() == CardType.RESOURCE) {
                 resourceCounter++;
             }
         }
@@ -97,29 +107,5 @@ public class Player {
 
         this.playArea = new PlayArea(hand, c);
     }
-
-
-
-    /*=======================================================================================================*/
-    /**
-     * Shows the untaken tokens and then assigns the chosen token to the player
-     * @param t the list of available tokens a player can choose from
-     */
-    public void chooseToken(List<Token> t) {
-        //TODO needs the player's controller
-    }
-
-    //*second possible way to implement chooseToken*
-    /*il game dovrebbe assegnare il token dei players*/
-
-
-    /**
-     * Assigns a secret objectiveCard to the player which other players can't see
-     * @param a one of the two possible objectiveCard the player can choose at the start
-     * @param b one of the two possible objectiveCard the player can choose at the start
-     */
-    public void chooseSecret(ObjectiveCard a, ObjectiveCard b) {
-        //TODO needs the player's controller
-    }
-
+    /*Removed the methods: chooseToken() and chooseSecret()*/
 }

@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.Player;
 
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 import it.polimi.ingsw.model.Card.*;
 import it.polimi.ingsw.model.Evaluator.CornerEvaluator;
@@ -31,13 +28,13 @@ public class PlayArea {
      * The StartCard chosen to start.
      * Its Coordinate is (0,0).
      */
-    //TODO check for new implementation, remember that we consider the coordinate (0,0) for this card.
+    /*Remember that we consider the coordinate (0,0) for this card.*/
     private final StartCard startCard;
 
     /**
      * The map of the PlayableCards played after the {@link PlayArea#startCard} in this PlayArea and their respective coordinates.
      */
-    private final Map<Coordinate, PlayableCard> playedCards; //TODO check for new implementation
+    private final Map<Coordinate, PlayableCard> playedCards;
 
     /**
      * The map of the items a player possesses, items covered by other cards aren't included.
@@ -47,7 +44,7 @@ public class PlayArea {
     /**
      * The card and its Coordinate selected by the player for placing.
      */
-    private Pair<Coordinate, EvaluableCard> selectedCard; //TODO check for new implementation
+    private Pair<Coordinate, EvaluableCard> selectedCard;
 
     public PlayArea(List<PlayableCard> hand, StartCard c){
 
@@ -86,6 +83,10 @@ public class PlayArea {
         return this.selectedCard;
     }
 
+    public StartCard getStartCard() {
+        return this.startCard;
+    }
+
     /**
      * Flips the start card if signaled by the given parameter.
      * Updates uncovered items based on the visible corners of the chosen side.
@@ -93,8 +94,7 @@ public class PlayArea {
      */
     public void flipStartCard(boolean flipped){
 
-        StartCard sc;
-        sc = (StartCard) this.playedCards.get(new Coordinate(0, 0));
+        StartCard sc = this.startCard;
         if (flipped)
             sc.flipCard();
 
@@ -154,16 +154,17 @@ public class PlayArea {
         Coordinate[] coveredCoordinates = this.newlyCoveredCards(pos);
 
         Coordinate startCoordinate = new Coordinate(0, 0);
-        StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
+        StartCard sc = this.startCard;
         Item currItem;
         int currValue;
         PlayableCard currCard;
 
         //TODO up to review the two letters standard for corners
         int i;
-        //Corresponding corners of the cards covered by selected card
+        //Corresponding corners of the cards covered by played card
         int[] arrayCorners = {2, 3, 0, 1};
 
+        /*Updating the player's items inventory depending on the cards that have their corner covered*/
         for(i = 0; i < coveredCoordinates.length; i++){
             if(coveredCoordinates[i] != null){
                 if(coveredCoordinates[i].equals(startCoordinate)){
@@ -172,7 +173,7 @@ public class PlayArea {
                         currValue = this.uncoveredItems.get(currItem);
                         currValue--;
                         this.uncoveredItems.put(currItem, currValue);
-                        //TODO corner setter for startCard's array
+                        sc.setCorner(Item.COVERED, arrayCorners[i]);
                     }
                     else{
                         if(sc.getBackCorners()[arrayCorners[i]] != Item.EMPTY){
@@ -181,18 +182,18 @@ public class PlayArea {
                             currValue--;
                             this.uncoveredItems.put(currItem, currValue);
                         }
-                        //TODO corner setter for startCard's back array
+                        sc.setBackCorner(Item.COVERED, arrayCorners[i]);
                     }
                 }
                 else{
-                    currCard = (PlayableCard) this.playedCards.get(coveredCoordinates[i]);
-                    if(currCard.getCorners()[arrayCorners[i]] != Item.EMPTY) {
+                    currCard = this.playedCards.get(coveredCoordinates[i]);
+                    if(currCard.getCorners()[arrayCorners[i]] != Item.EMPTY){
                         currItem = currCard.getCorners()[arrayCorners[i]];
                         currValue = this.uncoveredItems.get(currItem);
                         currValue--;
                         this.uncoveredItems.put(currItem, currValue);
                     }
-                    currCard.setCorner(Item.HIDDEN, arrayCorners[i]);
+                    currCard.setCorner(Item.COVERED, arrayCorners[i]);
                 }
             }
         }
@@ -229,12 +230,17 @@ public class PlayArea {
         Coordinate[] coveredCoordinates = {null, null, null, null};
         int[] arrayX = {-1, 1, 1, -1};
         int[] arrayY = {1, 1, -1, -1};
+        Coordinate[] coordinateArray = new Coordinate[4];
+        for(int i = 0; i < arrayX.length; i++)
+            coordinateArray[i] = new Coordinate(arrayX[i], arrayY[i]);
+
+
         boolean flag = false;
 
         /*The way it's implemented I check the corners of the selected card starting from the TL and ending in BL*/
-        for(int i = 0; i < arrayX.length; i++){
-            Coordinate coordinateCheck = new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]);
-            if(this.playedCards.containsKey(coordinateCheck)) {
+        for(int i = 0; i < coordinateArray.length; i++){
+            Coordinate coordinateCheck = pos.add(coordinateArray[i]);
+            if(this.playedCards.containsKey(coordinateCheck)){
                 coveredCoordinates[i] = coordinateCheck;
                 flag = true;
             }
@@ -250,44 +256,51 @@ public class PlayArea {
     }
 
     public List<Coordinate> getAvailablePos() {
+        //TODO code review
         /*Don't use method newlyCoveredCards, it would be wrong logically!*/
         int[] arrayX = {-1, 1, 1, -1};
         int[] arrayY = {1, 1, -1, -1};
-        int i;
-        List<Coordinate> availablePos = new ArrayList<>();
+        Coordinate[] arrayCoordinate = new Coordinate[4];
+        for(int i = 0; i < arrayX.length; i++)
+            arrayCoordinate[i] = new Coordinate(arrayX[i], arrayY[i]);
+
+
+        Set<Coordinate> okPos = new HashSet<>();
+        Set<Coordinate> notOkPos = new HashSet<>();
         Coordinate startCoordinate = new Coordinate(0, 0);
-        StartCard sc = (StartCard) this.playedCards.get(startCoordinate);
+        StartCard sc = this.startCard;
 
         for(Coordinate pos : this.playedCards.keySet()){
             if(pos.equals(startCoordinate)){
                 if(!sc.isFlipped()){
-                    for(i = 0; i < sc.getCorners().length; i++){
-                        if(sc.getCorners()[i] != Item.HIDDEN){
-                            availablePos.add(new Coordinate(arrayX[i], arrayY[i]));
-                        }
+                    for(int i = 0; i < sc.getCorners().length; i++){
+                        if(sc.getCorners()[i] != Item.HIDDEN && sc.getCorners()[i] != Item.COVERED)
+                            okPos.add(startCoordinate.add(arrayCoordinate[i]));
+                        else
+                            notOkPos.add(startCoordinate.add(arrayCoordinate[i]));
                     }
                 }
                 else{
-                    for(i = 0; i < sc.getBackCorners().length; i++){
-                        if(sc.getBackCorners()[i] != Item.HIDDEN){
-                            availablePos.add(new Coordinate(arrayX[i], arrayY[i]));
-                        }
+                    for(int i = 0; i < sc.getBackCorners().length; i++){
+                        if(sc.getBackCorners()[i] != Item.HIDDEN && sc.getBackCorners()[i] != Item.COVERED)
+                            okPos.add(startCoordinate.add(arrayCoordinate[i]));
+                        else
+                            notOkPos.add(startCoordinate.add(arrayCoordinate[i]));
                     }
                 }
             }
-            //If current Card is not the starting Card I have to keep in mind that current Card corners might
-            // be covering other cards' corners
             else{
-                PlayableCard currCard = (PlayableCard) this.playedCards.get(pos);
-                for(i = 0; i < currCard.getCorners().length; i++){
-                    if(!this.playedCards.containsKey(new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]))
-                    && currCard.getCorners()[i] != Item.HIDDEN){
-                        availablePos.add(new Coordinate(pos.getX() + arrayX[i], pos.getY() + arrayY[i]));
-                    }
+                PlayableCard currCard = this.playedCards.get(pos);
+                for(int i = 0; i < currCard.getCorners().length; i++){
+                    if(currCard.getCorners()[i] != Item.HIDDEN && currCard.getCorners()[i] != Item.COVERED)
+                        okPos.add(pos.add(arrayCoordinate[i]));
+                    else
+                        notOkPos.add(pos.add(arrayCoordinate[i]));
                 }
             }
         }
-        return availablePos;
+        okPos.removeAll(notOkPos);
+        return new ArrayList<>(okPos);
     }
 
     public void addToHand(PlayableCard c) throws FullHandException {
