@@ -5,15 +5,15 @@ package it.polimi.ingsw.model.Card;
  */
 public abstract class Card {
 	/**
-	 * A unique identifier (an integer) that distinguishes each and every card in the game.
+	 * A unique identifier (a String) that distinguishes each and every card in the game.
 	 */
-	private final int id;
+	private final String id;
 
 	/**
 	 * Constructs a new Card with the given identifier.
-	 * @param id A unique integer associated with each card.
+	 * @param id A unique String associated with each card.
 	 */
-	public Card(int id) {
+	public Card(String id) {
 		this.id = id;
 	}
 
@@ -21,7 +21,7 @@ public abstract class Card {
 	 * Retrieves the identifier of a card.
 	 * @return {@link Card#id}
 	 */
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 }

@@ -38,7 +38,7 @@ public class StartCard extends Card {
 	 * @param id A unique integer associated with each card.
 	 * @param backPermanentResources The list of fixed resources of a Start card.
 	 */
-	public StartCard(int id, List<Item> backPermanentResources) {
+	public StartCard(String id, List<Item> backPermanentResources) {
 		super(id);
 		this.backPermanentResources = backPermanentResources;
 		this.corners = new Item[4];

@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.Card;
 
 import it.polimi.ingsw.model.Evaluator.Evaluator;
 
+import java.util.Map;
+
 /**
  * A class to represent a specific type of card, a Playable card.
  */
@@ -17,11 +19,6 @@ public abstract class PlayableCard extends EvaluableCard {
 	private Item[] corners;
 
 	/**
-	 * Shows if the card has a constraint to get points.
-	 */
-	private final boolean hasConstraint;
-
-	/**
 	 * Sets each corner to the Item EMPTY.
 	 */
 	public void flipCard() {
@@ -32,17 +29,15 @@ public abstract class PlayableCard extends EvaluableCard {
 
 	/**
 	 * Constructs a new Playable
-	 * @param id A unique integer associated with each card.
+	 * @param id A unique String associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
 	 * @param points The amount of points associated with each card.
 	 * @param permanentResource The list of Items in each corner of the back of a Start card.
-	 * @param hasConstraint The showing side of a Start card.
 	 */
-	public PlayableCard(int id, Evaluator evaluator, int points, Item permanentResource, boolean hasConstraint) {
+	public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource) {
 		super(id, evaluator, points);
 		this.permanentResource = permanentResource;
 		this.corners = new Item[4];
-		this.hasConstraint = hasConstraint;
 	}
 
 	/**
@@ -70,7 +65,10 @@ public abstract class PlayableCard extends EvaluableCard {
 		this.corners[i] = item;
 	}
 
-	public boolean getHasConstraint() {
-		return hasConstraint;
+	/**
+	 * Retrieves the number of occurrences of each resource to be able to score points.
+	 */
+	public Map<Item, Integer> getConstraint() {
+		return null;
 	}
 }

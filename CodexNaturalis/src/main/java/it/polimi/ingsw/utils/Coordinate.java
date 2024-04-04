@@ -26,6 +26,15 @@ public class Coordinate {
     }
 
     /**
+     * Retrieves the sum of two Coordinates.
+     * @param c The coordinate to sum.
+     * @return A new sum Coordinate.
+     */
+    public Coordinate add(Coordinate c){
+        return new Coordinate(this.x + c.x, this.y + c.y);
+    }
+
+    /**
      * Retrieves the x-coordinate of this Coordinate.
      *
      * @return the x-coordinate.
