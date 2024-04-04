@@ -1,6 +1,11 @@
 package it.polimi.ingsw.model.Card;
 
 import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.Pair;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class to represent an Evaluable card, i.e. an Objective or Gold or Resource card.
@@ -18,11 +23,11 @@ public abstract class EvaluableCard extends Card {
 
 	/**
 	 * Constructs a new Evaluable card.
-	 * @param id A unique integer associated with each card.
+	 * @param id A unique String associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
 	 * @param points The amount of points associated with each card.
 	 */
-	public EvaluableCard(int id, Evaluator evaluator, int points) {
+	public EvaluableCard(String id, Evaluator evaluator, int points) {
 		super(id);
 		this.evaluator = evaluator;
 		this.points = points;
@@ -51,5 +56,21 @@ public abstract class EvaluableCard extends Card {
 	public void setPoints(int points) {
 		this.points = points;
 	}
+
+	/**
+	 * Retrieves the list of pairs of coordinates and items required to score points.
+	 */
+	public List<Pair<Coordinate, Item>> getRequiredPattern() {
+		return null;
+	}
+
+	/**
+	 * Retrieves the number of Items of each Resource required to score points.
+	 */
+	public Map<Item, Integer> getRequiredItems() {
+		return null;
+	}
+
+
 }
 
