@@ -30,7 +30,7 @@ public class PlayArea {
     private final StartCard startCard;
 
     /**
-     * The map of the PlayableCards played after the {@link PlayArea#startCard} in this PlayArea and their respective coordinates.
+     * The map of the PlayableCards played after the {@link StartCard} and their respective coordinates.
      */
     private final Map<Coordinate, PlayableCard> playedCards;
 
@@ -44,6 +44,11 @@ public class PlayArea {
      */
     private Pair<Coordinate, EvaluableCard> selectedCard;
 
+    /**
+     * PlayArea's constructor
+     * @param hand the player's initial hand
+     * @param c the player's chosen start card
+     */
     public PlayArea(List<PlayableCard> hand, StartCard c){
 
         this.hand = hand;
@@ -95,8 +100,9 @@ public class PlayArea {
     }
 
     /**
-     * Selects the given {@link EvaluableCard}.
+     * Selects the given {@link EvaluableCard} and its {@link Coordinate}.
      * @param c The card to be selected.
+     * @param pos The coordinate of the selected card
      */
     public void selectCard(Coordinate pos, EvaluableCard c) {
         this.selectedCard.setKey(pos);
@@ -125,8 +131,17 @@ public class PlayArea {
         }
     }
 
-    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws MissingCardFromHandException,
-            NoCoveredCardsException{
+    /**
+     * Removes a card from the player's hand, updates the item counts if the card covers others corners.
+     * After which the card is placed into the playedCard.
+     *
+     * @param c The card which is going to be placed.
+     * @param pos The coordinates of the card.
+     * @param flipped Indicates if the card is placed flipped or not.
+     * @throws MissingCardFromHandException If the played card is not present in the player's hand.
+     * @throws NoCoveredCardsException If the card doesn't cover any other cards which is impossible.
+     */
+    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped){
         this.removeFromHand(c);
         Coordinate[] coveredCoordinates = this.newlyCoveredCards(pos);
 
@@ -195,14 +210,27 @@ public class PlayArea {
         this.playedCards.put(new Coordinate(pos.getX(), pos.getY()), c);
     }
 
-    private void removeFromHand(PlayableCard c) throws MissingCardFromHandException{
+    /**
+     * Removes a card from the player's hand.
+     *
+     * @param c The card to be removed.
+     * @throws MissingCardFromHandException If the card is not present in the player's hand.
+     */
+    private void removeFromHand(PlayableCard c){
         if(!this.hand.contains(c))
             throw new MissingCardFromHandException();
         else
             this.hand.remove(c);
     }
 
-    public Coordinate[] newlyCoveredCards(Coordinate pos) throws NoCoveredCardsException{
+    /**
+     * Calculates which cards will have their corner covered by the played card.
+     *
+     * @param pos The card's coordinates.
+     * @return A list of the covered cards coordinates.
+     * @throws NoCoveredCardsException If the card doesn't cover any other cards which is impossible.
+     */
+    public Coordinate[] newlyCoveredCards(Coordinate pos) {
         Coordinate[] coveredCoordinates = {null, null, null, null};
         int[] arrayX = {-1, 1, 1, -1};
         int[] arrayY = {1, 1, -1, -1};
@@ -230,6 +258,11 @@ public class PlayArea {
     }
 
     /*Exception if there is no card at the parameter coordinate ?*/
+    /**
+     * Gets the player's already played card if passed its matching coordinates.
+     * @param pos The coordinates with which playArea retrieves the associated card.
+     * @return The card that matches the passed coordinates.
+     */
     public Card getCardByPos(Coordinate pos) {
         if(pos.equals(new Coordinate(0, 0)))
             return this.startCard;
@@ -237,6 +270,10 @@ public class PlayArea {
             return this.playedCards.get(pos);
     }
 
+    /**
+     * Provides a listing of coordinates accessible to a player for card placement.
+     * @return A list of coordinates.
+     */
     public List<Coordinate> getAvailablePos() {
         //TODO code review
         /*To be used only AFTER the PlayArea has a StartCard*/
@@ -284,6 +321,10 @@ public class PlayArea {
         return new ArrayList<>(okPos);
     }
 
+    /**
+     * Adds a playable card to the player's hand.
+     * @param c The card to be added.
+     */
     public void addToHand(PlayableCard c) {
         if(this.hand.size() >= 3){
             throw new FullHandException();

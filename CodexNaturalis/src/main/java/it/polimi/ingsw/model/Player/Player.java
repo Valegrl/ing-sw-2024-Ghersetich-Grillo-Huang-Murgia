@@ -92,7 +92,7 @@ public class Player {
         int goldCounter = 0;
         int resourceCounter = 0;
 
-        for(PlayableCard currCard : this.getPlayArea().getHand()){
+        for(PlayableCard currCard : hand){
             if(currCard.getCardType() == CardType.GOLD) {
                 goldCounter++;
             }
