@@ -55,7 +55,7 @@ public class Player {
         return this.token;
     }
 
-    public boolean getOnline(){
+    public boolean isOnline(){
         return this.online;
     }
 
@@ -80,12 +80,12 @@ public class Player {
     }
 
     /**
-     * Initializes player's playArea which contains all the methods and data regarding the game's execution.
+     * Initializes player's playArea, which contains all the methods and data regarding the game's execution.
      * @param hand the cards a player selects at the game's start.
      * @param c the startCard that a player selects upon starting the game, it gets placed on the PlayArea at (0, 0).
      */
     public void initPlayArea(List<PlayableCard> hand, StartCard c) throws IllegalFirstHandException {
-        if(hand.size() != 3){
+        if(hand.size() != 3){ // TODO constants ?
             throw new IllegalFirstHandException();
         }
 

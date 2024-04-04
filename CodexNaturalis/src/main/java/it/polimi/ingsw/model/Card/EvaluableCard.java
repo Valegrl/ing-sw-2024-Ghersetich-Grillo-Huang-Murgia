@@ -51,7 +51,7 @@ public abstract class EvaluableCard extends Card {
 
 	/**
 	 * Sets the amount of point of an Evaluable card.
-	 * @param points The amount of points associated with each Evaluable card.
+	 * @param points The number of points associated with each Evaluable card.
 	 */
 	public void setPoints(int points) {
 		this.points = points;

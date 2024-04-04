@@ -7,31 +7,27 @@ import java.util.List;
  */
 public class StartCard extends Card {
 	/**
-	 * The fixed resources of each start card, valid through the entire game.
+	 * The fixed resources of each start card,
+	 * valid through the entire game only if the card is flipped.
 	 */
 	private final List<Item> backPermanentResources;
 
 	/**
-	 * The Items on each corner of a Start card.
+	 * The {@link Item Items} contained on each corner of a Start card's front side.
 	 */
-	private Item[] corners;
+	private Item[] frontCorners;
 
 	/**
-	 * The Items on each corner of the back of a Start card.
+	 * The {@link Item Items} contained on each corner of a Start card's back side.
 	 */
 	private Item[] backCorners;
 
 	/**
-	 * Shows if the showing side of the card was changed. Flipped is false if the showing side is the front of the start card, true if the showing side is the back of a Start card.
+	 * Indicates the current showing side of the StartCard.
+	 * Flipped is false if the card is displayed with the front side,
+	 * true if the card is displayed with the back side.
 	 */
 	private boolean flipped = false;
-
-	/**
-	 * Changes the showing side in which the Start card will be placed in the Play Area.
-	 */
-	public void flipCard() {
-		flipped=!flipped;
-	}
 
 	/**
 	 * Constructs a new Start Card.
@@ -41,13 +37,23 @@ public class StartCard extends Card {
 	public StartCard(String id, List<Item> backPermanentResources) {
 		super(id);
 		this.backPermanentResources = backPermanentResources;
-		this.corners = new Item[4];
-		this.backCorners = new Item[4];
+		this.frontCorners = new Item[CornerIndex.values().length];
+		this.backCorners = new Item[CornerIndex.values().length];
 	}
 
 	/**
-	 * Checks the showing side of a placed card.
-	 * @return The current state of the card, whether it's flipped or not.
+	 * Changes the showing side of the StartCard in the {@link it.polimi.ingsw.model.Player.PlayArea PlayArea}.
+	 */
+	public void flipCard() {
+		flipped =! flipped;
+	}
+
+	/**
+	 * Retrieves the showing side of the StartCard.
+	 * true if it's flipped,
+	 * false otherwise.
+	 *
+	 * @return The current showing side of the card, whether it's flipped or not.
 	 */
 	public boolean isFlipped() {
 		return flipped;
@@ -62,25 +68,47 @@ public class StartCard extends Card {
 	}
 
 	/**
-	 * Retrieves the list of Items in each corner of a Start card.
-	 * @return {@link StartCard#corners}.
+	 * Retrieves the array of {@link Item}s contained on each corner of a Start card's front side.
+	 * @return {@link StartCard#frontCorners}.
 	 */
-	public Item[] getCorners() {
-		return corners;
+	public Item[] getFrontCorners() {
+		return frontCorners;
 	}
 
-	public void setCorner(Item item, int i) {
-		this.corners[i] = item;
-	}
 	/**
-	 * Retrieves the list of Items in each corner of the back of a Start card.
+	 * Sets the item at the specified index in the frontCorners array.
+	 *
+	 * @param item The item to set.
+	 * @param i The index at which to set the item.
+	 * @throws ArrayIndexOutOfBoundsException if the index is out of range (i < 0 || i >= backCorners.length).
+	 */
+	public void setFrontCorner(Item item, int i) {
+		if (i < 0 || i >= frontCorners.length) {
+			throw new ArrayIndexOutOfBoundsException("Index is out of range: " + i);
+		}
+		this.frontCorners[i] = item;
+	}
+
+	/**
+	 * Retrieves the array of {@link Item}s contained on each corner of a Start card's back side.
 	 * @return {@link StartCard#backCorners}.
 	 */
 	public Item[] getBackCorners() {
 		return backCorners;
 	}
 
+	/**
+	 * Sets the item at the specified index in the back corners array.
+	 *
+	 * @param item The item to set.
+	 * @param i The index at which to set the item.
+	 * @throws ArrayIndexOutOfBoundsException if the index is out of range (i < 0 || i >= backCorners.length).
+	 */
 	public void setBackCorner(Item item, int i) {
+		if (i < 0 || i >= backCorners.length) {
+			throw new ArrayIndexOutOfBoundsException("Index is out of range: " + i);
+		}
 		this.backCorners[i] = item;
 	}
+
 }

@@ -5,12 +5,13 @@ package it.polimi.ingsw.model.Card;
  */
 public abstract class Card {
 	/**
-	 * A unique identifier (a String) that distinguishes each and every card in the game.
+	 * A String-format unique identifier that distinguishes each and every card in the game.
 	 */
 	private final String id;
 
 	/**
 	 * Constructs a new Card with the given identifier.
+	 *
 	 * @param id A unique String associated with each card.
 	 */
 	public Card(String id) {
@@ -19,7 +20,7 @@ public abstract class Card {
 
 	/**
 	 * Retrieves the identifier of a card.
-	 * @return {@link Card#id}
+	 * @return {@link Card#id}.
 	 */
 	public String getId() {
 		return id;

@@ -6,49 +6,54 @@ import java.util.Map;
 
 /**
  * A class to represent a specific type of card, a Playable card.
+ * These Cards can be played in a {@link it.polimi.ingsw.model.Player.Player Player}'s {@link it.polimi.ingsw.model.Player.PlayArea PlayArea}.
  */
 public abstract class PlayableCard extends EvaluableCard {
 	/**
-	 * The fixed resource of a Playable card, valid through the entire game.
+	 * The permanent resource of a Playable card.
+	 * It is visible through the entire game if the card is placed on its back side.
 	 */
 	private final Item permanentResource;
 
 	/**
-	 * The Items on each corner of a Start card.
+	 * The {@link Item Items} contained on each corner of a card.
 	 */
 	private Item[] corners;
 
 	/**
-	 * The PlayableCard can be {@link CardType#GOLD} or {@link CardType#RESOURCE}.
+	 * The type of PlayableCard.
+	 * It can be {@link CardType#GOLD gold} or {@link CardType#RESOURCE resource}.
 	 */
 	private final CardType type;
 
 	/**
-	 * Sets each corner to the Item EMPTY.
-	 */
-	public void flipCard() {
-		for(int i=0;i<4;i++){
-			corners[i]=Item.EMPTY;
-		}
-	}
-
-	/**
-	 * Constructs a new Playable
+	 * Constructs a new PlayableCard.
+	 *
 	 * @param id A unique String associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
-	 * @param points The amount of points associated with each card.
-	 * @param permanentResource The list of Items in each corner of the back of a Start card.
-	 * @param type Represents if a PlayableCard is {@link CardType#GOLD} or {@link CardType#RESOURCE}.
+	 * @param points The number of points associated with each card.
+	 * @param permanentResource The permanent resource of a PlayableCard.
+	 * @param type The type of this PlayableCard.
 	 */
 	public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource, CardType type) {
 		super(id, evaluator, points);
+
 		this.permanentResource = permanentResource;
-		this.corners = new Item[4];
+		this.corners = new Item[CornerIndex.values().length];
 		this.type = type;
 	}
 
 	/**
-	 * Retrieves the permanent resources of a Start card.
+	 * Flips the card by setting each corner as {@link Item#EMPTY empty}.
+	 */
+	public void flipCard() {
+		for (CornerIndex c : CornerIndex.values()){
+			corners[c.getIndex()] = Item.EMPTY;
+		}
+	}
+
+	/**
+	 * Retrieves the permanent resource of a Start card.
 	 * @return {@link PlayableCard#permanentResource}.
 	 */
 	public Item getPermanentResource() {
@@ -56,7 +61,7 @@ public abstract class PlayableCard extends EvaluableCard {
 	}
 
 	/**
-	 * Retrieves items on the corners of each card.
+	 * Retrieves the array of {@link Item}s contained on each corner of this card.
 	 * @return {@link PlayableCard#corners}.
 	 */
 	public Item[] getCorners() {
@@ -64,23 +69,28 @@ public abstract class PlayableCard extends EvaluableCard {
 	}
 
 	/**
-	 * Sets an Item on each corner of a Playable card.
-	 * @param  item The Item required for a corner
-	 * @param  i Iterates through the four corners of a card.
+	 * Sets the {@link Item} at the specified index in the corners array.
+	 *
+	 * @param item The {@link Item} to set.
+	 * @param i The index at which to set the item.
+	 * @throws ArrayIndexOutOfBoundsException if the index is out of range (i < 0 || i >= backCorners.length).
 	 */
 	public void setCorner(Item item, int i) {
+		if (i < 0 || i >= corners.length) {
+			throw new ArrayIndexOutOfBoundsException("Index is out of range: " + i);
+		}
 		this.corners[i] = item;
 	}
 
 	/**
-	 * Retrieves the number of occurrences of each resource to be able to score points.
+	 * Retrieves the constraint associated with this PlayableCard.
 	 */
 	public Map<Item, Integer> getConstraint() {
 		return null;
 	}
 
 	/**
-	 * Retrieves the type of the PlayableCard.
+	 * Retrieves this PlayableCard's type.
 	 */
 	public CardType getCardType() { return type;}
 }

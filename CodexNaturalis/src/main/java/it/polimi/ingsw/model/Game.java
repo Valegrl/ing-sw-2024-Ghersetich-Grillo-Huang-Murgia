@@ -113,8 +113,7 @@ public class Game {
 
         PlayableCard drawnCard;
         if (chosenDeck.equals(CardType.GOLD)) {
-            if (chosenCard >= 0 && chosenCard < 2) // TODO CONSTANTS?
-                // TODO exceptions for empty decks?
+            if (chosenCard >= 0 && chosenCard < 2) // TODO constants?
                 drawnCard = this.goldDeck.drawVisible(chosenCard);
             else
                 drawnCard = this.goldDeck.drawTop();
@@ -127,16 +126,20 @@ public class Game {
 
         Player currPlayer = this.players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
+
+        // TODO add checkIfEmptyDecks() to start finalPhase
     }
 
     /**
      * Selects the given {@link EvaluableCard} in the {@link PlayArea} of the specified {@link Player}.
      *
      * @param c The {@link EvaluableCard} that needs to be selected.
+     * @param pos The {@link Coordinate} of the card that needs to be selected.
+     *            Can be null if the card to be selected is a {@link ObjectiveCard}.
      * @param p The {@link Player} that selected the card.
      */
-    public void selectCard(EvaluableCard c, Player p) {
-        p.getPlayArea().selectCard(c); //TODO check for new implementation
+    public void selectCard(EvaluableCard c, Coordinate pos, Player p) {
+        p.getPlayArea().selectCard(pos, c);
     }
 
     /**
@@ -154,7 +157,7 @@ public class Game {
 
         currScore += points;
 
-        if (currScore > 20 && !this.finalPhase) this.finalPhase = true; // TODO modify if changed GameStatus
+        if (currScore >= 20 && !this.finalPhase) this.finalPhase = true; // TODO modify if changed GameStatus
         if (currScore > 29) currScore = 29;
 
         this.scoreboard.put(p, currScore);
