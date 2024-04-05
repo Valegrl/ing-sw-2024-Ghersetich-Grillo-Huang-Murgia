@@ -14,6 +14,6 @@ public abstract class Evaluator {
      * @param playArea Where points are calculated.
      * @return Calculated points.
      */
-    public abstract int calculatePoints(PlayArea playArea) throws NoCoveredCardsException;
+    public abstract int calculatePoints(PlayArea playArea);
 
 }
