@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.Card;
 
+import java.util.Objects;
+
 /**
  * A class to represent all possible cards in the game.
  */
@@ -24,6 +26,21 @@ public abstract class Card {
 	 */
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Card that = (Card) obj;
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
 

@@ -82,4 +82,9 @@ public class Pair<T, U> {
         Pair<?, ?> pair = (Pair<?, ?>) o;
         return Objects.equals(key, pair.key) && Objects.equals(value, pair.value);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, value);
+    }
 }

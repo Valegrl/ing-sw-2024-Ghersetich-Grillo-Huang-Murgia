@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.util.Objects;
+
 /**
  * A class to represent a coordinate in a two-dimensional space.
  */
@@ -67,5 +69,10 @@ public class Coordinate {
             return false;
         Coordinate that = (Coordinate) o;
         return x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
