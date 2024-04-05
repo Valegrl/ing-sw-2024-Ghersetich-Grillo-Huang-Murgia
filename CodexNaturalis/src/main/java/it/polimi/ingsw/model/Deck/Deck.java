@@ -1,14 +1,25 @@
 package it.polimi.ingsw.model.Deck;
 
 import it.polimi.ingsw.model.Card.Card;
-import it.polimi.ingsw.model.Card.PlayableCard;
 
-public abstract interface Deck {
+import java.util.List;
 
-    public abstract void newVisibleCard();
+class Deck<T extends Card>{
 
-    public abstract PlayableCard drawVisible(int chosenCard);
+    protected final List<T> deck;
 
-    public abstract PlayableCard drawTop();
 
+    public Deck(List<T> deck) {
+        //TODO correct implementation
+        this.deck = deck;
+    }
+
+    public T drawTop(){
+        //TODO correct implementation
+        return deck.removeLast();
+    }
+
+    public int getSize(){
+        return deck.size();
+    }
 }

@@ -1,19 +1,15 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Card.CardType;
-import it.polimi.ingsw.model.Deck.ResourceDeck;
-import it.polimi.ingsw.model.Deck.GoldDeck;
+import it.polimi.ingsw.model.Card.*;
+import it.polimi.ingsw.model.Deck.PlayingDeck;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.polimi.ingsw.model.Card.ObjectiveCard;
-import it.polimi.ingsw.model.Card.PlayableCard;
 import it.polimi.ingsw.model.Player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.model.Card.EvaluableCard;
 import it.polimi.ingsw.model.Player.Player;
 
 /**
@@ -28,12 +24,12 @@ public class Game {
     /**
      * The Game's {@link it.polimi.ingsw.model.Card.ResourceCard resource cards} deck.
      */
-    private final ResourceDeck resourceDeck;
+    private final PlayingDeck<ResourceCard> resourceDeck;
 
     /**
      * The Game's {@link it.polimi.ingsw.model.Card.GoldCard gold cards} deck.
      */
-    private final GoldDeck goldDeck;
+    private final PlayingDeck<GoldCard> goldDeck;
 
     /**
      * The list of {@link Player players} in a Game.
@@ -68,8 +64,8 @@ public class Game {
     public Game(int id, List<String> players) {
         this.id = id;
 
-        this.resourceDeck = new ResourceDeck(); //TODO when implemented ResourceDeck constructor
-        this.goldDeck = new GoldDeck(); // TODO when implemented GoldDeck constructor
+        this.resourceDeck = new PlayingDeck<ResourceCard>(null, null); //TODO when implemented ResourceDeck constructor
+        this.goldDeck = new PlayingDeck<GoldCard>(null, null); // TODO when implemented GoldDeck constructor
 
         this.turnPlayerIndex = 0;
 
@@ -195,7 +191,7 @@ public class Game {
      * Retrieves Game's resource deck.
      * @return {@link Game#resourceDeck}.
      */
-    public ResourceDeck getResourceDeck() {
+    public PlayingDeck<ResourceCard> getResourceDeck() {
         return resourceDeck;
     }
 
@@ -203,7 +199,7 @@ public class Game {
      * Retrieves Game's gold deck.
      * @return {@link Game#goldDeck}.
      */
-    public GoldDeck getGoldDeck() {
+    public PlayingDeck<GoldCard> getGoldDeck() {
         return goldDeck;
     }
 

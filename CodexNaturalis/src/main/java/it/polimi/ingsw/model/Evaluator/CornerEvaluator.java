@@ -37,6 +37,6 @@ public class CornerEvaluator extends Evaluator {
                 countCorners++;
         }
 
-        return (card.getValue().getPoints()) * countCorners;
+        return (card.getValue().getPoints()) * countCorners;  /*always >0*/
     }
 }

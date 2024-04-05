@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.Evaluator;
 
 import it.polimi.ingsw.model.Player.PlayArea;
-import it.polimi.ingsw.model.exceptions.NoCoveredCardsException;
 
 /**
- * A class that evaluates the points a player receives from a card.
+ * A class that evaluates the points a player receives from a card by verifying a specific condition.
  */
 public abstract class Evaluator {
 
