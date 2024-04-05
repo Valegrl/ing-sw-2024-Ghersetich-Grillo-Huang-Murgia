@@ -139,7 +139,7 @@ public class Game {
      * @param p The {@link Player} that selected the card.
      */
     public void selectCard(EvaluableCard c, Coordinate pos, Player p) {
-        p.getPlayArea().selectCard(pos, c);
+        p.getPlayArea().setSelectedCard(pos, c);
     }
 
     /**

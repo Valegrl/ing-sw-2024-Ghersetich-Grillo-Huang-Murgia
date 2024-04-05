@@ -23,19 +23,19 @@ public class PlayArea {
     private final List<PlayableCard> hand;
 
     /**
-     * The StartCard chosen to start.
+     * The StartCard chosen at the start.
      * Its Coordinate is (0,0).
      */
     /*Remember that we consider the coordinate (0,0) for this card.*/
     private final StartCard startCard;
 
     /**
-     * The map of the PlayableCards played after the {@link StartCard} and their respective coordinates.
+     * The map of the played cards coordinates after the {@link StartCard start card} and their respective cards.
      */
     private final Map<Coordinate, PlayableCard> playedCards;
 
     /**
-     * The map of the items a player possesses, items covered by other cards aren't included.
+     * The map which represents the player's item inventory and their respective quantities.
      */
     private final Map<Item, Integer> uncoveredItems;
 
@@ -45,9 +45,9 @@ public class PlayArea {
     private Pair<Coordinate, EvaluableCard> selectedCard;
 
     /**
-     * PlayArea's constructor
-     * @param hand the player's initial hand
-     * @param c the player's chosen start card
+     * Constructs a new PlayArea with the given starting hand and start card chosen by the player.
+     * @param hand The player's initial hand.
+     * @param c The player's chosen start card.
      */
     public PlayArea(List<PlayableCard> hand, StartCard c){
 
@@ -100,21 +100,21 @@ public class PlayArea {
     }
 
     /**
-     * Selects the given {@link EvaluableCard} and its {@link Coordinate}.
+     * Selects the given {@link EvaluableCard evaluable card} and its {@link Coordinate coordinate}.
      * @param c The card to be selected.
      * @param pos The coordinate of the selected card
      */
-    public void selectCard(Coordinate pos, EvaluableCard c) {
+    public void setSelectedCard(Coordinate pos, EvaluableCard c) {
         this.selectedCard.setKey(pos);
         this.selectedCard.setValue(c);
     }
 
     /**
-     * Checks if the given {@link PlayableCard}'s constraint is satisfied.
+     * Checks if the given {@link PlayableCard playable card}'s constraint is satisfied.
      *
      * @param c The card on which the constraint will be checked.
-     * @return true if the player can play the given card, false if the player can't play it.
-     * @throws NonConstraintCardException If the given {@link PlayableCard} does not have a constraint to check.
+     * @return true If the player can play the given card, false if the player can't play it.
+     * @throws NonConstraintCardException If the given {@link PlayableCard playable card} does not have a constraint to check.
      */
     public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
         if(c.getCardType() == CardType.RESOURCE)
@@ -132,8 +132,9 @@ public class PlayArea {
     }
 
     /**
-     * Removes a card from the player's hand, updates the item counts if the card covers others corners.
-     * After which the card is placed into the playedCard.
+     * Removes a card from the player's hand.
+     * Updates the item counts if the placement of the card is going to cover others cards corners.
+     * The played card is then placed into the playedCards map of the play area.
      *
      * @param c The card which is going to be placed.
      * @param pos The coordinates of the card.

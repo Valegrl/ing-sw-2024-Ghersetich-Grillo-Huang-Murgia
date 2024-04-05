@@ -9,38 +9,39 @@ import java.util.List;
 
 
 /**
- * A class to represent a player in-game
+ * A class to represent a player in-game.
  */
 public class Player {
 
     /**
-     * The player's username
+     * The player's username.
      */
     private final String username;
 
     /**
-     * The player's colored token which can be either red, blue, green or yellow
+     * The player's colored token which can be either red, blue, green or yellow.
      */
     private Token token;
 
     /**
-     * The player's own playArea which contains all the data and methods regarding the game's execution
+     * The player's own {@link PlayArea play area} which contains all the data and methods regarding the game's execution.
      */
     private PlayArea playArea;
 
     /**
-     * The player's personal objective
+     * The player's personal objective.
      */
     private ObjectiveCard secretObjective;
 
     /**
-     * The player's connection status
+     * The player's connection status.
      */
     private boolean online;
 
     /**
-     * Player constructor
-     * @param username string given to set the player's username
+     * Constructs a new instance of Player given the username the player chose.
+     *
+     * @param username The string given to set the player's username.
      */
     public Player(String username){
         this.username = username;
@@ -81,8 +82,9 @@ public class Player {
 
     /**
      * Initializes player's playArea, which contains all the methods and data regarding the game's execution.
-     * @param hand the cards a player selects at the game's start.
-     * @param c the startCard that a player selects upon starting the game, it gets placed on the PlayArea at (0, 0).
+     *
+     * @param hand The cards a player has at the game's start. It has to be 1 {@link GoldCard gold card} and 2 {@link ResourceCard resource cards}.
+     * @param c The {@link StartCard start card} that a player selects upon starting the game, it gets placed on the play area at (0, 0).
      */
     public void initPlayArea(List<PlayableCard> hand, StartCard c) throws IllegalFirstHandException {
         if(hand.size() != 3){ // TODO constants ?
