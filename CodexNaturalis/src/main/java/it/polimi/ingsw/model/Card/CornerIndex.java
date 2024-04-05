@@ -33,14 +33,16 @@ public enum CornerIndex {
 
     /**
      * Constructs a new CornerIndex with the given index.
+     *
      * @param index The index of the corner.
      */
-    private CornerIndex(int index) {
+    CornerIndex(int index) {
         this.index = index;
     }
 
     /**
      * Retrieves the index associated with this CornerIndex.
+     *
      * @return The index.
      */
     public int getIndex() {

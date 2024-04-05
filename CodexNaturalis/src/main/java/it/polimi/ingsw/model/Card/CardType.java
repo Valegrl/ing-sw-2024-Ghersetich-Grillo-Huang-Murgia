@@ -21,14 +21,16 @@ public enum CardType {
 
     /**
      * Constructs a new CardType with the given type.
+     *
      * @param type The type of the {@link PlayableCard}.
      */
-    private CardType(String type) {
+    CardType(String type) {
         this.type = type;
     }
 
     /**
      * Retrieves the type associated to this CardType, in a String representation.
+     *
      * @return The type.
      */
     public String getType() {

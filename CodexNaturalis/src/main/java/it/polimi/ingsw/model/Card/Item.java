@@ -62,9 +62,10 @@ public enum Item {
 
     /**
      * Constructs a new Item with the given type.
+     *
      * @param type The type of the Item.
      */
-    private Item(String type) {
+    Item(String type) {
         this.type = type;
     }
 
@@ -92,6 +93,7 @@ public enum Item {
 
     /**
      * Retrieves the type of this Item, in a String representation.
+     *
      * @return The type of Item.
      */
     public String getType() {
