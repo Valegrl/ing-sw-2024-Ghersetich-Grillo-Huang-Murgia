@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.Pair;
 import java.util.Map;
 
 /**
- * A class to represent an Evaluable card, i.e. an Objective or Gold or Resource card.
+ * A class to represent an Evaluable card, i.e., an Objective, a Gold or a Resource card.
  */
 public abstract class EvaluableCard extends Card {
 	/**
@@ -18,13 +18,13 @@ public abstract class EvaluableCard extends Card {
 	/**
 	 * The amount of points associated with each and every card.
 	 */
-	private int points;
+	private final int points;
 
 	/**
 	 * Constructs a new Evaluable card.
 	 * @param id A unique String associated with each card.
 	 * @param evaluator The card's specific {@link Evaluator evaluator}.
-	 * @param points The amount of points associated with each card.
+	 * @param points The number of points associated with each card.
 	 */
 	public EvaluableCard(String id, Evaluator evaluator, int points) {
 		super(id);
@@ -42,18 +42,10 @@ public abstract class EvaluableCard extends Card {
 
 	/**
 	 * Retrieves the points associated with an Evaluable card.
-	 * @return The amount of points associated with each and every Evaluable card.
+	 * @return The number of points associated with each and every Evaluable card.
 	 */
 	public int getPoints() {
 		return points;
-	}
-
-	/**
-	 * Sets the amount of point of an Evaluable card.
-	 * @param points The number of points associated with each Evaluable card.
-	 */
-	public void setPoints(int points) {
-		this.points = points;
 	}
 
 	/**

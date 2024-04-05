@@ -18,7 +18,7 @@ public abstract class PlayableCard extends EvaluableCard {
 	/**
 	 * The {@link Item Items} contained on each corner of a card.
 	 */
-	private Item[] corners;
+	private final Item[] corners;
 
 	/**
 	 * The type of PlayableCard.

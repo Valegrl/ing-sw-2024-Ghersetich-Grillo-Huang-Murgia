@@ -15,12 +15,12 @@ public class StartCard extends Card {
 	/**
 	 * The {@link Item Items} contained on each corner of a Start card's front side.
 	 */
-	private Item[] frontCorners;
+	private final Item[] frontCorners;
 
 	/**
 	 * The {@link Item Items} contained on each corner of a Start card's back side.
 	 */
-	private Item[] backCorners;
+	private final Item[] backCorners;
 
 	/**
 	 * Indicates the current showing side of the StartCard.
