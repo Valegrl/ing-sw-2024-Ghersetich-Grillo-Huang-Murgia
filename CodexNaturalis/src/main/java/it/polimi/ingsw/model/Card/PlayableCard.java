@@ -33,13 +33,13 @@ public abstract class PlayableCard extends EvaluableCard {
      * @param evaluator         The card's specific {@link Evaluator evaluator}.
      * @param points            The number of points associated with each card.
      * @param permanentResource The permanent resource of a PlayableCard.
+     * @param corners           The items contained on each corner of the card.
      * @param type              The type of this PlayableCard.
      */
-    public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource, CardType type) {
+    public PlayableCard(String id, Evaluator evaluator, int points, Item permanentResource, Item[] corners, CardType type) {
         super(id, evaluator, points);
-
         this.permanentResource = permanentResource;
-        this.corners = new Item[CornerIndex.values().length];
+        this.corners = corners;
         this.type = type;
     }
 

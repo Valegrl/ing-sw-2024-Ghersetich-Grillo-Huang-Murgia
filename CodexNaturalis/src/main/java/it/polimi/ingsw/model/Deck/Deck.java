@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.Deck;
 
 import it.polimi.ingsw.model.Card.Card;
-
 import java.util.List;
 
-class Deck<T extends Card>{
+class Deck<T extends Card> {
 
     protected final List<T> deck;
 
@@ -22,4 +21,5 @@ class Deck<T extends Card>{
     public int getSize(){
         return deck.size();
     }
+
 }
