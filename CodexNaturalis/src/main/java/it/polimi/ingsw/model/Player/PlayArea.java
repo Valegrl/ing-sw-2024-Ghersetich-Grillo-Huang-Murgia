@@ -30,7 +30,7 @@ public class PlayArea {
     private final StartCard startCard;
 
     /**
-     * The map of the played cards coordinates after the {@link StartCard start card} and their respective cards.
+     * The map of the played cards coordinates after the {@link StartCard} and their respective cards.
      */
     private final Map<Coordinate, PlayableCard> playedCards;
 
@@ -72,7 +72,7 @@ public class PlayArea {
     /**
      * Flips the start card if signaled by the given parameter.
      * Updates uncovered items based on the visible corners of the chosen side.
-     * @param flipped Indicates whether the start card should be flipped (true) or not (false).
+     * @param flipped Indicates whether the start card should be flipped {@code true} or not {@code false}.
      */
     public void flipStartCard(boolean flipped){
 
@@ -100,9 +100,9 @@ public class PlayArea {
     }
 
     /**
-     * Selects the given {@link EvaluableCard evaluable card} and its {@link Coordinate coordinate}.
+     * Selects the given {@link EvaluableCard} and its {@link Coordinate}.
      * @param c The card to be selected.
-     * @param pos The coordinate of the selected card
+     * @param pos The coordinate of the selected card.
      */
     public void setSelectedCard(Coordinate pos, EvaluableCard c) {
         this.selectedCard.setKey(pos);
@@ -110,11 +110,11 @@ public class PlayArea {
     }
 
     /**
-     * Checks if the given {@link PlayableCard playable card}'s constraint is satisfied.
+     * Checks if the given {@link PlayableCard}'s constraint is satisfied.
      *
      * @param c The card on which the constraint will be checked.
-     * @return true If the player can play the given card, false if the player can't play it.
-     * @throws NonConstraintCardException If the given {@link PlayableCard playable card} does not have a constraint to check.
+     * @return {@code true} if the player can play the given card, {@code false} if the player can't play it.
+     * @throws NonConstraintCardException If the given {@link PlayableCard} does not have a constraint to check.
      */
     public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
         if(c.getCardType() == CardType.RESOURCE)
@@ -134,7 +134,7 @@ public class PlayArea {
     /**
      * Removes a card from the player's hand.
      * Updates the item counts if the placement of the card is going to cover others cards corners.
-     * The played card is then placed into the playedCards map of the play area.
+     * The played card is then placed into the {@link PlayArea#playedCards} map.
      *
      * @param c The card which is going to be placed.
      * @param pos The coordinates of the card.
@@ -260,9 +260,9 @@ public class PlayArea {
 
     /*Exception if there is no card at the parameter coordinate ?*/
     /**
-     * Gets the player's already played card if passed its matching coordinates.
-     * @param pos The coordinates with which playArea retrieves the associated card.
-     * @return The card that matches the passed coordinates.
+     * Retrieves the player's already played card if passed its matching coordinates.
+     * @param pos The coordinates with which it retrieves the associated card.
+     * @return The card that matches the given coordinates.
      */
     public Card getCardByPos(Coordinate pos) {
         if(pos.equals(new Coordinate(0, 0)))
@@ -335,22 +335,42 @@ public class PlayArea {
         }
     }
 
+    /**
+     * Retrieves the player's current hand.
+     * @return {@link PlayArea#hand}.
+     */
     public List<PlayableCard> getHand(){
         return this.hand;
     }
 
+    /**
+     * Retrieves the player's already placed cards.
+     * @return {@link PlayArea#playedCards}.
+     */
     public Map<Coordinate, PlayableCard> getPlayedCards(){
         return this.playedCards;
     }
 
+    /**
+     * Retrieves the player's current item counts.
+     * @return {@link PlayArea#uncoveredItems}.
+     */
     public Map<Item, Integer> getUncoveredItems(){
         return this.uncoveredItems;
     }
 
+    /**
+     * Retrieves the player's current selected card.
+     * @return {@link PlayArea#selectedCard}.
+     */
     public Pair<Coordinate, EvaluableCard> getSelectedCard(){
         return this.selectedCard;
     }
 
+    /**
+     * Retrieves the player's start card.
+     * @return {@link PlayArea#startCard}.
+     */
     public StartCard getStartCard() {
         return this.startCard;
     }
