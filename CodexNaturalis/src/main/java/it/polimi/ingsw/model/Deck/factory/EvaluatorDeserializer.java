@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Deck;
+package it.polimi.ingsw.model.Deck.factory;
 
 import com.google.gson.*;
 import it.polimi.ingsw.model.Evaluator.*;

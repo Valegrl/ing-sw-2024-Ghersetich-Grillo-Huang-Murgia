@@ -1,9 +1,9 @@
-package it.polimi.ingsw.model.Deck;
+package it.polimi.ingsw.model.Deck.factory;
 
 import com.google.gson.reflect.TypeToken;
 
-import it.polimi.ingsw.model.Card.Card;
 import it.polimi.ingsw.model.Card.GoldCard;
+import it.polimi.ingsw.model.Deck.PlayingDeck;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ public class GoldDeckFactory extends DeckFactory {
     private static final String JSON_FILE_NAME = "CodexNaturalis/target/classes/GoldDeck.json";
 
     @Override
-    public PlayingDeck<? extends Card> createDeck() {
+    public PlayingDeck<GoldCard> createDeck() {
         List<GoldCard> cards = readCardsFromJson(JSON_FILE_NAME, new TypeToken<List<GoldCard>>() {
         }.getType());
         Collections.shuffle(cards);

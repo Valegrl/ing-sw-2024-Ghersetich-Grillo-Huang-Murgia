@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.Deck;
 
-import it.polimi.ingsw.model.Card.Card;
-import java.util.List;
+import it.polimi.ingsw.model.Card.*;
+
+import java.util.*;
 
 public class Deck<T extends Card> {
 
@@ -13,12 +14,12 @@ public class Deck<T extends Card> {
         this.deck = deck;
     }
 
-    public T drawTop(){
+    public T drawTop() {
         //TODO correct implementation
         return deck.removeLast();
     }
 
-    public int getSize(){
+    public int getSize() {
         return deck.size();
     }
 
