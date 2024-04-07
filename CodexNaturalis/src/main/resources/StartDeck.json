@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  },
+  {
+    "id": 2,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  },
+  {
+    "id": 3,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  },
+  {
+    "id": 4,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  },
+  {
+    "id": 5,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  },
+  {
+    "id": 6,
+    "backPermanentResources": [
+      "plant",
+      "animal"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "backCorners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "flipped": "true"
+  }
+]

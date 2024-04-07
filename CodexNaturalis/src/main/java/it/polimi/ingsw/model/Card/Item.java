@@ -99,4 +99,9 @@ public enum Item {
     public String getType() {
         return this.type;
     }
+
+    @Override
+    public String toString() {
+        return this.getType();
+    }
 }

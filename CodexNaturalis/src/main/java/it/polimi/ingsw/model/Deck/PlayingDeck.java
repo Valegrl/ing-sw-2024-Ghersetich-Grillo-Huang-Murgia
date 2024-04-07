@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlayingDeck<U extends PlayableCard> extends Deck<U> {
+
     private final U[] visibleCards;
 
     public PlayingDeck(List<U> deck, U[] visibleCards) {
@@ -15,11 +16,11 @@ public class PlayingDeck<U extends PlayableCard> extends Deck<U> {
         this.visibleCards = visibleCards;
     }
 
-    public void newVisibleCard(){
+    public void newVisibleCard() {
         //TODO implementation
     }
 
-    public U drawVisible(int chosenCard){
+    public U drawVisible(int chosenCard) {
         //TODO correct implementation
         U draw = visibleCards[chosenCard];
         visibleCards[chosenCard] = null;
@@ -27,7 +28,7 @@ public class PlayingDeck<U extends PlayableCard> extends Deck<U> {
         return draw;
     }
 
-    public Item getTopResource(){
+    public Item getTopResource() {
         //TODO review implementation
         return deck.getLast().getPermanentResource();
     }

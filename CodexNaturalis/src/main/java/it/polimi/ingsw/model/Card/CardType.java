@@ -36,4 +36,9 @@ public enum CardType {
     public String getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return this.getType();
+    }
 }

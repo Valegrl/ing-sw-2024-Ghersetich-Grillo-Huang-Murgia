@@ -1,0 +1,880 @@
+[
+  {
+    "id": 1,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {"type": "CornerEvaluator"},
+    "type":"gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 2,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 3,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 4,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 5,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 6,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 7,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 8,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 9,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 10,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 11,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 12,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 13,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 14,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 15,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 16,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 17,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 18,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 19,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 20,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 21,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 22,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 23,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 24,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 25,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 26,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 27,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 28,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 29,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 30,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 31,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 32,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 33,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 34,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 35,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 36,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 37,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 38,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 39,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  },
+  {
+    "id": 40,
+    "points": 10,
+    "permanentResource": "plant",
+    "corners": [
+      "plant",
+      "animal",
+      "plant",
+      "hidden"
+    ],
+    "evaluator": {
+      "type": "CornerEvaluator"
+    },
+    "type": "gold",
+    "constraint": {
+      "plant": 3,
+      "animal": 1
+    },
+    "requiredItems": {
+      "quill": 1
+    }
+  }
+]
