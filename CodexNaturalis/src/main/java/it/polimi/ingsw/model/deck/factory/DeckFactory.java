@@ -15,16 +15,17 @@ import java.util.*;
 
 public class DeckFactory {
 
-    Map<Class<?>, String> classToFile=  new HashMap<>() {{
+    Map<Class<?>, String> classToFile = new HashMap<>() {{
         put(StartCard.class, "CodexNaturalis/src/main/resources/StartDeck.json");
         put(ObjectiveCard.class, "CodexNaturalis/src/main/resources/ObjectiveDeck.json");
         put(GoldCard.class, "CodexNaturalis/src/main/resources/GoldDeck.json");
         put(ResourceCard.class, "CodexNaturalis/src/main/resources/ResourceDeck.json");
     }};
 
-    public <T extends Card> Deck<T> createDeck(Class<T> cls){
+    public <T extends Card> Deck<T> createDeck(Class<T> cls) {
         String JSON_FILE_NAME = classToFile.get(cls);
         List<T> cards = readCardsFromJson(JSON_FILE_NAME, TypeToken.getParameterized(List.class, cls).getType());
+        assert cards != null;
         Collections.shuffle(cards);
 
         return new Deck<>(cards);

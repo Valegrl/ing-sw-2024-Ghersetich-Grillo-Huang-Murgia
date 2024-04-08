@@ -42,7 +42,7 @@ public class PlayArea {
     /**
      * The card and its Coordinate selected by the player for placing.
      */
-    private Pair<Coordinate, EvaluableCard> selectedCard;
+    private final Pair<Coordinate, EvaluableCard> selectedCard;
 
     /**
      * Constructs a new PlayArea with the given starting hand and start card chosen by the player.
@@ -55,14 +55,15 @@ public class PlayArea {
 
         this.playedCards = new HashMap<>();
 
-        this.uncoveredItems = new HashMap<>();
-        uncoveredItems.put(Item.PLANT, 0);
-        uncoveredItems.put(Item.ANIMAL, 0);
-        uncoveredItems.put(Item.FUNGI, 0);
-        uncoveredItems.put(Item.INSECT, 0);
-        uncoveredItems.put(Item.QUILL, 0);
-        uncoveredItems.put(Item.INKWELL, 0);
-        uncoveredItems.put(Item.MANUSCRIPT, 0);
+        this.uncoveredItems = new HashMap<>() {{
+            put(Item.PLANT, 0);
+            put(Item.ANIMAL, 0);
+            put(Item.FUNGI, 0);
+            put(Item.INSECT, 0);
+            put(Item.QUILL, 0);
+            put(Item.INKWELL, 0);
+            put(Item.MANUSCRIPT, 0);
+        }};
 
         this.selectedCard = new Pair<>(null, null);
 
@@ -76,26 +77,23 @@ public class PlayArea {
      */
     public void flipStartCard(boolean flipped){
 
-        StartCard sc = this.startCard;
+        StartCard sc = startCard;
         if (flipped)
             sc.flipCard();
 
         Item[] corners;
-        int currItems;
+
         if (flipped){
             for (Item item : sc.getBackPermanentResources())
-                this.uncoveredItems.put(item, 1);
+                uncoveredItems.put(item, uncoveredItems.get(item) + 1);
             corners = sc.getBackCorners();
-        }
-        else
+        } else
             corners = sc.getFrontCorners();
 
         for (Item item : corners) {
-            if (item != Item.EMPTY && item != Item.HIDDEN) {
-                currItems = this.uncoveredItems.get(item);
-                currItems++;
-                this.uncoveredItems.put(item, currItems);
-            }
+            if (item != Item.EMPTY && item != Item.HIDDEN)
+                uncoveredItems.put(item, uncoveredItems.get(item) + 1);
+
         }
     }
 
@@ -120,11 +118,10 @@ public class PlayArea {
         if(c.getCardType() == CardType.RESOURCE)
             throw new NonConstraintCardException();
         else {
-            GoldCard goldCard = (GoldCard) c;
             int currCheck;
-            for(Item item : goldCard.getConstraint().keySet()){
+            for(Item item : c.getConstraint().keySet()){
                 currCheck = this.uncoveredItems.get(item);
-                if(currCheck < goldCard.getConstraint().get(item))
+                if(currCheck < c.getConstraint().get(item))
                     return false;
             }
             return true;
@@ -144,12 +141,13 @@ public class PlayArea {
      */
     public void placeCard(PlayableCard c, Coordinate pos, boolean flipped){
         this.removeFromHand(c);
-        Coordinate[] coveredCoordinates = this.newlyCoveredCards(pos);
+        Coordinate[] coveredCoordinates = newlyCoveredCards(pos);
 
         Coordinate startCoordinate = new Coordinate(0, 0);
-        StartCard sc = this.startCard;
+        Coordinate check;
+        StartCard sc = startCard;
         Item currItem;
-        int currValue;
+        int j;
         PlayableCard currCard;
 
         //TODO up to review the two letters standard for corners
@@ -158,55 +156,45 @@ public class PlayArea {
 
         /*Updating the player's items inventory depending on the cards that have their corner covered*/
         for(CornerIndex i : CornerIndex.values()){
-            if(coveredCoordinates[i.getIndex()] != null){
-                if(coveredCoordinates[i.getIndex()].equals(startCoordinate)){
+            j = i.getIndex();
+            check = coveredCoordinates[j];
+            if(check != null){
+                if(check.equals(startCoordinate)){
                     if(!sc.isFlipped()){
-                        currItem = sc.getFrontCorners()[arrayCorners[i.getIndex()]];
-                        currValue = this.uncoveredItems.get(currItem);
-                        currValue--;
-                        this.uncoveredItems.put(currItem, currValue);
-                        sc.setFrontCorner(Item.COVERED, arrayCorners[i.getIndex()]);
+                        currItem = sc.getFrontCorners()[arrayCorners[j]];
+                        uncoveredItems.put(currItem, uncoveredItems.get(currItem) - 1);
+                        sc.setFrontCorner(Item.COVERED, arrayCorners[j]);
                     }
                     else{
-                        if(sc.getBackCorners()[arrayCorners[i.getIndex()]] != Item.EMPTY){
-                            currItem = sc.getBackCorners()[arrayCorners[i.getIndex()]];
-                            currValue = this.uncoveredItems.get(currItem);
-                            currValue--;
-                            this.uncoveredItems.put(currItem, currValue);
+                        if(sc.getBackCorners()[arrayCorners[j]] != Item.EMPTY){
+                            currItem = sc.getBackCorners()[arrayCorners[j]];
+                            uncoveredItems.put(currItem, uncoveredItems.get(currItem) - 1);
                         }
-                        sc.setBackCorner(Item.COVERED, arrayCorners[i.getIndex()]);
+                        sc.setBackCorner(Item.COVERED, arrayCorners[j]);
                     }
                 }
                 else{
-                    currCard = this.playedCards.get(coveredCoordinates[i.getIndex()]);
-                    if(currCard.getCorners()[arrayCorners[i.getIndex()]] != Item.EMPTY){
-                        currItem = currCard.getCorners()[arrayCorners[i.getIndex()]];
-                        currValue = this.uncoveredItems.get(currItem);
-                        currValue--;
-                        this.uncoveredItems.put(currItem, currValue);
+                    currCard = playedCards.get(check);
+                    if(currCard.getCorners()[arrayCorners[j]] != Item.EMPTY){
+                        currItem = currCard.getCorners()[arrayCorners[j]];
+                        uncoveredItems.put(currItem, uncoveredItems.get(currItem) - 1);
                     }
-                    currCard.setCorner(Item.COVERED, arrayCorners[i.getIndex()]);
+                    currCard.setCorner(Item.COVERED, arrayCorners[j]);
                 }
             }
         }
 
         if(flipped) {
             currItem = c.getPermanentResource();
-            currValue = this.uncoveredItems.get(currItem);
-            currValue++;
-            this.uncoveredItems.put(currItem, currValue);
+            uncoveredItems.put(currItem, uncoveredItems.get(currItem) + 1);
         } else {
             Item[] corners = c.getCorners();
-            for(Item item : corners){
-                if(item != Item.EMPTY && item != Item.HIDDEN){
-                    currValue = this.uncoveredItems.get(item);
-                    currValue++;
-                    this.uncoveredItems.put(item, currValue);
-                }
-            }
+            for(Item item : corners)
+                if(item != Item.EMPTY && item != Item.HIDDEN)
+                    uncoveredItems.put(item, uncoveredItems.get(item) + 1);
         }
 
-        this.playedCards.put(pos, c);
+        playedCards.put(pos, c);
     }
 
     /**
@@ -229,15 +217,14 @@ public class PlayArea {
      * @return A list of the covered cards coordinates.
      * @throws NoCoveredCardsException If the card doesn't cover any other cards which is impossible.
      */
-    public Coordinate[] newlyCoveredCards(Coordinate pos) {
+    private Coordinate[] newlyCoveredCards(Coordinate pos) {
         Coordinate[] coveredCoordinates = {null, null, null, null};
-        int[] arrayX = {-1, 1, 1, -1};
-        int[] arrayY = {1, 1, -1, -1};
-
-        Coordinate[] coordinateArray = new Coordinate[arrayX.length];
-
-        for(int i = 0; i < arrayX.length; i++)
-            coordinateArray[i] = new Coordinate(arrayX[i], arrayY[i]);
+        Coordinate[] coordinateArray = {
+                new Coordinate(-1,1),
+                new Coordinate(1,1),
+                new Coordinate(1,-1),
+                new Coordinate(-1,-1)
+        };
         Coordinate startCoordinate = new Coordinate(0, 0);
 
         boolean flag = false;
@@ -276,42 +263,42 @@ public class PlayArea {
     public List<Coordinate> getAvailablePos() {
         //TODO code review
         /*To be used only AFTER the PlayArea has a StartCard*/
-        int[] arrayX = {-1, 1, 1, -1};
-        int[] arrayY = {1, 1, -1, -1};
-        Coordinate[] arrayCoordinate = new Coordinate[arrayX.length];
-
-        for(int i = 0; i < arrayX.length; i++)
-            arrayCoordinate[i] = new Coordinate(arrayX[i], arrayY[i]);
+        Coordinate[] arrayCoordinate = {
+                new Coordinate(-1,1),
+                new Coordinate(1,1),
+                new Coordinate(1,-1),
+                new Coordinate(-1,-1)
+        };
 
         Set<Coordinate> okPos = new HashSet<>();
         Set<Coordinate> notOkPos = new HashSet<>();
         Coordinate startCoordinate = new Coordinate(0, 0);
         StartCard sc = this.startCard;
+        Item[] temp;
+        int j;
 
-        if(!sc.isFlipped()){
-            for(CornerIndex i : CornerIndex.values()) {
-                if(sc.getFrontCorners()[i.getIndex()] != Item.HIDDEN && sc.getFrontCorners()[i.getIndex()] != Item.COVERED)
-                    okPos.add(startCoordinate.add(arrayCoordinate[i.getIndex()]));
-                else
-                    notOkPos.add(startCoordinate.add(arrayCoordinate[i.getIndex()]));
-            }
-        }
-        else{
-            for(CornerIndex i : CornerIndex.values()) {
-                if(sc.getBackCorners()[i.getIndex()] != Item.HIDDEN && sc.getBackCorners()[i.getIndex()] != Item.COVERED)
-                    okPos.add(startCoordinate.add(arrayCoordinate[i.getIndex()]));
-                else
-                    notOkPos.add(startCoordinate.add(arrayCoordinate[i.getIndex()]));
-            }
+        if(!sc.isFlipped())
+            temp = sc.getFrontCorners();
+        else
+            temp = sc.getBackCorners();
+
+        /*check startCard's corners*/
+        for(CornerIndex i : CornerIndex.values()) {
+            j = i.getIndex();
+            if(temp[j] != Item.HIDDEN && temp[j] != Item.COVERED)
+                okPos.add(startCoordinate.add(arrayCoordinate[j]));
+            else
+                notOkPos.add(startCoordinate.add(arrayCoordinate[j]));
         }
 
-        for(Coordinate pos : this.playedCards.keySet()){
+        for(Coordinate pos : this.playedCards.keySet()) {
             PlayableCard currCard = this.playedCards.get(pos);
             for(CornerIndex i : CornerIndex.values()) {
-                if(currCard.getCorners()[i.getIndex()] != Item.HIDDEN && currCard.getCorners()[i.getIndex()] != Item.COVERED)
-                    okPos.add(pos.add(arrayCoordinate[i.getIndex()]));
+                j = i.getIndex();
+                if(currCard.getCorners()[j] != Item.HIDDEN && currCard.getCorners()[j] != Item.COVERED)
+                    okPos.add(pos.add(arrayCoordinate[j]));
                 else
-                    notOkPos.add(pos.add(arrayCoordinate[i.getIndex()]));
+                    notOkPos.add(pos.add(arrayCoordinate[j]));
             }
         }
 

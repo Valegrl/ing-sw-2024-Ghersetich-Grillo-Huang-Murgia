@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.card.Card;
-import it.polimi.ingsw.model.card.Item;
 
 import java.util.List;
 
@@ -46,6 +45,11 @@ public class Deck<T extends Card> {
         return deck.size();
     }
 
+    /**
+     * Retrieves, without removing, the top card from the deck, if present, represented by the first {@link Card} of the list.
+     *
+     * @return The top card from the deck, or null if the deck is empty.
+     */
     public T seeTopCard() {
         T card = null;
         if(!deck.isEmpty())

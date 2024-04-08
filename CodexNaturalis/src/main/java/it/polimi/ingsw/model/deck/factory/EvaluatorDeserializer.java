@@ -14,16 +14,12 @@ public class EvaluatorDeserializer implements JsonDeserializer<Evaluator> {
         JsonObject jsonObject = json.getAsJsonObject();
         String evaluatorType = jsonObject.get("type").getAsString();
 
-        switch (evaluatorType) {
-            case ("BasicEvaluator"):
-                return context.deserialize(json, BasicEvaluator.class);
-            case ("CornerEvaluator"):
-                return context.deserialize(json, CornerEvaluator.class);
-            case ("ItemEvaluator"):
-                return context.deserialize(json, ItemEvaluator.class);
-            case ("PatternEvaluator"):
-                return context.deserialize(json, PatternEvaluator.class);
-        }
-        return null;
+        return switch (evaluatorType) {
+            case ("BasicEvaluator") -> context.deserialize(json, BasicEvaluator.class);
+            case ("CornerEvaluator") -> context.deserialize(json, CornerEvaluator.class);
+            case ("ItemEvaluator") -> context.deserialize(json, ItemEvaluator.class);
+            case ("PatternEvaluator") -> context.deserialize(json, PatternEvaluator.class);
+            default -> null;
+        };
     }
 }
