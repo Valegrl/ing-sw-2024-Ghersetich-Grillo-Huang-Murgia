@@ -48,7 +48,7 @@ public class Deck<T extends Card> {
 
     public T seeTopCard() {
         T card = null;
-        if(deck.size()>0)
+        if(!deck.isEmpty())
             card = this.deck.getFirst();
         return card;
     }

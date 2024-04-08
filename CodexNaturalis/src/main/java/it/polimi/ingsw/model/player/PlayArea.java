@@ -116,7 +116,7 @@ public class PlayArea {
      * @return {@code true} if the player can play the given card, {@code false} if the player can't play it.
      * @throws NonConstraintCardException If the given {@link PlayableCard} does not have a constraint to check.
      */
-    public boolean checkConstraint(PlayableCard c) throws NonConstraintCardException{
+    public boolean checkConstraint(PlayableCard c) {
         if(c.getCardType() == CardType.RESOURCE)
             throw new NonConstraintCardException();
         else {
@@ -190,14 +190,12 @@ public class PlayArea {
             }
         }
 
-        if(flipped){
+        if(flipped) {
             currItem = c.getPermanentResource();
             currValue = this.uncoveredItems.get(currItem);
             currValue++;
             this.uncoveredItems.put(currItem, currValue);
-            c.flipCard();
-        }
-        else{
+        } else {
             Item[] corners = c.getCorners();
             for(Item item : corners){
                 if(item != Item.EMPTY && item != Item.HIDDEN){
@@ -208,7 +206,7 @@ public class PlayArea {
             }
         }
 
-        this.playedCards.put(new Coordinate(pos.getX(), pos.getY()), c);
+        this.playedCards.put(pos, c);
     }
 
     /**

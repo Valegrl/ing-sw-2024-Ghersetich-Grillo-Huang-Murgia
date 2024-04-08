@@ -117,7 +117,7 @@ public class Player {
      * @param c The {@link StartCard start card} that a player selects upon starting the game, it gets placed on the play area at (0, 0).
      * @throws IllegalFirstHandException If the player's starting hand isn't composed of 1 {@link GoldCard gold card} and 2 {@link ResourceCard resource cards}.
      */
-    public void initPlayArea(List<PlayableCard> hand, StartCard c)throws IllegalFirstHandException{
+    public void initPlayArea(List<PlayableCard> hand, StartCard c) {
         if(hand.size() != 3){ // TODO constants ?
             throw new IllegalFirstHandException();
         }
