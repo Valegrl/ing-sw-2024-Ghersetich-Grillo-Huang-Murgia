@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.card.Card;
+import it.polimi.ingsw.model.card.Item;
 
 import java.util.List;
 
@@ -43,6 +44,13 @@ public class Deck<T extends Card> {
      */
     public int getSize() {
         return deck.size();
+    }
+
+    public T seeTopCard() {
+        T card = null;
+        if(deck.size()>0)
+            card = this.deck.getFirst();
+        return card;
     }
 
     @Override
