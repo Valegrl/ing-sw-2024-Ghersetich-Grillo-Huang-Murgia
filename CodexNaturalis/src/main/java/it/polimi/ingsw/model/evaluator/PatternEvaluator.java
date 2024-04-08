@@ -35,7 +35,7 @@ public class PatternEvaluator extends Evaluator {
             boolean flag = false;
             temp.clear();
             for (int i = 0; i < pattern.length && !flag; i++) {
-                pointer = pos.add(pattern[i].getKey());
+                pointer = pos.sum(pattern[i].getKey());
                 cond1 = !pointer.equals(start);
                 cond2 = !alreadyValued.contains(pointer);
                 cond3 = playedCards.containsKey(pointer);

@@ -231,7 +231,7 @@ public class PlayArea {
 
         /*The way it's implemented I check the corners of the selected card starting from the TL and ending in BL*/
         for(int i = 0; i < coordinateArray.length; i++){
-            Coordinate coordinateCheck = pos.add(coordinateArray[i]);
+            Coordinate coordinateCheck = pos.sum(coordinateArray[i]);
             if(this.playedCards.containsKey(coordinateCheck) || coordinateCheck.equals(startCoordinate)){
                 coveredCoordinates[i] = coordinateCheck;
                 flag = true;
@@ -286,9 +286,9 @@ public class PlayArea {
         for(CornerIndex i : CornerIndex.values()) {
             j = i.getIndex();
             if(temp[j] != Item.HIDDEN && temp[j] != Item.COVERED)
-                okPos.add(startCoordinate.add(arrayCoordinate[j]));
+                okPos.add(startCoordinate.sum(arrayCoordinate[j]));
             else
-                notOkPos.add(startCoordinate.add(arrayCoordinate[j]));
+                notOkPos.add(startCoordinate.sum(arrayCoordinate[j]));
         }
 
         for(Coordinate pos : this.playedCards.keySet()) {
@@ -296,9 +296,9 @@ public class PlayArea {
             for(CornerIndex i : CornerIndex.values()) {
                 j = i.getIndex();
                 if(currCard.getCorners()[j] != Item.HIDDEN && currCard.getCorners()[j] != Item.COVERED)
-                    okPos.add(pos.add(arrayCoordinate[j]));
+                    okPos.add(pos.sum(arrayCoordinate[j]));
                 else
-                    notOkPos.add(pos.add(arrayCoordinate[j]));
+                    notOkPos.add(pos.sum(arrayCoordinate[j]));
             }
         }
 

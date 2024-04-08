@@ -32,7 +32,7 @@ public class CornerEvaluator extends Evaluator {
 
 
         for (Coordinate corner : corners) {
-            check = card.getKey().add(corner);
+            check = card.getKey().sum(corner);
             if (check.equals(start) || playedCards.containsKey(check))
                 countCorners++;
         }

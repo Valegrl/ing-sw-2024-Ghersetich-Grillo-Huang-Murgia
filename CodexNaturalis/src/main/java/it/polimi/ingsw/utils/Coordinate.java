@@ -32,7 +32,7 @@ public class Coordinate {
      * @param c The coordinate to sum.
      * @return A new sum Coordinate.
      */
-    public Coordinate add(Coordinate c){
+    public Coordinate sum(Coordinate c){
         return new Coordinate(this.x + c.x, this.y + c.y);
     }
 
