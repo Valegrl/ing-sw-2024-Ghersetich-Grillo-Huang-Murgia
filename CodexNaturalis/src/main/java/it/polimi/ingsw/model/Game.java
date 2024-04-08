@@ -3,10 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
 import it.polimi.ingsw.model.exceptions.EmptyDeckException;
@@ -386,13 +383,39 @@ public class Game {
     }
 
     /**
+     * Retrieves the visibleResourceCards array.
+     * @return {@link Game#visibleResourceCards}.
+     */
+    public PlayableCard[] getVisibleResourceCards() {
+        return Arrays.copyOf(visibleResourceCards, visibleResourceCards.length);
+    }
+
+    /**
+     * Retrieves the visibleGoldCards array.
+     * @return {@link Game#visibleGoldCards}.
+     */
+    public PlayableCard[] getVisibleGoldCards() {
+        return Arrays.copyOf(visibleGoldCards, visibleGoldCards.length);
+    }
+
+    /**
      * Retrieves the list of {@link Player players} in the Game.
      * @return {@link Game#players}.
      */
-    public List<Player> getPlayers() { // TODO String instead of players?
-        return players;
+    public List<String> getPlayerUsernames() { // TODO String instead of players?
+        List<String> usernames = new ArrayList<>();
+        for (Player p : this.players) {
+            usernames.add(p.getUsername());
+        }
+        return usernames;
     }
 
+    /**
+     * Retrieves a player object based on the provided username.
+     *
+     * @param user The username of the player to retrieve.
+     * @return The {@link Player} associated with the given username.
+     */
     private Player getPlayerFromUsername(String user) {
         for (Player player : this.players)
             if (player.getUsername().equals(user))
