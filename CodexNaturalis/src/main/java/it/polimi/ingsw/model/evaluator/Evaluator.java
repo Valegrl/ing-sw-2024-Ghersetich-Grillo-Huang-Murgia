@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.Evaluator;
+package it.polimi.ingsw.model.evaluator;
 
-import it.polimi.ingsw.model.Player.PlayArea;
+import it.polimi.ingsw.model.player.PlayArea;
 
 /**
  * A class that evaluates the points a player receives from a card by verifying a specific condition.

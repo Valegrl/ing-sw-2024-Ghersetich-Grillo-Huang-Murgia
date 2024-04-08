@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.Player;
+package it.polimi.ingsw.model.player;
 
 import java.util.*;
 
-import it.polimi.ingsw.model.Card.*;
+import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.utils.Coordinate;
 
 import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
@@ -12,11 +12,11 @@ import it.polimi.ingsw.model.exceptions.NoCoveredCardsException;
 import it.polimi.ingsw.utils.Pair;
 
 /**
- * A class to represent the {@link it.polimi.ingsw.model.Player.Player Player}'s playArea.
+ * A class to represent the {@link it.polimi.ingsw.model.player.Player player}'s playArea.
  * It contains played cards and methods for the game's execution.
  */
 public class PlayArea {
-//{@link it.polimi.ingsw.model.Evaluator.Evaluator }
+//{@link it.polimi.ingsw.model.evaluator.evaluator }
     /**
      * The list of cards the player holds and can play.
      */

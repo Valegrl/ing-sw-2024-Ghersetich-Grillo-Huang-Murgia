@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class StartCard extends Card {
     private boolean flipped = false;
 
     /**
-     * Constructs a new Start Card.
+     * Constructs a new Start card.
      *
      * @param id                     A unique integer associated with each card.
      * @param backPermanentResources The list of fixed resources of a Start card.
@@ -43,7 +43,7 @@ public class StartCard extends Card {
     }
 
     /**
-     * Changes the showing side of the StartCard in the {@link it.polimi.ingsw.model.Player.PlayArea PlayArea}.
+     * Changes the showing side of the StartCard in the {@link it.polimi.ingsw.model.player.PlayArea PlayArea}.
      */
     public void flipCard() {
         flipped = !flipped;

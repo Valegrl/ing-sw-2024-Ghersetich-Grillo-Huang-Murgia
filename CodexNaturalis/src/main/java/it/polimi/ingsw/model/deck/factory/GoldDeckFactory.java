@@ -1,16 +1,16 @@
-package it.polimi.ingsw.model.Deck.factory;
+package it.polimi.ingsw.model.deck.factory;
 
 import com.google.gson.reflect.TypeToken;
 
-import it.polimi.ingsw.model.Card.GoldCard;
-import it.polimi.ingsw.model.Deck.PlayingDeck;
+import it.polimi.ingsw.model.card.GoldCard;
+import it.polimi.ingsw.model.deck.PlayingDeck;
 
 import java.util.Collections;
 import java.util.List;
 
 public class GoldDeckFactory extends DeckFactory {
 
-    private static final String JSON_FILE_NAME = "CodexNaturalis/target/classes/GoldDeck.json";
+    private static final String JSON_FILE_NAME = "CodexNaturalis/src/main/resources/GoldDeck.json";
 
     @Override
     public PlayingDeck<GoldCard> createDeck() {

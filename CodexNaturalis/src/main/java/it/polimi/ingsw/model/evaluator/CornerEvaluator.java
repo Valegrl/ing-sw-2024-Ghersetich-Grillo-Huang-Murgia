@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.Evaluator;
+package it.polimi.ingsw.model.evaluator;
 
-import it.polimi.ingsw.model.Card.EvaluableCard;
-import it.polimi.ingsw.model.Card.PlayableCard;
-import it.polimi.ingsw.model.Player.PlayArea;
+import it.polimi.ingsw.model.card.EvaluableCard;
+import it.polimi.ingsw.model.card.PlayableCard;
+import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 

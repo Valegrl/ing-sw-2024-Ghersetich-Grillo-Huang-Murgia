@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Player;
+package it.polimi.ingsw.model.player;
 
 /**
  * An enumeration that represents the game tokens.

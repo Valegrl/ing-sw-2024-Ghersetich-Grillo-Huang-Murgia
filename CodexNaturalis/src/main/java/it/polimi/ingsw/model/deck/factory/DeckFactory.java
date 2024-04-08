@@ -1,11 +1,11 @@
-package it.polimi.ingsw.model.Deck.factory;
+package it.polimi.ingsw.model.deck.factory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.polimi.ingsw.model.Card.Card;
-import it.polimi.ingsw.model.Deck.Deck;
-import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.model.card.Card;
+import it.polimi.ingsw.model.deck.Deck;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 
 import java.io.FileReader;
 import java.io.IOException;

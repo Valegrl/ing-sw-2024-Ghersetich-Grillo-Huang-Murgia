@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ public abstract class Card {
     private final String id;
 
     /**
-     * Constructs a new Card with the given identifier.
+     * Constructs a new card with the given identifier.
      *
      * @param id A unique String associated with each card.
      */
@@ -43,5 +43,7 @@ public abstract class Card {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
 

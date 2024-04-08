@@ -1,16 +1,16 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Card.*;
-import it.polimi.ingsw.model.Deck.PlayingDeck;
+import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.deck.PlayingDeck;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.polimi.ingsw.model.Player.PlayArea;
+import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.model.Player.Player;
+import it.polimi.ingsw.model.player.Player;
 
 /**
  * A class to represent a Codex Naturalis game.
@@ -22,12 +22,12 @@ public class Game {
     private final int id;
 
     /**
-     * The Game's {@link it.polimi.ingsw.model.Card.ResourceCard resource cards} deck.
+     * The Game's {@link it.polimi.ingsw.model.card.ResourceCard resource cards} deck.
      */
     private final PlayingDeck<ResourceCard> resourceDeck;
 
     /**
-     * The Game's {@link it.polimi.ingsw.model.Card.GoldCard gold cards} deck.
+     * The Game's {@link it.polimi.ingsw.model.card.GoldCard gold cards} deck.
      */
     private final PlayingDeck<GoldCard> goldDeck;
 
@@ -143,7 +143,7 @@ public class Game {
      * If the updated score is at least 20, the game updates his {@link Game#finalPhase} status.
      * The maximum score of the {@link Game#scoreboard} is 29.
      *
-     * @param p The Player to assign the points to.
+     * @param p The player to assign the points to.
      * @param points The number of points to assign.
      */
     private void assignPoints(Player p, int points) {
@@ -212,7 +212,7 @@ public class Game {
     }
 
     /**
-     * Retrieves the index of the Player that currently has the turn.
+     * Retrieves the index of the player that currently has the turn.
      * @return {@link Game#turnPlayerIndex}.
      */
     public int getTurnPlayerIndex() {

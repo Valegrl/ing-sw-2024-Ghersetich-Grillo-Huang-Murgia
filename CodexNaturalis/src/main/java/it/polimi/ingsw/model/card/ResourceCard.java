@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
-import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 
 /**
  * A class to represent a specific type of card, the Resource card.

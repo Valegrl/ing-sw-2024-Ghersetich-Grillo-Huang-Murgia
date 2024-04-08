@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.Evaluator;
+package it.polimi.ingsw.model.evaluator;
 
-import it.polimi.ingsw.model.Card.EvaluableCard;
-import it.polimi.ingsw.model.Card.Item;
-import it.polimi.ingsw.model.Player.PlayArea;
+import it.polimi.ingsw.model.card.EvaluableCard;
+import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.model.player.PlayArea;
 
 import java.util.ArrayList;
 import java.util.List;

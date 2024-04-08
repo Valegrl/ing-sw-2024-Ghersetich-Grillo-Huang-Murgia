@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
 /**
  * An enumeration that represents the type of {@link PlayableCard}.

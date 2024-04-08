@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.exceptions;
 
 /**
  * Exception thrown when the player tries to place a card, but the card's coordinate isn't diagonal to any card in the
- * {@link it.polimi.ingsw.model.Player.PlayArea}.
+ * {@link it.polimi.ingsw.model.player.PlayArea}.
  */
 public class NoCoveredCardsException extends RuntimeException{
     /**

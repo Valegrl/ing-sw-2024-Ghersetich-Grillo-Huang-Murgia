@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
 /**
  * An enumeration that represents the game Items.
@@ -51,7 +51,7 @@ public enum Item {
     HIDDEN("hidden"),
 
     /**
-     * The corner covered by another Card.
+     * The corner covered by another card.
      */
     COVERED("covered");
 

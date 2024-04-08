@@ -1,16 +1,16 @@
-package it.polimi.ingsw.model.Deck.factory;
+package it.polimi.ingsw.model.deck.factory;
 
 import com.google.gson.reflect.TypeToken;
 
-import it.polimi.ingsw.model.Card.ResourceCard;
-import it.polimi.ingsw.model.Deck.PlayingDeck;
+import it.polimi.ingsw.model.card.ResourceCard;
+import it.polimi.ingsw.model.deck.PlayingDeck;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ResourceDeckFactory extends DeckFactory {
 
-    private static final String JSON_FILE_NAME = "CodexNaturalis/target/classes/ResourceDeck.json";
+    private static final String JSON_FILE_NAME = "CodexNaturalis/src/main/resources/ResourceDeck.json";
 
     @Override
     public PlayingDeck<ResourceCard> createDeck() {

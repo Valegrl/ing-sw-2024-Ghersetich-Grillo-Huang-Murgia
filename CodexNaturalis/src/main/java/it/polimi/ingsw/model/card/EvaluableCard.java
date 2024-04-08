@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
-import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
@@ -16,7 +16,7 @@ public abstract class EvaluableCard extends Card {
     private final Evaluator evaluator;
 
     /**
-     * The amount of points associated with each and every card.
+     * The number of points associated with each and every card.
      */
     private final int points;
 

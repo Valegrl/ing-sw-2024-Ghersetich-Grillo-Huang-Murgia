@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model.Deck.factory;
+package it.polimi.ingsw.model.deck.factory;
 
 import com.google.gson.*;
-import it.polimi.ingsw.model.Evaluator.*;
+import it.polimi.ingsw.model.evaluator.*;
 
 import java.lang.reflect.Type;
 

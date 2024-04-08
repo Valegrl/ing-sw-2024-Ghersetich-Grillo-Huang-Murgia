@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.Evaluator;
+package it.polimi.ingsw.model.evaluator;
 
-import it.polimi.ingsw.model.Player.PlayArea;
+import it.polimi.ingsw.model.player.PlayArea;
 
 /**
  * A class that evaluates a basic card, without sample to check.

@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
-import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
@@ -18,7 +18,8 @@ public class ObjectiveCard extends EvaluableCard {
 
     /**
      * A Map associating Items to the number of required visible resources of that type
-     * in the {@link it.polimi.ingsw.model.Player.Player Player}'s {@link it.polimi.ingsw.model.Player.PlayArea PlayArea} to assign points.
+     * in the {@link it.polimi.ingsw.model.player.Player player}'s {@link it.polimi.ingsw.model.player.PlayArea PlayArea} to assign points.
+     * Each value of the Map is > 0, because it only contains Items that are necessary to achieve the objective.
      */
     private final Map<Item, Integer> requiredItems;
 

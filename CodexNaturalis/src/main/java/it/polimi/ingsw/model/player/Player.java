@@ -1,10 +1,8 @@
-package it.polimi.ingsw.model.Player;
+package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.Card.*;
-import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.exceptions.IllegalFirstHandException;
 
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -39,7 +37,7 @@ public class Player {
     private boolean online;
 
     /**
-     * Constructs a new instance of Player given the username the player chose.
+     * Constructs a new instance of player given the username the player chose.
      *
      * @param username The string given to set the player's username.
      */

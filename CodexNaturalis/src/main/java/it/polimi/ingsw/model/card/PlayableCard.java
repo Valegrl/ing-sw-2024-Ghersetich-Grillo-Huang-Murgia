@@ -1,12 +1,12 @@
-package it.polimi.ingsw.model.Card;
+package it.polimi.ingsw.model.card;
 
-import it.polimi.ingsw.model.Evaluator.Evaluator;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 
 import java.util.Map;
 
 /**
  * A class to represent a specific type of card, a Playable card.
- * These Cards can be played in a {@link it.polimi.ingsw.model.Player.Player Player}'s {@link it.polimi.ingsw.model.Player.PlayArea PlayArea}.
+ * These Cards can be played in a {@link it.polimi.ingsw.model.player.Player player}'s {@link it.polimi.ingsw.model.player.PlayArea PlayArea}.
  */
 public abstract class PlayableCard extends EvaluableCard {
     /**
