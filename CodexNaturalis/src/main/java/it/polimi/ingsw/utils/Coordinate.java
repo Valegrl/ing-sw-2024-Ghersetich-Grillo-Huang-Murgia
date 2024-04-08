@@ -28,9 +28,10 @@ public class Coordinate {
     }
 
     /**
-     * Retrieves the sum of two Coordinates.
+     * Calculates the sum of two Coordinates by creating a new Coordinate object.
+     *
      * @param c The coordinate to sum.
-     * @return A new sum Coordinate.
+     * @return The new Coordinate.
      */
     public Coordinate sum(Coordinate c){
         return new Coordinate(this.x + c.x, this.y + c.y);
