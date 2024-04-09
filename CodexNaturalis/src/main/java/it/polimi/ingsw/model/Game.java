@@ -73,9 +73,9 @@ public class Game {
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
      * @param id The identifier of the Game.
-     * @param players The list of chosen usernames by players.
+     * @param usernames The list of usernames chosen by players.
      */
-    public Game(int id, List<String> players) {
+    public Game(int id, List<String> usernames) {
         this.id = id;
 
         this.resourceDeck = new DeckFactory().createDeck(ResourceCard.class);
@@ -87,7 +87,7 @@ public class Game {
         this.turnPlayerIndex = 0;
 
         this.players = new ArrayList<>();
-        for (String user : players)
+        for (String user : usernames)
             this.players.add(new Player(user));
 
         this.scoreboard = new HashMap<>();
@@ -115,17 +115,17 @@ public class Game {
         Deck<StartCard> startDeck = new DeckFactory().createDeck(StartCard.class);
         Deck<ObjectiveCard> objectiveDeck = new DeckFactory().createDeck(ObjectiveCard.class);
 
-        for (int i = 0; i < this.commonObjectives.length; i++)
-            this.commonObjectives[i] = objectiveDeck.drawTop();
+        for (int i = 0; i < commonObjectives.length; i++)
+            commonObjectives[i] = objectiveDeck.drawTop();
 
         List<ObjectiveCard[]> secretObjectiveCards = new ArrayList<>();
 
         List<PlayableCard> hand = new ArrayList<>();
 
-        for (Player p : this.players) {
-            hand.add(this.resourceDeck.drawTop());
-            hand.add(this.resourceDeck.drawTop());
-            hand.add(this.goldDeck.drawTop());
+        for (Player p : players) {
+            hand.add(resourceDeck.drawTop());
+            hand.add(resourceDeck.drawTop());
+            hand.add(goldDeck.drawTop());
 
             p.initPlayArea(hand, startDeck.drawTop());
 
@@ -145,7 +145,7 @@ public class Game {
      * If the current player is the last player in the list, the turn wraps around to the first player.
      */
     public void newTurn() {
-        this.turnPlayerIndex = (this.turnPlayerIndex + 1) % this.players.size();
+        turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
     }
 
     /**
@@ -166,7 +166,7 @@ public class Game {
      */
     public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws InvalidConstraintException {
 
-        Player currPlayer = this.players.get(this.turnPlayerIndex);
+        Player currPlayer = players.get(turnPlayerIndex);
         selectCard(c, pos, currPlayer.getUsername());
 
         boolean placeable;
@@ -198,32 +198,32 @@ public class Game {
 
         if (chosenDeck.equals(CardType.GOLD)) {
             if (chosenCard >= 0 && chosenCard < 2) { // TODO constants?
-                drawnCard = this.visibleGoldCards[chosenCard];
-                newVisible = this.goldDeck.drawTop();
+                drawnCard = visibleGoldCards[chosenCard];
+                newVisible = goldDeck.drawTop();
                 if (newVisible != null)
-                    this.visibleGoldCards[chosenCard] = newVisible;
+                    visibleGoldCards[chosenCard] = newVisible;
                 else
-                    this.visibleGoldCards[chosenCard] = this.resourceDeck.drawTop();
+                    visibleGoldCards[chosenCard] = resourceDeck.drawTop();
             } else
-                drawnCard = this.goldDeck.drawTop();
+                drawnCard = goldDeck.drawTop();
         } else {
             if (chosenCard >= 0 && chosenCard < 2) {
-                drawnCard = this.visibleResourceCards[chosenCard];
-                newVisible = this.resourceDeck.drawTop();
+                drawnCard = visibleResourceCards[chosenCard];
+                newVisible = resourceDeck.drawTop();
                 if (newVisible != null)
-                    this.visibleResourceCards[chosenCard] = newVisible;
+                    visibleResourceCards[chosenCard] = newVisible;
                 else
-                    this.visibleResourceCards[chosenCard] = this.goldDeck.drawTop();
+                    visibleResourceCards[chosenCard] = goldDeck.drawTop();
             } else
-                drawnCard = this.resourceDeck.drawTop();
+                drawnCard = resourceDeck.drawTop();
         }
 
         if (drawnCard == null) throw new EmptyDeckException(); // TODO when controller is implemented, make non runtimeException?
 
-        Player currPlayer = this.players.get(turnPlayerIndex);
+        Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (this.resourceDeck.getSize() == 0 && this.goldDeck.getSize() == 0) this.finalPhase = true;
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) finalPhase = true;
 
     }
 
@@ -252,15 +252,15 @@ public class Game {
      */
     private void assignPoints(Player p, int points) {
 
-        int currScore = this.scoreboard.get(p);
+        int currScore = scoreboard.get(p);
         if (currScore == 29) return;
 
         currScore += points;
 
-        if (currScore >= 20 && !this.finalPhase) this.finalPhase = true; // TODO modify if changed GameStatus
+        if (currScore >= 20 && !finalPhase) finalPhase = true; // TODO modify if changed GameStatus
         if (currScore > 29) currScore = 29;
 
-        this.scoreboard.put(p, currScore);
+        scoreboard.put(p, currScore);
     }
 
     /**
@@ -296,14 +296,14 @@ public class Game {
         Map<Player, Integer> objPoints = new HashMap<>();
         int playerObjPoints;
 
-        for (Player p : this.players) {
+        for (Player p : players) {
             playerObjPoints = calculateObjectives(p);
             assignPoints(p, playerObjPoints);
 
             objPoints.put(p, playerObjPoints);
         }
 
-        return winner(objPoints);
+        return getWinner(objPoints);
     }
 
     /**
@@ -313,7 +313,7 @@ public class Game {
      */
     private int calculateObjectives(Player p) {
         int objPoints = 0;
-        for (ObjectiveCard c: this.commonObjectives)
+        for (ObjectiveCard c: commonObjectives)
             objPoints += c.getEvaluator().calculatePoints(p.getPlayArea());
         objPoints += p.getSecretObjective().getEvaluator().calculatePoints(p.getPlayArea());
         return objPoints;
@@ -325,19 +325,19 @@ public class Game {
      * @param objPoints A map representing the points scored by players from objective cards.
      * @return The player with the highest score, the game winner.
      */
-    private Player winner(Map<Player, Integer> objPoints) {
+    private Player getWinner(Map<Player, Integer> objPoints) {
         List<Player> currWinners = new ArrayList<>();
         int currMaxPoints = 0;
 
         // getting Players with the most points
-        for (Map.Entry<Player, Integer> entry : this.scoreboard.entrySet()) {
+        for (Map.Entry<Player, Integer> entry : scoreboard.entrySet()) {
             if (entry.getValue() > currMaxPoints) {
                 currWinners.clear();
                 currWinners.add(entry.getKey());
             } else if (entry.getValue() == currMaxPoints) {
                 currWinners.add(entry.getKey());
             }
-            currMaxPoints = this.scoreboard.get(currWinners.getFirst());
+            currMaxPoints = scoreboard.get(currWinners.getFirst());
         }
 
         // checking which player, from the ones with the same points, scored the most points from ObjectiveCards
@@ -367,19 +367,19 @@ public class Game {
     }
 
     /**
-     * Retrieves Game's resource deck.
-     * @return {@link Game#resourceDeck}.
+     * Shows the top Card of the Game's resource deck without removing it from the Deck.
+     * @return {@link ResourceCard}.
      */
-    public Deck<ResourceCard> getResourceDeck() {
-        return resourceDeck;
+    public ResourceCard seeResourceTopCard() {
+        return resourceDeck.seeTopCard();
     }
 
     /**
-     * Retrieves Game's gold deck.
-     * @return {@link Game#goldDeck}.
+     * Shows the top Card of the Game's gold deck without removing it from the Deck.
+     * @return {@link GoldCard}.
      */
-    public Deck<GoldCard> getGoldDeck() {
-        return goldDeck;
+    public GoldCard seeGoldTopCard() {
+        return goldDeck.seeTopCard();
     }
 
     /**
@@ -402,12 +402,8 @@ public class Game {
      * Retrieves the list of {@link Player players} in the Game.
      * @return {@link Game#players}.
      */
-    public List<String> getPlayerUsernames() { // TODO String instead of players?
-        List<String> usernames = new ArrayList<>();
-        for (Player p : this.players) {
-            usernames.add(p.getUsername());
-        }
-        return usernames;
+    public List<Player> getPlayers() {
+        return players;
     }
 
     /**
@@ -417,10 +413,10 @@ public class Game {
      * @return The {@link Player} associated with the given username.
      */
     private Player getPlayerFromUsername(String user) {
-        for (Player player : this.players)
-            if (player.getUsername().equals(user))
-                return player;
-        return null;
+        return players.stream()
+                .filter(player -> player.getUsername().equals(user))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
