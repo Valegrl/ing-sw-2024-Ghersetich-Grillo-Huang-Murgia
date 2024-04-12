@@ -24,6 +24,9 @@ public class DeckFactory {
 
     public <T extends Card> Deck<T> createDeck(Class<T> cls) {
         String JSON_FILE_NAME = classToFile.get(cls);
+        if (JSON_FILE_NAME == null) {
+            throw new IllegalArgumentException("Class " + cls + " not supported");
+        }
         List<T> cards = readCardsFromJson(JSON_FILE_NAME, TypeToken.getParameterized(List.class, cls).getType());
         assert cards != null;
         Collections.shuffle(cards);

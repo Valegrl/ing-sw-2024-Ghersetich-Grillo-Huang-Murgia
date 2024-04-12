@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "SC01",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -17,10 +17,10 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   },
   {
-    "id": 2,
+    "id": "SC02",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -37,10 +37,10 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   },
   {
-    "id": 3,
+    "id": "SC03",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -57,10 +57,10 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   },
   {
-    "id": 4,
+    "id": "SC04",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -77,10 +77,10 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   },
   {
-    "id": 5,
+    "id": "SC05",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -97,10 +97,10 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   },
   {
-    "id": 6,
+    "id": "SC06",
     "backPermanentResources": [
       "plant",
       "animal"
@@ -117,6 +117,6 @@
       "plant",
       "hidden"
     ],
-    "flipped": "true"
+    "flipped": "false"
   }
 ]

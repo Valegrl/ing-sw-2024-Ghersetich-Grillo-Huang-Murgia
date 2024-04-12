@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "OC01",
     "points": 3,
     "requiredPattern": [
       {
@@ -31,7 +31,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 2,
+    "id": "OC02",
     "points": 3,
     "requiredPattern": [
       {
@@ -62,7 +62,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 3,
+    "id": "OC03",
     "points": 3,
     "requiredPattern": [
       {
@@ -93,7 +93,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 4,
+    "id": "OC04",
     "points": 3,
     "requiredPattern": [
       {
@@ -124,7 +124,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 5,
+    "id": "OC05",
     "points": 3,
     "requiredPattern": [
       {
@@ -155,7 +155,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 6,
+    "id": "OC06",
     "points": 3,
     "requiredPattern": [
       {
@@ -186,7 +186,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 7,
+    "id": "OC07",
     "points": 3,
     "requiredPattern": [
       {
@@ -217,7 +217,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 8,
+    "id": "OC08",
     "points": 3,
     "requiredPattern": [
       {
@@ -248,7 +248,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 9,
+    "id": "OC09",
     "points": 3,
     "requiredPattern": [
       {
@@ -279,7 +279,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 10,
+    "id": "OC10",
     "points": 3,
     "requiredPattern": [
       {
@@ -310,7 +310,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 11,
+    "id": "OC11",
     "points": 3,
     "requiredPattern": [
       {
@@ -341,7 +341,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 12,
+    "id": "OC12",
     "points": 3,
     "requiredPattern": [
       {
@@ -372,7 +372,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 13,
+    "id": "OC13",
     "points": 3,
     "requiredPattern": [
       {
@@ -403,7 +403,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 14,
+    "id": "OC14",
     "points": 3,
     "requiredPattern": [
       {
@@ -434,7 +434,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 15,
+    "id": "OC15",
     "points": 3,
     "requiredPattern": [
       {
@@ -465,7 +465,7 @@
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
-    "id": 16,
+    "id": "OC16",
     "points": 3,
     "requiredPattern": [
       {

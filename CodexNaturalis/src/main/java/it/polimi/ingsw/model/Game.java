@@ -1,14 +1,13 @@
 package it.polimi.ingsw.model;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
-
-import java.util.*;
-
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
 import it.polimi.ingsw.model.exceptions.EmptyDeckException;
 import it.polimi.ingsw.model.exceptions.InvalidConstraintException;
-import it.polimi.ingsw.model.exceptions.NoWinnerException;
 import it.polimi.ingsw.model.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
@@ -284,14 +283,14 @@ public class Game {
     }
 
     /**
-     * Ends the game and determines the winner based on objective points earned by {@link Player Players}.
+     * Ends the game and determines the ordered Leaderboard based on objective points earned by {@link Player Players}.
      *
      * This method calculates and assigns the total objective points earned by each player
      * by evaluating the {@link ObjectiveCard ObjectiveCards}.
      *
-     * @return The {@link Player} who has the highest total objective points and is declared as the winner of the game.
+     * @return The ordered list of {@link Player Players}' usernames, based on the points scored.
      */
-    public Player endGame() { // TODO string instead of Player?
+    public List<String> endGame() {
         // TODO ENDED gameStatus?
         Map<Player, Integer> objPoints = new HashMap<>();
         int playerObjPoints;
@@ -303,11 +302,12 @@ public class Game {
             objPoints.put(p, playerObjPoints);
         }
 
-        return getWinner(objPoints);
+        return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
     }
 
     /**
      * Calculates the total points earned by a {@link Player} from both {@link Game#commonObjectives} and {@link Player  secret objective} cards.
+     *
      * @param p The player for whom the total objective points are to be calculated.
      * @return  The total points earned by the player.
      */
@@ -320,42 +320,44 @@ public class Game {
     }
 
     /**
-     * Determines the game's winner based on the points scored by players and their points scored from objective cards.
+     * Resolves ties within a group of {@link Player Players} based on their points scored from {@link ObjectiveCard objective cards}.
      *
-     * @param objPoints A map representing the points scored by players from objective cards.
-     * @return The player with the highest score, the game winner.
+     * @param players   The list of {@link Player Players} to resolve ties for,
+     *                  these players must be included as a key in the objPoints Map.
+     * @param objPoints A map containing the objective points scored by each player in the Game, including the ones not considered in the draw.
+     * @return The list of {@link Player Players} with ties resolved based on objective points.
      */
-    private Player getWinner(Map<Player, Integer> objPoints) {
-        List<Player> currWinners = new ArrayList<>();
-        int currMaxPoints = 0;
+    private List<Player> resolveTie(List<Player> players, Map<Player, Integer> objPoints) {
+        return players.stream()
+                .sorted(Comparator.comparingInt(objPoints::get).reversed())
+                .collect(Collectors.toList());
+    }
 
-        // getting Players with the most points
-        for (Map.Entry<Player, Integer> entry : scoreboard.entrySet()) {
-            if (entry.getValue() > currMaxPoints) {
-                currWinners.clear();
-                currWinners.add(entry.getKey());
-            } else if (entry.getValue() == currMaxPoints) {
-                currWinners.add(entry.getKey());
-            }
-            currMaxPoints = scoreboard.get(currWinners.getFirst());
-        }
+    /**
+     * Generates the final leaderboard based on {@link Player Player} scores.
+     * Ties are resolved based on their points scored from {@link ObjectiveCard objective cards}.
+     *
+     * @param objPoints A map containing the objective points scored by each player.
+     * @return The final leaderboard as a list of {@link Player} objects, ordered by points and resolved ties.
+     */
+    private List<Player> getFinalLeaderboard(Map<Player, Integer> objPoints) {
 
-        // checking which player, from the ones with the same points, scored the most points from ObjectiveCards
-        if (currWinners.size() != 1) {
-            for (Player p : objPoints.keySet()) {
-                if (!currWinners.contains(p)) {
-                    objPoints.remove(p);
-                }
-            }
-            currWinners.clear();
-            currWinners.add(objPoints.entrySet().stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(null));
-        }
-        if (currWinners.getFirst() == null) throw new NoWinnerException("No winner could be found");
+        return scoreboard.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(
 
-        return currWinners.getFirst();
+                        Collectors.groupingBy(
+                                Map.Entry::getValue,
+                                LinkedHashMap::new,
+                                Collectors.mapping(
+                                        Map.Entry::getKey,
+                                        Collectors.toList()
+                                )
+                        )
+                )
+                .values().stream()
+                .flatMap(players -> players.size() > 1 ? resolveTie(players, objPoints).stream() : players.stream())
+                .toList();
     }
 
     /**
@@ -448,6 +450,13 @@ public class Game {
      */
     public boolean isFinalPhase() {
         return finalPhase;
+    }
+
+    /**
+     * @return true if the player with turn is online.
+     */
+    private boolean isTurnPlayerOnline() {
+        return players.get(turnPlayerIndex).isOnline();
     }
 
 }
