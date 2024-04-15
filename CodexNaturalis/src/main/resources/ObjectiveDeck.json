@@ -1,96 +1,87 @@
 [
   {
     "id": "OC01",
-    "points": 3,
+    "points": 2,
     "requiredPattern": [
       {
         "key": {
           "x": 0,
           "y": 0
         },
-        "value": "plant"
+        "value": "fungi"
       },
       {
         "key": {
           "x": 1,
           "y": 1
         },
-        "value": "plant"
+        "value": "fungi"
       },
       {
         "key": {
           "x": 2,
           "y": 2
         },
-        "value": "plant"
+        "value": "fungi"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC02",
-    "points": 3,
+    "points": 2,
     "requiredPattern": [
       {
         "key": {
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "plant"
       },
       {
         "key": {
-          "x": 1,
-          "y": 1
+          "x": -1,
+          "y": -1
         },
-        "item": "plant"
+        "value": "plant"
       },
       {
         "key": {
-          "x": 2,
-          "y": 2
+          "x": -2,
+          "y": -2
         },
-        "item": "plant"
+        "value": "plant"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC03",
-    "points": 3,
+    "points": 2,
     "requiredPattern": [
       {
         "key": {
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "animal"
       },
       {
         "key": {
           "x": 1,
           "y": 1
         },
-        "item": "plant"
+        "value": "animal"
       },
       {
         "key": {
           "x": 2,
           "y": 2
         },
-        "item": "plant"
+        "value": "animal"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC04",
@@ -101,27 +92,24 @@
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "insect"
       },
       {
         "key": {
-          "x": 1,
-          "y": 1
+          "x": -1,
+          "y": -1
         },
-        "item": "plant"
+        "value": "insect"
       },
       {
         "key": {
-          "x": 2,
-          "y": 2
+          "x": -2,
+          "y": -2
         },
-        "item": "plant"
+        "value": "insect"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC05",
@@ -132,27 +120,24 @@
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "plant"
       },
       {
         "key": {
-          "x": 1,
-          "y": 1
+          "x": -1,
+          "y": -1
         },
-        "item": "plant"
+        "value": "fungi"
       },
       {
         "key": {
-          "x": 2,
-          "y": 2
+          "x": -1,
+          "y": -2
         },
-        "item": "plant"
+        "value": "fungi"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC06",
@@ -163,27 +148,24 @@
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "insect"
       },
       {
         "key": {
           "x": 1,
           "y": 1
         },
-        "item": "plant"
+        "value": "plant"
       },
       {
         "key": {
-          "x": 2,
+          "x": 1,
           "y": 2
         },
-        "item": "plant"
+        "value": "plant"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC07",
@@ -194,27 +176,24 @@
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "fungi"
       },
       {
         "key": {
-          "x": 1,
-          "y": 1
+          "x": -1,
+          "y": -1
         },
-        "item": "plant"
+        "value": "animal"
       },
       {
         "key": {
-          "x": 2,
-          "y": 2
+          "x": -1,
+          "y": -2
         },
-        "item": "plant"
+        "value": "animal"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC08",
@@ -225,274 +204,89 @@
           "x": 0,
           "y": 0
         },
-        "item": "plant"
+        "value": "animal"
       },
       {
         "key": {
           "x": 1,
-          "y": 1
+          "y": -1
         },
-        "item": "plant"
+        "value": "insect"
       },
       {
         "key": {
-          "x": 2,
-          "y": 2
+          "x": 1,
+          "y": -2
         },
-        "item": "plant"
+        "value": "insect"
       }
     ],
-    "requiredItems": {
-      "plant": 3
-    },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "PatternEvaluator"}
   },
   {
     "id": "OC09",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "fungi": 3
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC10",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
       "plant": 3
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC11",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "animal": 3
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC12",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "insect": 3
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC13",
     "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
     "requiredItems": {
-      "plant": 3
+      "quill": 1,
+      "inkwell": 1,
+      "manuscript": 1
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC14",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "manuscript": 3
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC15",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "inkwell": 2
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   },
   {
     "id": "OC16",
-    "points": 3,
-    "requiredPattern": [
-      {
-        "key": {
-          "x": 0,
-          "y": 0
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 1,
-          "y": 1
-        },
-        "item": "plant"
-      },
-      {
-        "key": {
-          "x": 2,
-          "y": 2
-        },
-        "item": "plant"
-      }
-    ],
+    "points": 2,
     "requiredItems": {
-      "plant": 3
+      "quill": 2
     },
-    "evaluator": {"type": "BasicEvaluator"}
+    "evaluator": {"type": "ItemEvaluator"}
   }
 ]

@@ -67,7 +67,8 @@ public class Game {
     /**
      *
      */
-    private boolean finalPhase; // TODO GameStatus?
+    private GameStatus gameStatus; /* TODO what if a player disconnects in the SETUP phase? When does he choose StartCard?
+                                           when  do we start the RUNNING phase?*/
 
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
@@ -95,7 +96,7 @@ public class Game {
 
         this.commonObjectives = new ObjectiveCard[2];
 
-        this.finalPhase = false; //TODO game status enum?
+        this.gameStatus = GameStatus.SETUP;
     }
 
     /**
@@ -187,11 +188,17 @@ public class Game {
     }
 
     /**
-     * TODO JavaDoc
-     * @param chosenDeck
-     * @param chosenCard
+     * Draws a card from the chosen deck or from the visible cards array.
+     * If a card is drawn from the visible cards array, it is replaced with the top card from the corresponding deck.
+     * If the corresponding deck is empty, it is replaced with the top card from the other deck.
+     * If both decks are empty, the game status is updated to LAST_CIRCLE.
+     * The drawn card is added to the current player's hand.
+     *
+     * @param chosenDeck The deck from which the card should be drawn.
+     * @param chosenCard The index of the card to be drawn from the visible cards array.
+     *                   If the value is not in the range [0, 2), a card is drawn from the top of the deck.
      */
-    public void drawPlayableCard(CardType chosenDeck, int chosenCard) {
+    public void drawCard(CardType chosenDeck, int chosenCard) {
 
         PlayableCard drawnCard, newVisible;
 
@@ -222,7 +229,7 @@ public class Game {
         Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) finalPhase = true;
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) gameStatus = GameStatus.LAST_CIRCLE;
 
     }
 
@@ -243,7 +250,7 @@ public class Game {
 
     /**
      * Assigns the given points to the selected {@link Player} in the {@link Game#scoreboard}.
-     * If the updated score is at least 20, the game updates his {@link Game#finalPhase} status.
+     * If the updated score is at least 20, the game updates his {@link Game#gameStatus} status.
      * The maximum score of the {@link Game#scoreboard} is 29.
      *
      * @param p      The player to assign the points to.
@@ -256,10 +263,19 @@ public class Game {
 
         currScore += points;
 
-        if (currScore >= 20 && !finalPhase) finalPhase = true; // TODO modify if changed GameStatus
+        if (currScore >= 20 && !gameStatus.equals(GameStatus.LAST_CIRCLE))
+            gameStatus = GameStatus.LAST_CIRCLE;
         if (currScore > 29) currScore = 29;
 
         scoreboard.put(p, currScore);
+    }
+
+    private int onlinePlayersNumber() {
+        int i = 0;
+        for (Player p: players) {
+            if (p.isOnline()) i++;
+        }
+        return i;
     }
 
     /**
@@ -270,6 +286,8 @@ public class Game {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(false);
+        if (onlinePlayersNumber() == 1) gameStatus = GameStatus.WAITING; // TODO start timeout?
+        if (onlinePlayersNumber() == 0) gameStatus = GameStatus.ENDED; // TODO forceQuitGame?
     }
 
     /**
@@ -280,6 +298,7 @@ public class Game {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(true);
+        if (onlinePlayersNumber() > 1) gameStatus = GameStatus.RUNNING;
     }
 
     /**
@@ -291,7 +310,7 @@ public class Game {
      * @return The ordered list of {@link Player Players}' usernames, based on the points scored.
      */
     public List<String> endGame() {
-        // TODO ENDED gameStatus?
+
         Map<Player, Integer> objPoints = new HashMap<>();
         int playerObjPoints;
 
@@ -301,6 +320,8 @@ public class Game {
 
             objPoints.put(p, playerObjPoints);
         }
+
+        gameStatus = GameStatus.ENDED;
 
         return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
     }
@@ -446,10 +467,11 @@ public class Game {
     }
 
     /**
-     * TODO game status getter
+     * Retrieves the current status of the game.
+     * @return {@link Game#gameStatus}.
      */
-    public boolean isFinalPhase() {
-        return finalPhase;
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 
     /**

@@ -2,40 +2,38 @@
   {
     "id": "SC01",
     "backPermanentResources": [
-      "plant",
-      "animal"
+      "insect"
     ],
     "frontCorners": [
+      "fungi",
       "plant",
       "animal",
-      "plant",
-      "hidden"
+      "insect"
     ],
     "backCorners": [
+      "empty",
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "insect"
     ],
     "flipped": "false"
   },
   {
     "id": "SC02",
     "backPermanentResources": [
-      "plant",
-      "animal"
+      "fungi"
     ],
     "frontCorners": [
       "plant",
       "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "fungi"
     ],
     "backCorners": [
-      "plant",
       "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "fungi",
+      "empty"
     ],
     "flipped": "false"
   },
@@ -43,58 +41,59 @@
     "id": "SC03",
     "backPermanentResources": [
       "plant",
-      "animal"
+      "fungi"
     ],
     "frontCorners": [
-      "plant",
+      "insect",
       "animal",
       "plant",
-      "hidden"
+      "fungi"
     ],
     "backCorners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "empty",
+      "empty",
+      "empty"
     ],
     "flipped": "false"
   },
   {
     "id": "SC04",
     "backPermanentResources": [
-      "plant",
-      "animal"
+      "animal",
+      "insect"
     ],
     "frontCorners": [
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "fungi",
+      "animal"
     ],
     "backCorners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "empty",
+      "empty",
+      "empty"
     ],
     "flipped": "false"
   },
   {
     "id": "SC05",
     "backPermanentResources": [
-      "plant",
-      "animal"
+      "animal",
+      "fungi",
+      "plant"
     ],
     "frontCorners": [
-      "plant",
+      "insect",
+      "fungi",
       "animal",
-      "plant",
-      "hidden"
+      "plant"
     ],
     "backCorners": [
-      "plant",
-      "animal",
-      "plant",
+      "empty",
+      "empty",
+      "hidden",
       "hidden"
     ],
     "flipped": "false"
@@ -103,18 +102,19 @@
     "id": "SC06",
     "backPermanentResources": [
       "plant",
-      "animal"
+      "animal",
+      "fungi"
     ],
     "frontCorners": [
-      "plant",
+      "fungi",
       "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "plant"
     ],
     "backCorners": [
-      "plant",
-      "animal",
-      "plant",
+      "empty",
+      "empty",
+      "hidden",
       "hidden"
     ],
     "flipped": "false"

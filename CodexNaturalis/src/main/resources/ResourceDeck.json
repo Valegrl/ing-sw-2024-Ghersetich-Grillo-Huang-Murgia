@@ -1,25 +1,25 @@
 [
   {
     "id": "RC01",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "fungi",
+      "empty",
+      "hidden",
+      "fungi"
     ],
     "type": "resource",
     "evaluator": {"type": "BasicEvaluator"}
   },
   {
     "id": "RC02",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
+      "fungi",
+      "fungi",
+      "empty",
       "hidden"
     ],
     "type": "resource",
@@ -29,13 +29,13 @@
   },
   {
     "id": "RC03",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "hidden",
+      "fungi",
+      "fungi"
     ],
     "type": "resource",
     "evaluator": {
@@ -44,13 +44,13 @@
   },
   {
     "id": "RC04",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "fungi",
+      "fungi",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -59,13 +59,13 @@
   },
   {
     "id": "RC05",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "quill",
+      "fungi",
+      "plant"
     ],
     "type": "resource",
     "evaluator": {
@@ -74,12 +74,12 @@
   },
   {
     "id": "RC06",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
+      "inkwell",
+      "fungi",
       "animal",
-      "plant",
       "hidden"
     ],
     "type": "resource",
@@ -89,13 +89,13 @@
   },
   {
     "id": "RC07",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "fungi",
+      "insect",
+      "empty",
+      "manuscript"
     ],
     "type": "resource",
     "evaluator": {
@@ -104,13 +104,13 @@
   },
   {
     "id": "RC08",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "fungi",
+      "hidden",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -119,13 +119,13 @@
   },
   {
     "id": "RC09",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "fungi",
+      "hidden",
+      "empty",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -134,13 +134,13 @@
   },
   {
     "id": "RC10",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "fungi",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "empty",
+      "empty",
+      "fungi"
     ],
     "type": "resource",
     "evaluator": {
@@ -149,13 +149,13 @@
   },
   {
     "id": "RC11",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "hidden",
+      "plant"
     ],
     "type": "resource",
     "evaluator": {
@@ -164,12 +164,12 @@
   },
   {
     "id": "RC12",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
       "plant",
-      "animal",
       "plant",
+      "empty",
       "hidden"
     ],
     "type": "resource",
@@ -179,13 +179,13 @@
   },
   {
     "id": "RC13",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
+      "empty",
+      "hidden",
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "plant"
     ],
     "type": "resource",
     "evaluator": {
@@ -194,13 +194,13 @@
   },
   {
     "id": "RC14",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
+      "hidden",
       "plant",
-      "animal",
       "plant",
-      "hidden"
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -209,13 +209,13 @@
   },
   {
     "id": "RC15",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
+      "hidden",
+      "insect",
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "quill"
     ],
     "type": "resource",
     "evaluator": {
@@ -224,12 +224,12 @@
   },
   {
     "id": "RC16",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
+      "fungi",
       "plant",
-      "animal",
-      "plant",
+      "inkwell",
       "hidden"
     ],
     "type": "resource",
@@ -239,13 +239,13 @@
   },
   {
     "id": "RC17",
-    "points": 10,
+    "points": 0,
     "permanentResource": "plant",
     "corners": [
-      "plant",
+      "manuscript",
+      "hidden",
       "animal",
-      "plant",
-      "hidden"
+      "plant"
     ],
     "type": "resource",
     "evaluator": {
@@ -254,13 +254,13 @@
   },
   {
     "id": "RC18",
-    "points": 10,
+    "points": 1,
     "permanentResource": "plant",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "empty",
+      "hidden",
+      "plant"
     ],
     "type": "resource",
     "evaluator": {
@@ -269,11 +269,11 @@
   },
   {
     "id": "RC19",
-    "points": 10,
+    "points": 1,
     "permanentResource": "plant",
     "corners": [
-      "plant",
-      "animal",
+      "empty",
+      "empty",
       "plant",
       "hidden"
     ],
@@ -284,13 +284,13 @@
   },
   {
     "id": "RC20",
-    "points": 10,
+    "points": 1,
     "permanentResource": "plant",
     "corners": [
+      "hidden",
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "empty",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -299,13 +299,13 @@
   },
   {
     "id": "RC21",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
       "animal",
-      "plant",
-      "hidden"
+      "animal",
+      "hidden",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -314,13 +314,13 @@
   },
   {
     "id": "RC22",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
+      "hidden",
+      "empty",
       "animal",
-      "plant",
-      "hidden"
+      "animal"
     ],
     "type": "resource",
     "evaluator": {
@@ -329,13 +329,13 @@
   },
   {
     "id": "RC23",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
       "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "empty",
+      "animal"
     ],
     "type": "resource",
     "evaluator": {
@@ -344,12 +344,12 @@
   },
   {
     "id": "RC24",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
+      "empty",
       "animal",
-      "plant",
+      "animal",
       "hidden"
     ],
     "type": "resource",
@@ -359,13 +359,13 @@
   },
   {
     "id": "RC25",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
+      "empty",
+      "insect",
       "animal",
-      "plant",
-      "hidden"
+      "inkwell"
     ],
     "type": "resource",
     "evaluator": {
@@ -374,12 +374,12 @@
   },
   {
     "id": "RC26",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
       "plant",
       "animal",
-      "plant",
+      "manuscript",
       "hidden"
     ],
     "type": "resource",
@@ -389,13 +389,13 @@
   },
   {
     "id": "RC27",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "quill",
+      "hidden",
+      "fungi",
+      "animal"
     ],
     "type": "resource",
     "evaluator": {
@@ -404,13 +404,13 @@
   },
   {
     "id": "RC28",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "empty",
+      "empty",
+      "animal"
     ],
     "type": "resource",
     "evaluator": {
@@ -419,13 +419,13 @@
   },
   {
     "id": "RC29",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
+      "empty",
+      "hidden",
       "animal",
-      "plant",
-      "hidden"
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -434,13 +434,13 @@
   },
   {
     "id": "RC30",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "animal",
     "corners": [
-      "plant",
+      "empty",
       "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -449,13 +449,13 @@
   },
   {
     "id": "RC31",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "insect",
+      "hidden",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -464,13 +464,13 @@
   },
   {
     "id": "RC32",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "empty",
+      "insect",
+      "insect"
     ],
     "type": "resource",
     "evaluator": {
@@ -479,13 +479,13 @@
   },
   {
     "id": "RC33",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "hidden",
+      "empty",
+      "insect"
     ],
     "type": "resource",
     "evaluator": {
@@ -494,12 +494,12 @@
   },
   {
     "id": "RC34",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
+      "empty",
+      "insect",
+      "insect",
       "hidden"
     ],
     "type": "resource",
@@ -509,13 +509,13 @@
   },
   {
     "id": "RC35",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "quill",
+      "insect",
+      "animal"
     ],
     "type": "resource",
     "evaluator": {
@@ -524,12 +524,12 @@
   },
   {
     "id": "RC36",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
+      "manuscript",
+      "insect",
+      "fungi",
       "hidden"
     ],
     "type": "resource",
@@ -539,13 +539,13 @@
   },
   {
     "id": "RC37",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 0,
+    "permanentResource": "insect",
     "corners": [
+      "insect",
       "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "inkwell"
     ],
     "type": "resource",
     "evaluator": {
@@ -554,13 +554,13 @@
   },
   {
     "id": "RC38",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "insect",
+      "hidden",
+      "empty",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
@@ -569,12 +569,12 @@
   },
   {
     "id": "RC39",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
+      "empty",
+      "empty",
+      "insect",
       "hidden"
     ],
     "type": "resource",
@@ -584,13 +584,13 @@
   },
   {
     "id": "RC40",
-    "points": 10,
-    "permanentResource": "plant",
+    "points": 1,
+    "permanentResource": "insect",
     "corners": [
-      "plant",
-      "animal",
-      "plant",
-      "hidden"
+      "hidden",
+      "insect",
+      "empty",
+      "empty"
     ],
     "type": "resource",
     "evaluator": {
