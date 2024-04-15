@@ -1,0 +1,122 @@
+[
+  {
+    "id": "SC01",
+    "backPermanentResources": [
+      "insect"
+    ],
+    "frontCorners": [
+      "fungi",
+      "plant",
+      "animal",
+      "insect"
+    ],
+    "backCorners": [
+      "empty",
+      "plant",
+      "empty",
+      "insect"
+    ],
+    "flipped": "false"
+  },
+  {
+    "id": "SC02",
+    "backPermanentResources": [
+      "fungi"
+    ],
+    "frontCorners": [
+      "plant",
+      "animal",
+      "insect",
+      "fungi"
+    ],
+    "backCorners": [
+      "animal",
+      "empty",
+      "fungi",
+      "empty"
+    ],
+    "flipped": "false"
+  },
+  {
+    "id": "SC03",
+    "backPermanentResources": [
+      "plant",
+      "fungi"
+    ],
+    "frontCorners": [
+      "insect",
+      "animal",
+      "plant",
+      "fungi"
+    ],
+    "backCorners": [
+      "empty",
+      "empty",
+      "empty",
+      "empty"
+    ],
+    "flipped": "false"
+  },
+  {
+    "id": "SC04",
+    "backPermanentResources": [
+      "animal",
+      "insect"
+    ],
+    "frontCorners": [
+      "plant",
+      "insect",
+      "fungi",
+      "animal"
+    ],
+    "backCorners": [
+      "empty",
+      "empty",
+      "empty",
+      "empty"
+    ],
+    "flipped": "false"
+  },
+  {
+    "id": "SC05",
+    "backPermanentResources": [
+      "animal",
+      "fungi",
+      "plant"
+    ],
+    "frontCorners": [
+      "insect",
+      "fungi",
+      "animal",
+      "plant"
+    ],
+    "backCorners": [
+      "empty",
+      "empty",
+      "hidden",
+      "hidden"
+    ],
+    "flipped": "false"
+  },
+  {
+    "id": "SC06",
+    "backPermanentResources": [
+      "plant",
+      "animal",
+      "fungi"
+    ],
+    "frontCorners": [
+      "fungi",
+      "animal",
+      "insect",
+      "plant"
+    ],
+    "backCorners": [
+      "empty",
+      "empty",
+      "hidden",
+      "hidden"
+    ],
+    "flipped": "false"
+  }
+]

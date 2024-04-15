@@ -16,14 +16,14 @@ import java.util.*;
 public class DeckFactory {
 
     Map<Class<?>, String> classToFile = new HashMap<>() {{
-        put(StartCard.class, "CodexNaturalis/src/main/resources/StartDeck.json");
-        put(ObjectiveCard.class, "CodexNaturalis/src/main/resources/ObjectiveDeck.json");
-        put(GoldCard.class, "CodexNaturalis/src/main/resources/GoldDeck.json");
-        put(ResourceCard.class, "CodexNaturalis/src/main/resources/ResourceDeck.json");
+        put(StartCard.class, "StartDeck.json");
+        put(ObjectiveCard.class, "ObjectiveDeck.json");
+        put(GoldCard.class, "GoldDeck.json");
+        put(ResourceCard.class, "ResourceDeck.json");
     }};
 
     public <T extends Card> Deck<T> createDeck(Class<T> cls) {
-        String JSON_FILE_NAME = classToFile.get(cls);
+        String JSON_FILE_NAME = getClass().getClassLoader().getResource(classToFile.get(cls)).getPath();
         if (JSON_FILE_NAME == null) {
             throw new IllegalArgumentException("Class " + cls + " not supported");
         }
@@ -45,4 +45,5 @@ public class DeckFactory {
             return null;
         }
     }
+
 }

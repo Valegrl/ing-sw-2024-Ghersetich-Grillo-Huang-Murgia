@@ -76,7 +76,7 @@ public class Lobby {
      * @throws InsufficientPlayersException If the lobby does not have enough players to start the game.
      */
     public Game startGame() throws InsufficientPlayersException {
-        if (requiredPlayers < joinedPlayers.size())
+        if (requiredPlayers > joinedPlayers.size())
             throw new InsufficientPlayersException();
         return new Game(this.id, joinedPlayers);
     }

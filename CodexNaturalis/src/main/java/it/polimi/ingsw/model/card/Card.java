@@ -44,6 +44,5 @@ public abstract class Card {
         return Objects.hash(id);
     }
 
-
 }
 

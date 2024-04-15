@@ -57,4 +57,5 @@ public class ObjectiveCard extends EvaluableCard {
     public Map<Item, Integer> getRequiredItems() {
         return requiredItems;
     }
+
 }
