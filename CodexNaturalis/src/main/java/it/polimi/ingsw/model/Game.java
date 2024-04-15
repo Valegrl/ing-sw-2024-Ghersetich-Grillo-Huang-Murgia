@@ -100,12 +100,12 @@ public class Game {
 
     /**
      * Sets up the initial game state by creating and initializing decks and distributing cards to players.
-     *
+     * <br>
      * The 2 {@link Game#commonObjectives} are drawn from the ObjectiveCards deck.
-     *
+     * <br>
      * The hand is distributed by giving 2 {@link ResourceCard ResourceCards} and 1 {@link GoldCard} to each player.
      * Each player is given a {@link StartCard}.
-     *
+     * <br>
      * Initializes each player's {@link PlayArea}.
      *
      * @return A list containing arrays of 2 {@link ObjectiveCard ObjectiveCards} for each player to choose their secret objective from.
@@ -149,12 +149,12 @@ public class Game {
 
     /**
      * Places a {@link PlayableCard} on the current player's {@link PlayArea} at the specified position.
-     *
+     * <br>
      * If the card is flipped, it flips the card before placing it on the play area.
-     *
+     * <br>
      * After determining if the card's {@link GoldCard constraint}, if present, is satisfied,
      * it places the card on the play area at the specified position.
-     *
+     * <br>
      * Additionally, calculates the points earned by placing the card
      * and assigns them to the current {@link Player}.
      *
@@ -284,7 +284,7 @@ public class Game {
 
     /**
      * Ends the game and determines the ordered Leaderboard based on objective points earned by {@link Player Players}.
-     *
+     * <br>
      * This method calculates and assigns the total objective points earned by each player
      * by evaluating the {@link ObjectiveCard ObjectiveCards}.
      *
