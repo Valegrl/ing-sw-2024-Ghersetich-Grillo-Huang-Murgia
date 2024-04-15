@@ -10,6 +10,7 @@ import it.polimi.ingsw.utils.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A class that evaluates a card that gives points based on a placement pattern of other cards.
@@ -26,12 +27,15 @@ public class PatternEvaluator extends Evaluator {
         Pair<Coordinate, Item>[] pattern = card.getRequiredPattern();
         Map<Coordinate, PlayableCard> playedCards = playArea.getPlayedCards();
 
+        Set<Coordinate> keys = playedCards.keySet();
+        List<Coordinate> cardCoordinates = Coordinate.sortCoordinates(new ArrayList<>(keys));
+
         List<Coordinate> alreadyValued = new ArrayList<>();
         List<Coordinate> temp = new ArrayList<>();
         Coordinate start = new Coordinate(0,0);
         Coordinate pointer;
 
-        for (Coordinate pos : playedCards.keySet()){
+        for (Coordinate pos : cardCoordinates){
             boolean flag = false;
             temp.clear();
             for (int i = 0; i < pattern.length && !flag; i++) {

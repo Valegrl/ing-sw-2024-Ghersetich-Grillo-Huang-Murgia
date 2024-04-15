@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -75,5 +76,24 @@ public class Coordinate {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    /**
+     * Sorts a list of {@code Coordinate} objects by their y-coordinates in ascending order.
+     * If y-coordinates are equal, x-coordinates are compared and sorted in ascending order.
+     *
+     * @param coordinates the list of {@code Coordinate} objects to be sorted
+     * @return the sorted list of {@code Coordinate} objects
+     */
+    public static List<Coordinate> sortCoordinates(List<Coordinate> coordinates) {
+        coordinates.sort((c1, c2) -> {
+            int yComparison = Integer.compare(c1.getY(), c2.getY());
+            if (yComparison != 0) {
+                return yComparison;
+            } else {
+                return Integer.compare(c1.getX(), c2.getX());
+            }
+        });
+        return coordinates;
     }
 }
