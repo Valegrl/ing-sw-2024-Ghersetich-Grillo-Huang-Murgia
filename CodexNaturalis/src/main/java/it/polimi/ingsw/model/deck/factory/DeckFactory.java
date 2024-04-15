@@ -30,10 +30,14 @@ public class DeckFactory {
         URL resource;
         URI jsonURI;
 
-        resource = getClass().getClassLoader().getResource(classToFile.get(cls));
-
-        if (resource == null) {
+        String JSON_FILE_NAME = classToFile.get(cls);
+        if (JSON_FILE_NAME == null) {
             throw new IllegalArgumentException("Class " + cls + " not supported");
+        }
+
+        resource = getClass().getClassLoader().getResource(JSON_FILE_NAME);
+        if (resource == null) {
+            throw new IllegalArgumentException("Resource for " + cls + " not found");
         }
 
         try {
