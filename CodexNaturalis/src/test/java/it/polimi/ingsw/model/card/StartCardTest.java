@@ -19,7 +19,12 @@ class StartCardTest {
         item1 = Mockito.mock(Item.class);
         item2 = Mockito.mock(Item.class);
         List<Item> backPermanentResources = Arrays.asList(item1, item2);
-        startCard = new StartCard("1", backPermanentResources);
+
+        Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};
+        Item[] backCorners = new Item[]{Item.EMPTY, Item.PLANT, Item.EMPTY, Item.INSECT};
+        boolean flipped = false;
+
+        startCard = new StartCard("1", backPermanentResources, frontCorners, backCorners, flipped);
     }
 
     @Test

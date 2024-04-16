@@ -27,19 +27,23 @@ public class StartCard extends Card {
      * Flipped is false if the card is displayed with the front side,
      * true if the card is displayed with the back side.
      */
-    private boolean flipped = false;
+    private boolean flipped;
 
     /**
-     * Constructs a new Start card.
+     * Constructs a new StartCard with the given parameters.
      *
-     * @param id                     A unique integer associated with each card.
-     * @param backPermanentResources The list of fixed resources of a Start card.
+     * @param id                     The unique identifier for the StartCard.
+     * @param backPermanentResources The list of permanent resources on the back of the StartCard.
+     * @param frontCorners           The array of Items on the front corners of the StartCard.
+     * @param backCorners            The array of Items on the back corners of the StartCard.
+     * @param flipped                The initial flipped state of the StartCard. If true, the StartCard is considered flipped.
      */
-    public StartCard(String id, List<Item> backPermanentResources) {
+    public StartCard(String id, List<Item> backPermanentResources, Item[] frontCorners, Item[] backCorners, boolean flipped) {
         super(id);
         this.backPermanentResources = backPermanentResources;
-        this.frontCorners = new Item[CornerIndex.values().length];
-        this.backCorners = new Item[CornerIndex.values().length];
+        this.frontCorners = frontCorners;
+        this.backCorners = backCorners;
+        this.flipped = flipped;
     }
 
     /**
