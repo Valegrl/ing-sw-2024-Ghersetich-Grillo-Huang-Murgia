@@ -187,6 +187,8 @@ public class PlayArea {
         if(flipped) {
             currItem = c.getPermanentResource();
             uncoveredItems.put(currItem, uncoveredItems.get(currItem) + 1);
+            for(CornerIndex i : CornerIndex.values())
+                c.setCorner(Item.EMPTY, i.getIndex());
         } else {
             Item[] corners = c.getCorners();
             for(Item item : corners)
@@ -277,10 +279,8 @@ public class PlayArea {
         Item[] temp;
         int j;
 
-        if(!sc.isFlipped())
-            temp = sc.getFrontCorners();
-        else
-            temp = sc.getBackCorners();
+        temp = !sc.isFlipped() ? sc.getFrontCorners() : sc.getBackCorners();
+        notOkPos.add(startCoordinate);
 
         /*check startCard's corners*/
         for(CornerIndex i : CornerIndex.values()) {
