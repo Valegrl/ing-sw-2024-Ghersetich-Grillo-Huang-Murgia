@@ -1,6 +1,10 @@
 package it.polimi.ingsw.utils;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinateTest {
@@ -38,29 +42,17 @@ class CoordinateTest {
     }
 
     @Test
-    void equalsSameObject() {
-        Coordinate c1 = new Coordinate(1, 2);
-        assertTrue(c1.equals(c1));
-    }
-
-    @Test
-    void equalsDifferentObject() {
+    void testEquals() {
         Coordinate c1 = new Coordinate(1, 2);
         Coordinate c2 = new Coordinate(1, 2);
-        assertTrue(c1.equals(c2));
-    }
+        Coordinate c3 = new Coordinate(3, 4);
+        Object o = new Object();
 
-    @Test
-    void equalsDifferentObjectDifferentValues() {
-        Coordinate c1 = new Coordinate(1, 2);
-        Coordinate c2 = new Coordinate(3, 4);
-        assertFalse(c1.equals(c2));
-    }
-
-    @Test
-    void equalsNull() {
-        Coordinate c1 = new Coordinate(1, 2);
-        assertFalse(c1.equals(null));
+        assertEquals(c1, c1);
+        assertEquals(c1, c2);
+        assertNotEquals(c1, c3);
+        assertNotEquals(null, c1);
+        assertNotEquals(c1, o);
     }
 
     @Test
@@ -68,5 +60,21 @@ class CoordinateTest {
         Coordinate c1 = new Coordinate(1, 2);
         Coordinate c2 = new Coordinate(1, 2);
         assertEquals(c1.hashCode(), c2.hashCode());
+    }
+
+    @Test
+    void testSortCoordinates() {
+        Coordinate c1 = new Coordinate(1, 2);
+        Coordinate c2 = new Coordinate(3, 1);
+        Coordinate c3 = new Coordinate(2, 3);
+        Coordinate c4 = new Coordinate(-5, 1);
+
+        List<Coordinate> coordinates = Arrays.asList(c1, c2, c3, c4);
+        List<Coordinate> sortedCoordinates = Coordinate.sortCoordinates(coordinates);
+
+        assertEquals(c4, sortedCoordinates.get(0));
+        assertEquals(c2, sortedCoordinates.get(1));
+        assertEquals(c1, sortedCoordinates.get(2));
+        assertEquals(c3, sortedCoordinates.get(3));
     }
 }
