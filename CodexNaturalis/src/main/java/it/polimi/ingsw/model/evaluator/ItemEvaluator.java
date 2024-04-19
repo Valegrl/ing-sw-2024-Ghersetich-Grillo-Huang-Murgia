@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * A class that evaluates a card that gives points based on the visibility of some items in the PlayArea.
  */
-public class ItemEvaluator extends Evaluator {
+public class ItemEvaluator implements Evaluator {
 
     @Override
     public int calculatePoints(PlayArea playArea) {

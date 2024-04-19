@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * A class that evaluates a card that gives points based on a placement pattern of other cards.
  */
-public class PatternEvaluator extends Evaluator {
+public class PatternEvaluator implements Evaluator {
 
     @Override
     public int calculatePoints(PlayArea playArea) {

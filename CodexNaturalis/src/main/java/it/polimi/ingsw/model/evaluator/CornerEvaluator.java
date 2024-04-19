@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * A class that evaluates a card that gives points based on the corners it covers.
  */
-public class CornerEvaluator extends Evaluator {
+public class CornerEvaluator implements Evaluator {
 
     @Override
     public int calculatePoints(PlayArea playArea) {
