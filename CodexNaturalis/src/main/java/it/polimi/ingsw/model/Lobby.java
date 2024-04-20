@@ -105,4 +105,12 @@ public class Lobby {
         return requiredPlayers;
     }
 
+    /**
+     * Retrieves the unique identifier of the Lobby.
+     *
+     * @return The unique identifier of the Lobby.
+     */
+    public String getId() {
+        return id;
+    }
 }
