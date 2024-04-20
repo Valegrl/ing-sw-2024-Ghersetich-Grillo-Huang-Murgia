@@ -14,7 +14,7 @@ public class Lobby {
     /**
      * The Lobby's identifier.
      */
-    private final int id;
+    private final String id;
 
     /**
      * The list of Players' usernames that joined the Lobby.
@@ -32,7 +32,7 @@ public class Lobby {
      * @param user The first player's username.
      * @param requiredPlayers The number of required players to start this Lobby's game.
      */
-    public Lobby(int id, String user, int requiredPlayers) {
+    public Lobby(String id, String user, int requiredPlayers) {
         if (user == null)
             throw new NullPointerException("User name cannot be null");
         if (requiredPlayers < 2 || requiredPlayers > 4)

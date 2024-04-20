@@ -20,7 +20,7 @@ public class Game {
     /**
      * The Game's identifier.
      */
-    private final int id;
+    private final String id;
 
     /**
      * The Game's {@link it.polimi.ingsw.model.card.ResourceCard resource cards} deck.
@@ -75,7 +75,7 @@ public class Game {
      * @param id The identifier of the Game.
      * @param usernames The list of usernames chosen by players.
      */
-    public Game(int id, List<String> usernames) {
+    public Game(String id, List<String> usernames) {
         this.id = id;
 
         this.resourceDeck = new DeckFactory().createDeck(ResourceCard.class);
@@ -385,7 +385,7 @@ public class Game {
      * Retrieves the Game id.
      * @return {@link Game#id gameId}.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
