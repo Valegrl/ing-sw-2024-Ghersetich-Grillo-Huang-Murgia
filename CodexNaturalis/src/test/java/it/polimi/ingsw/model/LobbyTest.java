@@ -18,8 +18,13 @@ class LobbyTest {
 
     @Test
     void addPlayerToFullLobbyThrowsException() {
-        Lobby lobby = new Lobby(1, "player1", 1);
-        assertThrows(FullLobbyException.class, () -> lobby.addPlayer("player2"));
+        Lobby lobby = new Lobby(1, "player1", 2);
+        try {
+            lobby.addPlayer("player2");
+        } catch (NonUniqueUsernameException | FullLobbyException e) {
+            throw new RuntimeException(e);
+        }
+        assertThrows(FullLobbyException.class, () -> lobby.addPlayer("player3"));
     }
 
     @Test
@@ -48,12 +53,17 @@ class LobbyTest {
 
     @Test
     void startGameWithSufficientPlayers() {
-        Lobby lobby = new Lobby(1, "player1", 1);
+        Lobby lobby = new Lobby(1, "player1", 2);
+        try {
+            lobby.addPlayer("player2");
+        } catch (NonUniqueUsernameException | FullLobbyException e) {
+            throw new RuntimeException(e);
+        }
 
         assertDoesNotThrow(lobby::startGame);
 
         Game game = lobby.startGame();
-        assertEquals(1, game.getPlayers().size());
+        assertEquals(2, game.getPlayers().size());
     }
 
     @Test
@@ -63,13 +73,34 @@ class LobbyTest {
     }
 
     @Test
+    void lobbyConstructorThrowsExceptionWhenUsernameIsNull() {
+        assertThrows(NullPointerException.class, () -> new Lobby(1, null, 2));
+    }
+
+    @Test
+    void lobbyConstructorThrowsExceptionWhenRequiredPlayersIsInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new Lobby(1, "player1", 5));
+        assertThrows(IllegalArgumentException.class, () -> new Lobby(1, "player1", 1));
+    }
+
+    @Test
+    void addPlayerThrowsExceptionWhenUsernameIsNull() {
+        Lobby lobby = new Lobby(1, "player1", 2);
+        assertThrows(NullPointerException.class, () -> lobby.addPlayer(null));
+    }
+
+    @Test
+    void removePlayerThrowsExceptionWhenUsernameIsNull() {
+        Lobby lobby = new Lobby(1, "player1", 2);
+        assertThrows(NullPointerException.class, () -> lobby.removePlayer(null));
+    }
+
+    @Test
     void getJoinedPlayers() {
         Lobby lobby = new Lobby(1, "player1", 2);
         try {
             lobby.addPlayer("player2");
-        } catch (NonUniqueUsernameException e) {
-            throw new RuntimeException(e);
-        } catch (FullLobbyException e) {
+        } catch (NonUniqueUsernameException | FullLobbyException e) {
             throw new RuntimeException(e);
         }
         assertEquals(2, lobby.getJoinedPlayers().size());

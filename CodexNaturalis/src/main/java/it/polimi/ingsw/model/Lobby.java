@@ -33,6 +33,10 @@ public class Lobby {
      * @param requiredPlayers The number of required players to start this Lobby's game.
      */
     public Lobby(int id, String user, int requiredPlayers) {
+        if (user == null)
+            throw new NullPointerException("User name cannot be null");
+        if (requiredPlayers < 2 || requiredPlayers > 4)
+            throw new IllegalArgumentException("Number of required players must be between 2 and 4");
         this.id = id;
         this.joinedPlayers = new ArrayList<>();
         this.joinedPlayers.add(user);
@@ -45,16 +49,18 @@ public class Lobby {
      * corresponding exceptions will be thrown.
      *
      * @param user The username of the player to be added.
+     * @return true if the player's username was successfully added to the list of joined players, false otherwise.
      * @throws NonUniqueUsernameException If the username is not unique in the lobby.
      * @throws FullLobbyException         If the lobby is already full.
      */
-    public void addPlayer(String user) throws NonUniqueUsernameException, FullLobbyException {
+    public boolean addPlayer(String user) throws NonUniqueUsernameException, FullLobbyException {
+        if (user == null)
+            throw new NullPointerException("User name cannot be null");
         if (requiredPlayers == joinedPlayers.size())
             throw new FullLobbyException();
-        if (!joinedPlayers.contains(user))
-            this.joinedPlayers.add(user);
-        else
+        if (joinedPlayers.contains(user))
             throw new NonUniqueUsernameException();
+        return this.joinedPlayers.add(user);
     }
 
     /**
@@ -66,6 +72,8 @@ public class Lobby {
      * @return true if the player's username was present and successfully removed, otherwise false.
      */
     public boolean removePlayer(String user) {
+        if (user == null)
+            throw new NullPointerException("User name cannot be null");
         return joinedPlayers.remove(user);
     }
 
@@ -86,7 +94,7 @@ public class Lobby {
      * @return {@link Lobby#joinedPlayers}.
      */
     public List<String> getJoinedPlayers() {
-        return joinedPlayers;
+        return new ArrayList<>(joinedPlayers);
     }
 
     /**
