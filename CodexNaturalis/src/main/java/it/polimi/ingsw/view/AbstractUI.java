@@ -1,4 +1,4 @@
 package it.polimi.ingsw.view;
 
-public abstract class AbstractUI implements MainActivitiesView {
+public abstract class AbstractUI {
 }

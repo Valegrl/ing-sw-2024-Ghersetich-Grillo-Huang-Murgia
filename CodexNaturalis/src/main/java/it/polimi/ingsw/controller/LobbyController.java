@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-
-import it.polimi.ingsw.listener.GameListener;
 import it.polimi.ingsw.model.Lobby;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.List;
  * These operations are synchronized to ensure thread safety.</p>
  */
 public class LobbyController{
-    //TODO review class, implementation, listeners and synchronized methods
+    //TODO move LobbyController in Controller class and delete Lobby from model
     /**
      * The Lobby instance that this controller manages.
      * It contains the state of the lobby, including the list of players and the game settings.
@@ -30,12 +28,11 @@ public class LobbyController{
      * Constructs a new LobbyController with the given listener, player name, lobby ID, and number of required players.
      * It also adds this controller to the list of active lobby controllers in the Controller singleton.
      *
-     * @param listener The GameListener to be associated with the lobby.
      * @param playerName The name of the player creating the lobby.
      * @param lobbyID The unique identifier for the lobby.
      * @param nPlayersRequired The number of players required to start the game.
      */
-    protected LobbyController(GameListener listener, String playerName, String lobbyID, int nPlayersRequired) {
+    protected LobbyController(String playerName, String lobbyID, int nPlayersRequired) {
         lobby = new Lobby(lobbyID, playerName, nPlayersRequired);
         Controller.getInstance().addToLobbyControllers(this);
     }

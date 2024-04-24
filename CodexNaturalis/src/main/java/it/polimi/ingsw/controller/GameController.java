@@ -19,7 +19,7 @@ import it.polimi.ingsw.model.Lobby;
  * the game flow.</p>
  */
 public class GameController {
-    //TODO review class, implementation, listeners and synchronized methods
+    //TODO review class, implementation and synchronized methods
     /**
      * The Game instance that this controller manages.
      * It contains the state of the game, including the list of players, the game board, and the game settings.
@@ -57,5 +57,5 @@ public class GameController {
         return game.getId();
     }
 
-    //TODO Game logic and TurnManager
+    //TODO Game logic
 }

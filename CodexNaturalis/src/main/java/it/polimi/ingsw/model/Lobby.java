@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.exceptions.NonUniqueUsernameException;
 
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO move this class in Controller class
 /**
  * A class to represent a Lobby for a multiplayer game.
  */

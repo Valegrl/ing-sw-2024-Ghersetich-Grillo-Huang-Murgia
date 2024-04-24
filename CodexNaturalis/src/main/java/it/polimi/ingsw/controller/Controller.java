@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.listener.GameListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,13 +41,12 @@ public class Controller {
      * <p>The lobby is identified by a unique identifier, which is also used for the game once the lobby is ready to start.
      * The lobby is then deleted.</p>
      *
-     * @param listener The {@code GameListener} to be associated with the lobby.
      * @param playerName The name of the player creating the lobby.
      * @param lobbyID The unique identifier for the lobby.
      * @param nPlayersRequired The number of players required to start the game.
      * @return The {@code LobbyController} for the newly created lobby.
      */
-    public synchronized LobbyController createLobby(GameListener listener, String playerName, String lobbyID, int nPlayersRequired){
+    public synchronized LobbyController createLobby(String playerName, String lobbyID, int nPlayersRequired){
         //TODO implementation
         /*check if lobbyID is unique*/
     }
@@ -60,12 +57,11 @@ public class Controller {
      *<p>The lobby is identified by a unique identifier, which is also used for the game once the lobby is ready to start.
      * The lobby is then deleted.</p>
      *
-     * @param listener The {@code GameListener} to be associated with the lobby.
      * @param playerName The name of the player joining the lobby.
      * @param lobbyID The unique identifier for the lobby.
      * @return The {@code LobbyController} for the lobby the player joined.
      */
-    public synchronized LobbyController joinLobby(GameListener listener, String playerName, String lobbyID){
+    public synchronized LobbyController joinLobby(String playerName, String lobbyID){
         //TODO implementation
     }
 
@@ -73,12 +69,11 @@ public class Controller {
      * Allows a player to reconnect to an existing game and returns the corresponding {@code GameController}.
      * Only players who were present when the game started can reconnect.
      *
-     * @param listener The {@code GameListener} to be associated with the game.
      * @param playerName The name of the player reconnecting to the game.
      * @param gameID The unique identifier for the game.
      * @return The {@code GameController} for the game the player reconnected to.
      */
-    public synchronized GameController reconnectToGame(GameListener listener, String playerName, String gameID){
+    public synchronized GameController reconnectToGame(String playerName, String gameID){
         //TODO implementation
     }
 
