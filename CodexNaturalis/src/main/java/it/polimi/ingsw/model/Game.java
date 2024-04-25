@@ -76,6 +76,19 @@ public class Game {
      * @param usernames The list of usernames chosen by players.
      */
     public Game(String id, List<String> usernames) {
+        // Check that id is not null
+        assert id != null : "Game id cannot be null";
+
+        // Check that usernames is not null and not empty
+        assert usernames != null && !usernames.isEmpty() : "Usernames cannot be null or empty";
+
+        // Check that usernames size is between 2 and 4
+        assert usernames.size() >= 2 && usernames.size() <= 4 : "Number of players must be between 2 and 4";
+
+        // Check that all usernames are unique
+        Set<String> uniqueUsernames = new HashSet<>(usernames);
+        assert uniqueUsernames.size() == usernames.size() : "All players must have unique usernames";
+
         this.id = id;
 
         this.resourceDeck = new DeckFactory().createDeck(ResourceCard.class);
