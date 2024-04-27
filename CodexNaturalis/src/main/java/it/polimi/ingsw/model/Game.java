@@ -68,7 +68,7 @@ public class Game {
      *
      */
     private GameStatus gameStatus; /* TODO what if a player disconnects in the SETUP phase? When does he choose StartCard?
-                                           when  do we start the RUNNING phase?*/
+                                           when  do we start the RUNNING phase? */
 
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
@@ -76,16 +76,12 @@ public class Game {
      * @param usernames The list of usernames chosen by players.
      */
     public Game(String id, List<String> usernames) {
-        // Check that id is not null
         assert id != null : "Game id cannot be null";
 
-        // Check that usernames is not null and not empty
         assert usernames != null && !usernames.isEmpty() : "Usernames cannot be null or empty";
 
-        // Check that usernames size is between 2 and 4
         assert usernames.size() >= 2 && usernames.size() <= 4 : "Number of players must be between 2 and 4";
 
-        // Check that all usernames are unique
         Set<String> uniqueUsernames = new HashSet<>(usernames);
         assert uniqueUsernames.size() == usernames.size() : "All players must have unique usernames";
 
@@ -242,7 +238,7 @@ public class Game {
         Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) gameStatus = GameStatus.LAST_CIRCLE;
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) setGameStatus(GameStatus.LAST_CIRCLE);
 
     }
 
@@ -277,7 +273,7 @@ public class Game {
         currScore += points;
 
         if (currScore >= 20 && !gameStatus.equals(GameStatus.LAST_CIRCLE))
-            gameStatus = GameStatus.LAST_CIRCLE;
+            setGameStatus(GameStatus.LAST_CIRCLE);
         if (currScore > 29) currScore = 29;
 
         scoreboard.put(p, currScore);
@@ -299,8 +295,8 @@ public class Game {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(false);
-        if (onlinePlayersNumber() == 1) gameStatus = GameStatus.WAITING; // TODO start timeout?
-        if (onlinePlayersNumber() == 0) gameStatus = GameStatus.ENDED; // TODO forceQuitGame?
+        if (onlinePlayersNumber() == 1) setGameStatus(GameStatus.WAITING); // TODO start timeout?
+        if (onlinePlayersNumber() == 0) setGameStatus(GameStatus.ENDED); // TODO forceQuitGame?
     }
 
     /**
@@ -311,7 +307,7 @@ public class Game {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(true);
-        if (onlinePlayersNumber() > 1) gameStatus = GameStatus.RUNNING;
+        if (onlinePlayersNumber() > 1) setGameStatus(GameStatus.RUNNING);
     }
 
     /**
@@ -334,7 +330,7 @@ public class Game {
             objPoints.put(p, playerObjPoints);
         }
 
-        gameStatus = GameStatus.ENDED;
+        setGameStatus(GameStatus.ENDED);
 
         return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
     }
@@ -416,6 +412,13 @@ public class Game {
      */
     public GoldCard seeGoldTopCard() {
         return goldDeck.seeTopCard();
+    }
+
+    /**
+     * Sets the Game status to the given one.
+     */
+    private void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     /**
