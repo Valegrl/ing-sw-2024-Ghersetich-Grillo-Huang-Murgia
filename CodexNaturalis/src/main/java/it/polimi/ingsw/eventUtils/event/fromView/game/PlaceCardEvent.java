@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class PlaceCardEvent extends Event {
+public class PlaceCardEvent extends FeedbackEvent {
 
     private final static String id = "PLACE_CARD";
 
@@ -11,7 +11,7 @@ public class PlaceCardEvent extends Event {
         super(id);
     }
 
-    public PlaceCardEvent(Response response) {
-        super(id, response);
+    public PlaceCardEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

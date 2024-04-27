@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class isMyTurnEvent extends Event {
+public class isMyTurnEvent extends FeedbackEvent {
 
     private final static String id = "IS_MY_TURN";
 
@@ -11,7 +11,7 @@ public class isMyTurnEvent extends Event {
         super(id);
     }
 
-    public isMyTurnEvent(Response response) {
-        super(id, response);
+    public isMyTurnEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

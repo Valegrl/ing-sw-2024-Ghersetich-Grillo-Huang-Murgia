@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class ReconnectToGameEvent extends Event {
+public class ReconnectToGameEvent extends FeedbackEvent {
 
     private final static String id = "RECONNECT_TO_GAME";
 
@@ -11,7 +11,7 @@ public class ReconnectToGameEvent extends Event {
         super(id);
     }
 
-    public ReconnectToGameEvent(Response response) {
-        super(id, response);
+    public ReconnectToGameEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

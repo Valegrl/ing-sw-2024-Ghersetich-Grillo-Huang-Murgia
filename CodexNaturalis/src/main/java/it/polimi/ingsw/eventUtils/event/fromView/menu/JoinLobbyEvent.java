@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class JoinLobbyEvent extends Event {
+public class JoinLobbyEvent extends FeedbackEvent {
 
     private final static String id = "JOIN_LOBBY";
 
@@ -11,7 +11,7 @@ public class JoinLobbyEvent extends Event {
         super(id);
     }
 
-    public JoinLobbyEvent(Response response) {
-        super(id, response);
+    public JoinLobbyEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

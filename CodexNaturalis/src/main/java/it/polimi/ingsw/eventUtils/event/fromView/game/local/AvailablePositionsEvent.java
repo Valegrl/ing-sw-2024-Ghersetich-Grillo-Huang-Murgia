@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class AvailablePositionsEvent extends Event {
+public class AvailablePositionsEvent extends FeedbackEvent {
 
     private final static String id = "AVAILABLE_POSITIONS";
 
@@ -11,7 +11,7 @@ public class AvailablePositionsEvent extends Event {
         super(id);
     }
 
-    public AvailablePositionsEvent(Response response) {
-        super(id, response);
+    public AvailablePositionsEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

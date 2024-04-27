@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class GetMyOfflineGamesEvent extends Event {
+public class GetMyOfflineGamesEvent extends FeedbackEvent {
 
     private final static String id = "GET_MY_OFFLINE_GAMES";
 
@@ -11,7 +11,7 @@ public class GetMyOfflineGamesEvent extends Event {
         super(id);
     }
 
-    public GetMyOfflineGamesEvent(Response response) {
-        super(id, response);
+    public GetMyOfflineGamesEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

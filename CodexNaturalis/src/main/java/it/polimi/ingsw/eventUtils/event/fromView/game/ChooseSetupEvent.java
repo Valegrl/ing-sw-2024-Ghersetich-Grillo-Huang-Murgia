@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class ChooseSetupEvent extends Event {
+public class ChooseSetupEvent extends FeedbackEvent {
 
     private final static String id = "CHOOSE_SETUP";
 
@@ -11,7 +11,7 @@ public class ChooseSetupEvent extends Event {
         super(id);
     }
 
-    public ChooseSetupEvent(Response response) {
-        super(id, response);
+    public ChooseSetupEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

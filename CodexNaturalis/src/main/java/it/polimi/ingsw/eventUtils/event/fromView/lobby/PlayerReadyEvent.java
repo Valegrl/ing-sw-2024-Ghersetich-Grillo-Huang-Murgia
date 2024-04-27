@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.lobby;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class PlayerReadyEvent extends Event {
+public class PlayerReadyEvent extends FeedbackEvent {
 
     private final static String id = "PLAYER_READY";
 
@@ -11,7 +11,7 @@ public class PlayerReadyEvent extends Event {
         super(id);
     }
 
-    public PlayerReadyEvent(Response response) {
-        super(id, response);
+    public PlayerReadyEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

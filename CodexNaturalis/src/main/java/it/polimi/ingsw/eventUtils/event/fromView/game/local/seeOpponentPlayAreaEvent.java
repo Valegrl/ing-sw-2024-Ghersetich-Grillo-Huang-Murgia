@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class seeOpponentPlayAreaEvent extends Event {
+public class seeOpponentPlayAreaEvent extends FeedbackEvent {
 
     private final static String id = "SEE_OPPONENT_PLAY_AREA";
 
@@ -11,7 +11,7 @@ public class seeOpponentPlayAreaEvent extends Event {
         super(id);
     }
 
-    public seeOpponentPlayAreaEvent(Response response) {
-        super(id, response);
+    public seeOpponentPlayAreaEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

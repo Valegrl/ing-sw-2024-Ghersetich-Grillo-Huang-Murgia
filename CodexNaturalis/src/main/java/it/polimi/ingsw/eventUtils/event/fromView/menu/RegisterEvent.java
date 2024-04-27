@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class RegisterEvent extends Event {
+public class RegisterEvent extends FeedbackEvent {
 
     private final static String id = "REGISTER";
 
@@ -11,7 +11,7 @@ public class RegisterEvent extends Event {
         super(id);
     }
 
-    public RegisterEvent(Response response) {
-        super(id, response);
+    public RegisterEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.lobby;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class KickFromLobbyEvent extends Event {
+public class KickFromLobbyEvent extends FeedbackEvent {
 
     private final static String id = "KICK_FROM_LOBBY";
 
@@ -11,7 +11,7 @@ public class KickFromLobbyEvent extends Event {
         super(id);
     }
 
-    public KickFromLobbyEvent(Response response) {
-        super(id, response);
+    public KickFromLobbyEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

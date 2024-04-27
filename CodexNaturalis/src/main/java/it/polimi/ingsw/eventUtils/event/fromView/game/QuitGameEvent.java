@@ -1,9 +1,9 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game;
 
-import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromView.Response;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class QuitGameEvent extends Event {
+public class QuitGameEvent extends FeedbackEvent {
 
     private final static String id = "QUIT_GAME";
 
@@ -11,7 +11,7 @@ public class QuitGameEvent extends Event {
         super(id);
     }
 
-    public QuitGameEvent(Response response) {
-        super(id, response);
+    public QuitGameEvent(Feedback feedback) {
+        super(id, feedback);
     }
 }

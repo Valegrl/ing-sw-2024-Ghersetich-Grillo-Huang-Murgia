@@ -1,6 +1,6 @@
 package it.polimi.ingsw.eventUtils.event.fromView;
 
-public enum Response {
+public enum Feedback {
     SUCCESS,
 
     FAILURE
