@@ -33,8 +33,8 @@ class PlayAreaTest {
         assertEquals(startCard, playArea.getStartCard());
         assertTrue(playArea.getPlayedCards().isEmpty());
         assertTrue(playArea.getUncoveredItems().values().stream().allMatch(v -> v == 0));
-        assertNull(playArea.getSelectedCard().getKey());
-        assertNull(playArea.getSelectedCard().getValue());
+        assertNull(playArea.getSelectedCard().key());
+        assertNull(playArea.getSelectedCard().value());
     }
 
     @Test
@@ -59,8 +59,8 @@ class PlayAreaTest {
 
         playArea.setSelectedCard(coordinate, evaluableCard);
 
-        assertEquals(coordinate, playArea.getSelectedCard().getKey());
-        assertEquals(evaluableCard, playArea.getSelectedCard().getValue());
+        assertEquals(coordinate, playArea.getSelectedCard().key());
+        assertEquals(evaluableCard, playArea.getSelectedCard().value());
     }
     @Test
     void testCheckConstraintSatisfied() {

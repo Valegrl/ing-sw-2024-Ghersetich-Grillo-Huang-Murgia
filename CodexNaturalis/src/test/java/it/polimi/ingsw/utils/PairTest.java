@@ -7,29 +7,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class PairTest {
 
     @Test
-    void getKey() {
+    void testKey() {
         Pair<String, Integer> pair = new Pair<>("key", 1);
-        assertEquals("key", pair.getKey());
+        assertEquals("key", pair.key());
     }
 
     @Test
-    void setKey() {
+    void testValue() {
         Pair<String, Integer> pair = new Pair<>("key", 1);
-        pair.setKey("newKey");
-        assertEquals("newKey", pair.getKey());
-    }
-
-    @Test
-    void getValue() {
-        Pair<String, Integer> pair = new Pair<>("key", 1);
-        assertEquals(1, pair.getValue());
-    }
-
-    @Test
-    void setValue() {
-        Pair<String, Integer> pair = new Pair<>("key", 1);
-        pair.setValue(2);
-        assertEquals(2, pair.getValue());
+        assertEquals(1, pair.value());
     }
 
     @Test

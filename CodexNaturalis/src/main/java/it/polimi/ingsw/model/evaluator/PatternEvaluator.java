@@ -23,7 +23,7 @@ public class PatternEvaluator implements Evaluator {
         int counter = 0;
         boolean cond1, cond2, cond3;
 
-        EvaluableCard card = playArea.getSelectedCard().getValue();
+        EvaluableCard card = playArea.getSelectedCard().value();
         Pair<Coordinate, Item>[] pattern = card.getRequiredPattern();
         Map<Coordinate, PlayableCard> playedCards = playArea.getPlayedCards();
 
@@ -39,12 +39,12 @@ public class PatternEvaluator implements Evaluator {
             boolean flag = false;
             temp.clear();
             for (int i = 0; i < pattern.length && !flag; i++) {
-                pointer = pos.sum(pattern[i].getKey());
+                pointer = pos.sum(pattern[i].key());
                 cond1 = !pointer.equals(start);
                 cond2 = !alreadyValued.contains(pointer);
                 cond3 = playedCards.containsKey(pointer);
                 if (cond1 && cond2 && cond3) {
-                    if(pattern[i].getValue() == playedCards.get(pointer).getPermanentResource())
+                    if(pattern[i].value() == playedCards.get(pointer).getPermanentResource())
                         temp.add(pointer);
                     else
                         flag = true;

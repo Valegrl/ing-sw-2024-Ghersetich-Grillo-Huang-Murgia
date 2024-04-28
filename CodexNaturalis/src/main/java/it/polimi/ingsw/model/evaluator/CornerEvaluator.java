@@ -32,11 +32,11 @@ public class CornerEvaluator implements Evaluator {
 
 
         for (Coordinate corner : corners) {
-            check = card.getKey().sum(corner);
+            check = card.key().sum(corner);
             if (check.equals(start) || playedCards.containsKey(check))
                 countCorners++;
         }
 
-        return (card.getValue().getPoints()) * countCorners;  /*always >0*/
+        return (card.value().getPoints()) * countCorners;  /*always >0*/
     }
 }

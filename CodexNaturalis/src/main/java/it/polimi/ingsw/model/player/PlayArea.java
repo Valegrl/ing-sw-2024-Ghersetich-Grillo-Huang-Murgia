@@ -42,7 +42,7 @@ public class PlayArea {
     /**
      * The card and its Coordinate selected by the player for placing.
      */
-    private final Pair<Coordinate, EvaluableCard> selectedCard;
+    private Pair<Coordinate, EvaluableCard> selectedCard;
 
     /**
      * Constructs a new PlayArea with the given starting hand and start card chosen by the player.
@@ -103,8 +103,7 @@ public class PlayArea {
      * @param pos The coordinate of the selected card.
      */
     public void setSelectedCard(Coordinate pos, EvaluableCard c) {
-        this.selectedCard.setKey(pos);
-        this.selectedCard.setValue(c);
+        this.selectedCard = new Pair<>(pos, c);
     }
 
     /**
@@ -349,7 +348,7 @@ public class PlayArea {
      * @return {@link PlayArea#selectedCard}.
      */
     public Pair<Coordinate, EvaluableCard> getSelectedCard(){
-        return this.selectedCard;
+        return new Pair<>(selectedCard.key(), selectedCard.value());
     }
 
     /**

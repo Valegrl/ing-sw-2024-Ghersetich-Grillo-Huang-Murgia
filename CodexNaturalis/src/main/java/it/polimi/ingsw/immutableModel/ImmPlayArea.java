@@ -67,7 +67,7 @@ public final class ImmPlayArea {
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
         this.uncoveredItems = Collections.unmodifiableMap(playArea.getUncoveredItems());
-        this.selectedCard = new Pair<>(playArea.getSelectedCard().getKey(), new ImmEvaluableCard(playArea.getSelectedCard().getValue()));
+        this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
     }
 
     /**

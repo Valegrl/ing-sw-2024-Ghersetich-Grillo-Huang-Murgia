@@ -16,7 +16,7 @@ public class ItemEvaluator implements Evaluator {
     @Override
     public int calculatePoints(PlayArea playArea) {
 
-        EvaluableCard card = playArea.getSelectedCard().getValue();
+        EvaluableCard card = playArea.getSelectedCard().value();
         Map<Item, Integer> availableItems = playArea.getUncoveredItems();
         Map<Item, Integer> itemsToFind = card.getRequiredItems();
 

@@ -343,8 +343,11 @@ public class Game {
      */
     private int calculateObjectives(Player p) {
         int objPoints = 0;
-        for (ObjectiveCard c: commonObjectives)
+        for (ObjectiveCard c: commonObjectives){
+            p.getPlayArea().setSelectedCard(null, c);
             objPoints += c.getEvaluator().calculatePoints(p.getPlayArea());
+        }
+        p.getPlayArea().setSelectedCard(null, p.getSecretObjective());
         objPoints += p.getSecretObjective().getEvaluator().calculatePoints(p.getPlayArea());
         return objPoints;
     }

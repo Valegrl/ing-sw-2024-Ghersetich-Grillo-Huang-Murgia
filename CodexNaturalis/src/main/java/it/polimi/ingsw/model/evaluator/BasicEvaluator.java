@@ -9,6 +9,6 @@ public class BasicEvaluator implements Evaluator {
 
     @Override
     public int calculatePoints(PlayArea playArea) {
-        return playArea.getSelectedCard().getValue().getPoints();
+        return playArea.getSelectedCard().value().getPoints();
     }
 }
