@@ -3,58 +3,118 @@ package it.polimi.ingsw.network.clientSide;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.view.View;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
+import java.util.*;
+
+//TODO Code review
 
 /*Singleton*/
 public class ClientManager extends UnicastRemoteObject implements Client {
 
-    private final static ClientManager clientManager;
+    //TODO implement a filter which controls if an event's id is in local only and doesn't need to send to server
+    private  View view;
 
-    static{
-        try{
-            clientManager = new ClientManager();
-        }
-        catch(Exception e){
-            throw new RuntimeException("Exception occurred during clientManager creation");
-        }
+    private Server server;
+
+    private ViewListener listener;
+
+    private ClientManager clientManager;
+
+    private final Queue<Event> requests = new LinkedList<>();
+
+    private final Queue<Event> responds = new LinkedList<>();
+
+    private ClientManager(View view, Server server) throws RemoteException {
+
+        //TODO code review
+        new Thread(){
+            @Override
+            public void run() {
+                while(true){
+                    if(isRequestsEmpty()){
+                        continue;
+                    }
+                    Event request = pollFromRequests();
+                    try {
+                        listener.handle(request);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
+        new Thread(){
+            @Override
+            public void run(){
+                while(true){
+                    if(isRespondsEmpty()){
+                        continue;
+                    }
+                    Event respond = pollFromResponds();
+                    try{
+                        listener.handle(respond);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
     }
 
-    private RemoteServerSocket serverSocket;
-
-    private List<Event> requests;
-
-    private List<Event> responds;
-
-    private ClientManager() throws RemoteException {
-        try{
-            serverSocket = new RemoteServerSocket();
-        }
-        catch(Exception e){
-            System.out.println("Error linking with client's socket");
-        }
+    public ClientManager getInstance(View view, Server server) throws RemoteException {
+        if(clientManager == null)
+            this.clientManager = new ClientManager(view, server);
+        return this.clientManager;
     }
 
     @Override
-    public void report(Event event) throws RemoteException {
-
+    public synchronized void report(Event event) throws RemoteException {
+        responds.add(event);
     }
 
-    void managed(Event event){
-
+    public synchronized void  handleEvent(Event event) throws RemoteException {
+        requests.add(event);
     }
 
-    public static ClientManager getInstance(){
-        return clientManager;
+    public void managed(Event event){
+        //TODO implementation
     }
 
-    public RemoteServerSocket getServerSocket(){
-        return this.serverSocket;
+    public synchronized Event pollFromRequests(){
+        return requests.poll();
     }
 
-    public void setServerSocket(RemoteServerSocket RSS){
-        this.serverSocket = RSS;
+    public synchronized Event pollFromResponds(){
+        return responds.poll();
     }
+
+    public void addViewListener(ViewListener listener){
+        this.listener = listener;
+    }
+
+    private synchronized boolean isRequestsEmpty(){
+        if(requests.isEmpty()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private synchronized boolean isRespondsEmpty(){
+        if(responds.isEmpty()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }
