@@ -47,10 +47,12 @@ public class RemoteClientSocket implements Client {
             Gson gson = new Gson();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
+            server.direct(event, this);
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found: " + e.getMessage());
         }
+
     }
 }
