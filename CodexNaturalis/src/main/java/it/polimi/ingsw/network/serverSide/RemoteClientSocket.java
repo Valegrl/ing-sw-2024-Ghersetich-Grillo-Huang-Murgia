@@ -11,12 +11,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.net.Socket;
+
 public class RemoteClientSocket implements Client {
-    private Server server;
+
+    private final Server server;
+
     private final ObjectOutputStream outputStream;
+
     private final ObjectInputStream inputStream;
-    private RemoteClientSocket(Socket socket, Server server) throws RemoteException {
-        this.server=server;
+
+
+    public RemoteClientSocket(Socket socket, Server server) throws RemoteException {
+        this.server = server;
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -35,7 +41,7 @@ public class RemoteClientSocket implements Client {
             System.err.println("I/O error: " + e.getMessage());
         }
     }
-    void readStream(){
+    public void readStream(){
         try {
             String jsonString = (String) inputStream.readObject();
             Gson gson = new Gson();
