@@ -12,15 +12,32 @@ import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.net.Socket;
 
+/**
+ * The {@code RemoteClientSocket} class is used as a server-side skeleton.
+ * It forwards {@code Event}s to a {@code RemoteServerSocket}, that is a client-side stub.
+ */
 public class RemoteClientSocket implements Client {
-
+    /**
+     * The {@code Server} that this {@code RemoteClientSocket} is connected to.
+     */
     private final Server server;
 
+    /**
+     * The {@code ObjectOutputStream} used to send {@code Event}s to the {@code RemoteServerSocket}.
+     */
     private final ObjectOutputStream outputStream;
-
+    /**
+     * The {@code ObjectInputStream} used to receive {@code Event}s from the {@code RemoteServerSocket}.
+     */
     private final ObjectInputStream inputStream;
 
-
+    /**
+     * Creates a new {@code RemoteClientSocket} with the given {@code Socket} and {@code Server}.
+     *
+     * @param socket the {@code Socket} used to connect to the {@code RemoteServerSocket}.
+     * @param server The {@code Server} that this {@code RemoteClientSocket} is connected to.
+     * @throws RemoteException if any I/O error occurs.
+     */
     public RemoteClientSocket(Socket socket, Server server) throws RemoteException {
         this.server = server;
         try {
@@ -30,6 +47,14 @@ public class RemoteClientSocket implements Client {
             throw new RemoteException();
         }
     }
+
+    /**
+     * Forwards an {@code Event} to the {@code RemoteServerSocket}.
+     * The {@code Event} is serialized into a JSON string and sent through the {@code ObjectOutputStream}.
+     *
+     * @param event the {@link Event} to forward.
+     * @throws RemoteException if any I/O error occurs.
+     */
     @Override
     public void report(Event event) throws RemoteException {
         try {
@@ -41,6 +66,13 @@ public class RemoteClientSocket implements Client {
             System.err.println("I/O error: " + e.getMessage());
         }
     }
+
+    /**
+     * Receives an event from the {@code RemoteServerSocket} through the {@code ObjectInputStream}.
+     * The message is deserialized into an {@code Event} and forwarded to the {@code ServerManager}.
+     *
+     * @throws RemoteException if any I/O error occurs.
+     */
     public void readStream(){
         try {
             String jsonString = (String) inputStream.readObject();
