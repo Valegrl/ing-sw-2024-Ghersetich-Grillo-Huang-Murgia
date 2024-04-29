@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
 /**
- * A class to represent a pair of elements.
+ * A Record to represent a pair of elements.
  *
  * @param <T>   The type of the key.
  * @param <U>   The type of the value.
@@ -10,7 +10,7 @@ package it.polimi.ingsw.utils;
  */
 public record Pair<T, U>(T key, U value) {
     /**
-     * Constructs a new Pair object with the given key and value elements.
+     * Constructs a new Pair Record with the given key and value elements.
      *
      * @param key   The key element of the Pair.
      * @param value The value element of the Pair.
