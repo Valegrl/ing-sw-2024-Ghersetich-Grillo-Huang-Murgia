@@ -7,12 +7,6 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -31,13 +25,11 @@ public class ClientManager extends UnicastRemoteObject implements Client {
 
     private ViewListener listener;
 
-    private static ClientManager clientManager;
+    private static ClientManager instance;
 
     private final Queue<Event> requestsQueue = new LinkedList<>();
 
     private final Queue<Event> respondsQueue = new LinkedList<>();
-
-    private boolean running = true;
 
     public void initRMI(String registryAddress, View view) throws RemoteException {
         //TODO implement RMI
@@ -53,26 +45,38 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     public void initSocket(String ipAddress, int portNumber, View view) throws RemoteException {
-        //TODO implement Socket
-        this.view = view;
-        try{
-            Socket socket = new Socket(ipAddress, portNumber);
-            ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
-            Server server = (Server) objectIn.readObject();
-        }
-        catch(IOException | ClassNotFoundException e){
-            System.err.println("Client socket exception:");
+        //TODO create thread in which ClientManager readStream() from the remoteServerSocket
+        RemoteServerSocket remoteServerSocket = null;
+        try {
+            remoteServerSocket = new RemoteServerSocket(ipAddress, portNumber);
+        } catch (IOException e) {
+            System.err.println("Client Socket exception");
             e.printStackTrace();
+        }
+        RemoteServerSocket finalRemoteServerSocket = remoteServerSocket;
+
+        if (finalRemoteServerSocket != null) {
+            Thread socketThread = new Thread(
+                    () -> {
+                        try {
+                            finalRemoteServerSocket.readStream();
+                        } catch (RemoteException e) {
+                            System.err.println("Cannot read stream from the RemoteServerSocket");
+                        }
+                    });
+            socketThread.start();
+        }
+        else {
+            throw new RemoteException("Error creating remoteServerSocket");
         }
     }
 
     private ClientManager() throws RemoteException {
-
         //TODO code review
         new Thread(){
             @Override
             public void run() {
-                while(running){
+                while(true){
                     synchronized(requestsQueue) {
                         while (requestsQueue.isEmpty()) {
                             try {
@@ -95,7 +99,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         new Thread(){
             @Override
             public void run(){
-                while(running) {
+                while(true) {
                     synchronized (respondsQueue) {
                         while (respondsQueue.isEmpty()) {
                             try {
@@ -119,9 +123,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     public static ClientManager getInstance() throws RemoteException {
-        if(clientManager == null)
-            clientManager = new ClientManager();
-        return clientManager;
+        if(instance == null)
+            instance = new ClientManager();
+        return instance;
     }
 
     @Override
@@ -147,8 +151,5 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         //TODO implementation
     }
 
-    private void stopThreads(){
-        running = false;
-    }
 
 }
