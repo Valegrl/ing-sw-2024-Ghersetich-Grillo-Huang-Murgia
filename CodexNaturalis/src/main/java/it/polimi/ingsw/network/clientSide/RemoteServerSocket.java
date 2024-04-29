@@ -31,6 +31,8 @@ public class RemoteServerSocket implements Server {
      */
     private final ObjectInputStream inputStream;
 
+    private final Client client;
+
     /**
      * Creates a new {@code RemoteServerSocket} with the given IP address and port number.
      *
@@ -38,9 +40,10 @@ public class RemoteServerSocket implements Server {
      * @param portNumber the port number used to establish a connection.
      * @throws IOException if any I/O error occurs.
      */
-    private RemoteServerSocket(String ipAddress, int portNumber) throws IOException {
+    public RemoteServerSocket(String ipAddress, int portNumber) throws IOException {
+        this.client = ClientManager.getInstance();
         try {
-            this.socket= new Socket(ipAddress,portNumber);
+            this.socket = new Socket(ipAddress,portNumber);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,11 +65,10 @@ public class RemoteServerSocket implements Server {
      */
     @Override
     public void direct(Event event, Client client) throws RemoteException {
-        //TODO Figure out how to use client parameter
         try {
             Gson gson = new Gson();
             String jsonString = gson.toJson(event);
-            outputStream.writeObject(jsonString);
+            outputStream.writeUTF(jsonString);
             outputStream.flush();
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
@@ -81,14 +83,13 @@ public class RemoteServerSocket implements Server {
      */
     public void readStream() throws RemoteException{
         try {
-            String jsonString = (String) inputStream.readObject();
+            String jsonString = (String) inputStream.readUTF();
             Gson gson = new Gson();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
+            client.report(event);
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class non found: " + e.getMessage());
         }
     }
 }

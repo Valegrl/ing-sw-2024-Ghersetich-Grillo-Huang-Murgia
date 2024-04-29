@@ -35,11 +35,10 @@ public class RemoteClientSocket implements Client {
      * Creates a new {@code RemoteClientSocket} with the given {@code Socket} and {@code Server}.
      *
      * @param socket the {@code Socket} used to connect to the {@code RemoteServerSocket}.
-     * @param server The {@code Server} that this {@code RemoteClientSocket} is connected to.
      * @throws RemoteException if any I/O error occurs.
      */
-    public RemoteClientSocket(Socket socket, Server server) throws RemoteException {
-        this.server = server;
+    public RemoteClientSocket(Socket socket) throws RemoteException {
+        this.server = ServerManager.getInstance();
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -60,7 +59,7 @@ public class RemoteClientSocket implements Client {
         try {
             Gson gson = new Gson();
             String jsonString = gson.toJson(event);
-            outputStream.writeObject(jsonString);
+            outputStream.writeUTF(jsonString);
             outputStream.flush();
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
@@ -75,16 +74,13 @@ public class RemoteClientSocket implements Client {
      */
     public void readStream(){
         try {
-            String jsonString = (String) inputStream.readObject();
+            String jsonString = (String) inputStream.readUTF();
             Gson gson = new Gson();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
             server.direct(event, this);
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class not found: " + e.getMessage());
         }
-
     }
 }
