@@ -45,7 +45,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     }
                     requestPair = requestsQueue.poll();
                 }
-                manage(requestPair.key(), virtualViews.get(requestPair.value()));
+                manage(requestPair.key(), requestPair.value());
             }
         }).start();
     }
@@ -56,14 +56,26 @@ public class ServerManager extends UnicastRemoteObject implements Server {
             requestsQueue.add(new Pair<>(event, client));
             requestsQueue.notify();
         }
-        // TODO: how to respond through RMI when an event is handled?
     }
 
-    private void manage(Event event, VirtualView virtualView) {
-        // TODO VirtualView listeners or map?
+    private void manage(Event event, Client client) {
+        VirtualView virtualView = virtualViews.get(client);
+        Event response = null;
+        // response = virtualView.handle(event); TODO VirtualView listeners or map?
+        try {
+            client.report(response);
+        } catch (RemoteException e) {
+            // System.err.println("Cannot send message to " + virtualView.getUsername() + "'s client"); TODO VirtualView username
+            System.err.println("Error: " + e.getMessage());
+        }
+
     }
 
     public void addVirtualView(Client client, VirtualView virtualView) {
         virtualViews.put(client, virtualView);
+    }
+
+    public void removeVirtualView(Client client) {
+        virtualViews.remove(client);
     }
 }
