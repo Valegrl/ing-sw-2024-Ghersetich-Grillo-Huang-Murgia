@@ -6,7 +6,16 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.View;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
@@ -22,28 +31,62 @@ public class ClientManager extends UnicastRemoteObject implements Client {
 
     private ViewListener listener;
 
-    private ClientManager clientManager;
+    private static ClientManager clientManager;
 
-    private final Queue<Event> requests = new LinkedList<>();
+    private final Queue<Event> requestsQueue = new LinkedList<>();
 
-    private final Queue<Event> responds = new LinkedList<>();
+    private final Queue<Event> respondsQueue = new LinkedList<>();
 
-    private ClientManager(View view, Server server) throws RemoteException {
+    private boolean running = true;
+
+    public void initRMI(String registryAddress, View view) throws RemoteException {
+        //TODO implement RMI
+        try {
+            this.view = view;
+            Registry registry = LocateRegistry.getRegistry(registryAddress);
+            this.server = (Server) registry.lookup("rmi://"+registryAddress+"/ServerInterface");
+        }
+        catch(Exception e){
+            System.err.println("Client RMI exception:");
+            e.printStackTrace();
+        }
+    }
+
+    public void initSocket(String ipAddress, int portNumber, View view) throws RemoteException {
+        //TODO implement Socket
+        this.view = view;
+        try{
+            Socket socket = new Socket(ipAddress, portNumber);
+            ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
+            Server server = (Server) objectIn.readObject();
+        }
+        catch(IOException | ClassNotFoundException e){
+            System.err.println("Client socket exception:");
+            e.printStackTrace();
+        }
+    }
+
+    private ClientManager() throws RemoteException {
 
         //TODO code review
         new Thread(){
             @Override
             public void run() {
-                while(true){
-                    if(isRequestsEmpty()){
-                        continue;
-                    }
-                    Event request = pollFromRequests();
-                    try {
-                        listener.handle(request);
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
+                while(running){
+                    synchronized(requestsQueue) {
+                        while (requestsQueue.isEmpty()) {
+                            try {
+                                requestsQueue.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Event request = requestsQueue.poll();
+                        try {
+                            listener.handle(request);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -52,69 +95,53 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         new Thread(){
             @Override
             public void run(){
-                while(true){
-                    if(isRespondsEmpty()){
-                        continue;
-                    }
-                    Event respond = pollFromResponds();
-                    try{
-                        listener.handle(respond);
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
+                while(running) {
+                    synchronized (respondsQueue) {
+                        while (respondsQueue.isEmpty()) {
+                            try {
+                                respondsQueue.wait();
+                            }
+                            catch(InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                        Event respond = respondsQueue.poll();
+                        try {
+                            /*Something*/
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
         }.start();
-
     }
 
-    public ClientManager getInstance(View view, Server server) throws RemoteException {
+    public static ClientManager getInstance() throws RemoteException {
         if(clientManager == null)
-            this.clientManager = new ClientManager(view, server);
-        return this.clientManager;
+            clientManager = new ClientManager();
+        return clientManager;
     }
 
     @Override
     public synchronized void report(Event event) throws RemoteException {
-        responds.add(event);
+        respondsQueue.add(event);
     }
 
     public synchronized void  handleEvent(Event event) throws RemoteException {
-        requests.add(event);
-    }
-
-    public void managed(Event event){
-        //TODO implementation
-    }
-
-    public synchronized Event pollFromRequests(){
-        return requests.poll();
-    }
-
-    public synchronized Event pollFromResponds(){
-        return responds.poll();
+        requestsQueue.add(event);
     }
 
     public void addViewListener(ViewListener listener){
         this.listener = listener;
     }
 
-    private synchronized boolean isRequestsEmpty(){
-        if(requests.isEmpty()) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    public void managed(Event event){
+        //TODO implementation
     }
-    private synchronized boolean isRespondsEmpty(){
-        if(responds.isEmpty()){
-            return true;
-        }
-        else{
-            return false;
-        }
+
+    private void stopThreads(){
+        running = false;
     }
 
 }
