@@ -115,6 +115,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                 }
             }
         }.start();
+
     }
 
     public static ClientManager getInstance() throws RemoteException {
@@ -124,12 +125,18 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public synchronized void report(Event event) throws RemoteException {
-        respondsQueue.add(event);
+    public void report(Event event) throws RemoteException {
+        synchronized (respondsQueue) {
+            respondsQueue.add(event);
+            notifyAll();
+        }
     }
 
-    public synchronized void  handleEvent(Event event) throws RemoteException {
-        requestsQueue.add(event);
+    public void  handleEvent(Event event) throws RemoteException {
+        synchronized (requestsQueue) {
+            requestsQueue.add(event);
+            notifyAll();
+        }
     }
 
     public void addViewListener(ViewListener listener){
