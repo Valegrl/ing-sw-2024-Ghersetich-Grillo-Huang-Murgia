@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.AbstractUI;
 import it.polimi.ingsw.view.View;

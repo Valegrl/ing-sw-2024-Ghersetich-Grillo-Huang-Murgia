@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.serverSide;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.Pair;
@@ -63,7 +62,8 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         VirtualView virtualView = virtualViews.get(client);
         Event response = null;
 
-        // response = virtualView.handle(event); TODO VirtualView listeners or map?
+        event.receiveEvent(virtualView);
+
         try {
             client.report(response);
         } catch (RemoteException e) {
@@ -71,6 +71,11 @@ public class ServerManager extends UnicastRemoteObject implements Server {
             System.err.println("Error: " + e.getMessage());
         }
 
+    }
+
+    public void join(Client client) {
+        VirtualView virtualView = new VirtualView();
+        virtualViews.put(client, virtualView);
     }
 
     public void addVirtualView(Client client, VirtualView virtualView) {
