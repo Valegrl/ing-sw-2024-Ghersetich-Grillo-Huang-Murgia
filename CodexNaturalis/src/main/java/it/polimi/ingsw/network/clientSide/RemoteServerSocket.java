@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network.clientSide;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.eventUtils.EventDeserializer;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
@@ -81,12 +83,13 @@ public class RemoteServerSocket implements Server {
      *
      * @throws RemoteException if any I/O error occurs.
      */
-    public void readStream() throws RemoteException{
+    public void readStream() throws RemoteException {
         try {
             String jsonString = (String) inputStream.readUTF();
-            Gson gson = new Gson();
-            Event event;
-            event = gson.fromJson(jsonString, Event.class);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Event.class, new EventDeserializer())
+                    .create();
+            Event event = gson.fromJson(jsonString, Event.class);
             client.report(event);
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());

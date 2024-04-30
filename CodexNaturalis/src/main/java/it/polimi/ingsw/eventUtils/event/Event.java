@@ -1,6 +1,8 @@
 package it.polimi.ingsw.eventUtils.event;
 
-public abstract class Event /*<T>*/ {
+import java.io.Serializable;
+
+public abstract class Event implements Serializable/*<T>*/ {
     private final String ID;
 
     public Event(String ID) {

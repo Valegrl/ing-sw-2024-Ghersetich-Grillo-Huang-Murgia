@@ -1,7 +1,8 @@
 package it.polimi.ingsw.network.serverSide;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
+import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.eventUtils.EventDeserializer;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
@@ -75,7 +76,9 @@ public class RemoteClientSocket implements Client {
     public void readStream(){
         try {
             String jsonString = (String) inputStream.readUTF();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Event.class, new EventDeserializer())
+                    .create();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
             server.direct(event, this);

@@ -7,9 +7,8 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
@@ -63,8 +62,8 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         //TODO implement RMI
         try {
             this.view = view;
-            Registry registry = LocateRegistry.getRegistry(registryAddress);
-            this.server = (Server) registry.lookup("rmi://"+registryAddress+"/ServerInterface");
+            // Registry registry = LocateRegistry.getRegistry(registryAddress);
+            this.server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
         }
         catch(Exception e){
             System.err.println("Client RMI exception:");
@@ -83,29 +82,21 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     public void initSocket(String ipAddress, int portNumber, View view) throws RemoteException {
         //TODO create thread in which ClientManager readStream() from the remoteServerSocket
-        RemoteServerSocket remoteServerSocket = null;
         try {
-            remoteServerSocket = new RemoteServerSocket(ipAddress, portNumber);
+            server = new RemoteServerSocket(ipAddress, portNumber);
         } catch (IOException e) {
-            System.err.println("Client Socket exception");
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-        RemoteServerSocket finalRemoteServerSocket = remoteServerSocket;
-
-        if (finalRemoteServerSocket != null) {
-            Thread socketThread = new Thread(
-                    () -> {
-                        try {
-                            finalRemoteServerSocket.readStream();
-                        } catch (RemoteException e) {
-                            System.err.println("Cannot read stream from the RemoteServerSocket");
-                        }
-                    });
-            socketThread.start();
-        }
-        else {
-            throw new RemoteException("Error creating remoteServerSocket");
-        }
+        new Thread(() -> {
+            RemoteServerSocket serverSocket = (RemoteServerSocket) server;
+            while(true) {
+                try {
+                    serverSocket.readStream();
+                } catch (RemoteException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 
     /**
@@ -131,7 +122,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                         }
                         Event request = requestsQueue.poll();
                         try {
-                            listener.handle(request);
+                            server.direct(request, ClientManager.this);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -155,7 +146,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                         }
                         Event response = responsesQueue.poll();
                         try {
-                            /*Something*/
+                            managed(response);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -188,7 +179,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     public void report(Event event) throws RemoteException {
         synchronized (responsesQueue) {
             responsesQueue.add(event);
-            notifyAll();
+            responsesQueue.notify();
         }
     }
 
@@ -201,7 +192,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     public void  handleEvent(Event event) throws RemoteException {
         synchronized (requestsQueue) {
             requestsQueue.add(event);
-            notifyAll();
+            requestsQueue.notify();
         }
     }
 

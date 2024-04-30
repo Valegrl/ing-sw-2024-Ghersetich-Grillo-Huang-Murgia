@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.serverSide;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.Pair;
@@ -60,7 +61,9 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     private void manage(Event event, Client client) {
         VirtualView virtualView = virtualViews.get(client);
-        Event response = null;
+        // TODO test
+        Event response = new KickedPlayerFromLobbyEvent();
+
         // response = virtualView.handle(event); TODO VirtualView listeners or map?
         try {
             client.report(response);

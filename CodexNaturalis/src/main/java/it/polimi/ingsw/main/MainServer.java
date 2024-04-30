@@ -1,5 +1,6 @@
 package it.polimi.ingsw.main;
 
+import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.network.serverSide.RemoteClientSocket;
 import it.polimi.ingsw.network.serverSide.ServerManager;
 
@@ -52,18 +53,15 @@ public class MainServer {
                 Socket socket = serverSocket.accept();
                 System.out.println("New socket accepted");
                 new Thread(() -> {
+                    RemoteClientSocket client = null;
                     try {
-                        RemoteClientSocket client = new RemoteClientSocket(socket, ServerManager.getInstance());
-                        client.readStream();
+                        client = new RemoteClientSocket(socket);
+                        ServerManager.getInstance().addVirtualView(client, new VirtualView());
                     } catch (RemoteException e) {
-                        System.err.println(e.getMessage());
-                    } finally {
-                        System.out.println("Socket client disconnected");
-                        try {
-                            socket.close();
-                        } catch (IOException e) {
-                            System.err.println("Cannot close socket");
-                        }
+                        throw new RuntimeException(e);
+                    }
+                    while(true) {
+                        client.readStream();
                     }
                 }).start();
             }
@@ -75,7 +73,7 @@ public class MainServer {
 
     private void startRMI(int port) throws RemoteException {
         Registry registry = LocateRegistry.createRegistry(port);
-        registry.rebind("CodexNaturalisServer51", ServerManager.getInstance());
+        registry.rebind("CodexNaturalisServer51", ServerManager.getInstance()); // TODO config?
     }
 
 }
