@@ -61,8 +61,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     private void manage(Event event, Client client) {
         VirtualView virtualView = virtualViews.get(client);
-        // TODO test
-        Event response = new KickedPlayerFromLobbyEvent();
+        Event response = null;
 
         // response = virtualView.handle(event); TODO VirtualView listeners or map?
         try {

@@ -59,10 +59,8 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * @throws RemoteException If a communication-related exception occurs.
      */
     public void initRMI(String registryAddress, View view) throws RemoteException {
-        //TODO implement RMI
         try {
             this.view = view;
-            // Registry registry = LocateRegistry.getRegistry(registryAddress);
             this.server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
         }
         catch(Exception e){

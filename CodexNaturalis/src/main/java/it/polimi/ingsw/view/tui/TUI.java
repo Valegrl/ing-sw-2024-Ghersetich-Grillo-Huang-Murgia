@@ -21,7 +21,6 @@ public class TUI extends AbstractUI implements View {
         super();
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out, true);
-        run();
     }
 
     private int readChoiceFromInput(String opt1, String opt2){
@@ -84,14 +83,6 @@ public class TUI extends AbstractUI implements View {
         clearConsole();
         while(!chooseConnection());
         out.println("Connection with server established");
-
-        // TODO test
-        try {
-            ClientManager.getInstance().handleEvent(new UpdateLobbyPlayersEvent());
-            ClientManager.getInstance().handleEvent(new UpdateLobbyPlayersEvent());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void clearConsole() {
