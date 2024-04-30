@@ -2,16 +2,28 @@ package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
+import it.polimi.ingsw.utils.Pair;
 
-public class JoinLobbyEvent extends FeedbackEvent {
+import java.util.List;
+
+public class JoinLobbyEvent extends FeedbackEvent<Pair<String, List<String>>> {
 
     private final static String id = "JOIN_LOBBY";
 
-    public JoinLobbyEvent() {
+    private final Pair<String, List<String>> info;
+
+    public JoinLobbyEvent(String lobbyID) {
         super(id);
+        info = new Pair<>(lobbyID, null);
     }
 
-    public JoinLobbyEvent(Feedback feedback) {
-        super(id, feedback);
+    public JoinLobbyEvent(Feedback feedback, List<String> usernames, String message) {
+        super(id, feedback, message);
+        info = new Pair<>(null, usernames);
+    }
+
+    @Override
+    public Pair<String, List<String>> getData() {
+        return info;
     }
 }

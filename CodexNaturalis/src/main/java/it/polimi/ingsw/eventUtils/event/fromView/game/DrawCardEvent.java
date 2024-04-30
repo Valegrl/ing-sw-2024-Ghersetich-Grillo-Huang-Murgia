@@ -11,7 +11,7 @@ public class DrawCardEvent extends FeedbackEvent {
         super(id);
     }
 
-    public DrawCardEvent(Feedback feedback) {
-        super(id, feedback);
+    public DrawCardEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

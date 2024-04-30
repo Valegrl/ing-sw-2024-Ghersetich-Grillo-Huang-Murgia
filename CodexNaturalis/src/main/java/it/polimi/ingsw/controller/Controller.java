@@ -1,7 +1,11 @@
 package it.polimi.ingsw.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.eventUtils.listener.GameListener;
+import it.polimi.ingsw.utils.Pair;
+
+import java.util.*;
 
 /**
  * The {@code Controller} class is a Singleton that serves as a central point of control for managing game controllers.
@@ -14,9 +18,26 @@ import java.util.List;
  * <p>Use the {@link #getInstance()} method to get the single instance of this class.</p>
  */
 public class Controller {
-    //TODO review synchronized methods. Manage player username & password
-    private final static Controller controller = new Controller();
+
+    /**
+     * The singleton instance of the Controller.
+     */
+    private static Controller controller = null;
+
+    /**
+     * The list of GameController instances.
+     */
     private final List<GameController> gameControllers;
+
+    /**
+     * All existing accounts.
+     */
+    private final Set<Pair<String, String>> userAccounts = new HashSet<>();
+
+    /**
+     * Only the accounts that are currently logged in are associated with a VirtualView.
+     */
+    private final Map<VirtualView, Pair<String, String>> virtualViewAccounts = new HashMap<>();
 
     /**
      * Private constructor to prevent instantiation.
@@ -26,39 +47,221 @@ public class Controller {
         gameControllers = new ArrayList<>();
     }
 
-    public synchronized GameController createLobby(String playerName, String lobbyID, int nPlayersRequired){
-        //TODO implementation
-        /*check if lobbyID is unique*/
-        return null;
-    }
+    /**
+     * Handles the user login event.
+     *
+     * @param vv The user's VirtualView.
+     * @param account The user's account.
+     * @return The login event.
+     */
+    protected synchronized LoginEvent login(VirtualView vv, Pair<String, String> account){
+        String username = account.key();
+        String password = account.value();
 
-    public synchronized GameController joinLobby(String playerName, String lobbyID){
-        //TODO implementation
-        return null;
-    }
+        if ( isFormatInvalid(username) || isFormatInvalid(password) || !userAccounts.contains(account))
+            return new LoginEvent(Feedback.FAILURE, "This account does not exist.");
 
-    public synchronized GameController reconnectToGame(String playerName, String gameID){
-        //TODO implementation
-        return null;
-    }
+        if (virtualViewAccounts.containsValue(account))
+            return new LoginEvent(Feedback.FAILURE, "Another instance is already connected.");
 
-    public synchronized List<String> getLobbiesAvailable(){
-        /*for on GameControllers*/
-        return null;
-    }
-
-    public synchronized List<String> getGamesAvailable(){
-        /*for on GameControllers*/
-        return null;
+        virtualViewAccounts.put(vv, account);
+        return new LoginEvent(Feedback.SUCCESS, "Login successful!");
     }
 
     /**
-     * Returns the single instance of the Controller class.
+     * Handles the user logout event.
      *
-     * @return the instance of the Controller class.
+     * @param vv The user's VirtualView.
+     * @return The logout event.
      */
-    public static Controller getInstance(){
-        return controller;
+    protected synchronized LogoutEvent logout(VirtualView vv){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new LogoutEvent(Feedback.SUCCESS, "You have already logged out.");
+
+        String username = virtualViewAccounts.get(vv).key();
+
+        for (GameController gc : gameControllers)
+            if (gc.getPlayers().contains(username)){
+                if (!gc.isGameStarted())
+                    gc.quitLobby(vv);
+                else
+                    gc.quitGame(vv);
+            }
+
+        virtualViewAccounts.remove(vv);
+        return new LogoutEvent(Feedback.SUCCESS, "Logout successful!");
+    }
+
+    /**
+     * Handles the event of registering a new account.
+     *
+     * @param newAccount The new account to register.
+     * @return The registration event.
+     */
+    protected synchronized RegisterEvent register(Pair<String, String> newAccount){
+        String username = newAccount.key();
+        String password = newAccount.value();
+
+        if ( isFormatInvalid(username) || isFormatInvalid(password))
+            return new RegisterEvent(Feedback.FAILURE, "Both the username and password must not contain spaces and must not be empty.");
+
+        for (Pair<String, String> existingAccount : userAccounts) {
+            if (existingAccount.key().equals(username)) {
+                return new RegisterEvent(Feedback.FAILURE, "Username already exists.");
+            }
+        }
+
+        userAccounts.add(newAccount);
+        return new RegisterEvent(Feedback.SUCCESS, "Registration successful!");
+    }
+
+    /**
+     * Handles the event of deleting an account.
+     *
+     * @param vv The user's VirtualView.
+     * @return The account deletion event.
+     */
+    protected synchronized DeleteAccountEvent deleteAccount(VirtualView vv){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new DeleteAccountEvent(Feedback.FAILURE, "Please log in first.");
+
+        Pair<String, String> account = virtualViewAccounts.get(vv);
+        logout(vv);
+        userAccounts.remove(account);
+        return new DeleteAccountEvent(Feedback.SUCCESS, "The account has been deleted!");
+    }
+
+    /**
+     * Handles the event of creating a new lobby.
+     *
+     * @param vv The user's VirtualView.
+     * @param gl The user's GameListener.
+     * @param lobbyID The ID of the lobby to create.
+     * @param nRequiredPlayers The number of players required to start the game.
+     * @return The lobby creation event and the GameController of the new lobby.
+     */
+    protected synchronized Pair<CreateLobbyEvent, GameController>
+                           createLobby(VirtualView vv, GameListener gl, String lobbyID, int nRequiredPlayers){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The user is not logged in."), null);
+
+        if (lobbyID == null || lobbyID.isEmpty())
+            return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The provided lobby ID is not allowed."), null);
+
+        for (GameController gc : gameControllers)
+            if (gc.getIdentifier().equals(lobbyID))
+                return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The lobby ID you entered is already in use."), null);
+
+        if (nRequiredPlayers <2 || nRequiredPlayers > 4)
+            return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The number of players should be between 2 and 4."), null);
+
+        GameController newGC = new GameController(vv, virtualViewAccounts.get(vv), gl, lobbyID, nRequiredPlayers);
+        return new Pair<>(new CreateLobbyEvent(Feedback.SUCCESS, "New " + lobbyID + " lobby has been created!"), newGC);
+    }
+
+    /**
+     * Handles the event of joining an existing lobby.
+     *
+     * @param vv The user's VirtualView.
+     * @param gl The user's GameListener.
+     * @param lobbyID The ID of the lobby to join.
+     * @return The lobby joining event and the GameController of the lobby.
+     */
+    protected synchronized Pair<JoinLobbyEvent, GameController>
+                           joinLobby(VirtualView vv, GameListener gl, String lobbyID){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The user is not logged in."), null);
+
+        if (lobbyID == null || lobbyID.isEmpty())
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The provided lobby ID is not allowed."), null);
+
+        for (GameController gc : gameControllers)
+            if (!gc.isGameStarted() && gc.getIdentifier().equals(lobbyID)){
+                gc.addPlayer(vv, virtualViewAccounts.get(vv), gl);
+                return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, gc.getPlayers(), lobbyID + " lobby joined!"), gc);
+                //TODO extra events in gameController
+            }
+        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby is either already full or does not exist."), null);
+    }
+
+    /**
+     * Handles the event of a player attempting to reconnect to an existing game.
+     * A player can only reconnect if they were present at the start of the game.
+     *
+     * @param vv The VirtualView of the reconnecting player.
+     * @param gl The GameListener of the reconnecting player.
+     * @param gameID The ID of the game to which the player is attempting to reconnect.
+     * @return A pair containing the reconnection event and the GameController of the game.
+     */
+    protected synchronized Pair<ReconnectToGameEvent, GameController>
+                           reconnectToGame(VirtualView vv, GameListener gl, String gameID){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The user is not logged in."), null);
+
+        if (gameID == null || gameID.isEmpty())
+            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The provided game ID is not allowed."), null);
+
+        Pair<String, String> account = virtualViewAccounts.get(vv);
+        String username = account.key();
+        for (GameController gc : gameControllers)
+            if (gc.isGameStarted() && gc.getIdentifier().equals(gameID) && gc.getPlayers().contains(username)) {
+                if (gc.isPlayerOffline(account)) {
+                    gc.reconnectPlayer(vv, account, gl);
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID + " game joined!"), gc);
+                    //TODO extra events from Model
+                }
+                else
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Player already in the game."), null);
+            }
+        return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The game does not exist or you do not have permission to enter it."), null);
+    }
+
+    /**
+     * Retrieves the list of available lobbies.
+     *
+     * @return The event with the list of available lobbies.
+     */
+    protected synchronized AvailableLobbiesEvent getLobbiesAvailable(){
+        List<String> collect = new ArrayList<>();
+
+        for (GameController gc : gameControllers)
+            if (!gc.isGameStarted())
+                collect.add(gc.getIdentifier());
+
+        if (collect.isEmpty())
+            return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are not available lobbies.");
+        return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "These are all the available lobbies.");
+    }
+
+    /**
+     * Retrieves the list of offline games available for the user.
+     *
+     * @param vv The user's VirtualView.
+     * @return The event with the list of offline games available.
+     */
+    protected synchronized GetMyOfflineGamesEvent getMyOfflineGamesAvailable(VirtualView vv){
+        if(!virtualViewAccounts.containsKey(vv))
+            return new GetMyOfflineGamesEvent(Feedback.FAILURE, null, "Please log in first.");
+
+        List<String> collect = new ArrayList<>();
+        String username = virtualViewAccounts.get(vv).key();
+
+        for (GameController gc : gameControllers)
+            if (gc.isGameStarted() && gc.getPlayers().contains(username))
+                collect.add(gc.getIdentifier());
+
+        if (collect.isEmpty())
+            return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "You do not have any available games.");
+        return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "These are all your available games.");
+    }
+
+    /**
+     * Handles the event of a client disconnecting.
+     *
+     * @param vv The user's VirtualView.
+     */
+    protected synchronized void clientDisconnected(VirtualView vv){
+        logout(vv);
     }
 
     /**
@@ -77,5 +280,26 @@ public class Controller {
      */
     protected synchronized void removeFromGameControllers(GameController gc){
         gameControllers.remove(gc);
+    }
+
+    /**
+     * Checks if the format of an input is invalid.
+     *
+     * @param input The input to check.
+     * @return true if the format is invalid, false otherwise.
+     */
+    private boolean isFormatInvalid(String input) {
+        return input == null || input.isEmpty() || input.contains(" ");
+    }
+
+    /**
+     * Returns the single instance of the Controller class.
+     *
+     * @return the instance of the Controller class.
+     */
+    public synchronized static Controller getInstance(){
+        if(controller == null)
+            controller = new Controller();
+        return controller;
     }
 }

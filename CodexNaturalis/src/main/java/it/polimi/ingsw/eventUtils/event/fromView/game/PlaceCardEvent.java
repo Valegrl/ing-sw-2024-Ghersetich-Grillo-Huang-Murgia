@@ -11,7 +11,7 @@ public class PlaceCardEvent extends FeedbackEvent {
         super(id);
     }
 
-    public PlaceCardEvent(Feedback feedback) {
-        super(id, feedback);
+    public PlaceCardEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

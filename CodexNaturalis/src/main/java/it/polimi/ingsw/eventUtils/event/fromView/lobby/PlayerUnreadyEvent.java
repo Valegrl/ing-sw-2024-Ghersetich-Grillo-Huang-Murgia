@@ -11,7 +11,7 @@ public class PlayerUnreadyEvent extends FeedbackEvent {
         super(id);
     }
 
-    public PlayerUnreadyEvent(Feedback feedback) {
-        super(id, feedback);
+    public PlayerUnreadyEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

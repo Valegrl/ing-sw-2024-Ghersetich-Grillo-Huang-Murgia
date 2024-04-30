@@ -11,7 +11,7 @@ public class seeOpponentPlayAreaEvent extends FeedbackEvent {
         super(id);
     }
 
-    public seeOpponentPlayAreaEvent(Feedback feedback) {
-        super(id, feedback);
+    public seeOpponentPlayAreaEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

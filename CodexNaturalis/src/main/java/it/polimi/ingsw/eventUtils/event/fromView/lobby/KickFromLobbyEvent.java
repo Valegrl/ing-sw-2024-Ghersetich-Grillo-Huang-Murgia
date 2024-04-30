@@ -11,7 +11,7 @@ public class KickFromLobbyEvent extends FeedbackEvent {
         super(id);
     }
 
-    public KickFromLobbyEvent(Feedback feedback) {
-        super(id, feedback);
+    public KickFromLobbyEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

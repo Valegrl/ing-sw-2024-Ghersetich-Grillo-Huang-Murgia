@@ -3,7 +3,7 @@ package it.polimi.ingsw.eventUtils.event.fromView.lobby;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 
-public class QuitLobbyEvent extends FeedbackEvent {
+public class QuitLobbyEvent extends FeedbackEvent<Object> {
 
     private final static String id = "QUIT_LOBBY";
 
@@ -11,7 +11,7 @@ public class QuitLobbyEvent extends FeedbackEvent {
         super(id);
     }
 
-    public QuitLobbyEvent(Feedback feedback) {
-        super(id, feedback);
+    public QuitLobbyEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

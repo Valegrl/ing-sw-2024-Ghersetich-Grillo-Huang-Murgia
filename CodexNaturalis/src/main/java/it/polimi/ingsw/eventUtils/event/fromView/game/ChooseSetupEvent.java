@@ -11,7 +11,7 @@ public class ChooseSetupEvent extends FeedbackEvent {
         super(id);
     }
 
-    public ChooseSetupEvent(Feedback feedback) {
-        super(id, feedback);
+    public ChooseSetupEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

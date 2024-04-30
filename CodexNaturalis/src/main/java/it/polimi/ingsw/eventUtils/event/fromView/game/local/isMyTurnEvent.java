@@ -11,7 +11,7 @@ public class isMyTurnEvent extends FeedbackEvent {
         super(id);
     }
 
-    public isMyTurnEvent(Feedback feedback) {
-        super(id, feedback);
+    public isMyTurnEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

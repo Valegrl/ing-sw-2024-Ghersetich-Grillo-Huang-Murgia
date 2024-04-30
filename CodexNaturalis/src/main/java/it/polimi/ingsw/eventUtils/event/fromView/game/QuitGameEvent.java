@@ -11,7 +11,7 @@ public class QuitGameEvent extends FeedbackEvent {
         super(id);
     }
 
-    public QuitGameEvent(Feedback feedback) {
-        super(id, feedback);
+    public QuitGameEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }

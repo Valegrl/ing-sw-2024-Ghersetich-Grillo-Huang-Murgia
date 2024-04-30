@@ -11,7 +11,7 @@ public class AvailablePositionsEvent extends FeedbackEvent {
         super(id);
     }
 
-    public AvailablePositionsEvent(Feedback feedback) {
-        super(id, feedback);
+    public AvailablePositionsEvent(Feedback feedback, String message) {
+        super(id, feedback, message);
     }
 }
