@@ -5,15 +5,15 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.UIEventReceiver;
 
-public class AvailablePositionsEvent extends FeedbackEvent {
+public class IsMyTurnEvent extends FeedbackEvent {
 
-    private final static String id = "AVAILABLE_POSITIONS";
+    private final static String id = "IS_MY_TURN";
 
-    public AvailablePositionsEvent() {
+    public IsMyTurnEvent() {
         super(id);
     }
 
-    public AvailablePositionsEvent(Feedback feedback, String message) {
+    public IsMyTurnEvent(Feedback feedback, String message) {
         super(id, feedback, message);
     }
 
