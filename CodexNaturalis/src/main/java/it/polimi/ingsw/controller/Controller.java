@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
-import it.polimi.ingsw.eventUtils.listener.GameListener;
+import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.utils.Pair;
 
 import java.util.*;

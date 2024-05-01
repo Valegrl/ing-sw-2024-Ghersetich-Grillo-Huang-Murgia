@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.clientSide;
 
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -137,7 +136,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                         }
                         Event response = responsesQueue.poll();
                         try {
-                            viewController.evaluateEvent(response);
+                            viewController.externalEvent(response);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

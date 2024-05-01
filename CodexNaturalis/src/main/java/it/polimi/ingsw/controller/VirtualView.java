@@ -5,7 +5,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
-import it.polimi.ingsw.eventUtils.listener.GameListener;
+import it.polimi.ingsw.eventUtils.GameListener;
 
 public class VirtualView {
     private GameListener gameListener;

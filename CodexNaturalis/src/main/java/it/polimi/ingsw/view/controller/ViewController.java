@@ -17,7 +17,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
-import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 
@@ -39,7 +38,7 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public void newViewEvent(Event event) {
-
+        //TODO: filter
     }
 
     public void externalEvent(Event event){

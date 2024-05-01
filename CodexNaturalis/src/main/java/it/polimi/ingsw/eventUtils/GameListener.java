@@ -1,4 +1,4 @@
-package it.polimi.ingsw.eventUtils.listener;
+package it.polimi.ingsw.eventUtils;
 
 import it.polimi.ingsw.eventUtils.event.Event;
 

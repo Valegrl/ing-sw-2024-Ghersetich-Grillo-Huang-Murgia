@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.eventUtils.event.fromView.menu.AvailableLobbiesEvent;
-import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.controller.ViewController;

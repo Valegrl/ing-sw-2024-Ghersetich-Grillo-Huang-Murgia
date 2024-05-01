@@ -3,10 +3,9 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
-import it.polimi.ingsw.eventUtils.listener.GameListener;
+import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.CardType;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
@@ -124,6 +123,9 @@ public class GameController {
     }
 
     protected synchronized QuitLobbyEvent quitLobby(VirtualView vv){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new QuitLobbyEvent(Feedback.FAILURE, "The user is not logged in.");
+
         //TODO extra events in gameController
         return null;
     }
