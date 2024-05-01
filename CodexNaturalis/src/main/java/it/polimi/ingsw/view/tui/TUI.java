@@ -1,25 +1,29 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.eventUtils.event.fromView.menu.AvailableLobbiesEvent;
+import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.clientSide.ClientManager;
-import it.polimi.ingsw.view.AbstractUI;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.controller.ViewController;
 
 import java.io.PrintStream;
 import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class TUI extends AbstractUI implements View {
+public class TUI implements View {
     private final Scanner in;
 
     private final PrintStream out;
 
     private String username;
 
+    private ViewController controller;
+
     public TUI() {
-        super();
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out, true);
+        this.controller = new ViewController(this);
     }
 
     private int readChoiceFromInput(String opt1, String opt2){
@@ -61,7 +65,7 @@ public class TUI extends AbstractUI implements View {
         if(choice == 1) {
             out.println("Connecting with socket...");
             try {
-                ClientManager.getInstance().initSocket(ip, 1098, this);
+                ClientManager.getInstance().initSocket(ip, 1098);
             } catch (RemoteException e){
                 out.println("Cannot connect with socket. Make sure the IP provided is valid and try again later...");
                 return false;
@@ -69,7 +73,7 @@ public class TUI extends AbstractUI implements View {
         } else {
             out.println("Connecting with RMI...");
             try {
-                ClientManager.getInstance().initRMI(ip, this);
+                ClientManager.getInstance().initRMI(ip);
             } catch (RemoteException e) {
                 out.println("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
                 return false;

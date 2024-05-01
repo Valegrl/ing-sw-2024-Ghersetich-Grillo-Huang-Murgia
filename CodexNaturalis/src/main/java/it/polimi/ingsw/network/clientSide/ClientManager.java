@@ -4,7 +4,7 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.listener.ViewListener;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.controller.ViewController;
 
 import java.io.IOException;
 import java.rmi.Naming;
@@ -22,19 +22,14 @@ public class ClientManager extends UnicastRemoteObject implements Client {
 
     //TODO implement a filter which controls if an event's id is in local only and doesn't need to send to server
     /**
-     * The view with which ClientManager is associated
+     * The ViewController with which ClientManager is associated
      */
-    private View view; // TODO change to ViewController?
+    private ViewController viewController;
 
     /**
      * The server, which the client is connected to.
      */
     private Server server;
-
-    /**
-     * The listener for view events.
-     */
-    private ViewListener listener;
 
     /**
      * The singleton instance of ClientManager.
@@ -55,12 +50,10 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * Initializes the connection to the server via RMI.
      *
      * @param registryAddress The address of the RMI registry.
-     * @param view The view to be associated with this ClientManager.
      * @throws RemoteException If a communication-related exception occurs.
      */
-    public void initRMI(String registryAddress, View view) throws RemoteException {
+    public void initRMI(String registryAddress) throws RemoteException {
         try {
-            this.view = view;
             this.server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
             this.server.join(this);
         }
@@ -76,10 +69,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      *
      * @param ipAddress The IP address of the server.
      * @param portNumber The port number of the server.
-     * @param view The view to be associated with this ClientManager.
      * @throws RemoteException If a communication-related exception occurs.
      */
-    public void initSocket(String ipAddress, int portNumber, View view) throws RemoteException {
+    public void initSocket(String ipAddress, int portNumber) throws RemoteException {
         //TODO create thread in which ClientManager readStream() from the remoteServerSocket
         try {
             server = new RemoteServerSocket(ipAddress, portNumber);
@@ -145,7 +137,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                         }
                         Event response = responsesQueue.poll();
                         try {
-                            managed(response);
+                            viewController.evaluateEvent(response);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -196,17 +188,11 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     /**
-     * Adds a listener for view events.
+     * Sets the associated ViewController.
      *
-     * @param listener The listener to be added.
+     * @param vc The ViewController to be set.
      */
-    public void addViewListener(ViewListener listener){
-        this.listener = listener;
+    public void setViewController(ViewController vc){
+        this.viewController = vc;
     }
-
-    public void managed(Event event){
-        //TODO implementation
-    }
-
-
 }

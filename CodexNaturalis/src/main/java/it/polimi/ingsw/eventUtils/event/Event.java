@@ -1,7 +1,7 @@
 package it.polimi.ingsw.eventUtils.event;
 
 import it.polimi.ingsw.controller.VirtualView;
-import it.polimi.ingsw.view.UIEventReceiver;
+import it.polimi.ingsw.view.controller.ViewEventReceiver;
 import java.io.Serializable;
 
 /**
@@ -29,11 +29,11 @@ public abstract class Event implements Serializable {
     public String getID() { return ID; }
 
     /**
-     * Method to be implemented by subclasses to handle the event when received by a UIEventReceiver.
+     * Method to be implemented by subclasses to handle the event when received by a ViewEventReceiver.
      *
-     * @param uiEventReceiver The UIEventReceiver that receives the event.
+     * @param viewEventReceiver The ViewEventReceiver that receives the event.
      */
-    public abstract void receiveEvent(UIEventReceiver uiEventReceiver);
+    public abstract void receiveEvent(ViewEventReceiver viewEventReceiver);
 
     /**
      * Method to be implemented by subclasses to handle the event when received by a VirtualView.

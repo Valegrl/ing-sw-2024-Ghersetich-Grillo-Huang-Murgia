@@ -2,7 +2,7 @@ package it.polimi.ingsw.eventUtils.event.fromModel;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.view.UIEventReceiver;
+import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class PlayerIsChoosingSetupEvent extends Event {
 
@@ -13,8 +13,8 @@ public class PlayerIsChoosingSetupEvent extends Event {
     }
 
     @Override
-    public void receiveEvent(UIEventReceiver uiEventReceiver) {
-        uiEventReceiver.evaluateEvent(this);
+    public void receiveEvent(ViewEventReceiver viewEventReceiver) {
+        viewEventReceiver.evaluateEvent(this);
     }
 
     @Override

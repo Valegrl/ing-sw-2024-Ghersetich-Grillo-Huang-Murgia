@@ -1,5 +1,6 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.controller;
 
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
@@ -16,13 +17,33 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.eventUtils.listener.ViewListener;
+import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.view.View;
 
-public class ViewController implements UIEventReceiver {
+import java.rmi.RemoteException;
 
-    private final AbstractUI view;
+public class ViewController implements ViewEventReceiver {
 
-    public ViewController(AbstractUI view) {
+    private final View view;
+    private final ClientManager clientManager;
+
+    public ViewController(View view) {
         this.view = view;
+        try {
+            this.clientManager = ClientManager.getInstance();
+            clientManager.setViewController(this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void newViewEvent(Event event) {
+
+    }
+
+    public void externalEvent(Event event){
+
     }
 
     @Override

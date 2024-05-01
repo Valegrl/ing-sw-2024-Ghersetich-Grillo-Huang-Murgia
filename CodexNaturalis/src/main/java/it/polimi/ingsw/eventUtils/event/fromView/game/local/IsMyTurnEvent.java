@@ -3,7 +3,7 @@ package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.view.UIEventReceiver;
+import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class IsMyTurnEvent extends FeedbackEvent {
 
@@ -18,8 +18,8 @@ public class IsMyTurnEvent extends FeedbackEvent {
     }
 
     @Override
-    public void receiveEvent(UIEventReceiver uiEventReceiver) {
-        uiEventReceiver.evaluateEvent(this);
+    public void receiveEvent(ViewEventReceiver viewEventReceiver) {
+        viewEventReceiver.evaluateEvent(this);
     }
 
     @Override

@@ -3,8 +3,7 @@ package it.polimi.ingsw.eventUtils.event.fromView.menu;
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.view.UIEventReceiver;
+import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
  * Represents an event that initiates the deletion of an account.
@@ -35,8 +34,8 @@ public class DeleteAccountEvent extends FeedbackEvent<Object> {
     }
 
     @Override
-    public void receiveEvent(UIEventReceiver uiEventReceiver) {
-        uiEventReceiver.evaluateEvent(this);
+    public void receiveEvent(ViewEventReceiver viewEventReceiver) {
+        viewEventReceiver.evaluateEvent(this);
     }
 
     @Override

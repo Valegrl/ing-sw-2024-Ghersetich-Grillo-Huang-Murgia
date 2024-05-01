@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.controller;
 
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.*;
@@ -9,12 +9,12 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 
 /**
- * The UIEventReceiver interface defines the methods that a class must implement to receive and handle UI events.
+ * The ViewEventReceiver interface defines the methods that a class must implement to receive and handle View events.
  */
-public interface UIEventReceiver {
+public interface ViewEventReceiver {
     /**
      * Default method to evaluate an event. This method is used only for unexpected events that cannot
-     * be handled by the UI.
+     * be handled by the View.
      *
      * @param event The event to be evaluated.
      */
