@@ -3,6 +3,7 @@ package it.polimi.ingsw.eventUtils;
 import com.google.gson.*;
 
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class EventDeserializer implements JsonDeserializer<Event> {
 
     private static final Map<String, Class<?>> idToEvent = new HashMap<>() {{
+        put("INVALID", InvalidEvent.class);
         put("KICKED_PLAYER_FROM_LOBBY", KickedPlayerFromLobbyEvent.class);
         put("UPDATE_LOBBY_PLAYERS", UpdateLobbyPlayersEvent.class);
         put("PLAYER_IS_CHOOSING_SETUP", PlayerIsChoosingSetupEvent.class);

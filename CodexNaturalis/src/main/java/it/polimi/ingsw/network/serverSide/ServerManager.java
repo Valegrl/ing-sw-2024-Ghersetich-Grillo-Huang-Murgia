@@ -113,14 +113,14 @@ public class ServerManager extends UnicastRemoteObject implements Server {
     public void direct(Event event, Client client) throws RemoteException {
         synchronized (requestsQueue) {
             requestsQueue.add(new Pair<>(event, client));
-            requestsQueue.notify();
+            requestsQueue.notifyAll();
         }
     }
 
     private void manage(Event event, Client client) {
         synchronized (virtualViews) {
             VirtualView virtualView = virtualViews.get(client);
-            event.receiveEvent(virtualView); // TODO change when implemented VirtualView queue
+           virtualView.handle(event);
         }
     }
 

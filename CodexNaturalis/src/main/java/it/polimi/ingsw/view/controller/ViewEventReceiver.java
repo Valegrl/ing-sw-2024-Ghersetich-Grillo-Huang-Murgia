@@ -24,6 +24,13 @@ public interface ViewEventReceiver {
     }
 
     /**
+     * Called when an invalid event is sent by the local player.
+     *
+     * @param event The invalid event sent by the local player.
+     */
+    void evaluateEvent(InvalidEvent event);
+
+    /**
      * Handles the event when the local player is kicked from the lobby.
      * @param event The event to be handled.
      */

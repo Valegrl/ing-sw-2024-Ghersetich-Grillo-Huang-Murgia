@@ -192,7 +192,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     public void report(Event event) throws RemoteException {
         synchronized (responsesQueue) {
             responsesQueue.add(event);
-            responsesQueue.notify();
+            responsesQueue.notifyAll();
         }
     }
 
@@ -205,7 +205,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     public void  handleEvent(Event event) throws RemoteException {
         synchronized (requestsQueue) {
             requestsQueue.add(event);
-            requestsQueue.notify();
+            requestsQueue.notifyAll();
         }
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.controller;
 
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
@@ -95,6 +96,11 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public void externalEvent(Event event){
+
+    }
+
+    @Override
+    public void evaluateEvent(InvalidEvent event) {
 
     }
 
