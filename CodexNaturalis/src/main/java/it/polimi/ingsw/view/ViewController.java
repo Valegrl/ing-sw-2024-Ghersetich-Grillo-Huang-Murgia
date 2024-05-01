@@ -1,14 +1,30 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.eventUtils.event.fromController.*;
-import it.polimi.ingsw.eventUtils.event.fromModel.*;
-import it.polimi.ingsw.eventUtils.event.fromView.game.*;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
-import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
+import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.ChooseSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.local.SeeOpponentPlayAreaEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
-import it.polimi.ingsw.view.UIEventReceiver;
 
-public class TUIEventReceiver implements UIEventReceiver {
+public class ViewController implements UIEventReceiver {
+
+    private final AbstractUI view;
+
+    public ViewController(AbstractUI view) {
+        this.view = view;
+    }
+
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
 

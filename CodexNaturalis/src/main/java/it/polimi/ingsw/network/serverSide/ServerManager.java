@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /*Singleton*/
 public class ServerManager extends UnicastRemoteObject implements Server {
@@ -22,7 +24,9 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     private final Map<Client, VirtualView> virtualViews;
 
-    public static ServerManager getInstance() throws RemoteException {
+    private final ExecutorService executor;
+
+    public synchronized static ServerManager getInstance() throws RemoteException {
         if( instance == null ) {
             instance = new ServerManager();
         }
@@ -31,6 +35,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     private ServerManager() throws RemoteException {
          this.virtualViews = new HashMap<>();
+         this.executor = Executors.newCachedThreadPool();
 
         new Thread(() -> {
             while (true) {
@@ -59,33 +64,32 @@ public class ServerManager extends UnicastRemoteObject implements Server {
     }
 
     private void manage(Event event, Client client) {
-        VirtualView virtualView = virtualViews.get(client);
-        Event response = null;
-
-        event.receiveEvent(virtualView);
-
-        try {
-            client.report(response);
-        } catch (RemoteException e) {
-            // System.err.println("Cannot send message to " + virtualView.getUsername() + "'s client"); TODO VirtualView username
-            System.err.println("Error: " + e.getMessage());
+        synchronized (virtualViews) {
+            VirtualView virtualView = virtualViews.get(client);
+            event.receiveEvent(virtualView); // TODO change when implemented VirtualView queue
         }
-
     }
 
     @Override
     public void join(Client client) throws RemoteException {
-        virtualViews.put(client, new VirtualView((event) -> {
-            try {
-                /*add event in exit queue?*/
-                client.report(event);
-            } catch (RemoteException e) {
-                System.err.println("The event cannot be sent to the client.");
-            }
-        }));
+        synchronized (virtualViews) {
+            virtualViews.put(client, new VirtualView((event) -> {
+                try {
+                    client.report(event);
+                } catch (RemoteException e) {
+                    System.err.println("The event cannot be sent to the client.");
+                }
+            }));
+        }
     }
 
-    public void removeVirtualView(Client client) {
-        virtualViews.remove(client);
+    public void leave(Client client) {
+        synchronized (virtualViews) {
+            virtualViews.remove(client);
+        }
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
     }
 }

@@ -6,4 +6,6 @@ public abstract class AbstractUI {
     void handleEvent(Event event){
 
     }
+
+    // TODO Implement specific-to-view functions that are called from controller EventReceiver
 }

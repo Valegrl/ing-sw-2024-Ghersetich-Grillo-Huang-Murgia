@@ -52,7 +52,7 @@ public class MainServer {
                 System.out.println("Waiting for a new socket...");
                 Socket socket = serverSocket.accept();
                 System.out.println("New socket accepted");
-                new Thread(() -> {
+                ServerManager.getInstance().getExecutor().execute(() -> {
                     RemoteClientSocket client = null;
                     try {
                         client = new RemoteClientSocket(socket);
@@ -63,7 +63,7 @@ public class MainServer {
                     while(true) {
                         client.readStream();
                     }
-                }).start();
+                });
             }
 
         } catch (IOException e) {

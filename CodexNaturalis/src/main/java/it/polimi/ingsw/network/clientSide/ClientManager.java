@@ -24,7 +24,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     /**
      * The view with which ClientManager is associated
      */
-    private View view;
+    private View view; // TODO change to ViewController?
 
     /**
      * The server, which the client is connected to.
@@ -162,7 +162,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * @return The singleton instance of ClientManager.
      * @throws RemoteException If a communication-related exception occurs.
      */
-    public static ClientManager getInstance() throws RemoteException {
+    public synchronized static ClientManager getInstance() throws RemoteException {
         if(instance == null)
             instance = new ClientManager();
         return instance;

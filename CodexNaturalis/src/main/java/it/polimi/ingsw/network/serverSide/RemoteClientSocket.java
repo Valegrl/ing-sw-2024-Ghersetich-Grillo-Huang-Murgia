@@ -33,12 +33,18 @@ public class RemoteClientSocket implements Client {
     private final ObjectInputStream inputStream;
 
     /**
+     * The {@link Socket} used to connect to the {@link it.polimi.ingsw.network.clientSide.RemoteServerSocket RemoteServerSocket}.
+     */
+    private final Socket socket;
+
+    /**
      * Creates a new {@code RemoteClientSocket} with the given {@code Socket} and {@code Server}.
      *
      * @param socket the {@code Socket} used to connect to the {@code RemoteServerSocket}.
      * @throws RemoteException if any I/O error occurs.
      */
     public RemoteClientSocket(Socket socket) throws RemoteException {
+        this.socket = socket;
         this.server = ServerManager.getInstance();
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -84,6 +90,19 @@ public class RemoteClientSocket implements Client {
             server.direct(event, this);
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Closes the {@link  Socket} and the {@code ObjectInputStream} and {@code ObjectOutputStream}.
+     */
+    protected void closeSocket() {
+        try {
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Cannot close socket to client " + e.getMessage());
         }
     }
 }

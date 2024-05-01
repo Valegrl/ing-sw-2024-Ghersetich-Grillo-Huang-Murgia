@@ -95,4 +95,17 @@ public class RemoteServerSocket implements Server {
             System.err.println("I/O error: " + e.getMessage());
         }
     }
+
+    /**
+     * Closes the {@link  Socket} and the {@code ObjectInputStream} and {@code ObjectOutputStream}.
+     */
+    protected void closeSocket() {
+        try {
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Cannot close socket to client " + e.getMessage());
+        }
+    }
 }
