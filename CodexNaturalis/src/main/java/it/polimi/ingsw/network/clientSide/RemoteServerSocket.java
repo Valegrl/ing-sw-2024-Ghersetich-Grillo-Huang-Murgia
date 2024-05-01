@@ -85,14 +85,17 @@ public class RemoteServerSocket implements Server {
      */
     public void readStream() throws RemoteException {
         try {
-            String jsonString = (String) inputStream.readUTF();
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Event.class, new EventDeserializer())
-                    .create();
-            Event event = gson.fromJson(jsonString, Event.class);
-            client.report(event);
+            if (!socket.isClosed()) {
+                String jsonString = inputStream.readUTF();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Event.class, new EventDeserializer())
+                        .create();
+                Event event = gson.fromJson(jsonString, Event.class);
+                client.report(event);
+            }
         } catch (IOException e) {
-            System.err.println("I/O error: " + e.getMessage());
+            if (!socket.isConnected())
+                System.err.println("I/O error: " + e.getMessage());
         }
     }
 
@@ -107,5 +110,23 @@ public class RemoteServerSocket implements Server {
         } catch (IOException e) {
             System.err.println("Cannot close socket to client " + e.getMessage());
         }
+    }
+
+    /**
+     * Closes the {@link  Socket} and the {@code ObjectInputStream} and {@code ObjectOutputStream}.
+     */
+    @Override
+    public void closeConnection() {
+        try {
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Cannot close socket to server");
+        }
+    }
+
+    protected Socket getSocket() {
+        return socket;
     }
 }

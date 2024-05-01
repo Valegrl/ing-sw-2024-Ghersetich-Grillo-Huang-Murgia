@@ -217,4 +217,8 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(RegisterEvent event) {
 
     }
+
+    public void serverCrashed () {
+        view.serverCrashed();
+    }
 }

@@ -64,10 +64,12 @@ public class RemoteClientSocket implements Client {
     @Override
     public void report(Event event) throws RemoteException {
         try {
-            Gson gson = new Gson();
-            String jsonString = gson.toJson(event);
-            outputStream.writeUTF(jsonString);
-            outputStream.flush();
+            if (!socket.isClosed()) {
+                Gson gson = new Gson();
+                String jsonString = gson.toJson(event);
+                outputStream.writeUTF(jsonString);
+                outputStream.flush();
+            }
         } catch (IOException e) {
             System.err.println("I/O error: " + e.getMessage());
         }
@@ -89,14 +91,16 @@ public class RemoteClientSocket implements Client {
             event = gson.fromJson(jsonString, Event.class);
             server.direct(event, this);
         } catch (IOException e) {
-            System.err.println("I/O error: " + e.getMessage());
+            if (!socket.isConnected())
+                System.err.println("I/O error: " + e.getMessage());
         }
     }
 
     /**
      * Closes the {@link  Socket} and the {@code ObjectInputStream} and {@code ObjectOutputStream}.
      */
-    protected void closeSocket() {
+    @Override
+    public void closeConnection() {
         try {
             inputStream.close();
             outputStream.close();

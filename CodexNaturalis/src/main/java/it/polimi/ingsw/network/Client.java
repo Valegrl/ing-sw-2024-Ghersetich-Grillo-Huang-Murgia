@@ -18,4 +18,6 @@ public interface Client extends Remote {
      * @throws RemoteException If a remote communication error occurs.
      */
     void report(Event event) throws RemoteException;
+
+    default void closeConnection() throws RemoteException {};
 }

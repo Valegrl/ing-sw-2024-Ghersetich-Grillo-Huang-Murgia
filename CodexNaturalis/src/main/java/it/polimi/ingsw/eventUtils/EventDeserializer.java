@@ -17,6 +17,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
+import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class EventDeserializer implements JsonDeserializer<Event> {
         put("RECONNECT_TO_GAME", ReconnectToGameEvent.class);
         put("REGISTER", RegisterEvent.class);
         put("PING", PingEvent.class);
+        put("PONG", PongEvent.class);
     }};
 
     @Override

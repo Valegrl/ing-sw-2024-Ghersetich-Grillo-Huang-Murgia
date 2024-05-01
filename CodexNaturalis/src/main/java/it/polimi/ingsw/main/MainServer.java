@@ -60,7 +60,7 @@ public class MainServer {
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                    while(true) {
+                    while(!socket.isClosed()) {
                         client.readStream();
                     }
                 });

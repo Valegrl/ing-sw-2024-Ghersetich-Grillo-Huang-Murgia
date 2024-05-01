@@ -28,4 +28,6 @@ public interface Server extends Remote {
      * @throws RemoteException If a remote communication error occurs.
      */
     default void join(Client client) throws RemoteException{}
+
+    default void closeConnection() throws RemoteException {};
 }

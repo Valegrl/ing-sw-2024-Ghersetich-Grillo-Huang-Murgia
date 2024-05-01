@@ -94,4 +94,15 @@ public class TUI implements View {
                 out.println("\033[H\033[2J");
         } catch (Exception ignored) {}
     }
+
+    public void serverCrashed() {
+        clearConsole();
+        out.println("Server crashed. Please try connecting again.");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        run();
+    }
 }
