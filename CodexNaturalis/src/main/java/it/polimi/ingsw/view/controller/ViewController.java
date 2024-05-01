@@ -21,11 +21,18 @@ import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 
 import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ViewController implements ViewEventReceiver {
 
     private final View view;
+
     private final ClientManager clientManager;
+
+    private final Queue<Event> outQueue = new LinkedList<>();
+
+    private final Queue<Event> inQueue = new LinkedList<>();
 
     public ViewController(View view) {
         this.view = view;
@@ -35,6 +42,52 @@ public class ViewController implements ViewEventReceiver {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
+        new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    synchronized (outQueue){
+                        while(outQueue.isEmpty()){
+                            try{
+                                outQueue.wait();
+                            }
+                            catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                        Event event = outQueue.poll();
+                        try{
+                            clientManager.handleEvent(event);
+                        }
+                        catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            }
+        }.start();
+
+        new Thread(){
+            @Override
+            public void run(){
+                while (true){
+                    synchronized (inQueue){
+                        while(inQueue.isEmpty()){
+                            try{
+                                inQueue.wait();
+                            }
+                            catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                        Event event = inQueue.poll();
+                        //Something, view has to handle the event
+                    }
+                }
+            }
+        }.start();
     }
 
     public void newViewEvent(Event event) {

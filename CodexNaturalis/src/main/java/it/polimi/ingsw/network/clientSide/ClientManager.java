@@ -19,7 +19,6 @@ import java.util.*;
  */
 public class ClientManager extends UnicastRemoteObject implements Client {
 
-    //TODO implement a filter which controls if an event's id is in local only and doesn't need to send to server
     /**
      * The ViewController with which ClientManager is associated
      */
@@ -71,7 +70,6 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * @throws RemoteException If a communication-related exception occurs.
      */
     public void initSocket(String ipAddress, int portNumber) throws RemoteException {
-        //TODO create thread in which ClientManager readStream() from the remoteServerSocket
         try {
             server = new RemoteServerSocket(ipAddress, portNumber);
         } catch (IOException e) {
@@ -92,7 +90,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     /**
      * Private constructor for the singleton pattern, creates two threads for managing the requests and responses queues.
      * The first thread waits if the requests queue is empty, otherwise it polls the event from the queue and calls the listener to handle it.
-     * The second thread waits if the responses queue is empty, otherwise it polls the event...
+     * The second thread waits if the responses queue is empty, otherwise it polls the event from the queue and manages the response.
      *
      * @throws RemoteException If a communication-related exception occurs.
      */
