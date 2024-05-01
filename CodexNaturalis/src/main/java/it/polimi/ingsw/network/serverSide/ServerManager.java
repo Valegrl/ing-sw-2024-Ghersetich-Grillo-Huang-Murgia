@@ -73,13 +73,16 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     }
 
-    public void join(Client client) {
-        VirtualView virtualView = new VirtualView();
-        virtualViews.put(client, virtualView);
-    }
-
-    public void addVirtualView(Client client, VirtualView virtualView) {
-        virtualViews.put(client, virtualView);
+    @Override
+    public void join(Client client) throws RemoteException {
+        virtualViews.put(client, new VirtualView((event) -> {
+            try {
+                /*add event in exit queue?*/
+                client.report(event);
+            } catch (RemoteException e) {
+                System.err.println("The event cannot be sent to the client.");
+            }
+        }));
     }
 
     public void removeVirtualView(Client client) {

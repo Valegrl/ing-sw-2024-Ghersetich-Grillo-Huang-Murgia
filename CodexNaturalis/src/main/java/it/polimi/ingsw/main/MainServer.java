@@ -56,7 +56,7 @@ public class MainServer {
                     RemoteClientSocket client = null;
                     try {
                         client = new RemoteClientSocket(socket);
-                        ServerManager.getInstance().addVirtualView(client, new VirtualView());
+                        ServerManager.getInstance().join(client);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }

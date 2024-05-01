@@ -5,10 +5,19 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
+import it.polimi.ingsw.eventUtils.listener.GameListener;
 
 public class VirtualView {
+    private GameListener gameListener;
+    private Controller controller;
+    private GameController gameController;
 
-    //TODO: Create a constructor method with a single thread for the incoming event queue.
+    public VirtualView(GameListener gl) {
+        this.gameListener = gl;
+        this.controller = Controller.getInstance();
+        //TODO: Single thread for the incoming event queue.
+    }
+
     //TODO: Implement queue manager methods.
     // REMEMBER: Manage one event at a time and wait for its return.
     // REMEMBER: Call my public method from @ServerManager to add the event to my queue.

@@ -19,4 +19,13 @@ public interface Server extends Remote {
      * @throws RemoteException If a remote communication error occurs.
      */
     void direct(Event event, Client client) throws RemoteException;
+
+    /**
+     * This method allows a client to join the server. It is used to establish a connection between the client and the server.
+     * Once the client has joined, it can start sending events to the server.
+     *
+     * @param client The client that wants to join the server.
+     * @throws RemoteException If a remote communication error occurs.
+     */
+    default void join(Client client) throws RemoteException{}
 }

@@ -62,7 +62,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         try {
             this.view = view;
             this.server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
-            // TODO add virtualView to server when using RMI
+            this.server.join(this);
         }
         catch(Exception e){
             System.err.println("Client RMI exception:");
