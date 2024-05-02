@@ -123,7 +123,7 @@ public class Controller {
      */
     protected synchronized DeleteAccountEvent deleteAccount(VirtualView vv){
         if (!virtualViewAccounts.containsKey(vv))
-            return new DeleteAccountEvent(Feedback.FAILURE, "Please log in first.");
+            return new DeleteAccountEvent(Feedback.FAILURE, "You must log in first.");
 
         Pair<String, String> account = virtualViewAccounts.get(vv);
         logout(vv);
@@ -143,17 +143,25 @@ public class Controller {
     protected synchronized Pair<CreateLobbyEvent, GameController>
                            createLobby(VirtualView vv, GameListener gl, String lobbyID, int nRequiredPlayers){
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The user is not logged in."), null);
+            return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "You must log in first."), null);
 
         if (lobbyID == null || lobbyID.isEmpty())
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The provided lobby ID is not allowed."), null);
 
-        for (GameController gc : gameControllers)
-            if (gc.getIdentifier().equals(lobbyID))
-                return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The lobby ID you entered is already in use."), null);
-
         if (nRequiredPlayers <2 || nRequiredPlayers > 4)
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The number of players should be between 2 and 4."), null);
+
+        Pair<String, String> account = virtualViewAccounts.get(vv);
+        for (GameController gc : gameControllers) {
+            if (gc.getIdentifier().equals(lobbyID))
+                return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The lobby ID you entered is already in use."), null);
+            else if (!gc.isPlayerOffline(account)) {
+                if(gc.isGameStarted())
+                    return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "Your account is already online in a game."), null);
+                else
+                    return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "Your account is already online in a lobby."), null);
+            }
+        }
 
         GameController newGC = new GameController(vv, virtualViewAccounts.get(vv), gl, lobbyID, nRequiredPlayers);
         return new Pair<>(new CreateLobbyEvent(Feedback.SUCCESS, "New " + lobbyID + " lobby has been created!"), newGC);
@@ -169,18 +177,33 @@ public class Controller {
      */
     protected synchronized Pair<JoinLobbyEvent, GameController>
                            joinLobby(VirtualView vv, GameListener gl, String lobbyID){
+        GameController found = null;
+
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The user is not logged in."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "You must log in first."), null);
 
         if (lobbyID == null || lobbyID.isEmpty())
             return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The provided lobby ID is not allowed."), null);
 
-        for (GameController gc : gameControllers)
-            if (!gc.isGameStarted() && gc.getIdentifier().equals(lobbyID)){
-                gc.addPlayer(vv, virtualViewAccounts.get(vv), gl);
-                return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, gc.getPlayers(), lobbyID + " lobby joined!"), gc);
-                //TODO extra events in gameController
+        Pair<String, String> account = virtualViewAccounts.get(vv);
+        for (GameController gc : gameControllers) {
+            if (!gc.isPlayerOffline(account)) {
+                if(gc.isGameStarted())
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "Your account is already online in a game."), null);
+                else
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "Your account is already online in a lobby."), null);
             }
+            if (!gc.isGameStarted() && gc.getIdentifier().equals(lobbyID)) {
+                found = gc;
+            }
+        }
+
+        if (found != null){
+            found.addPlayer(vv, virtualViewAccounts.get(vv), gl);
+            return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getPlayers(), lobbyID + " lobby joined!"), found);
+            //TODO extra events in gameController
+        }
+
         return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby is either already full or does not exist."), null);
     }
 
@@ -195,25 +218,34 @@ public class Controller {
      */
     protected synchronized Pair<ReconnectToGameEvent, GameController>
                            reconnectToGame(VirtualView vv, GameListener gl, String gameID){
+        GameController found = null;
+
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The user is not logged in."), null);
+            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "You must log in first."), null);
 
         if (gameID == null || gameID.isEmpty())
             return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The provided game ID is not allowed."), null);
 
         Pair<String, String> account = virtualViewAccounts.get(vv);
         String username = account.key();
-        for (GameController gc : gameControllers)
-            if (gc.isGameStarted() && gc.getIdentifier().equals(gameID) && gc.getPlayers().contains(username)) {
-                if (gc.isPlayerOffline(account)) {
-                    gc.reconnectPlayer(vv, account, gl);
-                    return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID + " game joined!"), gc);
-                    //TODO extra events from Model
-                }
+        for (GameController gc : gameControllers){
+            if (!gc.isPlayerOffline(account)) {
+                if(gc.isGameStarted())
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Your account is already online in a game."), null);
                 else
-                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Player already in the game."), null);
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Your account is already online in a lobby."), null);
             }
-        return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The game does not exist or you do not have permission to enter it."), null);
+            if (gc.isGameStarted() && gc.getIdentifier().equals(gameID) && gc.getPlayers().contains(username))
+                found = gc;
+        }
+
+        if (found != null){
+            found.reconnectPlayer(vv, account, gl);
+            return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID + " game joined!"), found);
+            //TODO extra events from Model
+        }
+
+        return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The game does not exist, or you do not have the permission to enter it."), null);
     }
 
     /**
@@ -221,7 +253,10 @@ public class Controller {
      *
      * @return The event with the list of available lobbies.
      */
-    protected synchronized AvailableLobbiesEvent getLobbiesAvailable(){
+    protected synchronized AvailableLobbiesEvent getLobbiesAvailable(VirtualView vv){
+        if (!virtualViewAccounts.containsKey(vv))
+            return new AvailableLobbiesEvent(Feedback.FAILURE, null, "You must log in first.");
+
         List<String> collect = new ArrayList<>();
 
         for (GameController gc : gameControllers)
@@ -241,7 +276,7 @@ public class Controller {
      */
     protected synchronized GetMyOfflineGamesEvent getMyOfflineGamesAvailable(VirtualView vv){
         if(!virtualViewAccounts.containsKey(vv))
-            return new GetMyOfflineGamesEvent(Feedback.FAILURE, null, "Please log in first.");
+            return new GetMyOfflineGamesEvent(Feedback.FAILURE, null, "You must log in first.");
 
         List<String> collect = new ArrayList<>();
         String username = virtualViewAccounts.get(vv).key();

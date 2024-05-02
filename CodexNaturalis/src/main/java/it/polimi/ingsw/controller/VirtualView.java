@@ -87,7 +87,7 @@ public class VirtualView {
     }
 
     public void evaluateEvent(AvailableLobbiesEvent event){
-        listener.update(controller.getLobbiesAvailable());
+        listener.update(controller.getLobbiesAvailable(this));
     }
 
     public void evaluateEvent(CreateLobbyEvent event){
