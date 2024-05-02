@@ -22,19 +22,55 @@ import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
+/**
+ * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
+ * It also receives events from the {@link ClientManager} and forwards them to the view to be processed.
+ * The class contains a list of event IDs that should be ignored and not forwarded as they can be processed locally.
+ * The ViewController class uses two queues to manage events coming in and out:
+ * - The first thread is responsible for taking events from the outQueue and sending them to the {@link ClientManager}.
+ * - The second thread is responsible for taking events from the inQueue and evaluating them.
+ */
 public class ViewController implements ViewEventReceiver {
 
+    /**
+     * The view that this controller is managing.
+     */
     private final View view;
 
+    /**
+     * The client manager that the view controller is using together to send and handle events.
+     */
     private final ClientManager clientManager;
 
+    /**
+     * The queue of events that are to be sent out.
+     */
     private final Queue<Event> outQueue = new LinkedList<>();
 
+    /**
+     * The queue of events that are received and need to be processed.
+     */
     private final Queue<Event> inQueue = new LinkedList<>();
 
+    /**
+     * The list of event IDs that should be ignored and not sent to the {@link ClientManager}.
+     */
+    private final List<String> ignoredEvents = new ArrayList<>(){{
+        add("AVAILABLE_POSITIONS");
+        add("IS_MY_TURN");
+        add("SEE_OPPONENT_PLAY_AREA");
+    }};
+
+    /**
+     * The constructor for the ViewController class.
+     *
+     * @param view The view this controller is associated with.
+     */
     public ViewController(View view) {
         this.view = view;
         try {
@@ -84,19 +120,41 @@ public class ViewController implements ViewEventReceiver {
                             }
                         }
                         Event event = inQueue.poll();
-                        //Something, view has to handle the event
+                        evaluateEvent(event);
                     }
                 }
             }
         }.start();
     }
 
+    /**
+     * Handles a new event from the view.
+     *
+     * @param event The new event from the view.
+     */
     public void newViewEvent(Event event) {
         //TODO: filter
+        if(ignoredEvents.contains(event.getID())){
+            this.evaluateEvent(event);
+        }
+        else{
+            synchronized (outQueue){
+                outQueue.add(event);
+                outQueue.notifyAll();
+            }
+        }
     }
 
+    /**
+     * Handles an external event coming from the server.
+     *
+     * @param event The external event.
+     */
     public void externalEvent(Event event){
-
+        synchronized (inQueue){
+            inQueue.add(event);
+            inQueue.notifyAll();
+        }
     }
 
     @Override
@@ -224,6 +282,9 @@ public class ViewController implements ViewEventReceiver {
 
     }
 
+    /**
+     * This method handles a server crash.
+     */
     public void serverCrashed () {
         view.serverCrashed();
     }
