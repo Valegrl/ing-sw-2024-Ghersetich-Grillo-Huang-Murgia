@@ -1,13 +1,14 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class ChooseSetupEvent extends FeedbackEvent {
 
-    private final static String id = "CHOOSE_SETUP";
+    private final static String id = EventID.CHOOSE_SETUP.getID();
 
     public ChooseSetupEvent() {
         super(id);

@@ -1,13 +1,14 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class AvailablePositionsEvent extends FeedbackEvent {
 
-    private final static String id = "AVAILABLE_POSITIONS";
+    private final static String id = EventID.AVAILABLE_POSITIONS.getID();
 
     public AvailablePositionsEvent() {
         super(id);

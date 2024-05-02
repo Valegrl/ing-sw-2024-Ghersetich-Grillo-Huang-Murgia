@@ -1,12 +1,13 @@
 package it.polimi.ingsw.eventUtils.event.fromModel;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class UpdateLocalModelEvent extends Event {
 
-    private final static String id = "UPDATE_LOCAL_MODEL";
+    private final static String id = EventID.UPDATE_LOCAL_MODEL.getID();
 
     public UpdateLocalModelEvent() {
         super(id);

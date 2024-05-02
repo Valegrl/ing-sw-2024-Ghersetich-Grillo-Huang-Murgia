@@ -1,13 +1,14 @@
 package it.polimi.ingsw.eventUtils.event.fromView.lobby;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class KickFromLobbyEvent extends FeedbackEvent {
 
-    private final static String id = "KICK_FROM_LOBBY";
+    private final static String id = EventID.KICK_FROM_LOBBY.getID();
 
     public KickFromLobbyEvent() {
         super(id);

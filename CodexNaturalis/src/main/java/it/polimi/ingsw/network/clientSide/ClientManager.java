@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.clientSide;
 
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
@@ -151,9 +152,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                             }
                         }
                         Event response = responsesQueue.poll();
-                        if (response.getID().equals("PING")) {
+                        if (response.getID().equals(EventID.PING.getID())) {
                             sendPong();
-                        } else if (response.getID().equals("PONG")) {
+                        } else if (response.getID().equals(EventID.PONG.getID())) {
                             synchronized (timerLock) {
                                 timer.cancel();
                             }

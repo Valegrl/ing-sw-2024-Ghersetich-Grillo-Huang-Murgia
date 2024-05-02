@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.serverSide;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
@@ -54,12 +55,12 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     }
                     requestPair = requestsQueue.poll();
                 }
-                if (requestPair.key().getID().equals("PONG")) {
+                if (requestPair.key().getID().equals(EventID.PONG.getID())) {
                     //System.out.println("Server received pong from client '" + virtualViews.get(requestPair.value()).getUsername() + "'.");
                     synchronized (clientTimers) {
                         clientTimers.get(requestPair.value()).cancel();
                     }
-                } else if (requestPair.key().getID().equals("PING")) {
+                } else if (requestPair.key().getID().equals(EventID.PING.getID())) {
                     sendPong(requestPair.value());
                 } else
                     manage(requestPair.key(), requestPair.value());

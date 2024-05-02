@@ -1,6 +1,7 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.utils.Pair;
@@ -17,7 +18,7 @@ public class JoinLobbyEvent extends FeedbackEvent<Pair<String, List<String>>> {
     /**
      * The identifier for this type of event.
      */
-    private final static String id = "JOIN_LOBBY";
+    private final static String id = EventID.JOIN_LOBBY.getID();
 
     /**
      * A pair of lobby ID and a list of usernames.

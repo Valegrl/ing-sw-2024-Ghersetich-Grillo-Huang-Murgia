@@ -1,13 +1,14 @@
 package it.polimi.ingsw.eventUtils.event.fromView.game;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class DrawCardEvent extends FeedbackEvent {
 
-    private final static String id = "DRAW_CARD";
+    private final static String id = EventID.DRAW_CARD.getID();
 
     public DrawCardEvent() {
         super(id);

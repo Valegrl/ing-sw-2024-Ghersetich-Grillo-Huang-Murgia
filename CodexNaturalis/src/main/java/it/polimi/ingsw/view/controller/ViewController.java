@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.controller;
 
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
@@ -56,15 +57,6 @@ public class ViewController implements ViewEventReceiver {
      * The queue of events that are received and need to be processed.
      */
     private final Queue<Event> inQueue = new LinkedList<>();
-
-    /**
-     * The list of event IDs that should be ignored and not sent to the {@link ClientManager}.
-     */
-    private final List<String> ignoredEvents = new ArrayList<>(){{
-        add("AVAILABLE_POSITIONS");
-        add("IS_MY_TURN");
-        add("SEE_OPPONENT_PLAY_AREA");
-    }};
 
     /**
      * The constructor for the ViewController class.
@@ -134,7 +126,7 @@ public class ViewController implements ViewEventReceiver {
      */
     public void newViewEvent(Event event) {
         //TODO: filter
-        if(ignoredEvents.contains(event.getID())){
+        if(EventID.isLocal(event.getID())){
             this.evaluateEvent(event);
         }
         else{

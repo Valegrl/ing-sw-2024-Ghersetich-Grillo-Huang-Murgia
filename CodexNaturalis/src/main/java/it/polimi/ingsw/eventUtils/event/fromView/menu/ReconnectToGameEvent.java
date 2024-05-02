@@ -1,6 +1,7 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
@@ -14,7 +15,7 @@ public class ReconnectToGameEvent extends FeedbackEvent<String> {
     /**
      * The identifier for this type of event.
      */
-    private final static String id = "RECONNECT_TO_GAME";
+    private final static String id = EventID.RECONNECT_TO_GAME.getID();
 
     /**
      * The ID of the game to reconnect to.

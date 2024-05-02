@@ -1,6 +1,7 @@
 package it.polimi.ingsw.eventUtils.event.fromView.menu;
 
 import it.polimi.ingsw.controller.VirtualView;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.utils.Pair;
@@ -15,7 +16,7 @@ public class CreateLobbyEvent extends FeedbackEvent<Pair<String, Integer>> {
     /**
      * The identifier for this type of event.
      */
-    private final static String id = "CREATE_LOBBY";
+    private final static String id = EventID.CREATE_LOBBY.getID();
 
     /**
      * A pair of lobby ID and number of players.
