@@ -181,36 +181,36 @@ public class Controller {
         GameController found = null;
 
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "You must log in first."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "You must log in first."), null);
 
         if (lobbyID == null || lobbyID.isEmpty())
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The provided lobby ID is not allowed."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The provided lobby ID is not allowed."), null);
 
         Pair<String, String> account = virtualViewAccounts.get(vv);
         for (GameController gc : gameControllers) {
             if (!gc.isPlayerOffline(account)) {
                 if(gc.isGameStarted())
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "Your account is already online in a game."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Your account is already online in a game."), null);
                 else
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "Your account is already online in a lobby."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Your account is already online in a lobby."), null);
             }
             if (gc.getIdentifier().equals(lobbyID)) {
                 if (!gc.isGameStarted()) {
                     if (gc.getRequiredPlayers() > gc.getPlayers().size())
                         found = gc;
                     else
-                        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby is already full."), null);
+                        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby is already full."), null);
                 } else
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby has already started a game."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby has already started a game."), null);
             }
         }
 
         if (found != null){
             found.addLobbyPlayer(vv, virtualViewAccounts.get(vv), gl);
-            return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getPlayers(), lobbyID + " lobby joined!"), found);
+            return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getReadyLobbyPlayers(), lobbyID + " lobby joined!"), found);
         }
 
-        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby does not exist."), null);
+        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby does not exist."), null);
     }
 
     /**

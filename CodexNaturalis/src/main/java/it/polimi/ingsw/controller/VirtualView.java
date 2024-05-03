@@ -67,20 +67,38 @@ public class VirtualView {
     public void evaluateEvent(PlaceCardEvent event){}
 
     public void evaluateEvent(QuitGameEvent event){
-        if(gameController!=null)
+        if(gameController != null)
             listener.update(gameController.quitGame(this));
         else
             listener.update(new QuitLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
 
-    public void evaluateEvent(KickFromLobbyEvent event){}
+    public void evaluateEvent(KickFromLobbyEvent event){
+        if(gameController != null)
+            listener.update(gameController.kickPlayer(this, event.getData()));
+        else
+            listener.update(new KickFromLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
+    }
 
-    public void evaluateEvent(PlayerReadyEvent event){}
+    public void evaluateEvent(PlayerReadyEvent event){
+        if(gameController != null) {
+            listener.update(gameController.readyToStart(this));
+            if (!gameController.isGameStarted())
+                gameController.startGame();
+        }
+        else
+            listener.update(new KickFromLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
+    }
 
-    public void evaluateEvent(PlayerUnreadyEvent event){}
+    public void evaluateEvent(PlayerUnreadyEvent event){
+        if(gameController != null)
+            listener.update(gameController.unReadyToStart(this));
+        else
+            listener.update(new KickFromLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
+    }
 
     public void evaluateEvent(QuitLobbyEvent event){
-        if(gameController!=null)
+        if(gameController != null)
             listener.update(gameController.quitLobby(this));
         else
             listener.update(new QuitLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
