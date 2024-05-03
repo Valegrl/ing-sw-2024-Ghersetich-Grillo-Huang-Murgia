@@ -9,7 +9,7 @@ import it.polimi.ingsw.view.controller.ViewEventReceiver;
 /**
  * This class represents an event that is triggered when a player quits the lobby.
  */
-public class QuitLobbyEvent extends FeedbackEvent<Object> {
+public class QuitLobbyEvent extends FeedbackEvent {
 
     /**
      * The unique identifier for a QuitLobbyEvent.
@@ -17,7 +17,7 @@ public class QuitLobbyEvent extends FeedbackEvent<Object> {
     private final static String id = EventID.QUIT_LOBBY.getID();
 
     /**
-     * Constructor for View (client).
+     * Constructor for the client side (View).
      * It initializes the superclass with the unique identifier for this event type.
      */
     public QuitLobbyEvent() {
@@ -25,7 +25,7 @@ public class QuitLobbyEvent extends FeedbackEvent<Object> {
     }
 
     /**
-     * Constructor for Controller (server).
+     * Constructor for the server side (Controller).
      * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
      *
      * @param feedback The feedback for the event.

@@ -4,55 +4,67 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * Represents an event that initiates the creation of a new lobby.
- * This event is a type of FeedbackEvent, which carries a pair of lobby ID and number of players as data.
+ * This class represents an event that is triggered when a lobby is created.
  */
-public class CreateLobbyEvent extends FeedbackEvent<Pair<String, Integer>> {
+public class CreateLobbyEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a CreateLobbyEvent.
      */
     private final static String id = EventID.CREATE_LOBBY.getID();
 
     /**
-     * A pair of lobby ID and number of players.
+     * The ID of the lobby to be created.
      */
-    private final Pair<String, Integer> setting;
+    private final String lobbyID;
 
     /**
-     * Constructor for View (client). Initializes the setting with the provided lobby ID and number of players.
+     * The number of players required for the lobby.
+     */
+    private final int requiredPlayers;
+
+    /**
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and sets the lobby ID and the number of players.
      *
      * @param lobbyID The ID of the lobby to be created.
-     * @param nPlayers The number of players in the lobby.
+     * @param nPlayers The number of players required for the lobby.
      */
     public CreateLobbyEvent(String lobbyID, Integer nPlayers) {
         super(id);
-        setting = new Pair<>(lobbyID, nPlayers);
+        this.lobbyID = lobbyID;
+        this.requiredPlayers = nPlayers;
     }
 
     /**
-     * Constructor for Controller (server). Initializes the setting with null values.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * The lobby ID is set to null and the number of players is set to -1.
      *
-     * @param feedback The feedback associated with the event.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
      */
     public CreateLobbyEvent(Feedback feedback, String message) {
         super(id, feedback, message);
-        setting = new Pair<>(null, null);
+        this.lobbyID = null;
+        this.requiredPlayers = -1;
     }
 
     /**
-     * Retrieves the data associated with this event, which is a pair of lobby ID and number of players.
-     *
-     * @return The pair of lobby ID and number of players.
+     * @return The ID of the lobby to be created.
      */
-    @Override
-    public Pair<String, Integer> getData() {
-        return setting;
+    public String getLobbyID() {
+        return lobbyID;
+    }
+
+    /**
+     * @return The number of players required for the lobby.
+     */
+    public int getRequiredPlayers() {
+        return requiredPlayers;
     }
 
     @Override

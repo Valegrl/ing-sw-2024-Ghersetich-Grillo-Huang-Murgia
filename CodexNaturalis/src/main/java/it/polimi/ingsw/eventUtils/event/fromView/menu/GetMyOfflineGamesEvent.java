@@ -4,33 +4,30 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an event that retrieves the list of offline games for a user.
- * Each game is represented as a pair, where the key is the game name and the value is another pair.
- * This inner pair represents the number of online players and the maximum number of players.
- * The offline games are those from which the user was disconnected due to network issues.
+ * This class represents an event that is triggered when the offline games of a specific user are requested.
+ * These are the games from which the user was disconnected due to network issues, not due to quitting the game.
  */
-public class GetMyOfflineGamesEvent extends FeedbackEvent<List<Pair<String, Pair<Integer, Integer>>>> {
+public class GetMyOfflineGamesEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a GetMyOfflineGamesEvent.
      */
     private final static String id = EventID.GET_MY_OFFLINE_GAMES.getID();
 
     /**
-     * A list of offline games. Each game is represented as a pair, where the key is the game name
-     * and the value is another pair representing the number of online players and the maximum number of players.
+     * The list of offline games.
      */
-    private final List<Pair<String, Pair<Integer, Integer>>> games;
+    private final List<LobbyState> games;
 
     /**
-     * Constructor for View (client). Initializes the list of games to an empty list.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and initializes the games list.
      */
     public GetMyOfflineGamesEvent() {
         super(id);
@@ -38,29 +35,24 @@ public class GetMyOfflineGamesEvent extends FeedbackEvent<List<Pair<String, Pair
     }
 
     /**
-     * Constructor for Controller (server). Initializes the list of games with the provided list.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also initializes the games list with the provided list.
      *
-     * @param feedback The feedback associated with the event.
-     * @param games The list of offline games. Each game is represented as a pair, where the key
-     *              is the game name and the value is another pair representing the number of online players and the
-     *              maximum number of players.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param games The list of games.
+     * @param message The message for the event.
      */
-    public GetMyOfflineGamesEvent(Feedback feedback, List<Pair<String, Pair<Integer, Integer>>> games, String message) {
+    public GetMyOfflineGamesEvent(Feedback feedback, List<LobbyState> games, String message) {
         super(id, feedback, message);
         this.games = new ArrayList<>(games);
     }
 
     /**
-     * Retrieves the data associated with this event, which is a list of offline games for the user.
-     * Each game is represented as a pair, where the key is the game name and the value is another
-     * pair representing the number of online players and the maximum number of players.
-     *
-     * @return A copy of the list of offline games.
+     * @return A new list containing the games that the user was disconnected from due to network issues.
      */
-    @Override
-    public List<Pair<String, Pair<Integer, Integer>>> getData() {
-        return new ArrayList<>(games);
+    public List<LobbyState> getGames() {
+        return games;
     }
 
     @Override

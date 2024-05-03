@@ -7,9 +7,9 @@ import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * This class represents an event that is triggered when a player wants to kick another player from the lobby.
+ * This class represents an event that is triggered when a player wants to kick another player.
  */
-public class KickFromLobbyEvent extends FeedbackEvent<String> {
+public class KickFromLobbyEvent extends FeedbackEvent {
 
     /**
      * The unique identifier for a KickFromLobbyEvent.
@@ -17,14 +17,15 @@ public class KickFromLobbyEvent extends FeedbackEvent<String> {
     private final static String id = EventID.KICK_FROM_LOBBY.getID();
 
     /**
-     * The name of the player to be kicked.
+     * The player to be kicked from the lobby.
      */
     private final String playerToKick;
 
     /**
-     * Constructor for View (client). New KickFromLobbyEvent with the player's name.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and sets the player to be kicked.
      *
-     * @param p The name of the player to be kicked.
+     * @param p The player to be kicked.
      */
     public KickFromLobbyEvent(String p) {
         super(id);
@@ -32,7 +33,9 @@ public class KickFromLobbyEvent extends FeedbackEvent<String> {
     }
 
     /**
-     * Constructor for Controller (server). New KickFromLobbyEvent with feedback and a message.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * The player to be kicked is set to null.
      *
      * @param feedback The feedback for the event.
      * @param message The message for the event.
@@ -43,12 +46,9 @@ public class KickFromLobbyEvent extends FeedbackEvent<String> {
     }
 
     /**
-     * Method for getting the data of the event.
-     *
-     * @return The name of the player to be kicked.
+     * @return The player to be kicked.
      */
-    @Override
-    public String getData() {
+    public String getPlayerToKick() {
         return playerToKick;
     }
 

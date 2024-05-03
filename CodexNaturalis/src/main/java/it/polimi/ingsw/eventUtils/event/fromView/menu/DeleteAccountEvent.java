@@ -7,28 +7,29 @@ import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * Represents an event that initiates the deletion of an account.
- * This event is a type of FeedbackEvent.
+ * This class represents an event that is triggered when an account deletion is requested.
  */
-public class DeleteAccountEvent extends FeedbackEvent<Object> {
+public class DeleteAccountEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a DeleteAccountEvent.
      */
     private final static String id = EventID.DELETE_ACCOUNT.getID();
 
     /**
-     * Constructor for View (client). Initializes the event with the specified id.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type.
      */
     public DeleteAccountEvent() {
         super(id);
     }
 
     /**
-     * Constructor for Controller (server). Initializes the event with the specified id, feedback, and message.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
      *
-     * @param feedback The feedback associated with the event.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
      */
     public DeleteAccountEvent(Feedback feedback, String message) {
         super(id, feedback, message);

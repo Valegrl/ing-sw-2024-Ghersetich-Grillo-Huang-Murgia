@@ -7,28 +7,29 @@ import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * Represents an event that initiates the logout process.
- * This event is a type of FeedbackEvent.
+ * This class represents an event that is triggered when a user attempts to log out.
  */
-public class LogoutEvent extends FeedbackEvent<Object> {
+public class LogoutEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a LogoutEvent.
      */
     private final static String id = EventID.LOGOUT.getID();
 
     /**
-     * Constructor for View (client). Initializes the event with the specified id.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type.
      */
     public LogoutEvent() {
         super(id);
     }
 
     /**
-     * Constructor for Controller (server). Initializes the event with the specified id, feedback, and message.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
      *
-     * @param feedback The feedback associated with the event.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
      */
     public LogoutEvent(Feedback feedback, String message) {
         super(id, feedback, message);

@@ -7,13 +7,12 @@ import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * Represents an event that initiates the reconnection to a game.
- * This event is a type of FeedbackEvent, which carries a game ID as data.
+ * This class represents an event that is triggered when a user attempts to reconnect to a game.
  */
-public class ReconnectToGameEvent extends FeedbackEvent<String> {
+public class ReconnectToGameEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a ReconnectToGameEvent.
      */
     private final static String id = EventID.RECONNECT_TO_GAME.getID();
 
@@ -23,7 +22,8 @@ public class ReconnectToGameEvent extends FeedbackEvent<String> {
     private final String gameID;
 
     /**
-     * Constructor for View (client). Initializes the event with the specified game ID.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and initializes the game ID.
      *
      * @param gameID The ID of the game to reconnect to.
      */
@@ -33,10 +33,12 @@ public class ReconnectToGameEvent extends FeedbackEvent<String> {
     }
 
     /**
-     * Constructor for Controller (server). Initializes the event with the specified id, feedback, and message.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also initializes the game ID with null.
      *
-     * @param feedback The feedback associated with the event.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
      */
     public ReconnectToGameEvent(Feedback feedback, String message) {
         super(id, feedback, message);
@@ -44,12 +46,9 @@ public class ReconnectToGameEvent extends FeedbackEvent<String> {
     }
 
     /**
-     * Retrieves the data associated with this event, which is the ID of the game to reconnect to.
-     *
      * @return The ID of the game to reconnect to.
      */
-    @Override
-    public String getData() {
+    public String getGameID() {
         return gameID;
     }
 

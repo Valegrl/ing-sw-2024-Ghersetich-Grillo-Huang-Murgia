@@ -4,54 +4,53 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
- * Represents an event that initiates the registration process.
- * This event is a type of FeedbackEvent, which carries a pair of username and password as data.
+ * This class represents an event that is triggered when a user attempts to register.
  */
-public class RegisterEvent extends FeedbackEvent<Pair<String, String>> {
+public class RegisterEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for a RegisterEvent.
      */
     private final static String id = EventID.REGISTER.getID();
 
     /**
-     * A pair of username and password.
+     * The account of the user attempting to register.
      */
-    private final Pair<String, String> account;
+    private final Account account;
 
     /**
-     * Constructor for View (client). Initializes the account with the provided username and password.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and initializes the account with the provided username and password.
      *
-     * @param username The username of the account.
-     * @param password The password of the account.
+     * @param username The username of the user.
+     * @param password The password of the user.
      */
     public RegisterEvent(String username, String password) {
         super(id);
-        account = new Pair<>(username, password);
+        account = new Account(username, password);
     }
 
     /**
-     * Constructor for Controller (server). Initializes the account with null values.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also initializes the account with an empty account.
      *
-     * @param feedback The feedback associated with the event.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
      */
     public RegisterEvent(Feedback feedback, String message) {
         super(id, feedback, message);
-        account = new Pair<>(null, null);
+        account = new Account();
     }
 
     /**
-     * Retrieves the data associated with this event, which is a pair of username and password.
-     *
-     * @return The pair of username and password.
+     * @return The account of the user attempting to register.
      */
-    @Override
-    public Pair<String, String> getData() {
+    public Account getAccount() {
         return account;
     }
 

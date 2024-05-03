@@ -5,10 +5,8 @@ import it.polimi.ingsw.eventUtils.event.Event;
 /**
  * Abstract class representing an event with feedback.
  * This class extends the Event class and provides additional fields for feedback and message.
- *
- * @param <T> The type of data associated with the event.
  */
-public abstract class FeedbackEvent<T> extends Event {
+public abstract class FeedbackEvent extends Event {
     /**
      * The feedback associated with the event.
      */
@@ -51,14 +49,5 @@ public abstract class FeedbackEvent<T> extends Event {
      */
     public String getMessage() {
         return message;
-    }
-
-    /**
-     * This method should be overridden by subclasses to return the appropriate data.
-     *
-     * @return The data associated with the event.
-     */
-    public T getData() {
-        return null;
     }
 }

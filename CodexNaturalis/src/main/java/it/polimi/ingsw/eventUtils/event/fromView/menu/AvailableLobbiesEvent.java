@@ -4,32 +4,30 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an event that provides information about available lobbies.
- * Each lobby is represented as a pair. The key is the lobby name, and the value is another pair.
- * This inner pair represents the number of online players and the maximum number of players.
+ * This class represents an event that is triggered when the available lobbies are requested.
  */
-public class AvailableLobbiesEvent extends FeedbackEvent<List<Pair<String, Pair<Integer, Integer>>>> {
+public class AvailableLobbiesEvent extends FeedbackEvent {
 
     /**
-     * The identifier for this type of event.
+     * The unique identifier for an AvailableLobbiesEvent.
      */
     private final static String id = EventID.AVAILABLE_LOBBIES.getID();
 
     /**
-     * A list of available lobbies. Each lobby is represented as a pair, where the key is the lobby name
-     * and the value is another pair representing the number of online players and the maximum number of players.
+     * The list of available lobbies.
      */
-    private final List<Pair<String, Pair<Integer, Integer>>> lobbies;
+    private final List<LobbyState> lobbies;
 
     /**
-     * Constructor for View (client). Initializes the list of lobbies to an empty list.
+     * Constructor for the client side (View).
+     * It initializes the superclass with the unique identifier for this event type and initializes the lobbies list.
      */
     public AvailableLobbiesEvent() {
         super(id);
@@ -37,28 +35,23 @@ public class AvailableLobbiesEvent extends FeedbackEvent<List<Pair<String, Pair<
     }
 
     /**
-     * Constructor for Controller (server). Initializes the list of lobbies with the provided list.
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also initializes the lobbies list with the provided list.
      *
-     * @param feedback The feedback associated with the event.
-     * @param lb The list of available lobbies. Each lobby is represented as a pair, where the key
-     *           is the lobby name and the value is another pair representing the number of online players and the
-     *           maximum number of players.
-     * @param message The message associated with the event.
+     * @param feedback The feedback for the event.
+     * @param lb The list of lobbies.
+     * @param message The message for the event.
      */
-    public AvailableLobbiesEvent(Feedback feedback, List<Pair<String, Pair<Integer, Integer>>> lb, String message) {
+    public AvailableLobbiesEvent(Feedback feedback, List<LobbyState> lb, String message) {
         super(id, feedback, message);
         lobbies = new ArrayList<>(lb);
     }
 
     /**
-     * Retrieves the data associated with this event, which is a list of available lobbies.
-     * Each lobby is represented as a pair, where the key is the lobby name and the value is another
-     * pair representing the number of online players and the maximum number of players.
-     *
-     * @return A copy of the list of available lobbies.
+     * @return A new list containing the lobbies.
      */
-    @Override
-    public List<Pair<String, Pair<Integer, Integer>>> getData() {
+    public List<LobbyState> getLobbies() {
         return new ArrayList<>(lobbies);
     }
 
