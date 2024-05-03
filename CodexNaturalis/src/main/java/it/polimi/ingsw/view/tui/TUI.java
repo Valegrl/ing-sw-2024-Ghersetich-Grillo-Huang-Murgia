@@ -3,11 +3,13 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.controller.ViewController;
+import it.polimi.ingsw.utils.Pair;
 
 import java.io.PrintStream;
 import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.List;
 
 public class TUI implements View {
     private final Scanner in;
@@ -104,5 +106,8 @@ public class TUI implements View {
             throw new RuntimeException(e);
         }
         run();
+    }
+    public void displayAvailableLobbies(List<Pair<String, Pair<Integer, Integer>>> availableLobbies) {
+
     }
 }

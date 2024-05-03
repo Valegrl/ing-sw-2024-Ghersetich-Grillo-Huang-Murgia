@@ -19,14 +19,20 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.immutableModel.ImmPlayer;
+import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
+import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Map;
 
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
@@ -49,14 +55,61 @@ public class ViewController implements ViewEventReceiver {
     private final ClientManager clientManager;
 
     /**
-     * The queue of events that are to be sent out.
-     */
-    private final Queue<Event> outQueue = new LinkedList<>();
-
-    /**
      * The queue of events that are received and need to be processed.
      */
-    private final Queue<Event> inQueue = new LinkedList<>();
+    private final Queue<Event> tasksQueue = new LinkedList<>();
+
+    /*Immutable model part*/
+    /**
+     * The unique identifier of the game.
+     */
+    private String id;
+
+    /**
+     * The list of players in the game.
+     */
+    private List<ImmPlayer> player;
+
+    /**
+     * The index of the player whose turn it is.
+     */
+    private int turnPlayerIndex;
+
+    /**
+     * The scoreboard of the game.
+     */
+    private Map<ImmPlayer, Integer> scoreboard;
+
+    /**
+     * The common objectives of the game.
+     */
+    private ImmObjectiveCard[] commonObjectives;
+
+    /**
+     * The current status of the game.
+     */
+    private GameStatus gameStatus;
+
+    /**
+     * The visible resource cards in the game.
+     */
+    private ImmPlayableCard[] visibleResourceCards;
+
+    /**
+     * The visible gold cards in the game.
+     */
+    private ImmPlayableCard[] visibleGoldCards;
+
+    /**
+     * The top card of the resource deck.
+     */
+    private Item topResourceDeck;
+
+    /**
+     * The top card of the gold deck.
+     */
+    private Item topGoldDeck;
+
 
     /**
      * The constructor for the ViewController class.
@@ -72,47 +125,22 @@ public class ViewController implements ViewEventReceiver {
             throw new RuntimeException(e);
         }
 
-        new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    synchronized (outQueue){
-                        while(outQueue.isEmpty()){
-                            try{
-                                outQueue.wait();
-                            }
-                            catch (InterruptedException e){
-                                e.printStackTrace();
-                            }
-                        }
-                        Event event = outQueue.poll();
-                        try{
-                            clientManager.handleEvent(event);
-                        }
-                        catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                }
-            }
-        }.start();
 
         new Thread(){
             @Override
             public void run(){
                 while (true){
-                    synchronized (inQueue){
-                        while(inQueue.isEmpty()){
+                    synchronized (tasksQueue){
+                        while(tasksQueue.isEmpty()){
                             try{
-                                inQueue.wait();
+                                tasksQueue.wait();
                             }
                             catch (InterruptedException e){
                                 e.printStackTrace();
                             }
                         }
-                        Event event = inQueue.poll();
-                        evaluateEvent(event);
+                        Event event = tasksQueue.poll();
+                        event.receiveEvent(ViewController.this);
                     }
                 }
             }
@@ -120,19 +148,22 @@ public class ViewController implements ViewEventReceiver {
     }
 
     /**
-     * Handles a new event from the view.
+     * Handles a new event from the view, which can be sent to the server or processed locally.
      *
      * @param event The new event from the view.
      */
     public void newViewEvent(Event event) {
-        //TODO: filter
         if(EventID.isLocal(event.getID())){
-            this.evaluateEvent(event);
+            synchronized (tasksQueue) {
+                tasksQueue.add(event);
+            }
         }
         else{
-            synchronized (outQueue){
-                outQueue.add(event);
-                outQueue.notifyAll();
+            try {
+                clientManager.handleEvent(event);
+            }
+            catch(RemoteException e){
+                e.printStackTrace();
             }
         }
     }
@@ -143,12 +174,15 @@ public class ViewController implements ViewEventReceiver {
      * @param event The external event.
      */
     public void externalEvent(Event event){
-        synchronized (inQueue){
-            inQueue.add(event);
-            inQueue.notifyAll();
+        synchronized (tasksQueue){
+            tasksQueue.add(event);
+            tasksQueue.notifyAll();
         }
     }
 
+    //TODO depending on the events arriving (model) I might have the entire model or one update, I must copy it and
+    //TODO set it in the local semi-immutable model
+    //TODO add methods on the View interface
     @Override
     public void evaluateEvent(InvalidEvent event) {
 
@@ -231,7 +265,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-
+        List<Pair<String, Pair<Integer, Integer>>> availableLobbies = event.getData();
+        view.displayAvailableLobbies(availableLobbies);
     }
 
     @Override
