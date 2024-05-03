@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -107,7 +108,11 @@ public class TUI implements View {
         }
         run();
     }
-    public void displayAvailableLobbies(List<Pair<String, Pair<Integer, Integer>>> availableLobbies) {
 
-    }
+    //TODO implement methods, possible changes to the names
+    public void displayAvailableLobbies(List<Pair<String, Pair<Integer, Integer>>> availableLobbies) {}
+
+    public void notifyCreatedLobby(Pair<String, Integer> createdLobby){}
+
+    public void notifyDeleteAccount(Feedback feedback, String message){}
 }

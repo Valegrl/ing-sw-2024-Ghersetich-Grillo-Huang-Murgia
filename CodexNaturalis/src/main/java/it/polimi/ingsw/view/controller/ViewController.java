@@ -7,6 +7,7 @@ import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEven
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChooseSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
@@ -271,12 +272,18 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-
+        //TODO deep copy for pair ?
+        Pair<String, Integer> createdLobby= new Pair<>(event.getData().key(), event.getData().value());
+        id = createdLobby.key();
+        view.notifyCreatedLobby(createdLobby);
     }
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
-
+        Feedback feedback = event.getFeedback();
+        String message = event.getMessage();
+        //TODO do something with the immutable model when feedback is success ?
+        view.notifyDeleteAccount(feedback, message);
     }
 
     @Override
