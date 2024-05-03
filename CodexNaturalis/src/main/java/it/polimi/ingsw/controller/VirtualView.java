@@ -8,6 +8,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.Pair;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -27,7 +28,6 @@ public class VirtualView {
         this.listener = gl;
         this.controller = Controller.getInstance();
         this.disconnected = false;
-        this.account = null;
 
         new Thread(() -> {
             while (!disconnected) {
@@ -75,7 +75,7 @@ public class VirtualView {
 
     public void evaluateEvent(KickFromLobbyEvent event){
         if(gameController != null)
-            listener.update(gameController.kickPlayer(this, event.getData()));
+            listener.update(gameController.kickPlayer(this, event.getPlayerToKick()));
         else
             listener.update(new KickFromLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
@@ -109,8 +109,8 @@ public class VirtualView {
     }
 
     public void evaluateEvent(CreateLobbyEvent event){
-        Pair<String, Integer> data = event.getData();
-        Pair<CreateLobbyEvent, GameController> response = controller.createLobby(this, listener, data.key(), data.value());
+        Pair<CreateLobbyEvent, GameController> response;
+        response = controller.createLobby(this, listener, event.getLobbyID(), event.getRequiredPlayers());
         gameController = response.value();
         listener.update(response.key());
     }
@@ -124,16 +124,14 @@ public class VirtualView {
     }
 
     public void evaluateEvent(JoinLobbyEvent event){
-        Pair<JoinLobbyEvent, GameController> response = controller.joinLobby(this, listener, event.getData().key());
+        Pair<JoinLobbyEvent, GameController> response = controller.joinLobby(this, listener, event.getLobbyID());
         gameController = response.value();
         listener.update(response.key());
     }
 
     public void evaluateEvent(LoginEvent event){
-        Pair<String, String> account = event.getData();
+        Account account = event.getAccount();
         LoginEvent response = controller.login(this, account);
-        if (response.getFeedback() == Feedback.SUCCESS)
-            this.account = account;
         listener.update(response);
     }
 
@@ -142,13 +140,14 @@ public class VirtualView {
     }
 
     public void evaluateEvent(ReconnectToGameEvent event){
-        Pair<ReconnectToGameEvent, GameController> response = controller.reconnectToGame(this, listener, event.getData());
+        Pair<ReconnectToGameEvent, GameController> response;
+        response = controller.reconnectToGame(this, listener, event.getGameID());
         gameController = response.value();
         listener.update(response.key());
     }
 
     public void evaluateEvent(RegisterEvent event){
-        Pair<String, String> account = event.getData();
+        Account account = event.getAccount();
         listener.update(controller.register(account));
     }
 

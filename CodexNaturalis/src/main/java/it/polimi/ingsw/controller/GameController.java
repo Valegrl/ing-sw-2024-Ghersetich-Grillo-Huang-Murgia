@@ -14,8 +14,8 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.CardType;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
@@ -35,7 +35,7 @@ import java.util.*;
  * The {@link GameController} is then added to the list of active game controllers in the {@link Controller} singleton.</p>
  */
 public class GameController {
-    //TODO review class, implementation and synchronized methods
+    //TODO review class, implementation
     /**
      * The Game identifier.
      */
@@ -55,17 +55,17 @@ public class GameController {
 
     /**
      * A map that stores the players who have joined the lobby or were present at the start of the game.
-     * The key is a pair of strings representing the account (username and password), and the value is
+     * The key is an Account object representing the account (username and password), and the value is
      * the corresponding GameListener.
      */
-    private final Map<Pair<String, String>, GameListener> joinedPlayers = new HashMap<>();
+    private final Map<Account, GameListener> joinedPlayers = new HashMap<>();
 
     /**
      * A map that stores the players who are currently online in the lobby or game.
-     * The key is the VirtualView associated with the player, and the value is a pair of strings
+     * The key is the VirtualView associated with the player, and the value is an Account object
      * representing the account (username and password).
      */
-    private final Map<VirtualView, Pair<String, String>> virtualViewAccounts = new HashMap<>();
+    private final Map<VirtualView, Account> virtualViewAccounts = new HashMap<>();
 
     /**
      * A map that stores the readiness status of players in the lobby.
@@ -97,28 +97,30 @@ public class GameController {
      * @param gameID The unique identifier for the Game.
      * @param nRequiredPlayers The number of players required to start the game.
      */
-    protected GameController(VirtualView vv, Pair<String, String> account, GameListener gl, String gameID, int nRequiredPlayers) {
+    protected GameController(VirtualView vv, Account account, GameListener gl, String gameID, int nRequiredPlayers) {
         this.game = null;
         this.gameStarted = false;
         this.joinedPlayers.put(account, gl);
         this.virtualViewAccounts.put(vv, account);
-        this.readyLobbyPlayers.put(account.key(), false);
+        this.readyLobbyPlayers.put(account.getUsername(), false);
         this.hostQueue.add(vv);
         this.id = gameID;
         this.requiredPlayers = nRequiredPlayers;
         Controller.getInstance().addToGameControllers(this);
     }
 
-    protected synchronized void addLobbyPlayer(VirtualView vv, Pair<String, String> account, GameListener gl){
+    protected synchronized void addLobbyPlayer(VirtualView vv, Account account, GameListener gl){
         if (requiredPlayers > joinedPlayers.keySet().size()) {
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
-            this.readyLobbyPlayers.put(account.key(), false);
+            this.readyLobbyPlayers.put(account.getUsername(), false);
             this.hostQueue.add(vv);
 
-            for (Map.Entry<Pair<String, String>, GameListener> entry : joinedPlayers.entrySet()) {
-                if (!entry.getKey().equals(account))
-                    entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "New player " + account.key() + " has joined!"));
+            for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                if (!entry.getKey().equals(account)) {
+                    entry.getValue().update(
+                            new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "New player " + account.getUsername() + " has joined!"));
+                }
             }
         }
     }
@@ -126,11 +128,11 @@ public class GameController {
     protected synchronized KickFromLobbyEvent kickPlayer(VirtualView vv, String playerName){
         if (!gameStarted) {
             if (vv.equals(hostQueue.peek())) {
-                if (!virtualViewAccounts.get(vv).key().equals(playerName)) {
+                if (!virtualViewAccounts.get(vv).getUsername().equals(playerName)) {
                     VirtualView remove = null;
-                    Pair<String, String> account = null;
-                    for (Map.Entry<VirtualView, Pair<String, String>> entry : virtualViewAccounts.entrySet()) {
-                        if (entry.getValue().key().equals(playerName)) {
+                    Account account = null;
+                    for (Map.Entry<VirtualView, Account> entry : virtualViewAccounts.entrySet()) {
+                        if (entry.getValue().getUsername().equals(playerName)) {
                             remove = entry.getKey();
                             account = entry.getValue();
                         }
@@ -138,7 +140,7 @@ public class GameController {
                     if (remove == null)
                         return new KickFromLobbyEvent(Feedback.FAILURE, "The player " + playerName + " is not in the lobby.");
                     else {
-                        for (Map.Entry<Pair<String, String>, GameListener> entry : joinedPlayers.entrySet()) {
+                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                             if (!entry.getKey().equals(virtualViewAccounts.get(remove)))
                                 entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + playerName + " has been kicked."));
                             else
@@ -161,14 +163,14 @@ public class GameController {
     protected synchronized PlayerReadyEvent readyToStart(VirtualView vv){
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
-                Pair<String, String> account = virtualViewAccounts.get(vv);
-                if (readyLobbyPlayers.get(account.key())) {
+                Account account = virtualViewAccounts.get(vv);
+                if (readyLobbyPlayers.get(account.getUsername())) {
                     return new PlayerReadyEvent(Feedback.SUCCESS, "You were already ready.");
                 } else {
-                    readyLobbyPlayers.put(account.key(), true);
-                    for (Map.Entry<Pair<String, String>, GameListener> entry : joinedPlayers.entrySet())
+                    readyLobbyPlayers.put(account.getUsername(), true);
+                    for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
                         if (!entry.getKey().equals(virtualViewAccounts.get(vv)))
-                            entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.key() + " is ready!"));
+                            entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.getUsername() + " is ready!"));
                     return new PlayerReadyEvent(Feedback.SUCCESS, "You are now ready!");
                 }
             }
@@ -180,14 +182,14 @@ public class GameController {
     protected synchronized PlayerUnreadyEvent unReadyToStart(VirtualView vv){
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
-                Pair<String, String> account = virtualViewAccounts.get(vv);
-                if (!readyLobbyPlayers.get(account.key())) {
+                Account account = virtualViewAccounts.get(vv);
+                if (!readyLobbyPlayers.get(account.getUsername())) {
                     return new PlayerUnreadyEvent(Feedback.SUCCESS, "You were already unready.");
                 } else {
-                    readyLobbyPlayers.put(account.key(), false);
-                    for (Map.Entry<Pair<String, String>, GameListener> entry : joinedPlayers.entrySet())
+                    readyLobbyPlayers.put(account.getUsername(), false);
+                    for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
                         if (!entry.getKey().equals(virtualViewAccounts.get(vv)))
-                            entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.key() + " is unready!"));
+                            entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.getUsername() + " is unready!"));
                     return new PlayerUnreadyEvent(Feedback.SUCCESS, "You are now unready!");
                 }
             }
@@ -199,15 +201,15 @@ public class GameController {
     protected synchronized QuitLobbyEvent quitLobby(VirtualView vv){
         if (virtualViewAccounts.containsKey(vv)){
             if (!gameStarted){
-                Pair<String, String> account = virtualViewAccounts.get(vv);
+                Account account = virtualViewAccounts.get(vv);
                 joinedPlayers.remove(account);
                 virtualViewAccounts.remove(vv);
-                readyLobbyPlayers.remove(account.key());
+                readyLobbyPlayers.remove(account.getUsername());
                 hostQueue.remove(vv);
 
                 if (!joinedPlayers.isEmpty()){
-                    for (Map.Entry<Pair<String, String>, GameListener> entry : joinedPlayers.entrySet())
-                        entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.key() + " has left the lobby!"));
+                    for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                        entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.getUsername() + " has left the lobby!"));
                 } else
                     deleteGame();
 
@@ -257,9 +259,9 @@ public class GameController {
         /*extra events from Model*/
     }
 
-    protected synchronized void reconnectPlayer(VirtualView vv, Pair<String, String> account, GameListener gl){
+    protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl){
         if(joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            game.reconnectPlayer(account.key()); //TODO: updated events from Model, check timer/turn
+            game.reconnectPlayer(account.getUsername()); //TODO: updated events from Model, check timer/turn
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
         }
@@ -288,8 +290,8 @@ public class GameController {
 
     protected synchronized List<String> getPlayers(){
         List<String> collect = new ArrayList<>();
-        for (Pair<String, String> account : joinedPlayers.keySet())
-            collect.add(account.key());
+        for (Account account : joinedPlayers.keySet())
+            collect.add(account.getUsername());
         return collect;
     }
 
@@ -308,7 +310,7 @@ public class GameController {
         return requiredPlayers;
     }
 
-    protected synchronized boolean isPlayerOffline(Pair<String, String> account){
-        return !virtualViewAccounts.containsValue(account);
+    protected synchronized boolean isPlayerOnline(Account account){
+        return virtualViewAccounts.containsValue(account);
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.util.Objects;
+
 /**
  * This class represents the state of a lobby in a game.
  */
@@ -53,5 +55,42 @@ public class LobbyState {
      */
     public int getRequiredPlayers() {
         return requiredPlayers;
+    }
+
+    @Override
+    public String toString() {
+        return "LobbyState{" +
+                "id='" + id + '\'' +
+                ", onlinePlayers=" + onlinePlayers +
+                ", requiredPlayers=" + requiredPlayers +
+                '}';
+    }
+
+    /**
+     * Checks if this LobbyState is equal to another object.
+     * An object is equal to this LobbyState if it is also a LobbyState and both have the same id, onlinePlayers, and requiredPlayers.
+     *
+     * @param o The object to compare this LobbyState to.
+     * @return true if the other object is equal to this LobbyState, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LobbyState that = (LobbyState) o;
+        return onlinePlayers == that.onlinePlayers &&
+                requiredPlayers == that.requiredPlayers &&
+                Objects.equals(id, that.id);
+    }
+
+    /**
+     * Generates a hash code for this LobbyState.
+     * The hash code is generated based on the id, onlinePlayers, and requiredPlayers of this LobbyState.
+     *
+     * @return The generated hash code.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, onlinePlayers, requiredPlayers);
     }
 }
