@@ -3,14 +3,15 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.GameListener;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.Pair;
 
 import java.util.*;
 
 /**
- * The {@code Controller} class is a Singleton that serves as a central point of control for managing game controllers.
- * It maintains a list of {@code GameController} instances, each corresponding to a game that is not yet in the
- * {@code GameStatus.ENDED} state.
+ * The {@link Controller} class is a Singleton that serves as a central point of control for managing game controllers.
+ * It maintains a list of {@link GameController} instances, each corresponding to a game that is not yet in the
+ * {@link GameStatus#ENDED} state.
  *
  * <p>The class provides methods to create and join lobbies, reconnect to a game, and retrieve lists of available
  * lobbies and games.</p>
@@ -193,18 +194,23 @@ public class Controller {
                 else
                     return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "Your account is already online in a lobby."), null);
             }
-            if (!gc.isGameStarted() && gc.getIdentifier().equals(lobbyID)) {
-                found = gc;
+            if (gc.getIdentifier().equals(lobbyID)) {
+                if (!gc.isGameStarted()) {
+                    if (gc.getRequiredPlayers() > gc.getPlayers().size())
+                        found = gc;
+                    else
+                        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby is already full."), null);
+                } else
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby has already started a game."), null);
             }
         }
 
         if (found != null){
-            found.addPlayer(vv, virtualViewAccounts.get(vv), gl);
+            found.addLobbyPlayer(vv, virtualViewAccounts.get(vv), gl);
             return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getPlayers(), lobbyID + " lobby joined!"), found);
-            //TODO extra events in gameController
         }
 
-        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby is either already full or does not exist."), null);
+        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, null, "The lobby does not exist."), null);
     }
 
     /**
@@ -242,7 +248,6 @@ public class Controller {
         if (found != null){
             found.reconnectPlayer(vv, account, gl);
             return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID + " game joined!"), found);
-            //TODO extra events from Model
         }
 
         return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The game does not exist, or you do not have the permission to enter it."), null);
@@ -255,13 +260,13 @@ public class Controller {
      */
     protected synchronized AvailableLobbiesEvent getLobbiesAvailable(VirtualView vv){
         if (!virtualViewAccounts.containsKey(vv))
-            return new AvailableLobbiesEvent(Feedback.FAILURE, null, "You must log in first.");
+            return new AvailableLobbiesEvent(Feedback.FAILURE, new ArrayList<>(), "You must log in first.");
 
-        List<String> collect = new ArrayList<>();
+        List<Pair<String, Pair<Integer, Integer>>> collect = new ArrayList<>();
 
         for (GameController gc : gameControllers)
-            if (!gc.isGameStarted())
-                collect.add(gc.getIdentifier());
+            if (!gc.isGameStarted() && (gc.getRequiredPlayers() > gc.getPlayers().size()))
+                collect.add(new Pair<>(gc.getIdentifier(), new Pair<>(gc.getNumOnlinePlayers(), gc.getRequiredPlayers())));
 
         if (collect.isEmpty())
             return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are not available lobbies.");
@@ -269,21 +274,22 @@ public class Controller {
     }
 
     /**
-     * Retrieves the list of offline games available for the user.
+     * Retrieves the list of offline games available for the user. These games are ones from which the user was
+     * disconnected due to network issues, not ones that the user voluntarily quit.
      *
      * @param vv The user's VirtualView.
      * @return The event with the list of offline games available.
      */
     protected synchronized GetMyOfflineGamesEvent getMyOfflineGamesAvailable(VirtualView vv){
         if(!virtualViewAccounts.containsKey(vv))
-            return new GetMyOfflineGamesEvent(Feedback.FAILURE, null, "You must log in first.");
+            return new GetMyOfflineGamesEvent(Feedback.FAILURE, new ArrayList<>(), "You must log in first.");
 
-        List<String> collect = new ArrayList<>();
+        List<Pair<String, Pair<Integer, Integer>>> collect = new ArrayList<>();
         String username = virtualViewAccounts.get(vv).key();
 
         for (GameController gc : gameControllers)
             if (gc.isGameStarted() && gc.getPlayers().contains(username))
-                collect.add(gc.getIdentifier());
+                collect.add(new Pair<>(gc.getIdentifier(), new Pair<>(gc.getNumOnlinePlayers(), gc.getRequiredPlayers())));
 
         if (collect.isEmpty())
             return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "You do not have any available games.");
@@ -296,7 +302,20 @@ public class Controller {
      * @param vv The user's VirtualView.
      */
     protected synchronized void clientDisconnected(VirtualView vv){
-        logout(vv);
+        if (!virtualViewAccounts.containsKey(vv))
+            return;
+
+        String username = virtualViewAccounts.get(vv).key();
+
+        for (GameController gc : gameControllers)
+            if (gc.getPlayers().contains(username)){
+                if (!gc.isGameStarted())
+                    gc.quitLobby(vv);
+                else
+                    gc.DisconnectFromGame(vv);
+            }
+
+        virtualViewAccounts.remove(vv);
     }
 
     /**

@@ -47,6 +47,12 @@ public class JoinLobbyEvent extends FeedbackEvent<Pair<String, List<String>>> {
         info = new Pair<>(null, usernames);
     }
 
+    /**
+     * Retrieves the data associated with this event, which is a pair consisting of the lobby ID and a list of usernames.
+     *
+     * @return The pair consisting of the lobby ID sent to the Controller and the list of usernames
+     * received from the Controller.
+     */
     @Override
     public Pair<String, List<String>> getData() {
         return info;

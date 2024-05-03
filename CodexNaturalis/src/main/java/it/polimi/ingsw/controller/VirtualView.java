@@ -70,7 +70,7 @@ public class VirtualView {
         if(gameController!=null)
             listener.update(gameController.quitGame(this));
         else
-            listener.update(new QuitLobbyEvent(Feedback.FAILURE, "Unexpected event."));
+            listener.update(new QuitLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
 
     public void evaluateEvent(KickFromLobbyEvent event){}
@@ -83,7 +83,7 @@ public class VirtualView {
         if(gameController!=null)
             listener.update(gameController.quitLobby(this));
         else
-            listener.update(new QuitLobbyEvent(Feedback.FAILURE, "Unexpected event."));
+            listener.update(new QuitLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
 
     public void evaluateEvent(AvailableLobbiesEvent event){

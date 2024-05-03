@@ -45,6 +45,11 @@ public class CreateLobbyEvent extends FeedbackEvent<Pair<String, Integer>> {
         setting = new Pair<>(null, null);
     }
 
+    /**
+     * Retrieves the data associated with this event, which is a pair of lobby ID and number of players.
+     *
+     * @return The pair of lobby ID and number of players.
+     */
     @Override
     public Pair<String, Integer> getData() {
         return setting;

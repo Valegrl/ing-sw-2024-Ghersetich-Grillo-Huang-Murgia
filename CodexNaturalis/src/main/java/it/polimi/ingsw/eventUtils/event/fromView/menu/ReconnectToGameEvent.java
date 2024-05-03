@@ -43,6 +43,11 @@ public class ReconnectToGameEvent extends FeedbackEvent<String> {
         this.gameID = null;
     }
 
+    /**
+     * Retrieves the data associated with this event, which is the ID of the game to reconnect to.
+     *
+     * @return The ID of the game to reconnect to.
+     */
     @Override
     public String getData() {
         return gameID;

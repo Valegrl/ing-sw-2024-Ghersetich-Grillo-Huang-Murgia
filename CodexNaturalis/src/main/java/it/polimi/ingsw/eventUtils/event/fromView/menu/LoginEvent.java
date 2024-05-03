@@ -45,6 +45,11 @@ public class LoginEvent extends FeedbackEvent<Pair<String, String>> {
         account = new Pair<>(null, null);
     }
 
+    /**
+     * Retrieves the data associated with this event, which is a pair of username and password.
+     *
+     * @return The pair of username and password.
+     */
     @Override
     public Pair<String, String> getData() {
         return account;
