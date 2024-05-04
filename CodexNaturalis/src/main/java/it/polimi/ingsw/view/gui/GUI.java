@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
@@ -25,5 +26,17 @@ public class GUI implements View {
     public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){}
 
     @Override
-    public void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus ){}
+    public void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus){}
+
+    @Override
+    public void notifyLogin(Feedback feedback, String message, Account account){}
+
+    @Override
+    public void notifyLogout(Feedback feedback, String message){}
+
+    @Override
+    public void notifyReconnectToGame(Feedback feedback, String message){}
+
+    @Override
+    public void notifyRegisterAccount(Feedback feedback, String message, Account account){}
 }

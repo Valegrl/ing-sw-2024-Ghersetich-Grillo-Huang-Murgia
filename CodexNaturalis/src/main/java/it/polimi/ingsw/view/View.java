@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 
@@ -23,5 +24,13 @@ public interface View {
 
     void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames);
 
-    void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus );
+    void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus );
+
+    void notifyLogin(Feedback feedback, String message, Account account);
+
+    void notifyLogout(Feedback feedback, String message);
+
+    void notifyReconnectToGame(Feedback feedback, String message);
+
+    void notifyRegisterAccount(Feedback feedback, String message, Account account);
 }

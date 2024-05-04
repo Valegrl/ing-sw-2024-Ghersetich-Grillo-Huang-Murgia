@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -117,26 +118,103 @@ public class TUI implements View {
         out.println(message);
         if(feedback.equals(Feedback.SUCCESS)){
             if(!availableLobbies.isEmpty()){
-                for(LobbyState lobby: availableLobbies){
-                    out.println(lobby.toString());
+                for(LobbyState lobby : availableLobbies){
+                    String lobbyID = lobby.getId();
+                    int onlinePlayers = lobby.getOnlinePlayers();
+                    int requiredPlayers = lobby.getRequiredPlayers();
+                    out.println(lobbyID + ": [" + onlinePlayers + "/" + requiredPlayers + "].") ;
                 }
             }
             else{
                 out.println("Please try again later...");
             }
         }
-
     }
 
     @Override
-    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){}
+    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            out.println("Lobby id: " + id);
+            out.println("Required players: " + requiredPlayers + ".");
+        }
+    }
 
     @Override
-    public void notifyDeleteAccount(Feedback feedback, String message){}
+    public void notifyDeleteAccount(Feedback feedback, String message){
+        clearConsole();
+        out.println(message);
+        //TODO logic with feedback if account is deleted
+    }
 
     @Override
-    public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){}
+    public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            if(!offlineGames.isEmpty()){
+                for(LobbyState lobby : offlineGames){
+                    String lobbyID = lobby.getId();
+                    int playersInGame = lobby.getOnlinePlayers();
+                    int requiredPlayers = lobby.getRequiredPlayers();
+                    out.println(lobbyID + ": [" + playersInGame + "/" + requiredPlayers + "].");
+                }
+            }
+        }
+    }
 
     @Override
-    public void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus){}
+    public void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus){
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            out.println("Current players and status:");
+            for(Pair<String, Boolean> player : playersReadyStatus){
+                String username = player.key();
+                Boolean ready = player.value();
+                if(ready) {
+                    out.println(username + " is ready.");
+                }
+                else{
+                    out.println(username + " is not ready.");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void notifyLogin(Feedback feedback, String message, Account account){
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            String username = account.getUsername();
+            out.println("You're connected as: " + username);
+        }
+    }
+
+    @Override
+    public void notifyLogout(Feedback feedback, String message){
+        clearConsole();
+        out.println(message);
+        //TODO logic with feedback if player log out
+    }
+
+    @Override
+    public void notifyReconnectToGame(Feedback feedback, String message){
+        clearConsole();
+        out.println(message);
+    }
+
+    @Override
+    public void notifyRegisterAccount(Feedback feedback, String message, Account account){
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            String username = account.getUsername();
+            String password = account.getPassword();
+            out.println("Username: " + username);
+            out.println("Password: " + password);
+        }
+    }
 }
