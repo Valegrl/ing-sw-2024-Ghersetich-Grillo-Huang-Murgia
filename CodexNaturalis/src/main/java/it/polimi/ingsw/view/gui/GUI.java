@@ -14,6 +14,9 @@ public class GUI implements View {
     public void serverCrashed(){}
 
     @Override
+    public void printMessage(String message){}
+
+    @Override
     public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {}
 
     @Override
@@ -39,4 +42,8 @@ public class GUI implements View {
 
     @Override
     public void notifyRegisterAccount(Feedback feedback, String message, Account account){}
+
+    @Override
+    public void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer){}
+
 }

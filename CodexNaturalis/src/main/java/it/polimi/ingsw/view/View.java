@@ -16,6 +16,8 @@ public interface View {
 
     //TODO add signature for specific-to-view methods that are called from controller EventReceiver
 
+    void printMessage(String message);
+
     void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies);
 
     void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers);
@@ -33,4 +35,6 @@ public interface View {
     void notifyReconnectToGame(Feedback feedback, String message);
 
     void notifyRegisterAccount(Feedback feedback, String message, Account account);
+
+    void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer);
 }

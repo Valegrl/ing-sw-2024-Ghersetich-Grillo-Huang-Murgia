@@ -112,10 +112,17 @@ public class TUI implements View {
     }
 
     //TODO implement methods, possible changes to the names
+
     @Override
-    public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {
+    public void printMessage(String message){
         clearConsole();
         out.println(message);
+    }
+
+    @Override
+    public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             if(!availableLobbies.isEmpty()){
                 for(LobbyState lobby : availableLobbies){
@@ -133,8 +140,8 @@ public class TUI implements View {
 
     @Override
     public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             out.println("Lobby id: " + id);
             out.println("Required players: " + requiredPlayers + ".");
@@ -143,15 +150,15 @@ public class TUI implements View {
 
     @Override
     public void notifyDeleteAccount(Feedback feedback, String message){
-        clearConsole();
-        out.println(message);
-        //TODO logic with feedback if account is deleted
+        printMessage(message);
+
+        //TODO logic with feedback if account is deleted ?
     }
 
     @Override
     public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             if(!offlineGames.isEmpty()){
                 for(LobbyState lobby : offlineGames){
@@ -166,8 +173,8 @@ public class TUI implements View {
 
     @Override
     public void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             out.println("Current players and status:");
             for(Pair<String, Boolean> player : playersReadyStatus){
@@ -185,8 +192,8 @@ public class TUI implements View {
 
     @Override
     public void notifyLogin(Feedback feedback, String message, Account account){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             String username = account.getUsername();
             out.println("You're connected as: " + username);
@@ -195,21 +202,22 @@ public class TUI implements View {
 
     @Override
     public void notifyLogout(Feedback feedback, String message){
-        clearConsole();
-        out.println(message);
-        //TODO logic with feedback if player log out
+        printMessage(message);
+
+        //TODO logic with feedback if player log out ?
     }
 
     @Override
     public void notifyReconnectToGame(Feedback feedback, String message){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
+        //TODO logic with feedback if player reconnect to game ?
     }
 
     @Override
     public void notifyRegisterAccount(Feedback feedback, String message, Account account){
-        clearConsole();
-        out.println(message);
+        printMessage(message);
+
         if(feedback.equals(Feedback.SUCCESS)){
             String username = account.getUsername();
             String password = account.getPassword();
@@ -217,4 +225,14 @@ public class TUI implements View {
             out.println("Password: " + password);
         }
     }
+
+    @Override
+    public void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer){
+        printMessage(message);
+
+        if(feedback.equals(Feedback.SUCCESS)){
+            out.println(kickedPlayer + " has been kicked from the lobby.");
+        }
+    }
+
 }

@@ -62,6 +62,21 @@ public class ViewController implements ViewEventReceiver {
      */
     private final Queue<Event> tasksQueue = new LinkedList<>();
 
+    /**
+     * Boolean to know if the view is in-game or not.
+     */
+    private boolean inGame;
+
+    /**
+     * Boolean to know if the view is in-lobby or not.
+     */
+    private boolean inLobby;
+
+    /**
+     * The account associated with the View.
+     */
+    private Account account;
+
     /*Immutable model part*/
     /**
      * The unique identifier of the game.
@@ -121,6 +136,10 @@ public class ViewController implements ViewEventReceiver {
      */
     public ViewController(View view) {
         this.view = view;
+        this.inGame = false;
+        this.inLobby = false;
+        this.account = null;
+
         try {
             this.clientManager = ClientManager.getInstance();
             clientManager.setViewController(this);
@@ -249,13 +268,25 @@ public class ViewController implements ViewEventReceiver {
 
     }
 
+    /*Events done on 4/05/2024*/
+    //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
+    //TODO (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
 
+        if(inGame && inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            String kickedPlayer = event.getPlayerToKick();
+            view.notifyKickFromLobby(feedback, message, kickedPlayer);
+        }
     }
 
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
+        Feedback feedback = event.getFeedback();
+        String message = event.getMessage();
+
 
     }
 
@@ -269,95 +300,153 @@ public class ViewController implements ViewEventReceiver {
 
     }
 
-    //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        List<LobbyState> availableLobbies = event.getLobbies();
-        view.displayAvailableLobbies(feedback, message, availableLobbies);
+
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            List<LobbyState> availableLobbies = event.getLobbies();
+            view.displayAvailableLobbies(feedback, message, availableLobbies);
+        }
     }
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-        //TODO deep copy for pair ?
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        String lobbyID = event.getLobbyID();
-        int requiredPlayers = event.getRequiredPlayers();
-        view.notifyCreatedLobby(feedback, message, lobbyID, requiredPlayers);
 
-        if(feedback.equals(Feedback.SUCCESS)) {
-            id = event.getLobbyID();
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            String lobbyID = event.getLobbyID();
+            int requiredPlayers = event.getRequiredPlayers();
+
+            if (feedback.equals(Feedback.SUCCESS)) {
+                id = event.getLobbyID();
+                this.inLobby = true;
+            }
+
+            view.notifyCreatedLobby(feedback, message, lobbyID, requiredPlayers);
         }
     }
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        view.notifyDeleteAccount(feedback, message);
+
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+
+            if(feedback.equals(Feedback.SUCCESS)) {
+                this.account = null;
+            }
+
+            view.notifyDeleteAccount(feedback, message);
+        }
     }
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        List<LobbyState> offlineGames = event.getGames();
-        view.displayOfflineGames(feedback, message, offlineGames);
+
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            List<LobbyState> offlineGames = event.getGames();
+            view.displayOfflineGames(feedback, message, offlineGames);
+        }
     }
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        String lobbyID = event.getLobbyID();
-        List<Pair<String, Boolean>> playersReadyStatus = event.getReadyStatusPlayers();
-        view.displayJoinedLobby(feedback, message, lobbyID, playersReadyStatus);
 
-        if(feedback.equals(Feedback.SUCCESS)) {
-            id = event.getLobbyID();
+        //TODO initialise immutable model ?
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            String lobbyID = event.getLobbyID();
+            List<Pair<String, Boolean>> playersReadyStatus = event.getReadyStatusPlayers();
+
+            if (feedback.equals(Feedback.SUCCESS)) {
+                id = event.getLobbyID();
+                inLobby = true;
+            }
+
+            view.displayJoinedLobby(feedback, message, lobbyID, playersReadyStatus);
         }
     }
 
     @Override
     public void evaluateEvent(LoginEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        Account account = event.getAccount();
-        view.notifyLogin(feedback, message, account);
+
+        if(!inGame && !inLobby && account == null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            Account account = event.getAccount();
+
+            if(feedback.equals(Feedback.SUCCESS)){
+                this.account = account;
+            }
+
+            view.notifyLogin(feedback, message, account);
+        }
     }
 
     @Override
     public void evaluateEvent(LogoutEvent event) {
+
+        if(!inGame && !inLobby && account != null){
         Feedback feedback = event.getFeedback();
         String message = event.getMessage();
+
+            if(feedback.equals(Feedback.SUCCESS)){
+                this.account = null;
+            }
+
         view.notifyLogout(feedback, message);
+        }
     }
 
     @Override
     public void evaluateEvent(ReconnectToGameEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        view.notifyReconnectToGame(feedback, message);
+        //TODO Reinitialise the local model ?
 
-        if(feedback.equals(Feedback.SUCCESS)){
-            id = event.getGameID();
+        if(!inGame && !inLobby && account != null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+
+            if (feedback.equals(Feedback.SUCCESS)) {
+                id = event.getGameID();
+                inGame = true;
+                inLobby = true;
+            }
+
+            view.notifyReconnectToGame(feedback, message);
         }
     }
 
     @Override
     public void evaluateEvent(RegisterEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-        Account account = event.getAccount();
-        view.notifyRegisterAccount(feedback, message, account);
+
+        if(!inGame && !inLobby && account == null) {
+            Feedback feedback = event.getFeedback();
+            String message = event.getMessage();
+            Account account = event.getAccount();
+
+            if(feedback.equals(Feedback.SUCCESS)){
+                this.account = account;
+            }
+
+            view.notifyRegisterAccount(feedback, message, account);
+        }
     }
 
     /**
      * This method handles a server crash.
      */
     public void serverCrashed () {
+        inGame = false;
+        inLobby = false;
+        account = null;
+
         view.serverCrashed();
     }
 }
