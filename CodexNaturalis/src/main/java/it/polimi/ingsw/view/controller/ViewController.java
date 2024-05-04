@@ -26,6 +26,7 @@ import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 
@@ -266,16 +267,15 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        List<Pair<String, Pair<Integer, Integer>>> availableLobbies = event.getData();
+        List< LobbyState> availableLobbies = event.getLobbies();
         view.displayAvailableLobbies(availableLobbies);
     }
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
         //TODO deep copy for pair ?
-        Pair<String, Integer> createdLobby= new Pair<>(event.getData().key(), event.getData().value());
-        id = createdLobby.key();
-        view.notifyCreatedLobby(createdLobby);
+        id = event.getLobbyID();
+        view.notifyCreatedLobby(event.getLobbyID(), event.getRequiredPlayers());
     }
 
     @Override
@@ -288,12 +288,15 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-
+        List<LobbyState> offlineGames = event.getGames();
+        view.displayOfflineGames(offlineGames);
     }
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-
+        id= event.getLobbyID();
+        List<Pair<String, Boolean>> playersReadyStatus = event.getReadyStatusPlayers();
+        view.displayJoinedLobby(id, playersReadyStatus);
     }
 
     @Override

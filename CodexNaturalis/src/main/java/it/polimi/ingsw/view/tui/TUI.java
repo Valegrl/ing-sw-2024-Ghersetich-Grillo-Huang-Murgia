@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.utils.Pair;
@@ -110,9 +111,18 @@ public class TUI implements View {
     }
 
     //TODO implement methods, possible changes to the names
-    public void displayAvailableLobbies(List<Pair<String, Pair<Integer, Integer>>> availableLobbies) {}
+    @Override
+    public void displayAvailableLobbies(List<LobbyState> availableLobbies) {}
 
-    public void notifyCreatedLobby(Pair<String, Integer> createdLobby){}
+    @Override
+    public void notifyCreatedLobby(String id, int requiredPlayers){}
 
+    @Override
     public void notifyDeleteAccount(Feedback feedback, String message){}
+
+    @Override
+    public void displayOfflineGames(List<LobbyState> offlineGames){}
+
+    @Override
+    public void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus){}
 }
