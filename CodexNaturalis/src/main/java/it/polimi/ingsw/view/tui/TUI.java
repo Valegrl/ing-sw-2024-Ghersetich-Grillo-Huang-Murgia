@@ -112,16 +112,30 @@ public class TUI implements View {
 
     //TODO implement methods, possible changes to the names
     @Override
-    public void displayAvailableLobbies(List<LobbyState> availableLobbies) {}
+    public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {
+        clearConsole();
+        out.println(message);
+        if(feedback.equals(Feedback.SUCCESS)){
+            if(!availableLobbies.isEmpty()){
+                for(LobbyState lobby: availableLobbies){
+                    out.println(lobby.toString());
+                }
+            }
+            else{
+                out.println("Please try again later...");
+            }
+        }
+
+    }
 
     @Override
-    public void notifyCreatedLobby(String id, int requiredPlayers){}
+    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){}
 
     @Override
     public void notifyDeleteAccount(Feedback feedback, String message){}
 
     @Override
-    public void displayOfflineGames(List<LobbyState> offlineGames){}
+    public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){}
 
     @Override
     public void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus){}

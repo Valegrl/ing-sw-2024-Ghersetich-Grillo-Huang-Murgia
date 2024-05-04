@@ -13,16 +13,16 @@ public class GUI implements View {
     public void serverCrashed(){}
 
     @Override
-    public void displayAvailableLobbies(List<LobbyState> availableLobbies) {}
+    public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {}
 
     @Override
-    public void notifyCreatedLobby(String id, int requiredPlayers){}
+    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){}
 
     @Override
     public void notifyDeleteAccount(Feedback feedback, String message){}
 
     @Override
-    public void displayOfflineGames(List<LobbyState> offlineGames){}
+    public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){}
 
     @Override
     public void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus ){}

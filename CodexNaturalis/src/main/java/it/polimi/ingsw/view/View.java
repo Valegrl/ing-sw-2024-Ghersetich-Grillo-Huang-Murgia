@@ -15,13 +15,13 @@ public interface View {
 
     //TODO add signature for specific-to-view methods that are called from controller EventReceiver
 
-    void displayAvailableLobbies(List<LobbyState> availableLobbies);
+    void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies);
 
-    void notifyCreatedLobby(String id, int requiredPlayers);
+    void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers);
 
     void notifyDeleteAccount(Feedback feedback, String message);
 
-    void displayOfflineGames(List<LobbyState> offlineGames);
+    void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames);
 
     void displayJoinedLobby(String id, List<Pair<String, Boolean>> playersReadyStatus );
 }

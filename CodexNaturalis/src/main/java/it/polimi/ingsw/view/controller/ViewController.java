@@ -26,6 +26,7 @@ import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
@@ -267,15 +268,23 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        List< LobbyState> availableLobbies = event.getLobbies();
-        view.displayAvailableLobbies(availableLobbies);
+        List<LobbyState> availableLobbies = event.getLobbies();
+        Feedback feedback = event.getFeedback();
+        String message = event.getMessage();
+
+        view.displayAvailableLobbies(feedback, message, availableLobbies);
     }
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
         //TODO deep copy for pair ?
-        id = event.getLobbyID();
-        view.notifyCreatedLobby(event.getLobbyID(), event.getRequiredPlayers());
+        String id = null;
+        Feedback feedback = event.getFeedback();
+        String message = event.getMessage();
+        if(feedback.equals(Feedback.SUCCESS)) {
+            id = event.getLobbyID();
+        }
+        view.notifyCreatedLobby(feedback, message, event.getLobbyID(), event.getRequiredPlayers());
     }
 
     @Override
@@ -289,19 +298,24 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
         List<LobbyState> offlineGames = event.getGames();
-        view.displayOfflineGames(offlineGames);
+        Feedback feedback = event.getFeedback();
+        String message = event.getMessage();
+        view.displayOfflineGames(feedback, message, offlineGames);
     }
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-        id= event.getLobbyID();
+        Feedback feedback = event.getFeedback();
+        if(feedback.equals(Feedback.SUCCESS)) {
+            id = event.getLobbyID();
+        }
         List<Pair<String, Boolean>> playersReadyStatus = event.getReadyStatusPlayers();
         view.displayJoinedLobby(id, playersReadyStatus);
     }
 
     @Override
     public void evaluateEvent(LoginEvent event) {
-
+        Account account = event.getAccount();
     }
 
     @Override
