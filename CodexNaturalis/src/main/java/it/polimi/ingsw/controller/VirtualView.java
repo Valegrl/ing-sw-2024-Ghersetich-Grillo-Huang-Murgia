@@ -19,7 +19,6 @@ public class VirtualView {
     private GameListener listener;
     private Controller controller;
     private GameController gameController;
-    private Pair<String, String> account;
     private boolean disconnected;
     private final Queue<Event> eventQueue = new LinkedList<>();
     private static final Logger logger = Logger.getLogger("VirtualView");
@@ -60,7 +59,9 @@ public class VirtualView {
         listener.update(new InvalidEvent());
     }
 
-    public void evaluateEvent(ChooseSetupEvent event){}
+    public void evaluateEvent(ChosenCardsSetupEvent event){}
+
+    public void evaluateEvent(ChosenTokenSetupEvent event){}
 
     public void evaluateEvent(DrawCardEvent event){}
 

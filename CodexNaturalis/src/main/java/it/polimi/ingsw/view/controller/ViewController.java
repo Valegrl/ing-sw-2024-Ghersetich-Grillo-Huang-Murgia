@@ -2,16 +2,10 @@ package it.polimi.ingsw.view.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
-import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
-import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromController.*;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.ChooseSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.SeeOpponentPlayAreaEvent;
@@ -20,6 +14,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 import it.polimi.ingsw.immutableModel.ImmPlayer;
 import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
@@ -203,6 +198,16 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    @Override
+    public void evaluateEvent(ChooseCardsSetupEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(ChooseTokenSetupEvent event) {
+
+    }
+
     //TODO depending on the events arriving (model) I might have the entire model or one update, I must copy it and
     //TODO set it in the local semi-immutable model
     //TODO add methods on the View interface
@@ -224,7 +229,7 @@ public class ViewController implements ViewEventReceiver {
     }
 
     @Override
-    public void evaluateEvent(PlayerIsChoosingSetupEvent event) {
+    public void evaluateEvent(UpdateGamePlayersEvent event) {
 
     }
 
@@ -249,7 +254,12 @@ public class ViewController implements ViewEventReceiver {
     }
 
     @Override
-    public void evaluateEvent(ChooseSetupEvent event) {
+    public void evaluateEvent(ChosenCardsSetupEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(ChosenTokenSetupEvent event) {
 
     }
 
@@ -439,8 +449,13 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    @Override
+    public void evaluateEvent(ServerCrashedEvent event) {
+
+    }
+
     /**
-     * This method handles a server crash.
+     * This method handles a server crash. //TODO: use event. Delete this method.
      */
     public void serverCrashed () {
         inGame = false;

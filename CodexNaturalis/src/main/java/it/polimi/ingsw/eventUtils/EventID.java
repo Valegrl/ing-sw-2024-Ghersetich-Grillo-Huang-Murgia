@@ -1,15 +1,8 @@
 package it.polimi.ingsw.eventUtils;
 
-import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
-import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
-import it.polimi.ingsw.eventUtils.event.fromController.UpdateGamePlayersEvent;
-import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromController.*;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.ChooseSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.SeeOpponentPlayAreaEvent;
@@ -31,6 +24,17 @@ import java.util.Set;
  * Each event type is associated with a unique ID and a corresponding class.
  */
 public enum EventID {
+
+    /**
+     * The {@link ChooseCardsSetupEvent} ID.
+     */
+    CHOOSE_CARDS_SETUP("CHOOSE_CARDS_SETUP", ChooseCardsSetupEvent.class),
+
+    /**
+     * The {@link ChooseTokenSetupEvent} ID.
+     */
+    CHOOSE_TOKEN_SETUP("CHOOSE_TOKEN_SETUP", ChooseTokenSetupEvent.class),
+
     /**
      * The {@link InvalidEvent} ID.
      */
@@ -50,11 +54,6 @@ public enum EventID {
      * The {@link UpdateLobbyPlayersEvent} ID.
      */
     UPDATE_LOBBY_PLAYERS("UPDATE_LOBBY_PLAYERS", UpdateLobbyPlayersEvent.class),
-
-    /**
-     * The {@link PlayerIsChoosingSetupEvent} ID.
-     */
-    PLAYER_IS_CHOOSING_SETUP("PLAYER_IS_CHOOSING_SETUP", PlayerIsChoosingSetupEvent.class),
 
     /**
      * The {@link UpdateLocalModelEvent} ID.
@@ -77,9 +76,14 @@ public enum EventID {
     SEE_OPPONENT_PLAY_AREA("SEE_OPPONENT_PLAY_AREA", SeeOpponentPlayAreaEvent.class),
 
     /**
-     * The {@link ChooseSetupEvent} ID.
+     * The {@link ChosenCardsSetupEvent} ID.
      */
-    CHOOSE_SETUP("CHOOSE_SETUP", ChooseSetupEvent.class),
+    CHOSEN_CARDS_SETUP("CHOSEN_CARDS_SETUP", ChosenCardsSetupEvent.class),
+
+    /**
+     * The {@link ChosenTokenSetupEvent} ID.
+     */
+    CHOSEN_TOKEN_SETUP("CHOSEN_TOKEN_SETUP", ChosenTokenSetupEvent.class),
 
     /**
      * The {@link DrawCardEvent} ID.

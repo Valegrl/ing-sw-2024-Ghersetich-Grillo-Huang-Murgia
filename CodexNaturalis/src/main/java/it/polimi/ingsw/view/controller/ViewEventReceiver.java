@@ -7,6 +7,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 
 /**
  * The ViewEventReceiver interface defines the methods that a class must implement to receive and handle View events.
@@ -24,8 +25,19 @@ public interface ViewEventReceiver {
     }
 
     /**
+     * Handles the event of the cards-setup from Server
+     * @param event The ChooseCardsSetupEvent to be handled.
+     */
+    void evaluateEvent(ChooseCardsSetupEvent event);
+
+    /**
+     * Handles the event of the token-setup from Server.
+     * @param event The ChooseTokenSetupEvent to be handled.
+     */
+    void evaluateEvent(ChooseTokenSetupEvent event);
+
+    /**
      * Called when an invalid event is sent by the local player.
-     *
      * @param event The invalid event sent by the local player.
      */
     void evaluateEvent(InvalidEvent event);
@@ -43,10 +55,10 @@ public interface ViewEventReceiver {
     void evaluateEvent(UpdateLobbyPlayersEvent event);
 
     /**
-     * Handles the event used to communicate that another player is choosing their setup.
+     * Handles the event of updating the game players.
      * @param event The event to be handled.
      */
-    void evaluateEvent(PlayerIsChoosingSetupEvent event);
+    void evaluateEvent(UpdateGamePlayersEvent event);
 
     /**
      * Handles the event of updating the local model.
@@ -74,10 +86,16 @@ public interface ViewEventReceiver {
     void evaluateEvent(SeeOpponentPlayAreaEvent event);
 
     /**
-     * Handles the event used for the local player's setup choice.
+     * Handles the event used for the local player's cards-setup choice.
      * @param event The event to be handled.
      */
-    void evaluateEvent(ChooseSetupEvent event);
+    void evaluateEvent(ChosenCardsSetupEvent event);
+
+    /**
+     * Handles the event of the local player's token-setup choice.
+     * @param event The ChosenTokenSetupEvent to be handled.
+     */
+    void evaluateEvent(ChosenTokenSetupEvent event);
 
     /**
      * Handles the event of the local player drawing a card.
@@ -175,4 +193,10 @@ public interface ViewEventReceiver {
      * @param event The event to be handled.
      */
     void evaluateEvent(RegisterEvent event);
+
+    /**
+     * Handles the event of a server crash.
+     * @param event The ServerCrashedEvent to be handled.
+     */
+    void evaluateEvent(ServerCrashedEvent event);
 }
