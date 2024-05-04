@@ -2,6 +2,7 @@ package it.polimi.ingsw.eventUtils;
 
 import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromController.UpdateGamePlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.PlayerIsChoosingSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
@@ -20,6 +21,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
+import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -38,6 +40,11 @@ public enum EventID {
      * The {@link KickedPlayerFromLobbyEvent} ID.
      */
     KICKED_PLAYER_FROM_LOBBY("KICKED_PLAYER_FROM_LOBBY", KickedPlayerFromLobbyEvent.class),
+
+    /**
+     * The {@link UpdateGamePlayersEvent} ID.
+     */
+    UPDATE_GAME_PLAYERS("UPDATE_GAME_PLAYERS", UpdateGamePlayersEvent.class),
 
     /**
      * The {@link UpdateLobbyPlayersEvent} ID.
@@ -167,7 +174,12 @@ public enum EventID {
     /**
      * The {@link ClientDisconnectedEvent} ID.
      */
-    CLIENT_DISCONNECTED("CLIENT_DISCONNECTED",ClientDisconnectedEvent.class);
+    CLIENT_DISCONNECTED("CLIENT_DISCONNECTED", ClientDisconnectedEvent.class),
+
+    /**
+     * The {@link ServerCrashedEvent} ID.
+     */
+    SERVER_CRASHED("SERVER_CRASHED", ServerCrashedEvent.class);
 
     /**
      * The unique ID of the event type.
