@@ -28,13 +28,20 @@ public class ChooseCardsSetupEvent extends Event {
     private final ImmStartCard startCard;
 
     /**
-     * Constructs a new ChooseCardsSetupEvent with the given objective cards and start card.
+     * A string representing the message associated with this event.
+     */
+    private final String message;
+
+    /**
+     * Constructs a new ChooseCardsSetupEvent with the given objective cards, start card, and message.
      *
      * @param obj   the array of ImmObjectiveCard objects representing the objective cards for the game
      * @param start the ImmStartCard object representing the start card for the game
+     * @param m     the message associated with this event
      */
-    public ChooseCardsSetupEvent(ImmObjectiveCard[] obj, ImmStartCard start) {
+    public ChooseCardsSetupEvent(ImmObjectiveCard[] obj, ImmStartCard start, String m) {
         super(id);
+        this.message = m;
         this.objectiveCards = obj;
         this.startCard = start;
     }
@@ -51,6 +58,13 @@ public class ChooseCardsSetupEvent extends Event {
      */
     public ImmStartCard getStartCard() {
         return startCard;
+    }
+
+    /**
+     * @return the message associated with this event
+     */
+    public String getMessage() {
+        return message;
     }
 
     @Override

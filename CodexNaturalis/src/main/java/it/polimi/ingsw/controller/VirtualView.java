@@ -59,9 +59,19 @@ public class VirtualView {
         listener.update(new InvalidEvent());
     }
 
-    public void evaluateEvent(ChosenCardsSetupEvent event){}
+    public void evaluateEvent(ChosenCardsSetupEvent event){
+        if(gameController != null)
+            listener.update(gameController.chosenCardsSetup(this, event.getObjectiveCardID(), event.getFlipStartCard()));
+        else
+            listener.update(new ChosenCardsSetupEvent(Feedback.FAILURE, "An unexpected action occurred."));
+    }
 
-    public void evaluateEvent(ChosenTokenSetupEvent event){}
+    public void evaluateEvent(ChosenTokenSetupEvent event){
+        if(gameController != null)
+            listener.update(gameController.chosenTokenSetup(this, event.getColor()));
+        else
+            listener.update(new ChosenTokenSetupEvent(Feedback.FAILURE, "An unexpected action occurred."));
+    }
 
     public void evaluateEvent(DrawCardEvent event){}
 

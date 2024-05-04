@@ -25,12 +25,18 @@ public class ChooseTokenSetupEvent extends Event {
     private final List<Token> availableColors;
 
     /**
+     * A string representing the message associated with this event.
+     */
+    private final String message;
+
+    /**
      * Constructs a new ChooseTokenSetupEvent with the given list of available colors.
      *
      * @param colors the list of Token objects representing the available colors for the game
      */
-    public ChooseTokenSetupEvent(List<Token> colors) {
+    public ChooseTokenSetupEvent(List<Token> colors, String m) {
         super(id);
+        this.message = m;
         this.availableColors = new ArrayList<>(colors);
     }
 
@@ -39,6 +45,13 @@ public class ChooseTokenSetupEvent extends Event {
      */
     public List<Token> getAvailableColors() {
         return availableColors;
+    }
+
+    /**
+     * @return the message associated with this event
+     */
+    public String getMessage() {
+        return message;
     }
 
     @Override

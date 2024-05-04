@@ -1,23 +1,26 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.eventUtils.event.fromController.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.KickedPlayerFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromController.UpdateGamePlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromController.UpdateLobbyPlayersEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.ChooseSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
+import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
+import it.polimi.ingsw.immutableModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.PlayerCardsSetup;
 
 import java.util.*;
 
@@ -85,6 +88,14 @@ public class GameController {
      * The number of players required for this game to start.
      */
     private final int requiredPlayers;
+
+    private List<PlayerCardsSetup> setupData;
+
+    private Timer timerSetupCards = null;
+    private Timer timerSetupToken = null;
+    private Timer timerAction = null;
+    private Timer timerWaiting = null;
+
 
     /**
      * Constructs a new GameController with the given lobby.
@@ -228,14 +239,42 @@ public class GameController {
                     count++;
             if (count == virtualViewAccounts.size()){
                 this.gameStarted = true;
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                    entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The game has started!"));
+
                 this.game = new Game(id, new ArrayList<>(readyLobbyPlayers.keySet()));
-                this.game.gameSetup();
+                this.setupData = this.game.gameSetup();
+
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()){
+                    String username = entry.getKey().getUsername();
+                    PlayerCardsSetup playerSetup = setupData.stream()
+                            .filter(setup -> setup.getUsername().equals(username))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (playerSetup != null) {
+                        ImmObjectiveCard[] obj = playerSetup.getImmObjectiveCards();
+                        ImmStartCard start = playerSetup.getImmStartCard();
+                        entry.getValue().update(new ChooseCardsSetupEvent(obj, start, "Choose your setup!"));
+                    } else
+                        System.err.println("An error occurred during the cards setup phase!");
+                }
+                this.timerSetupCards = setupCardsTimer();
             }
         }
     }
 
-    protected synchronized ChooseSetupEvent chosenSetup(VirtualView vv, String ObjectiveCardID, boolean StartCardFlipped, Token color){
+    protected synchronized ChosenCardsSetupEvent chosenCardsSetup(VirtualView vv, String ObjectiveCardID, boolean StartCardFlipped){
+        if (virtualViewAccounts.containsKey(vv)) {
+            if (gameStarted && game.getGameStatus() == GameStatus.SETUP) {
+                /* check timer + check choice + next phase */
+            }
+        }
         return null;/**/
+    }
+
+    protected synchronized ChosenTokenSetupEvent chosenTokenSetup(VirtualView vv, Token color){
+        return null;
     }
 
     protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped){
@@ -247,24 +286,116 @@ public class GameController {
     }
 
     protected synchronized QuitGameEvent quitGame(VirtualView vv){
-        /*remove vv to prevent reconnection*/
-        //TODO implementation
-        /*If no players, delete game. If 1 player, timer*/
-        /*extra events from Model*/
-        return null;
+        if (virtualViewAccounts.containsKey(vv)){
+            if (gameStarted){
+                Account account = virtualViewAccounts.get(vv);
+                joinedPlayers.remove(account);
+                virtualViewAccounts.remove(vv);
+
+                List<String> onlinePlayers = getOnlinePlayers();
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                    GameListener listener = entry.getValue();
+                    if (listener != null)
+                        listener.update(new UpdateGamePlayersEvent(onlinePlayers, "The player " + account.getUsername() + " has left the game!"));
+                }
+
+                handlePlayerOffline(account.getUsername());
+
+                return new QuitGameEvent(Feedback.SUCCESS, "Quit successful!");
+            } else
+                return new QuitGameEvent(Feedback.FAILURE, "You can only quit a game during the session.");
+        } else
+            return new QuitGameEvent(Feedback.FAILURE, "You are not in the lobby.");
     }
 
     protected synchronized void DisconnectFromGame(VirtualView vv){
-        /* remove vv only from virtualViewAccounts */
-        /*extra events from Model*/
+        if (virtualViewAccounts.containsKey(vv) && gameStarted){
+            Account account = virtualViewAccounts.get(vv);
+            joinedPlayers.put(account, null);
+            virtualViewAccounts.remove(vv);
+
+            List<String> onlinePlayers = getOnlinePlayers();
+            for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                GameListener listener = entry.getValue();
+                if (listener != null)
+                    listener.update(new UpdateGamePlayersEvent(onlinePlayers, "The player " + account.getUsername() + " has been disconnected!"));
+            }
+
+            handlePlayerOffline(account.getUsername());
+        }
     }
 
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl){
-        if(joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            game.reconnectPlayer(account.getUsername()); //TODO: updated events from Model, check timer/turn
+        if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
+            if (game.getGameStatus() == GameStatus.WAITING) {
+                this.timerWaiting.cancel();
+                this.timerWaiting = null;
+            }
+            game.reconnectPlayer(account.getUsername(), gl); //TODO: updated events from Model, check timer/turn
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
         }
+    }
+
+    private synchronized Timer waitingStatusTimer(){
+        if (gameStarted && game.getGameStatus() == GameStatus.WAITING) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    synchronized (GameController.this) {
+                        if (game.getGameStatus() == GameStatus.WAITING) {
+                            for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                                if (isPlayerOnline(entry.getKey()))
+                                    entry.getValue().update(new UpdateLobbyPlayersEvent(new ArrayList<>(), "The timer has run out; the game has ended!"));
+                            game.setGameStatus(GameStatus.ENDED);
+                            deleteGame();
+                        }
+                    }
+                }
+            };
+            timer.schedule(task, 60000 * 2); //TODO config file
+            return timer;
+        }
+        else return null;
+    }
+
+    private synchronized Timer setupCardsTimer(){
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    synchronized (GameController.this) {
+                        if (game.getGameStatus() == GameStatus.SETUP) {
+                            for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                                if (isPlayerOnline(entry.getKey()))
+                                    entry.getValue().update(new UpdateLobbyPlayersEvent(new ArrayList<>(), "The timer has run out!"));
+                            //TODO if for automatic choices + next phase (timer) + set null this
+                        }
+                    }
+                }
+            };
+            timer.schedule(task, 60000); //TODO config file
+            return timer;
+        }
+        else return null;
+    }
+
+    private synchronized void setupTokenTimer(){
+
+    }
+
+    private synchronized void playerActionTimer(){
+
+    }
+
+    private synchronized void handlePlayerOffline(String username){
+        game.offlinePlayer(username); //TODO automatic actions in model (place, draw, setup, status, turn)
+        if (game.getGameStatus() == GameStatus.ENDED)
+            deleteGame();
+        else if (game.getGameStatus() == GameStatus.WAITING)
+            timerWaiting = waitingStatusTimer();
     }
 
     /**
@@ -295,15 +426,18 @@ public class GameController {
         return collect;
     }
 
+    protected synchronized List<String> getOnlinePlayers(){
+        List<String> collect = new ArrayList<>();
+        for (Account account : virtualViewAccounts.values())
+            collect.add(account.getUsername());
+        return collect;
+    }
+
     protected List<Pair<String, Boolean>> getReadyLobbyPlayers() {
         List<Pair<String, Boolean>> collect = new ArrayList<>();
         for (Map.Entry<String, Boolean> entry : readyLobbyPlayers.entrySet())
              collect.add(new Pair<>(entry.getKey(), entry.getValue()));
         return collect;
-    }
-
-    protected synchronized Integer getNumOnlinePlayers(){
-        return virtualViewAccounts.size();
     }
 
     protected synchronized int getRequiredPlayers() {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
@@ -10,8 +11,10 @@ import it.polimi.ingsw.model.exceptions.EmptyDeckException;
 import it.polimi.ingsw.model.exceptions.InvalidConstraintException;
 import it.polimi.ingsw.model.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.player.PlayArea;
+import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.PlayerCardsSetup;
 
 /**
  * A class to represent a Codex Naturalis game.
@@ -70,6 +73,8 @@ public class Game {
     private GameStatus gameStatus; /* TODO what if a player disconnects in the SETUP phase? When does he choose StartCard?
                                            when  do we start the RUNNING phase? */
 
+    private GameStatus backupGameStatus;
+
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
      * @param id The identifier of the Game.
@@ -106,6 +111,8 @@ public class Game {
         this.commonObjectives = new ObjectiveCard[2];
 
         this.gameStatus = GameStatus.SETUP;
+
+        //TODO update listeners
     }
 
     /**
@@ -120,14 +127,16 @@ public class Game {
      *
      * @return A list containing arrays of 2 {@link ObjectiveCard ObjectiveCards} for each player to choose their secret objective from.
      */
-    public List<ObjectiveCard[]> gameSetup() {
+    public List<PlayerCardsSetup> gameSetup() {
         Deck<StartCard> startDeck = new DeckFactory().createDeck(StartCard.class);
         Deck<ObjectiveCard> objectiveDeck = new DeckFactory().createDeck(ObjectiveCard.class);
 
         for (int i = 0; i < commonObjectives.length; i++)
             commonObjectives[i] = objectiveDeck.drawTop();
 
-        List<ObjectiveCard[]> secretObjectiveCards = new ArrayList<>();
+        //TODO update listeners
+
+        List<PlayerCardsSetup> cardsSetup = new ArrayList<>();
 
         List<PlayableCard> hand = new ArrayList<>();
 
@@ -136,16 +145,17 @@ public class Game {
             hand.add(resourceDeck.drawTop());
             hand.add(goldDeck.drawTop());
 
-            p.initPlayArea(hand, startDeck.drawTop());
+            StartCard start = startDeck.drawTop();
+            p.initPlayArea(hand, start);
 
             ObjectiveCard[] secretObjectiveChoices = new ObjectiveCard[2];
 
             for (int i = 0; i < 2; i++) {
                 secretObjectiveChoices[i] = objectiveDeck.drawTop();
             }
-            secretObjectiveCards.add(secretObjectiveChoices);
+            cardsSetup.add(new PlayerCardsSetup(p.getUsername(), secretObjectiveChoices, start));
         }
-        return secretObjectiveCards;
+        return cardsSetup;
     }
 
     /**
@@ -182,7 +192,7 @@ public class Game {
         if (c.getCardType().equals(CardType.GOLD) && !flipped) {
             placeable = currPlayer.getPlayArea().checkConstraint(c);
             if (!placeable)
-                throw new InvalidConstraintException("The selected card does not satisfy its constraint for the current Player");
+                throw new InvalidConstraintException("The selected card does not satisfy its constraint for the current Player"); //TODO listener update, no exception
         } else if (flipped) {
             c.flipCard();
         }
@@ -292,9 +302,11 @@ public class Game {
      * @param user The Player's username.
      */
     public void offlinePlayer(String user) {
+        // TODO depending on the status and turn, do automatic actions.
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(false);
+        this.backupGameStatus = this.gameStatus;
         if (onlinePlayersNumber() == 1) setGameStatus(GameStatus.WAITING); // TODO start timeout?
         if (onlinePlayersNumber() == 0) setGameStatus(GameStatus.ENDED); // TODO forceQuitGame?
     }
@@ -303,12 +315,14 @@ public class Game {
      * Sets the {@link Player}'s online status as true.
      * @param user The Player's username.
      */
-    public void reconnectPlayer(String user) {
+    public void reconnectPlayer(String user, GameListener gl) {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(true);
-        if (onlinePlayersNumber() > 1) setGameStatus(GameStatus.RUNNING);
+        if (onlinePlayersNumber() > 1) setGameStatus(GameStatus.RUNNING); //TODO backupStatus
     }
+
+    //TODO: notify listeners only if online.
 
     /**
      * Ends the game and determines the ordered Leaderboard based on objective points earned by {@link Player Players}.
@@ -394,6 +408,45 @@ public class Game {
     }
 
     /**
+     * Updates the player's objective card and start card.
+     * This method should only be called once for each player and after the {@link Game#gameSetup}.
+     *
+     * @param username the username of the player
+     * @param objectiveCard the new objective card for the player
+     * @param flipStartCard whether to flip the start card
+     * @return true if the player was found and the cards were updated, false otherwise
+     */
+    public boolean setupPlayerCards(String username, ObjectiveCard objectiveCard, boolean flipStartCard) {
+        Player player = getPlayerFromUsername(username);
+        if (player == null)
+            return false;
+
+        player.setSecretObjective(objectiveCard);
+
+        if (flipStartCard)
+            player.getPlayArea().getStartCard().flipCard();
+
+        return true;
+    }
+
+    /**
+     * Sets the token for the player with the given username.
+     * This method should only be called once for each player and after the {@link Game#setupPlayerCards}.
+     *
+     * @param username the username of the player
+     * @param token the token to be set for the player
+     * @return true if the player was found and the token was set, false otherwise
+     */
+    public boolean setupPlayerToken(String username, Token token) {
+        Player player = getPlayerFromUsername(username);
+        if (player == null)
+            return false;
+
+        player.setToken(token);
+        return true;
+    }
+
+    /**
      * Retrieves the Game id.
      * @return {@link Game#id gameId}.
      */
@@ -420,7 +473,7 @@ public class Game {
     /**
      * Sets the Game status to the given one.
      */
-    private void setGameStatus(GameStatus gameStatus) {
+    public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
 
@@ -494,10 +547,10 @@ public class Game {
     }
 
     /**
-     * @return true if the player with turn is online.
+     * @return true if it is the player's turn.
      */
-    private boolean isTurnPlayerOnline() {
-        return players.get(turnPlayerIndex).isOnline();
+    public boolean isTurnPlayer(String player) {
+        return players.get(turnPlayerIndex).getUsername().equals(player);
     }
 
 }
