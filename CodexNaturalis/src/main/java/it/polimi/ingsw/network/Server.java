@@ -27,7 +27,7 @@ public interface Server extends Remote {
      * @param client The client that wants to join the server.
      * @throws RemoteException If a remote communication error occurs.
      */
-    default void join(Client client) throws RemoteException{}
+    default void join(Client client) throws RemoteException {}
 
     default void closeConnection() throws RemoteException {};
 }
