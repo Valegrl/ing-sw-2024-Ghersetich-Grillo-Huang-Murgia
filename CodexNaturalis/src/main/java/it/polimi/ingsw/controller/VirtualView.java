@@ -23,6 +23,8 @@ public class VirtualView {
     private final Queue<Event> eventQueue = new LinkedList<>();
     private static final Logger logger = Logger.getLogger("VirtualView");
 
+    //TODO: check not null parameters
+
     public VirtualView(GameListener gl) {
         this.listener = gl;
         this.controller = Controller.getInstance();

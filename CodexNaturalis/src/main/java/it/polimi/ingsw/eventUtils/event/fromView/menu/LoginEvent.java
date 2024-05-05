@@ -39,14 +39,15 @@ public class LoginEvent extends FeedbackEvent {
     /**
      * Constructor for the server side (Controller).
      * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
-     * It also initializes the account with an empty account.
+     * It also initializes the account with the provided username and a null password.
      *
      * @param feedback The feedback for the event.
+     * @param username The username of the user.
      * @param message The message for the event.
      */
-    public LoginEvent(Feedback feedback, String message) {
+    public LoginEvent(Feedback feedback, String username, String message) {
         super(id, feedback, message);
-        account = new Account();
+        account = new Account(username, null);
     }
 
     /**
@@ -55,6 +56,11 @@ public class LoginEvent extends FeedbackEvent {
     public Account getAccount() {
         return account;
     }
+
+    /**
+     * @return The username of the account.
+     */
+    public String getUsername() { return account.getUsername();}
 
     @Override
     public void receiveEvent(ViewEventReceiver viewEventReceiver) {

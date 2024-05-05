@@ -62,13 +62,20 @@ public class Controller {
         String password = account.getPassword();
 
         if ( isFormatInvalid(username) || isFormatInvalid(password) || !userAccounts.contains(account))
-            return new LoginEvent(Feedback.FAILURE, "This account does not exist.");
+            return new LoginEvent(Feedback.FAILURE, username, "This account does not exist.");
+
+        if (virtualViewAccounts.containsKey(vv)) {
+            if (virtualViewAccounts.get(vv).equals(account))
+                return new LoginEvent(Feedback.FAILURE, username, "You are already logged in to this account.");
+            else
+                return new LoginEvent(Feedback.FAILURE, username, "You are already logged in to another account.");
+        }
 
         if (virtualViewAccounts.containsValue(account))
-            return new LoginEvent(Feedback.FAILURE, "Another instance is already connected.");
+            return new LoginEvent(Feedback.FAILURE, username, "This account is already connected to another instance.");
 
         virtualViewAccounts.put(vv, account);
-        return new LoginEvent(Feedback.SUCCESS, "Login successful!");
+        return new LoginEvent(Feedback.SUCCESS, username, "Login successful!");
     }
 
     /**
