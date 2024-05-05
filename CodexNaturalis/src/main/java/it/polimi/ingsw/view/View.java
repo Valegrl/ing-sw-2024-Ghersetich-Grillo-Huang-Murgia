@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
@@ -37,4 +36,5 @@ public interface View {
     void notifyRegisterAccount(Feedback feedback, String message, Account account);
 
     void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer);
+
 }

@@ -6,13 +6,8 @@ import it.polimi.ingsw.eventUtils.event.fromController.*;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.SeeOpponentPlayAreaEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 import it.polimi.ingsw.immutableModel.ImmPlayer;
@@ -58,14 +53,9 @@ public class ViewController implements ViewEventReceiver {
     private final Queue<Event> tasksQueue = new LinkedList<>();
 
     /**
-     * Boolean to know if the view is in-game or not.
+     * The state in which the view is.
      */
-    private boolean inGame;
-
-    /**
-     * Boolean to know if the view is in-lobby or not.
-     */
-    private boolean inLobby;
+    private ViewState viewState;
 
     /**
      * The account associated with the View.
@@ -131,9 +121,7 @@ public class ViewController implements ViewEventReceiver {
      */
     public ViewController(View view) {
         this.view = view;
-        this.inGame = false;
-        this.inLobby = false;
-        this.account = null;
+        this.viewState = new ViewInMenu(view);
 
         try {
             this.clientManager = ClientManager.getInstance();
@@ -170,6 +158,7 @@ public class ViewController implements ViewEventReceiver {
      * @param event The new event from the view.
      */
     public void newViewEvent(Event event) {
+
         if(EventID.isLocal(event.getID())){
             synchronized (tasksQueue) {
                 tasksQueue.add(event);
@@ -281,23 +270,26 @@ public class ViewController implements ViewEventReceiver {
     /*Events done on 4/05/2024*/
     //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
     //TODO (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
+    //TODO should i print for IllegalStateException?
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
-
-        if(inGame && inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            String kickedPlayer = event.getPlayerToKick();
-            view.notifyKickFromLobby(feedback, message, kickedPlayer);
+        try{
+            viewState.evaluateEvent(event);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-
-
+        //TODO change state from Lobby to game ?
+        try{
+            viewState.evaluateEvent(event);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -312,56 +304,49 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            List<LobbyState> availableLobbies = event.getLobbies();
-            view.displayAvailableLobbies(feedback, message, availableLobbies);
+        try{
+            viewState.evaluateEvent(event);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            String lobbyID = event.getLobbyID();
-            int requiredPlayers = event.getRequiredPlayers();
-
-            if (feedback.equals(Feedback.SUCCESS)) {
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback() == Feedback.SUCCESS) {
                 id = event.getLobbyID();
-                this.inLobby = true;
+                viewState = new ViewInLobby(view);
             }
-
-            view.notifyCreatedLobby(feedback, message, lobbyID, requiredPlayers);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
 
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-
-            if(feedback.equals(Feedback.SUCCESS)) {
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.account = null;
             }
-
-            view.notifyDeleteAccount(feedback, message);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            List<LobbyState> offlineGames = event.getGames();
-            view.displayOfflineGames(feedback, message, offlineGames);
+        try{
+            viewState.evaluateEvent(event);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
@@ -369,83 +354,69 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(JoinLobbyEvent event) {
 
         //TODO initialise immutable model ?
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            String lobbyID = event.getLobbyID();
-            List<Pair<String, Boolean>> playersReadyStatus = event.getReadyStatusPlayers();
-
-            if (feedback.equals(Feedback.SUCCESS)) {
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
                 id = event.getLobbyID();
-                inLobby = true;
+                viewState = new ViewInLobby(view);
             }
-
-            view.displayJoinedLobby(feedback, message, lobbyID, playersReadyStatus);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(LoginEvent event) {
-
-        if(!inGame && !inLobby && account == null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            Account account = event.getAccount();
-
-            if(feedback.equals(Feedback.SUCCESS)){
-                this.account = account;
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
+                this.account = event.getAccount();
             }
-
-            view.notifyLogin(feedback, message, account);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(LogoutEvent event) {
-
-        if(!inGame && !inLobby && account != null){
-        Feedback feedback = event.getFeedback();
-        String message = event.getMessage();
-
-            if(feedback.equals(Feedback.SUCCESS)){
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
                 this.account = null;
             }
-
-        view.notifyLogout(feedback, message);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(ReconnectToGameEvent event) {
-        //TODO Reinitialise the local model ?
-
-        if(!inGame && !inLobby && account != null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-
-            if (feedback.equals(Feedback.SUCCESS)) {
+        //TODO Reinitialise the local model ? Connect directly to the game ?
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
                 id = event.getGameID();
-                inGame = true;
-                inLobby = true;
+                viewState = new ViewInGame(view);
             }
-
-            view.notifyReconnectToGame(feedback, message);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void evaluateEvent(RegisterEvent event) {
-
-        if(!inGame && !inLobby && account == null) {
-            Feedback feedback = event.getFeedback();
-            String message = event.getMessage();
-            Account account = event.getAccount();
-
-            if(feedback.equals(Feedback.SUCCESS)){
-                this.account = account;
+        try{
+            viewState.evaluateEvent(event);
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
+                this.account = event.getAccount();
             }
-
-            view.notifyRegisterAccount(feedback, message, account);
+        }
+        catch(IllegalStateException e){
+            e.printStackTrace();
         }
     }
 
@@ -458,8 +429,6 @@ public class ViewController implements ViewEventReceiver {
      * This method handles a server crash. //TODO: use event. Delete this method.
      */
     public void serverCrashed () {
-        inGame = false;
-        inLobby = false;
         account = null;
 
         view.serverCrashed();

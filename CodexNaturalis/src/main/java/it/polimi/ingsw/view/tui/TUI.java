@@ -112,6 +112,7 @@ public class TUI implements View {
     }
 
     //TODO implement methods, possible changes to the names
+    //TODO synchronize input in a way that the terminal doesn't print right away after an event
 
     @Override
     public void printMessage(String message){
@@ -234,5 +235,4 @@ public class TUI implements View {
             out.println(kickedPlayer + " has been kicked from the lobby.");
         }
     }
-
 }
