@@ -347,6 +347,7 @@ public class Game {
         setGameStatus(GameStatus.ENDED);
 
         return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
+        //TODO update listeners. void method?
     }
 
     /**
@@ -426,6 +427,7 @@ public class Game {
         if (flipStartCard)
             player.getPlayArea().getStartCard().flipCard();
 
+        //TODO update listeners
         return true;
     }
 
@@ -443,6 +445,7 @@ public class Game {
             return false;
 
         player.setToken(token);
+        //TODO update listeners
         return true;
     }
 
