@@ -62,7 +62,7 @@ public class Controller {
         String password = account.getPassword();
 
         if ( isFormatInvalid(username) || isFormatInvalid(password) || !userAccounts.contains(account))
-            return new LoginEvent(Feedback.FAILURE, username, "This account does not exist.");
+            return new LoginEvent(Feedback.FAILURE, username, "The username or password is not valid.");
 
         if (virtualViewAccounts.containsKey(vv)) {
             if (virtualViewAccounts.get(vv).equals(account))
