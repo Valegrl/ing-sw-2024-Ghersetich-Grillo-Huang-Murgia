@@ -46,4 +46,53 @@ public final class ImmObjectiveCard extends ImmEvaluableCard {
     public Map<Item, Integer> getRequiredItems() {
         return Map.copyOf(requiredItems);
     }
+
+    public String printCard(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ObjectiveCard: ").append(this.getId()).append("\n");
+        sb.append("  Points: ").append(this.getPoints()).append("\n");
+        if(this.getId().equals("OC01") || this.getId().equals("OC03")){
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+        }
+        if(this.getId().equals("OC02") || this.getId().equals("OC04")){
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
+        }
+        if(this.getId().equals("OC05")){
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
+        }
+        if(this.getId().equals("OC06")){
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
+        }
+        if(this.getId().equals("OC07")){
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
+        }
+        if(this.getId().equals("OC08")){
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
+        }
+        if(this.getId().equals("OC09") || this.getId().equals("OC10") || this.getId().equals("OC11") || this.getId().equals("OC12") ){
+            sb.append("  Required: ").append("\n");
+            for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+                sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+            }
+        }
+        if(this.getId().equals("OC13") || this.getId().equals("OC14") || this.getId().equals("OC15") || this.getId().equals("OC16") ){
+            sb.append("  Required: ").append("\n");
+            for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+                sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
 }

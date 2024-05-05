@@ -57,7 +57,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         sb.append("  Required Items: ").append("\n");
         for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
-            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
+            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
         }
         return sb.toString();
     }
