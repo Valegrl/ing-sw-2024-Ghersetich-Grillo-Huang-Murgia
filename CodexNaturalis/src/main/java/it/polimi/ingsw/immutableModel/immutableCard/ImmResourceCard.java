@@ -20,6 +20,11 @@ public final class ImmResourceCard extends ImmPlayableCard implements ViewCard {
         super(resourceCard);
     }
 
+    /**
+     * Prints the front of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
@@ -33,6 +38,11 @@ public final class ImmResourceCard extends ImmPlayableCard implements ViewCard {
         return sb.toString();
     }
 
+    /**
+     * Prints the back of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");

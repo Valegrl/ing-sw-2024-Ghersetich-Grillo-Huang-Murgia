@@ -43,6 +43,11 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         return Map.copyOf(requiredItems);
     }
 
+    /**
+     * Prints the front of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
@@ -62,6 +67,11 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         return sb.toString();
     }
 
+    /**
+     * Prints the back of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");

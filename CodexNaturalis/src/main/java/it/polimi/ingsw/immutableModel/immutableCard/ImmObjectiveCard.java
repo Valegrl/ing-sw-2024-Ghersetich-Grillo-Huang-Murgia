@@ -12,7 +12,7 @@ import java.util.Map;
  * It extends the ImmEvaluableCard class and adds additional properties and methods related to the objective card.
  * The class is final, so it can't be extended.
  */
-public final class ImmObjectiveCard extends ImmEvaluableCard {
+public final class ImmObjectiveCard extends ImmEvaluableCard implements ViewCard{
     /**
      * The requiredPattern is an array of pairs, each pair consists of a Coordinate and an Item.
      * It represents the pattern that needs to be matched on the board for the card to be evaluated.
@@ -47,6 +47,11 @@ public final class ImmObjectiveCard extends ImmEvaluableCard {
         return Map.copyOf(requiredItems);
     }
 
+    /**
+     * Prints the front of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCard(){
         StringBuilder sb = new StringBuilder();
         sb.append("ObjectiveCard: ").append(this.getId()).append("\n");

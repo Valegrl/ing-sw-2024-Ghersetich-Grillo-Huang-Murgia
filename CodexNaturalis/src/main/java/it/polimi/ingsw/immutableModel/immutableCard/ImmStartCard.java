@@ -85,6 +85,11 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
         return flipped;
     }
 
+    /**
+     * Prints the front of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");
@@ -95,6 +100,11 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
         return sb.toString();
     }
 
+    /**
+     * Prints the back of a card during a Command Line Interface(TUI) game.
+     *
+     * @return a string representing the card details.
+     */
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");

@@ -91,10 +91,17 @@ public enum Item {
         };
     }
 
+    /**
+     * Converts a String from the default color to a custom color based on the Item.
+     * Sets the color to default after printing the colored string.
+     * @param item   The item mapped to the color.
+     * @param string The string to color.
+     * @return The colored string.
+     */
     public static String itemToColor(Item item, String string) {
         return switch (item) {
             /**
-             * Green color for plants.
+             * Green color for plants then resets color to default.
              * Then resets color to default.
              */
             case Item.PLANT -> ("\u001B[32m" + string + "\u001B[0m");
@@ -141,6 +148,12 @@ public enum Item {
         };
     }
 
+    /**
+     * Prints the Item to a custom color.
+     * Sets the color to default after printing the colored Item.
+     * @param item The item mapped to the color.
+     * @return The colored Item string representation.
+     */
     public static String itemToColor(Item item) {
         return switch (item) {
             /**
@@ -153,19 +166,19 @@ public enum Item {
              * Cyan color for animals.
              * Then resets color to default.
              */
-            case Item.ANIMAL -> ("\u001B[32m" + Item.ANIMAL + "\u001B[0m");
+            case Item.ANIMAL -> ("\u001B[36m" + Item.ANIMAL + "\u001B[0m");
 
             /**
              * Red color for fungi.
              * Then resets color to default.
              */
-            case Item.FUNGI -> ("\u001B[32m" + Item.FUNGI + "\u001B[0m");
+            case Item.FUNGI -> ("\u001B[31m" + Item.FUNGI + "\u001B[0m");
 
             /**
              * Purple color for insects.
              * Then resets color to default.
              */
-            case Item.INSECT -> ("\u001B[32m" + Item.INSECT + "\u001B[0m");
+            case Item.INSECT -> ("\u001B[35m" + Item.INSECT + "\u001B[0m");
 
             /**
              * Yellow color for quills.
@@ -192,6 +205,7 @@ public enum Item {
             default -> null;
         };
     }
+
     /**
      * Retrieves the type of this Item, in a String representation.
      *
