@@ -1,5 +1,6 @@
 package it.polimi.ingsw.immutableModel.immutableCard;
 
+
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;

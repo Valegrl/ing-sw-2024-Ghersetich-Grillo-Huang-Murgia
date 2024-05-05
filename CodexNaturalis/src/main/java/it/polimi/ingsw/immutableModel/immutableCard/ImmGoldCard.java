@@ -9,7 +9,7 @@ import java.util.Map;
  * It extends the ImmPlayableCard class and adds additional properties and methods related to the gold card.
  * The class is final, so it can't be extended.
  */
-public final class ImmGoldCard extends ImmPlayableCard {
+public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
     /**
      * The constraint is a map where the keys are Items and the values are the quantity of each item required as
      * a constraint.
@@ -41,5 +41,32 @@ public final class ImmGoldCard extends ImmPlayableCard {
     @Override
     public Map<Item, Integer> getRequiredItems() {
         return Map.copyOf(requiredItems);
+    }
+
+    public String printCard() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append("  Points: ").append(this.getPoints()).append("\n");
+        sb.append("  Constraint: ").append("\n");
+        for (Map.Entry<Item, Integer> entry : this.getConstraint().entrySet()) {
+            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
+        }
+        Item[] corners = this.getCorners();
+        sb.append("  Corners: \n");
+        sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+        sb.append("  Required Items: ").append("\n");
+        for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
+            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
+        }
+        return sb.toString();
+    }
+
+    public String printCardBack() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append("  Corners: \n");
+        sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty");
+        return sb.toString();
     }
 }

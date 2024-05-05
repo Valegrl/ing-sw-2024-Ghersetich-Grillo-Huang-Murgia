@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.card.*;
  * It extends the ImmPlayableCard class and adds additional properties and methods related to the resource card.
  * The class is final, so it can't be extended.
  */
-public final class ImmResourceCard extends ImmPlayableCard {
+public final class ImmResourceCard extends ImmPlayableCard implements ViewCard {
 
     /**
      * Constructs an immutable representation of a resource card.
@@ -18,5 +18,26 @@ public final class ImmResourceCard extends ImmPlayableCard {
      */
     public ImmResourceCard(ResourceCard resourceCard) {
         super(resourceCard);
+    }
+
+    public String printCard() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        if (this.getPoints() != 0) {
+            sb.append("  Points: ").append(this.getPoints()).append("\n");
+        }
+        Item[] corners = this.getCorners();
+        sb.append("  Corners: \n");
+        sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+        return sb.toString();
+    }
+
+    public String printCardBack() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append("  Corners: \n");
+        sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty");
+        return sb.toString();
     }
 }

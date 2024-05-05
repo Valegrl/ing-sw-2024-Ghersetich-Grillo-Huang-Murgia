@@ -9,7 +9,7 @@ import java.util.Map;
  * It extends the ImmEvaluableCard class and adds additional properties and methods related to the playability
  * of the card.
  */
-public class ImmPlayableCard extends ImmEvaluableCard {
+public class ImmPlayableCard extends ImmEvaluableCard implements ViewCard {
     /**
      * The permanentResource represents the resource that the card provides permanently.
      */
@@ -75,6 +75,14 @@ public class ImmPlayableCard extends ImmEvaluableCard {
      * @return null
      */
     public Map<Item, Integer> getConstraint() {
+        return null;
+    }
+
+    public String printCard() {
+        return null;
+    }
+
+    public String printCardBack() {
         return null;
     }
 }

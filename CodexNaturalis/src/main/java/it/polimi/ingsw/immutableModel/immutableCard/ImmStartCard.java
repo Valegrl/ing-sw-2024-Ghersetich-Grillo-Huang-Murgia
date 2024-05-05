@@ -9,7 +9,7 @@ import java.util.List;
  * This class represents an immutable version of a StartCard.
  * It extends the ImmCard class and adds additional properties and methods related to the start card.
  */
-public final class ImmStartCard extends ImmCard {
+public final class ImmStartCard extends ImmCard implements ViewCard{
     /**
      * The backPermanentResources is a list of Items representing the resources that the card provides permanently
      * on its back side.
@@ -83,5 +83,27 @@ public final class ImmStartCard extends ImmCard {
      */
     public boolean isFlipped() {
         return flipped;
+    }
+
+    public String printCard() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("StartCard: ").append(this.getId()).append("\n");
+        Item[] frontCorners = this.getFrontCorners();
+        sb.append("  Front Corners: \n");
+        sb.append("    TL: ").append(Item.itemToColor(frontCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(frontCorners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(frontCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(frontCorners[CornerIndex.BR.getIndex()])).append("\n");
+        return sb.toString();
+    }
+
+    public String printCardBack() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("StartCard: ").append(this.getId()).append("\n");
+        sb.append("  Back Perm.Resources: \n");
+        //TODO Double for loop to print back resources
+        Item[] backCorners = this.getBackCorners();
+        sb.append("  Back Corners: \n");
+        sb.append("    TL: ").append(Item.itemToColor(backCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(backCorners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(backCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(backCorners[CornerIndex.BR.getIndex()])).append("\n");
+        return sb.toString();
     }
 }
