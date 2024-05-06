@@ -142,10 +142,7 @@ public enum Item {
              */
             case Item.MANUSCRIPT -> ("\u001B[33m" + string + "\u001B[0m");
 
-            case Item.EMPTY -> Item.EMPTY.toString();
-            case Item.HIDDEN -> Item.HIDDEN.toString();
-            case Item.COVERED -> Item.COVERED.toString();
-            default -> null;
+            case Item.EMPTY, Item.HIDDEN, Item.COVERED -> string;
         };
     }
 
@@ -203,7 +200,6 @@ public enum Item {
             case Item.EMPTY -> Item.EMPTY.toString();
             case Item.HIDDEN -> Item.HIDDEN.toString();
             case Item.COVERED -> Item.COVERED.toString();
-            default -> null;
         };
     }
 
