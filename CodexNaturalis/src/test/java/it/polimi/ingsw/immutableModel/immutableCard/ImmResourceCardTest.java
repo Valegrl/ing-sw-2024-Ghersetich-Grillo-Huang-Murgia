@@ -15,14 +15,14 @@ class ImmResourceCardTest {
 
         when(resourceCard.getId()).thenReturn("RC16");
         when(resourceCard.getPermanentResource()).thenReturn(Item.PLANT);
-        when(resourceCard.getCorners()).thenReturn(new Item[]{Item.FUNGI, Item.PLANT, Item.HIDDEN, Item.INKWELL});
+        when(resourceCard.getCorners()).thenReturn(new Item[]{Item.FUNGI, Item.PLANT, Item.INKWELL, Item.HIDDEN});
 
         ImmResourceCard card = new ImmResourceCard(resourceCard);
 
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.PLANT, "RC16") + "\n" +
                 "  Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
-                "    BL: " + Item.itemToColor(Item.INKWELL) + "  BR: " + Item.itemToColor(Item.HIDDEN);
+                "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.INKWELL);
 
         assertEquals(expectedOutput, card.printCard());
 

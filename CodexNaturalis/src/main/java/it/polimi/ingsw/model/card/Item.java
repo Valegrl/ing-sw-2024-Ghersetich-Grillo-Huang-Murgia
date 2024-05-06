@@ -141,9 +141,10 @@ public enum Item {
              * Then resets color to default.
              */
             case Item.MANUSCRIPT -> ("\u001B[33m" + string + "\u001B[0m");
-            case Item.EMPTY -> ("\u001B[32m" + string + "\u001B[0m");
-            case Item.HIDDEN -> ("\u001B[32m" + string + "\u001B[0m");
-            case Item.COVERED -> ("\u001B[32m" + string + "\u001B[0m");
+
+            case Item.EMPTY -> Item.EMPTY.toString();
+            case Item.HIDDEN -> Item.HIDDEN.toString();
+            case Item.COVERED -> Item.COVERED.toString();
             default -> null;
         };
     }
@@ -199,9 +200,9 @@ public enum Item {
             case Item.MANUSCRIPT -> ("\u001B[33m" + Item.MANUSCRIPT + "\u001B[0m");
 
 
-            case Item.EMPTY -> ("\u001B[32m" + Item.EMPTY + "\u001B[0m");
-            case Item.HIDDEN -> ("\u001B[32m" + Item.HIDDEN + "\u001B[0m");
-            case Item.COVERED -> ("\u001B[32m" + Item.COVERED + "\u001B[0m");
+            case Item.EMPTY -> Item.EMPTY.toString();
+            case Item.HIDDEN -> Item.HIDDEN.toString();
+            case Item.COVERED -> Item.COVERED.toString();
             default -> null;
         };
     }
