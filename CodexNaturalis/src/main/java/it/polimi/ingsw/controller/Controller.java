@@ -96,6 +96,9 @@ public class Controller {
                     gc.quitLobby(vv);
                 else
                     gc.quitGame(vv);
+
+                virtualViewAccounts.remove(vv);
+                return new LogoutEvent(Feedback.SUCCESS, "Logout successful!");
             }
 
         virtualViewAccounts.remove(vv);
@@ -165,7 +168,7 @@ public class Controller {
         for (GameController gc : gameControllers) {
             if (gc.getIdentifier().equals(lobbyID))
                 return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The lobby ID you entered is already in use."), null);
-            else if (gc.isPlayerOnline(account)) {
+            else if (gc.isPlayerOnline(account.getUsername())) {
                 if(gc.isGameStarted())
                     return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "Your account is already online in a game."), null);
                 else
@@ -197,7 +200,7 @@ public class Controller {
 
         Account account = virtualViewAccounts.get(vv);
         for (GameController gc : gameControllers) {
-            if (gc.isPlayerOnline(account)) {
+            if (gc.isPlayerOnline(account.getUsername())) {
                 if(gc.isGameStarted())
                     return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Your account is already online in a game."), null);
                 else
@@ -244,7 +247,7 @@ public class Controller {
         Account account = virtualViewAccounts.get(vv);
         String username = account.getUsername();
         for (GameController gc : gameControllers){
-            if (gc.isPlayerOnline(account)) {
+            if (gc.isPlayerOnline(account.getUsername())) {
                 if(gc.isGameStarted())
                     return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Your account is already online in a game."), null);
                 else
@@ -321,7 +324,10 @@ public class Controller {
                 if (!gc.isGameStarted())
                     gc.quitLobby(vv);
                 else
-                    gc.DisconnectFromGame(vv);
+                    gc.disconnectFromGame(vv);
+
+                virtualViewAccounts.remove(vv);
+                return;
             }
 
         virtualViewAccounts.remove(vv);

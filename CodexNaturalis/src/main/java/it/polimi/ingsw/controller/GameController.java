@@ -21,7 +21,6 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This class is responsible for managing the game logic.
@@ -88,7 +87,7 @@ public class GameController {
      */
     private final int requiredPlayers;
 
-    private List<Pair<PlayerCardsSetup, Boolean>> setupData;
+    private List<PlayerCardsSetup> setupData;
 
     private List<Pair<Token, Boolean>> colors;
 
@@ -121,7 +120,7 @@ public class GameController {
         Controller.getInstance().addToGameControllers(this);
     }
 
-    protected synchronized void addLobbyPlayer(VirtualView vv, Account account, GameListener gl){
+    protected synchronized void addLobbyPlayer(VirtualView vv, Account account, GameListener gl) {
         if (requiredPlayers > joinedPlayers.keySet().size()) {
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
@@ -137,7 +136,7 @@ public class GameController {
         }
     }
 
-    protected synchronized KickFromLobbyEvent kickPlayer(VirtualView vv, String playerName){
+    protected synchronized KickFromLobbyEvent kickPlayer(VirtualView vv, String playerName) {
         if (!gameStarted) {
             if (vv.equals(hostQueue.peek())) {
                 if (!virtualViewAccounts.get(vv).getUsername().equals(playerName)) {
@@ -172,7 +171,7 @@ public class GameController {
         return new KickFromLobbyEvent(Feedback.FAILURE, "You cannot kick other players during the game.");
     }
 
-    protected synchronized PlayerReadyEvent readyToStart(VirtualView vv){
+    protected synchronized PlayerReadyEvent readyToStart(VirtualView vv) {
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
                 Account account = virtualViewAccounts.get(vv);
@@ -191,7 +190,7 @@ public class GameController {
         return new PlayerReadyEvent(Feedback.FAILURE, "The ready status applies only to the lobby phase.");
     }
 
-    protected synchronized PlayerUnreadyEvent unReadyToStart(VirtualView vv){
+    protected synchronized PlayerUnreadyEvent unReadyToStart(VirtualView vv) {
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
                 Account account = virtualViewAccounts.get(vv);
@@ -210,7 +209,7 @@ public class GameController {
         return new PlayerUnreadyEvent(Feedback.FAILURE, "The unready status applies only to the lobby phase.");
     }
 
-    protected synchronized QuitLobbyEvent quitLobby(VirtualView vv){
+    protected synchronized QuitLobbyEvent quitLobby(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv)){
             if (!gameStarted){
                 Account account = virtualViewAccounts.get(vv);
@@ -232,7 +231,7 @@ public class GameController {
         return new QuitLobbyEvent(Feedback.FAILURE, "You are not in the lobby.");
     }
 
-    protected synchronized void startGame(){
+    protected synchronized void startGame() {
         if (!gameStarted){
             int count = 0;
             for (Boolean isReady : readyLobbyPlayers.values())
@@ -244,18 +243,14 @@ public class GameController {
                     entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The game has started!"));
 
                 this.game = new Game(id, new ArrayList<>(readyLobbyPlayers.keySet()));
-                List<PlayerCardsSetup> player = this.game.gameSetup();
-
-                this.setupData = new ArrayList<>();
-                for (PlayerCardsSetup p : player)
-                    setupData.add(new Pair<>(p, false));
+                this.setupData = this.game.gameSetup();
 
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()){
                     String username = entry.getKey().getUsername();
-                    PlayerCardsSetup playerSetup = Objects.requireNonNull(setupData.stream()
-                            .filter(setup -> setup.key().getUsername().equals(username))
+                    PlayerCardsSetup playerSetup = setupData.stream()
+                            .filter(setup -> setup.getUsername().equals(username))
                             .findFirst()
-                            .orElse(new Pair<>(null,null))).key();
+                            .orElse(null);
 
                     if (playerSetup != null) {
                         ImmObjectiveCard[] obj = playerSetup.getImmObjectiveCards();
@@ -269,26 +264,27 @@ public class GameController {
         }
     }
 
-    protected synchronized ChosenCardsSetupEvent chosenCardsSetup(VirtualView vv, String ObjectiveCardID, boolean StartCardFlipped){
+    protected synchronized ChosenCardsSetupEvent chosenCardsSetup(VirtualView vv, String ObjectiveCardID, boolean StartCardFlipped) {
         if (virtualViewAccounts.containsKey(vv)) {
             if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null) {
                 if (timerSetupCards.value() != null){
 
                     String username = virtualViewAccounts.get(vv).getUsername();
-                    for (Pair<PlayerCardsSetup, Boolean> p : setupData)
-                        if (username.equals(p.key().getUsername())){
-                            if (!p.value()) {
-                                for (ObjectiveCard c : p.key().getObjectiveCards())
+                    for (PlayerCardsSetup p : setupData)
+                        if (username.equals(p.getUsername())){
+                            if (!p.isChosen()) {
+                                for (ObjectiveCard c : p.getObjectiveCards())
                                     if (c.getId().equals(ObjectiveCardID)) {
                                         boolean done = game.setupPlayerCards(username, c, StartCardFlipped);
                                         if (!done)
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
-                                        setupData.remove(p);
-                                        setupData.add(new Pair<>(p.key(), true));
+                                        p.setChosen(true);
 
-                                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                                            if (isPlayerOnline(entry.getKey()) && !entry.getKey().getUsername().equals(username))
+                                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                                            String otherUsername = entry.getKey().getUsername();
+                                            if (isPlayerOnline(otherUsername) && !otherUsername.equals(username))
                                                 entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The player " + username + " has chosen a card setup."));
+                                        }
 
                                         return new ChosenCardsSetupEvent(Feedback.SUCCESS, "Your cards setup has been chosen!");
                                     }
@@ -299,27 +295,60 @@ public class GameController {
                     System.err.println("An error occurred during the chosen cards setup phase!");
 
                 }
-                return new ChosenCardsSetupEvent(Feedback.FAILURE, "The timer has run out! Your setup has been assigned automatically.");
+                return new ChosenCardsSetupEvent(Feedback.FAILURE, "The timer has run out! Your cards setup has been assigned automatically.");
             }
             return new ChosenCardsSetupEvent(Feedback.FAILURE, "You can only choose during the cards-setup phase.");
         }
         return new ChosenCardsSetupEvent(Feedback.FAILURE, "You are not in the game.");
     }
 
-    private synchronized void AutoCardsSetup(){ //TODO: call this method from handlePlayerOffline, if we are in this phase.
-        /* check timertask, se scaduto setup per tutti i false */
+    private synchronized void autoCardsSetup() {
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null){
+            /* Check TimerTask, if expired, set up for all the false ones. */
+            if (timerSetupCards.value() == null) {
+                for (PlayerCardsSetup p : setupData) {
+                    String username = p.getUsername();
+                    if (!p.isChosen()) {
+                        //TODO: config file?
+                        boolean done = game.setupPlayerCards(username, p.getObjectiveCards()[0], false);
+                        if (!done)
+                            throw new RuntimeException("A fatal error occurred with the player's username: " + username);
+                        p.setChosen(true);
 
-        /* se timertask non scaduto auto setup solo per i disconnected. */
-
-        /* startTokenSetup sempre alla fine di entrambi*/
+                        if(isPlayerOnline(username)){
+                            Account acc = null;
+                            for (Account account : joinedPlayers.keySet())
+                                if (account.getUsername().equals(username))
+                                    acc = account;
+                            if (acc != null)
+                                joinedPlayers.get(acc).update(new UpdateGamePlayersEvent(getOnlinePlayers(), "Your cards setup has been assigned automatically."));
+                            else
+                                throw new RuntimeException("A fatal error occurred with the player's username: " + username);
+                        }
+                    }
+                }
+            }
+            /* If the TimerTask has not expired, automatically set up for the disconnected ones. */
+            else {
+                for (PlayerCardsSetup p : setupData)
+                    if (!p.isChosen() && !isPlayerOnline(p.getUsername())){
+                        //TODO: config file?
+                        boolean done = game.setupPlayerCards(p.getUsername(), p.getObjectiveCards()[0], false);
+                        if (!done)
+                            throw new RuntimeException("A fatal error occurred with the player's username: " + p.getUsername());
+                        p.setChosen(true);
+                    }
+            }
+            startTokenSetup();
+        }
     }
 
-    protected synchronized void startTokenSetup(){
+    protected synchronized void startTokenSetup() {
         if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null){
             int countTrue = 0;
 
-            for (Pair<PlayerCardsSetup, Boolean> pair : setupData)
-                if (pair.value()) {
+            for (PlayerCardsSetup p : setupData)
+                if (p.isChosen()) {
                     countTrue++;
                 }
 
@@ -332,13 +361,11 @@ public class GameController {
                         .map(Pair::key)
                         .toList();
 
-                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) //TODO move?
-                    if(isPlayerOnline(entry.getKey()))
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                    if(isPlayerOnline(entry.getKey().getUsername()))
                         entry.getValue().update(new ChooseTokenSetupEvent(tokenList, "Choose your color!"));
 
                 this.timerSetupToken = setupTokenTimer();
-
-                /* autotoken for offline player*/
             }
         }
     }
@@ -347,13 +374,13 @@ public class GameController {
         return null;
     }
 
-    private synchronized void AutoTokenSetup(){ //TODO: ?call this method from handlePlayerOffline?, if we are in this phase.
+    private synchronized void autoTokenSetup() { //TODO: ?call this method from handlePlayerOffline?, if we are in this phase.
         /* check timertask, se scaduto setup per tutti i false + (startRunning new timer action + set running)) */
 
         /* se timertask non scaduto auto setup solo per i disconnected. */
     }
 
-    protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped){
+    protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped) {
         return null;
     }
 
@@ -361,7 +388,7 @@ public class GameController {
         return null;
     }
 
-    protected synchronized QuitGameEvent quitGame(VirtualView vv){
+    protected synchronized QuitGameEvent quitGame(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv)){
             if (gameStarted){
                 Account account = virtualViewAccounts.get(vv);
@@ -370,7 +397,7 @@ public class GameController {
 
                 List<String> onlinePlayers = getOnlinePlayers();
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                    if (isPlayerOnline(entry.getKey()))
+                    if (isPlayerOnline(entry.getKey().getUsername()))
                         entry.getValue().update(new UpdateGamePlayersEvent(onlinePlayers, "The player " + account.getUsername() + " has left the game!"));
 
                 handlePlayerOffline(account.getUsername());
@@ -382,7 +409,7 @@ public class GameController {
             return new QuitGameEvent(Feedback.FAILURE, "You are not in the lobby.");
     }
 
-    protected synchronized void DisconnectFromGame(VirtualView vv){
+    protected synchronized void disconnectFromGame(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv) && gameStarted){
             Account account = virtualViewAccounts.get(vv);
             joinedPlayers.put(account, null);
@@ -390,26 +417,45 @@ public class GameController {
 
             List<String> onlinePlayers = getOnlinePlayers();
             for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                if (isPlayerOnline(entry.getKey()))
+                if (isPlayerOnline(entry.getKey().getUsername()))
                     entry.getValue().update(new UpdateGamePlayersEvent(onlinePlayers, "The player " + account.getUsername() + " has been disconnected!"));
 
             handlePlayerOffline(account.getUsername());
         }
     }
 
-    protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl){
+    protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            if (game.getGameStatus() == GameStatus.WAITING) {
-                this.timerWaiting.cancel();
-                this.timerWaiting = null;
-            }
+            GameStatus gs = game.getGameStatus();
             game.reconnectPlayer(account.getUsername(), gl); //TODO: updated events from Model, check timer/turn/gameStatus
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
+
+            if (gs == GameStatus.SETUP) {
+                if (timerSetupToken == null) {
+                    /* card setup phase */
+                } else {
+                    /* token setup phase */
+                }
+
+            } else if (gs == GameStatus.RUNNING) {
+
+            } else if (gs == GameStatus.LAST_CIRCLE) {
+
+            } else if (gs == GameStatus.WAITING) {
+                this.timerWaiting.cancel();
+                this.timerWaiting = null;
+
+            } else if (gs == GameStatus.ENDED) {
+                /* needed? */
+
+            } else
+                throw new RuntimeException("A fatal error occurred with the Game Status");
+
         }
     }
 
-    private synchronized Pair<Timer, TimerTask> setupCardsTimer(){
+    private synchronized Pair<Timer, TimerTask> setupCardsTimer() {
         if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -418,10 +464,10 @@ public class GameController {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.SETUP && timerSetupToken == null) {
                             for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                                if (isPlayerOnline(entry.getKey()))
+                                if (isPlayerOnline(entry.getKey().getUsername()))
                                     entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The timer has run out!"));
                             GameController.this.timerSetupCards = new Pair<>(timer, null);
-                            GameController.this.AutoCardsSetup();
+                            GameController.this.autoCardsSetup();
                         }
                     }
                 }
@@ -432,7 +478,7 @@ public class GameController {
         else return null;
     }
 
-    private synchronized Pair<Timer, TimerTask> setupTokenTimer(){
+    private synchronized Pair<Timer, TimerTask> setupTokenTimer() {
         if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -441,11 +487,11 @@ public class GameController {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.SETUP) {
                             for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                                if (isPlayerOnline(entry.getKey()))
+                                if (isPlayerOnline(entry.getKey().getUsername()))
                                     entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The timer has run out!"));
                             //TODO if for automatic choices + next phase (timer) + set null this
                             GameController.this.timerSetupToken = new Pair<>(timer, null);
-                            GameController.this.AutoTokenSetup();
+                            GameController.this.autoTokenSetup();
                         }
                     }
                 }
@@ -460,7 +506,7 @@ public class GameController {
         return null;
     }
 
-    private synchronized Timer waitingStatusTimer(){
+    private synchronized Timer waitingStatusTimer() {
         if (gameStarted && game.getGameStatus() == GameStatus.WAITING) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -469,7 +515,7 @@ public class GameController {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.WAITING) {
                             for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                                if (isPlayerOnline(entry.getKey()))
+                                if (isPlayerOnline(entry.getKey().getUsername()))
                                     entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The timer has run out; the game has ended!"));
                             game.endGame();
                             deleteGame();
@@ -483,12 +529,32 @@ public class GameController {
         else return null;
     }
 
-    private synchronized void handlePlayerOffline(String username){
-        game.offlinePlayer(username); //TODO automatic actions in model (place, draw, setup, status, turn)
-        if (game.getGameStatus() == GameStatus.ENDED)
-            deleteGame();
-        else if (game.getGameStatus() == GameStatus.WAITING)
-            timerWaiting = waitingStatusTimer();
+    private synchronized void handlePlayerOffline(String username) {
+        if (gameStarted){
+            GameStatus gs = game.getGameStatus();
+            if (gs == GameStatus.SETUP) {
+                if (timerSetupToken == null) {
+                    autoCardsSetup();
+                } else {
+                    /* token setup phase */
+                }
+
+            } else if (gs == GameStatus.RUNNING) {
+
+            } else if (gs == GameStatus.LAST_CIRCLE) {
+
+            } else if (gs == GameStatus.WAITING) {
+                timerWaiting = waitingStatusTimer();
+
+            } else if (gs == GameStatus.ENDED) {
+                /* needed? */
+                deleteGame();
+
+            } else
+                throw new RuntimeException("A fatal error occurred with the Game Status");
+
+            game.offlinePlayer(username); //TODO automatic actions in model (place, draw, setup, status, turn)
+        }
     }
 
     /**
@@ -496,11 +562,11 @@ public class GameController {
      * This method deletes the Game instance that this controller manages and removes this GameController from the
      * list of game controllers in the Controller singleton.
      */
-    private synchronized void deleteGame(){
+    private synchronized void deleteGame() {
         Controller.getInstance().removeFromGameControllers(this);
     }
 
-    protected synchronized boolean isGameStarted(){return gameStarted;}
+    protected synchronized boolean isGameStarted() {return gameStarted;}
 
     /**
      * Retrieves the unique identifier of the game.
@@ -508,18 +574,18 @@ public class GameController {
      *
      * @return The unique identifier of the game.
      */
-    protected synchronized String getIdentifier(){
+    protected synchronized String getIdentifier() {
         return id;
     }
 
-    protected synchronized List<String> getPlayers(){
+    protected synchronized List<String> getPlayers() {
         List<String> collect = new ArrayList<>();
         for (Account account : joinedPlayers.keySet())
             collect.add(account.getUsername());
         return collect;
     }
 
-    protected synchronized List<String> getOnlinePlayers(){
+    protected synchronized List<String> getOnlinePlayers() {
         List<String> collect = new ArrayList<>();
         for (Account account : virtualViewAccounts.values())
             collect.add(account.getUsername());
@@ -537,7 +603,11 @@ public class GameController {
         return requiredPlayers;
     }
 
-    protected synchronized boolean isPlayerOnline(Account account){
-        return virtualViewAccounts.containsValue(account);
+    protected synchronized boolean isPlayerOnline(String username) {
+        for (Account account : virtualViewAccounts.values()) {
+            if (account.getUsername().equals(username))
+                return true;
+        }
+        return false;
     }
 }
