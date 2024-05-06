@@ -61,6 +61,12 @@ public interface ViewEventReceiver {
     void evaluateEvent(UpdateGamePlayersEvent event);
 
     /**
+     * Handles the event of ended game.
+     * @param event The event to be handled.
+     */
+    void evaluateEvent(EndedGameEvent event);
+
+    /**
      * Handles the event of updating the local model.
      * @param event The event to be handled.
      */

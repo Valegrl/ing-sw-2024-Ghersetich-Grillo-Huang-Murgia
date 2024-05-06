@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.card.EvaluableCard;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.PlayArea;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * A class that evaluates a card that gives points based on the visibility of some items in the PlayArea.
  */
-public class ItemEvaluator implements Evaluator {
+public class ItemEvaluator implements Evaluator, Serializable {
 
     @Override
     public int calculatePoints(PlayArea playArea) {

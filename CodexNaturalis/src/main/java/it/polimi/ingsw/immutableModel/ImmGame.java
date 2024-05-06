@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.card.GoldCard;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.ResourceCard;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @see it.polimi.ingsw.model.Game
  */
-public final class ImmGame {
+public final class ImmGame implements Serializable {
     /**
      * The unique identifier of the game.
      */

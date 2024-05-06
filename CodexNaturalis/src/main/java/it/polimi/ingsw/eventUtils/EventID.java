@@ -1,6 +1,7 @@
 package it.polimi.ingsw.eventUtils;
 
 import it.polimi.ingsw.eventUtils.event.fromController.*;
+import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
@@ -50,6 +51,11 @@ public enum EventID {
      * The {@link UpdateGamePlayersEvent} ID.
      */
     UPDATE_GAME_PLAYERS("UPDATE_GAME_PLAYERS", UpdateGamePlayersEvent.class),
+
+    /**
+     * The {@link EndedGameEvent} ID.
+     */
+    ENDED_GAME("ENDED_GAME", EndedGameEvent.class),
 
     /**
      * The {@link UpdateLobbyPlayersEvent} ID.

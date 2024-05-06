@@ -1,12 +1,13 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * A class to represent a coordinate in a two-dimensional space.
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
     /**
      * The x-coordinate.
      */

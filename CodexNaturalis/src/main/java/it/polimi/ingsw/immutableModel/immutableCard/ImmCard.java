@@ -2,6 +2,7 @@ package it.polimi.ingsw.immutableModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * It is used to provide a read-only view of the card data.
  * The class is final, so it can't be extended.
  */
-public class ImmCard {
+public class ImmCard implements Serializable {
     /**
      * The unique identifier of the card.
      */

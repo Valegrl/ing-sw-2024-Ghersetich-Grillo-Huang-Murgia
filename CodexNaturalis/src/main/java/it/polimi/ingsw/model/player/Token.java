@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.player;
 
+import java.io.Serializable;
+
 /**
  * An enumeration that represents the game tokens.
  * They are chosen by each {@link Player player}.
  */
-public enum Token {
+public enum Token implements Serializable {
     /**
      * The red color.
      */

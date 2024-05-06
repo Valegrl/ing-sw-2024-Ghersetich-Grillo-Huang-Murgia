@@ -6,12 +6,13 @@ import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * A class that evaluates a card that gives points based on the corners it covers.
  */
-public class CornerEvaluator implements Evaluator {
+public class CornerEvaluator implements Evaluator, Serializable {
 
     @Override
     public int calculatePoints(PlayArea playArea) {

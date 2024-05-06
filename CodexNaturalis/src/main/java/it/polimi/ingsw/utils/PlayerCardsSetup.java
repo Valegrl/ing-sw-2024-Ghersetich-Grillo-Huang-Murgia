@@ -91,7 +91,7 @@ public class PlayerCardsSetup {
      * @return an array of the player's objective cards
      */
     public ObjectiveCard[] getObjectiveCards() {
-        return objectiveCards;
+        return objectiveCards.clone();
     }
 
     /**

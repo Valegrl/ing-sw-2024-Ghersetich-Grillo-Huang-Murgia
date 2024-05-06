@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.card;
 
+import java.io.Serializable;
+
 /**
  * An enumeration that represents the game Items.
  * They can be found in a {@link Card card} corner.
  */
-public enum Item {
+public enum Item implements Serializable {
     /**
      * The plant kingdom resource.
      */

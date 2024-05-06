@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Set;
 /**
  * A class that evaluates a card that gives points based on a placement pattern of other cards.
  */
-public class PatternEvaluator implements Evaluator {
+public class PatternEvaluator implements Evaluator, Serializable {
 
     @Override
     public int calculatePoints(PlayArea playArea) {

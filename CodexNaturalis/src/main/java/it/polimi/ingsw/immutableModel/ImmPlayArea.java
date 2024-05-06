@@ -8,6 +8,7 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.model.card.Item;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @see it.polimi.ingsw.model.player.PlayArea
  */
-public final class ImmPlayArea {
+public final class ImmPlayArea implements Serializable {
     /**
      * The list of playable cards in the player's hand.
      */

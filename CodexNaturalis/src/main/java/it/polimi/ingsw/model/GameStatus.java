@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * An enumeration representing the possible states of a game.
  */
-public enum GameStatus {
+public enum GameStatus implements Serializable {
     /**
      * The game is in the setup phase.
      */

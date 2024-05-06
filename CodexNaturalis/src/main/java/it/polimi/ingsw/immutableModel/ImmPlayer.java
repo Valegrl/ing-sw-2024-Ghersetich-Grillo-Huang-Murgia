@@ -4,6 +4,8 @@ import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Token;
 
+import java.io.Serializable;
+
 /**
  * Immutable representation of the Player class.
  * This class provides a read-only view of the player's state, which can be safely shared across different threads.
@@ -12,7 +14,7 @@ import it.polimi.ingsw.model.player.Token;
  *
  * @see it.polimi.ingsw.model.player.Player
  */
-public final class ImmPlayer {
+public final class ImmPlayer implements Serializable {
     /**
      * The username of the player.
      */

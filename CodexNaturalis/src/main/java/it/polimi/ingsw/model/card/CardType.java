@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.card;
 
+import java.io.Serializable;
+
 /**
  * An enumeration that represents the type of {@link PlayableCard}.
  */
-public enum CardType {
+public enum CardType implements Serializable {
     /**
      * The gold card type.
      */

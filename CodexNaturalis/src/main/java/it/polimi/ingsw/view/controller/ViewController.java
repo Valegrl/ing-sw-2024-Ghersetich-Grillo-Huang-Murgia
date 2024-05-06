@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.controller;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.*;
+import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
@@ -234,6 +235,11 @@ public class ViewController implements ViewEventReceiver {
         if(view.getState().inGame()){
 
         }
+
+    }
+
+    @Override
+    public void evaluateEvent(EndedGameEvent event) {
 
     }
 
