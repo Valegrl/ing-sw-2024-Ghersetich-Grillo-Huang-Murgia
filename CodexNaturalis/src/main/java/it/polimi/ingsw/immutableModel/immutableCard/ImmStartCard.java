@@ -2,7 +2,9 @@ package it.polimi.ingsw.immutableModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -96,7 +98,7 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
         Item[] frontCorners = this.getFrontCorners();
         sb.append("  Front Corners: \n");
         sb.append("    TL: ").append(Item.itemToColor(frontCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(frontCorners[CornerIndex.TR.getIndex()])).append("\n");
-        sb.append("    BL: ").append(Item.itemToColor(frontCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(frontCorners[CornerIndex.BR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(frontCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(frontCorners[CornerIndex.BR.getIndex()]));
         return sb.toString();
     }
 
@@ -108,12 +110,16 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");
-        sb.append("  Back Perm.Resources: \n");
-        //TODO Double for loop to print back resources
+        sb.append("  Back Permanent Resources: \n");
+        List<Item> sortedResources = new ArrayList<>(this.getBackPermanentResources());
+        sortedResources.sort(Comparator.comparing(Enum::name));
+        for (Item item : sortedResources) {
+            sb.append("    ").append(item.toString()).append("\n");
+        }
         Item[] backCorners = this.getBackCorners();
         sb.append("  Back Corners: \n");
         sb.append("    TL: ").append(Item.itemToColor(backCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(backCorners[CornerIndex.TR.getIndex()])).append("\n");
-        sb.append("    BL: ").append(Item.itemToColor(backCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(backCorners[CornerIndex.BR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(backCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(backCorners[CornerIndex.BR.getIndex()]));
         return sb.toString();
     }
 }
