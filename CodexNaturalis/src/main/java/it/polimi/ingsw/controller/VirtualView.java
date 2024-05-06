@@ -70,9 +70,10 @@ public class VirtualView {
     }
 
     public void evaluateEvent(ChosenTokenSetupEvent event){
-        if(gameController != null)
+        if(gameController != null) {
             listener.update(gameController.chosenTokenSetup(this, event.getColor()));
-        else
+            gameController.startRunning();
+        } else
             listener.update(new ChosenTokenSetupEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
 

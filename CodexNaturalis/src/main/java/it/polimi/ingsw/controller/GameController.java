@@ -15,10 +15,7 @@ import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.player.Token;
-import it.polimi.ingsw.utils.Account;
-import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.utils.PlayerCardsSetup;
+import it.polimi.ingsw.utils.*;
 
 import java.util.*;
 
@@ -89,7 +86,9 @@ public class GameController {
 
     private List<PlayerCardsSetup> setupData;
 
-    private List<Pair<Token, Boolean>> colors;
+    private List<PlayerTokenSetup> setupColors;
+
+    private List<Token> availableTokens;
 
     private Pair<Timer, TimerTask> timerSetupCards = null;
     private Pair<Timer, TimerTask> timerSetupToken = null;
@@ -117,6 +116,7 @@ public class GameController {
         this.hostQueue.add(vv);
         this.id = gameID;
         this.requiredPlayers = nRequiredPlayers;
+        this.availableTokens = Arrays.asList(Token.values());
         Controller.getInstance().addToGameControllers(this);
     }
 
@@ -353,17 +353,19 @@ public class GameController {
                 }
 
             if (setupData.size() == countTrue) {
-                this.colors = new ArrayList<>();
-                for(Token t : Token.values())
-                    colors.add(new Pair<>(t, true));
+                this.setupColors = new ArrayList<>();
+                List<Token> colors = new ArrayList<>(Arrays.asList(Token.values()));
 
-                List<Token> tokenList = colors.stream()
-                        .map(Pair::key)
-                        .toList();
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                    String username = entry.getKey().getUsername();
+                    PlayerTokenSetup pts = new PlayerTokenSetup(username);
+                    if (isPlayerOnline(username))
+                        entry.getValue().update(new ChooseTokenSetupEvent(colors, "Choose your color!"));
+                    else
+                        pts.setDisconnected(true);
 
-                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                    if(isPlayerOnline(entry.getKey().getUsername()))
-                        entry.getValue().update(new ChooseTokenSetupEvent(tokenList, "Choose your color!"));
+                    setupColors.add(pts);
+                }
 
                 this.timerSetupToken = setupTokenTimer();
             }
@@ -374,18 +376,68 @@ public class GameController {
         return null;
     }
 
-    private synchronized void autoTokenSetup() { //TODO: ?call this method from handlePlayerOffline?, if we are in this phase.
-        /* check timertask, se scaduto setup per tutti i false + (startRunning new timer action + set running)) */
+    private synchronized void autoTokenSetup() {
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken != null){
+            /* check TimerTask, if expired, setup for all players with null token */
+            if (timerSetupToken.value() == null)
+                assignToken();
+            /* If TimerTask has not expired and all players online have a non-null token,
+               auto setup only for those who have been disconnectedAtLeastOnce. */
+            else {
+                int countNotNullOnline = 0;
 
-        /* se timertask non scaduto auto setup solo per i disconnected. */
+                for (PlayerTokenSetup p : setupColors)
+                    if (p.getToken() != null && isPlayerOnline(p.getUsername())) {
+                        countNotNullOnline++;
+                    }
+
+                //TODO check + for disconnectedAtLeastOnce
+
+                if (countNotNullOnline == virtualViewAccounts.size())
+                    assignToken();
+            }
+            startRunning();
+        }
+    }
+
+    private synchronized void assignToken() {
+        for (PlayerTokenSetup pts : setupColors)
+            if (pts.getToken() == null){
+                int dim = availableTokens.size();
+                if (dim > 0)
+                    pts.setToken(availableTokens.remove(dim-1));
+                else
+                    throw new RuntimeException("Token are not enough.");
+            }
+    }
+
+    protected synchronized void startRunning() {
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken != null){
+            int countTrue = 0;
+
+            for (PlayerTokenSetup p : setupColors)
+                if (p.getToken() != null) {
+                    countTrue++;
+                }
+
+            if (setupColors.size() == countTrue) {
+                /* set Status + turn + check offline player for skip turn or waiting status */
+            }
+        }
     }
 
     protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped) {
         return null;
     }
 
-    protected synchronized DrawCardEvent drawCard(VirtualView vv, CardType type, int index){
+    /* for the following two methods, manage the LAST-CIRCLE status */
+
+    protected synchronized DrawCardEvent drawCard(VirtualView vv, CardType type, int index) {
         return null;
+    }
+
+    protected synchronized void autoDrawCard() {
+
     }
 
     protected synchronized QuitGameEvent quitGame(VirtualView vv) {
@@ -426,32 +478,18 @@ public class GameController {
 
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
+            //TODO update others
+
             GameStatus gs = game.getGameStatus();
-            game.reconnectPlayer(account.getUsername(), gl); //TODO: updated events from Model, check timer/turn/gameStatus
-            joinedPlayers.put(account, gl);
-            virtualViewAccounts.put(vv, account);
-
-            if (gs == GameStatus.SETUP) {
-                if (timerSetupToken == null) {
-                    /* card setup phase */
-                } else {
-                    /* token setup phase */
-                }
-
-            } else if (gs == GameStatus.RUNNING) {
-
-            } else if (gs == GameStatus.LAST_CIRCLE) {
-
-            } else if (gs == GameStatus.WAITING) {
+            if (gs == GameStatus.WAITING) {
                 this.timerWaiting.cancel();
                 this.timerWaiting = null;
+                //TODO manage backupStatus cases (waiting is possible only for running and last-circle). start timer again.
+            }
 
-            } else if (gs == GameStatus.ENDED) {
-                /* needed? */
-
-            } else
-                throw new RuntimeException("A fatal error occurred with the Game Status");
-
+            game.reconnectPlayer(account.getUsername(), gl); //TODO: updated events from Model ?after return?, check timer/turn/gameStatus
+            joinedPlayers.put(account, gl);
+            virtualViewAccounts.put(vv, account);
         }
     }
 
@@ -489,7 +527,6 @@ public class GameController {
                             for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
                                 if (isPlayerOnline(entry.getKey().getUsername()))
                                     entry.getValue().update(new UpdateGamePlayersEvent(getOnlinePlayers(), "The timer has run out!"));
-                            //TODO if for automatic choices + next phase (timer) + set null this
                             GameController.this.timerSetupToken = new Pair<>(timer, null);
                             GameController.this.autoTokenSetup();
                         }
@@ -530,30 +567,34 @@ public class GameController {
     }
 
     private synchronized void handlePlayerOffline(String username) {
-        if (gameStarted){
-            GameStatus gs = game.getGameStatus();
-            if (gs == GameStatus.SETUP) {
-                if (timerSetupToken == null) {
-                    autoCardsSetup();
-                } else {
-                    /* token setup phase */
-                }
+        if (gameStarted) {
+            if (!getOnlinePlayers().isEmpty()) {
+                game.offlinePlayer(username); //TODO automatic actions in model  ?(place, draw, setup, status, turn)?
 
-            } else if (gs == GameStatus.RUNNING) {
+                GameStatus gs = game.getGameStatus();
+                if (gs == GameStatus.SETUP) {
+                    if (timerSetupToken == null) {
+                        autoCardsSetup();
+                    } else {
+                        for (PlayerTokenSetup pts : setupColors)
+                            if (pts.getUsername().equals(username))
+                                pts.setDisconnected(true);
+                        autoTokenSetup();
+                    }
 
-            } else if (gs == GameStatus.LAST_CIRCLE) {
+                } else if (gs == GameStatus.RUNNING) {
 
-            } else if (gs == GameStatus.WAITING) {
-                timerWaiting = waitingStatusTimer();
+                } else if (gs == GameStatus.LAST_CIRCLE) {
 
-            } else if (gs == GameStatus.ENDED) {
-                /* needed? */
+                } else if (gs == GameStatus.WAITING) {
+                    timerWaiting = waitingStatusTimer();
+                    ////TODO manage backupStatus cases (waiting is possible only for running and last-circle). stop current timer.
+
+                } else
+                    throw new RuntimeException("A fatal error occurred with the Game Status");
+            }
+            else
                 deleteGame();
-
-            } else
-                throw new RuntimeException("A fatal error occurred with the Game Status");
-
-            game.offlinePlayer(username); //TODO automatic actions in model (place, draw, setup, status, turn)
         }
     }
 
@@ -563,6 +604,10 @@ public class GameController {
      * list of game controllers in the Controller singleton.
      */
     private synchronized void deleteGame() {
+        joinedPlayers.clear();
+        virtualViewAccounts.clear();
+        readyLobbyPlayers.clear();
+        hostQueue.clear();
         Controller.getInstance().removeFromGameControllers(this);
     }
 

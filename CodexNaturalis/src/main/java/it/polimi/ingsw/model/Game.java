@@ -70,8 +70,7 @@ public class Game {
     /**
      *
      */
-    private GameStatus gameStatus; /* TODO what if a player disconnects in the SETUP phase? When does he choose StartCard?
-                                           when  do we start the RUNNING phase? */
+    private GameStatus gameStatus;
 
     private GameStatus backupGameStatus;
 
@@ -111,6 +110,7 @@ public class Game {
         this.commonObjectives = new ObjectiveCard[2];
 
         this.gameStatus = GameStatus.SETUP;
+        this.backupGameStatus = GameStatus.RUNNING;
 
         //TODO update listeners
     }
@@ -143,7 +143,7 @@ public class Game {
         for (Player p : players) {
             hand.add(resourceDeck.drawTop());
             hand.add(resourceDeck.drawTop());
-            hand.add(goldDeck.drawTop());
+            hand.add(goldDeck.drawTop()); //TODO When should the player be notified of the hand?
 
             StartCard start = startDeck.drawTop();
             p.initPlayArea(hand, start);
@@ -302,13 +302,15 @@ public class Game {
      * @param user The Player's username.
      */
     public void offlinePlayer(String user) {
-        // TODO depending on the status and turn, do automatic actions.
+        // TODO depending on the status and turn, do automatic actions. (maybe in gameController)
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(false);
-        this.backupGameStatus = this.gameStatus;
-        if (onlinePlayersNumber() == 1) setGameStatus(GameStatus.WAITING); // TODO start timeout?
-        if (onlinePlayersNumber() == 0) setGameStatus(GameStatus.ENDED); // TODO forceQuitGame?
+        if (onlinePlayersNumber() == 1 && !gameStatus.equals(GameStatus.SETUP)) {
+            this.backupGameStatus = this.gameStatus;
+            setGameStatus(GameStatus.WAITING);
+        }
+        //CHECK update listeners already in gameController?
     }
 
     /**
@@ -319,10 +321,9 @@ public class Game {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(true);
-        if (onlinePlayersNumber() > 1) setGameStatus(GameStatus.RUNNING); //TODO backupStatus
+        if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP))
+            setGameStatus(backupGameStatus); //TODO review
     }
-
-    //TODO: notify listeners only if online.
 
     /**
      * Ends the game and determines the ordered Leaderboard based on objective points earned by {@link Player Players}.
@@ -358,11 +359,12 @@ public class Game {
      */
     private int calculateObjectives(Player p) {
         int objPoints = 0;
+        String username = p.getUsername();
         for (ObjectiveCard c: commonObjectives){
-            p.getPlayArea().setSelectedCard(null, c);
+            selectCard(c, null, username);
             objPoints += c.getEvaluator().calculatePoints(p.getPlayArea());
         }
-        p.getPlayArea().setSelectedCard(null, p.getSecretObjective());
+        selectCard(p.getSecretObjective(), null, username);
         objPoints += p.getSecretObjective().getEvaluator().calculatePoints(p.getPlayArea());
         return objPoints;
     }
@@ -554,6 +556,10 @@ public class Game {
      */
     public boolean isTurnPlayer(String player) {
         return players.get(turnPlayerIndex).getUsername().equals(player);
+    }
+
+    public boolean updatePlayerWithModel(String player){
+        return false;
     }
 
 }
