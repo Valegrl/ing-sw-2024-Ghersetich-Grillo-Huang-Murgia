@@ -16,10 +16,11 @@ import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.network.clientSide.ClientManager;
-import it.polimi.ingsw.utils.Account;
-import it.polimi.ingsw.utils.LobbyState;
-import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
+import it.polimi.ingsw.view.tui.state.MenuState;
+import it.polimi.ingsw.view.tui.TUI;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -52,10 +53,6 @@ public class ViewController implements ViewEventReceiver {
      */
     private final Queue<Event> tasksQueue = new LinkedList<>();
 
-    /**
-     * The state in which the view is.
-     */
-    private ViewState viewState;
 
     /**
      * The account associated with the View.
@@ -121,7 +118,6 @@ public class ViewController implements ViewEventReceiver {
      */
     public ViewController(View view) {
         this.view = view;
-        this.viewState = new ViewInMenu(view);
 
         try {
             this.clientManager = ClientManager.getInstance();
@@ -274,147 +270,157 @@ public class ViewController implements ViewEventReceiver {
     //TODO should i print for IllegalStateException?
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inLobby()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
-        //TODO change state from Lobby to game ?
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inLobby()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(PlayerUnreadyEvent event) {
-
+        if(view.getState().inLobby()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+        }
+        else{
+            System.out.println("Lobby state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(QuitLobbyEvent event) {
-
+        if(view.getState().inLobby()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
+                this.id = null;
+            }
+        }
+        else{
+            System.out.println("Lobby state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state!!");
         }
     }
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-        try{
-            viewState.evaluateEvent(event);
-            if(event.getFeedback() == Feedback.SUCCESS) {
-                id = event.getLobbyID();
-                viewState = new ViewInLobby(view);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)){
+                this.id = event.getLobbyID();
             }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state!!");
         }
     }
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
-
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
             }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-
         //TODO initialise immutable model ?
-        try{
-            viewState.evaluateEvent(event);
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
-                id = event.getLobbyID();
-                viewState = new ViewInLobby(view);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+                this.id = event.getLobbyID();
             }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(LoginEvent event) {
-        try{
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = event.getUsername();
             }
-            viewState.evaluateEvent(event);
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(LogoutEvent event) {
-        try{
-            viewState.evaluateEvent(event);
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
             }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(ReconnectToGameEvent event) {
         //TODO Reinitialise the local model ? Connect directly to the game ?
-        try{
-            viewState.evaluateEvent(event);
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
-                id = event.getGameID();
-                viewState = new ViewInGame(view);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+                this.id = event.getGameID();
             }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(RegisterEvent event) {
-        try{
-            viewState.evaluateEvent(event);
+        if(view.getState().inMenu()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+                this.username = event.getAccount().getUsername();
+            }
         }
-        catch(IllegalStateException e){
-            e.printStackTrace();
+        else{
+            System.out.println("Menu state: event in wrong state");
         }
     }
 

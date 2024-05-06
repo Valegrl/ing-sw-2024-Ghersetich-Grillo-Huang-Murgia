@@ -50,25 +50,4 @@ public class GUI implements View {
 
     }
 
-    @Override
-    public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {}
-
-    @Override
-    public void notifyDeleteAccount(Feedback feedback, String message){}
-
-    @Override
-    public void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames){}
-
-    @Override
-    public void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus){}
-
-    @Override
-    public void notifyLogout(Feedback feedback, String message){}
-
-    @Override
-    public void notifyReconnectToGame(Feedback feedback, String message){}
-
-    @Override
-    public void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer){}
-
 }

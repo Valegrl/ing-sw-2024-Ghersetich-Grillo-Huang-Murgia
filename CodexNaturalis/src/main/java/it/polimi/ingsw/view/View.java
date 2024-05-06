@@ -29,19 +29,5 @@ public interface View {
 
     void handleResponse(String eventID, Feedback feedback, String message);
 
-    void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies);
-
-    void notifyDeleteAccount(Feedback feedback, String message);
-
-    void displayOfflineGames(Feedback feedback, String message, List<LobbyState> offlineGames);
-
-    void displayJoinedLobby(Feedback feedback, String message, String id, List<Pair<String, Boolean>> playersReadyStatus );
-
-    void notifyLogout(Feedback feedback, String message);
-
-    void notifyReconnectToGame(Feedback feedback, String message);
-
-    void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer);
-
     void serverCrashed();
 }
