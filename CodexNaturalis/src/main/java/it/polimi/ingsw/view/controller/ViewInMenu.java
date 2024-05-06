@@ -13,7 +13,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
-import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
@@ -21,7 +20,7 @@ import it.polimi.ingsw.view.View;
 import java.lang.*;
 import java.util.List;
 
-public class ViewInMenu implements ViewState{
+public class ViewInMenu implements ViewState {
     private View view;
 
     public ViewInMenu(View view){
@@ -169,8 +168,12 @@ public class ViewInMenu implements ViewState{
     public void evaluateEvent(LoginEvent event) throws IllegalStateException {
         Feedback feedback = event.getFeedback();
         String message = event.getMessage();
-        Account account = event.getAccount();
-        view.notifyLogin(feedback, message, account);
+        String username = event.getUsername();
+
+        if(feedback.equals(Feedback.SUCCESS)){
+            view.setUsername(username);
+        }
+        view.handleResponse(event.getID(), feedback, message);
     }
 
     @Override
@@ -191,8 +194,7 @@ public class ViewInMenu implements ViewState{
     public void evaluateEvent(RegisterEvent event) throws IllegalStateException {
         Feedback feedback = event.getFeedback();
         String message = event.getMessage();
-        Account account = event.getAccount();
-        view.notifyRegisterAccount(feedback, message, account);
+        view.handleResponse(event.getID(), feedback, message);
     }
 
     @Override

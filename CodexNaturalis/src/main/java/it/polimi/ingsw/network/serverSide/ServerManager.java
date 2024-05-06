@@ -39,8 +39,8 @@ public class ServerManager extends UnicastRemoteObject implements Server {
     }
 
     private ServerManager() throws RemoteException {
-         this.virtualViews = new HashMap<>();
-         this.executor = Executors.newCachedThreadPool();
+        this.virtualViews = new HashMap<>();
+        this.executor = Executors.newCachedThreadPool();
 
         new Thread(() -> {
             while (true) {
@@ -120,7 +120,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
     private void manage(Event event, Client client) {
         synchronized (virtualViews) {
-            VirtualView virtualView = virtualViews.get(client);
+           VirtualView virtualView = virtualViews.get(client);
            virtualView.handle(event);
         }
     }

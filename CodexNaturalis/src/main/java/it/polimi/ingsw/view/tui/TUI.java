@@ -1,16 +1,18 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
 import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
 
 import java.io.PrintStream;
-import java.rmi.RemoteException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.List;
 
@@ -21,74 +23,92 @@ public class TUI implements View {
 
     private String username;
 
-    private ViewController controller;
+    private final ViewController controller;
+
+    private final Object viewLock = new Object();
+
+    private ViewState state;
 
     public TUI() {
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out, true);
         this.controller = new ViewController(this);
-    }
-
-    private int readChoiceFromInput(String opt1, String opt2){
-        String inputRead;
-        int choice = -1;
-
-        while(true) {
-            out.println("1 - " + opt1);
-            out.println("2 - " + opt2);
-            try {
-                inputRead = in.nextLine();
-            } catch ( InputMismatchException ex){
-                out.println("Invalid selection!");
-                continue;
-            }
-
-            try {
-                choice = Integer.parseInt(inputRead);
-            } catch (NumberFormatException e) {
-                out.println("Invalid selection!");
-                continue;
-            }
-            if(choice != 1 && choice != 2)
-                out.println("Invalid selection!");
-            else
-                break;
-        }
-        return choice;
-    }
-
-    private boolean chooseConnection(){
-        out.println("Choose the connection type:");
-        int choice = readChoiceFromInput("SOCKET","RMI");
-
-        String ip;
-        out.println("Please provide the IP address or the URL of the server:");
-        ip = in.nextLine();
-
-        if(choice == 1) {
-            out.println("Connecting with socket...");
-            try {
-                ClientManager.getInstance().initSocket(ip, 1098);
-            } catch (RemoteException e){
-                out.println("Cannot connect with socket. Make sure the IP provided is valid and try again later...");
-                return false;
-            }
-        } else {
-            out.println("Connecting with RMI...");
-            try {
-                ClientManager.getInstance().initRMI(ip);
-            } catch (RemoteException e) {
-                out.println("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
-                return false;
-            }
-        }
-        return true;
+        this.state = new ChooseConnectionState(this);
     }
 
     public void run() {
         clearConsole();
-        while(!chooseConnection());
-        out.println("Connection with server established");
+        // ChooseConnectionState
+        state.run();
+    }
+
+    @Override
+    public void handleResponse(String eventID, Feedback feedback, String message) {
+        state.handleResponse(feedback, message, eventID);
+    }
+
+    private boolean loggedIn(){
+        out.println("Choose an option:");
+        // int choice = readChoiceFromInput("Login", "Register");
+
+        String user;
+        String psw;
+
+        out.println("Please provide your username:");
+        user = in.nextLine();
+        out.println("Please provide your password:");
+        psw = in.nextLine();
+
+        Event event;
+        /* if(choice == 1){
+            login();
+        } else {
+            event = new RegisterEvent(user, psw);
+
+        }*/
+
+        waitForResponse();
+
+        return true;
+    }
+
+    private boolean login(){
+        out.println("Please provide your username:");
+        String user = in.nextLine();
+        out.println("Please provide your password:");
+        String psw = in.nextLine();
+
+        Event event = new LoginEvent(user, psw);
+        controller.newViewEvent(event);
+
+        waitForResponse();
+
+        return true;
+    }
+
+    private boolean register(){
+        out.println("Please choose your username:");
+        String user = in.nextLine();
+        out.println("Please choose your password:");
+        String psw = in.nextLine();
+
+        Event event = new RegisterEvent(user, psw);
+        controller.newViewEvent(event);
+
+        waitForResponse();
+
+        return true;
+    }
+
+    private void waitForResponse(){
+        synchronized (viewLock){
+            try {
+                viewLock.wait();
+            } catch (InterruptedException e) {
+                System.err.println("Interrupted while waiting for server response: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void clearConsole() {
@@ -108,17 +128,11 @@ public class TUI implements View {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        state = new ChooseConnectionState(this);
         run();
     }
 
     //TODO implement methods, possible changes to the names
-    //TODO synchronize input in a way that the terminal doesn't print right away after an event
-
-    @Override
-    public void printMessage(String message){
-        clearConsole();
-        out.println(message);
-    }
 
     @Override
     public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {
@@ -192,16 +206,6 @@ public class TUI implements View {
     }
 
     @Override
-    public void notifyLogin(Feedback feedback, String message, Account account){
-        printMessage(message);
-
-        if(feedback.equals(Feedback.SUCCESS)){
-            String username = account.getUsername();
-            out.println("You're connected as: " + username);
-        }
-    }
-
-    @Override
     public void notifyLogout(Feedback feedback, String message){
         printMessage(message);
 
@@ -216,23 +220,39 @@ public class TUI implements View {
     }
 
     @Override
-    public void notifyRegisterAccount(Feedback feedback, String message, Account account){
-        printMessage(message);
-
-        if(feedback.equals(Feedback.SUCCESS)){
-            String username = account.getUsername();
-            String password = account.getPassword();
-            out.println("Username: " + username);
-            out.println("Password: " + password);
-        }
-    }
-
-    @Override
     public void notifyKickFromLobby(Feedback feedback, String message, String kickedPlayer){
         printMessage(message);
 
         if(feedback.equals(Feedback.SUCCESS)){
             out.println(kickedPlayer + " has been kicked from the lobby.");
         }
+    }
+
+    @Override
+    public void printMessage(String message){
+        out.println(message);
+    }
+
+    @Override
+    public String getInput() {
+        return in.nextLine();
+    }
+
+    public ViewController getController() {
+        return controller;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public void setState(ViewState state) {
+        this.state = state;
     }
 }

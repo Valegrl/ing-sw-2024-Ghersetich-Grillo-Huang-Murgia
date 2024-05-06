@@ -160,7 +160,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                             }
                         } else {
                             try {
-                                viewController.evaluateEvent(response);
+                                viewController.externalEvent(response);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -232,17 +232,17 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                                 serverCrashed();
                             }
                         };
-                        timer.schedule(task, 2000); // TODO config file?
+                        timer.schedule(task, 3000); // TODO config file?
                     }
 
                     // sending PingEvent
-                    System.out.println("Sending ping to server.");
+                    // System.out.println("Sending ping to server.");
                     server.direct(new PingEvent(), this);
                 } catch (RemoteException e) {
                     System.err.println("Cannot send ping to server.");
                 }
                 try {
-                    Thread.sleep(2000 * 2);
+                    Thread.sleep(3000 * 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -251,7 +251,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     private void sendPong() {
-        System.out.println("Client received ping, sending pong...");
+        // System.out.println("Client received ping, sending pong...");
         try {
             server.direct(new PongEvent(), ClientManager.this);
         } catch (RemoteException e) {

@@ -60,7 +60,7 @@ public class ViewController implements ViewEventReceiver {
     /**
      * The account associated with the View.
      */
-    private Account account;
+    private String username;
 
     /*Immutable model part*/
     /**
@@ -332,7 +332,7 @@ public class ViewController implements ViewEventReceiver {
         try{
             viewState.evaluateEvent(event);
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.account = null;
+                this.username = null;
             }
         }
         catch(IllegalStateException e){
@@ -369,10 +369,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(LoginEvent event) {
         try{
-            viewState.evaluateEvent(event);
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.account = event.getAccount();
+                this.username = event.getUsername();
             }
+            viewState.evaluateEvent(event);
         }
         catch(IllegalStateException e){
             e.printStackTrace();
@@ -384,7 +384,7 @@ public class ViewController implements ViewEventReceiver {
         try{
             viewState.evaluateEvent(event);
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.account = null;
+                this.username = null;
             }
         }
         catch(IllegalStateException e){
@@ -411,9 +411,6 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(RegisterEvent event) {
         try{
             viewState.evaluateEvent(event);
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.account = event.getAccount();
-            }
         }
         catch(IllegalStateException e){
             e.printStackTrace();
@@ -429,7 +426,7 @@ public class ViewController implements ViewEventReceiver {
      * This method handles a server crash. //TODO: use event. Delete this method.
      */
     public void serverCrashed () {
-        account = null;
+        username = null;
 
         view.serverCrashed();
     }

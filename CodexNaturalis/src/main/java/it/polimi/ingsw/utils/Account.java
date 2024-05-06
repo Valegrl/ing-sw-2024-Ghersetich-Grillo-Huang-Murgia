@@ -1,11 +1,12 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents an account with a username and password.
  */
-public class Account {
+public class Account implements Serializable {
 
     /**
      * The username of the account.

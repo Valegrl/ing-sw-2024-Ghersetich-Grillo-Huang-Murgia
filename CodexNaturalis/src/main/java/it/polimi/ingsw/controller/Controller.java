@@ -193,7 +193,7 @@ public class Controller {
             return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "You must log in first."), null);
 
         if (lobbyID == null || lobbyID.isEmpty())
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The provided lobby ID is not allowed."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The provided lobby ID is not valid."), null);
 
         Account account = virtualViewAccounts.get(vv);
         for (GameController gc : gameControllers) {

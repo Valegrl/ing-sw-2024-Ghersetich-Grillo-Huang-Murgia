@@ -1,6 +1,5 @@
 package it.polimi.ingsw.main;
 
-import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.network.serverSide.RemoteClientSocket;
 import it.polimi.ingsw.network.serverSide.ServerManager;
 
@@ -72,6 +71,7 @@ public class MainServer {
     }
 
     private void startRMI(int port) throws RemoteException {
+        System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
         Registry registry = LocateRegistry.createRegistry(port);
         registry.rebind("CodexNaturalisServer51", ServerManager.getInstance()); // TODO config?
     }
