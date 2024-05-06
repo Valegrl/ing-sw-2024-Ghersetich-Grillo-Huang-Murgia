@@ -23,17 +23,6 @@ public class ImmEvaluableCard extends ImmCard {
     private final int points;
 
     /**
-     * The requiredPattern is an array of pairs, each pair consists of a Coordinate and an Item.
-     * It represents the pattern that needs to be matched on the board for the card to be evaluated.
-     */
-    private final Pair<Coordinate, Item>[] requiredPattern;
-
-    /**
-     * The requiredItems is a map where the keys are Items and the values are the quantity of each item required.
-     */
-    private final Map<Item, Integer> requiredItems;
-
-    /**
      * Constructs an immutable representation of an evaluable card.
      * This constructor takes an EvaluableCard object as an argument and extracts its properties to create an
      * ImmEvaluableCard object.
@@ -44,8 +33,6 @@ public class ImmEvaluableCard extends ImmCard {
         super(evaluableCard);
         this.evaluator = evaluableCard.getEvaluator();
         this.points = evaluableCard.getPoints();
-        this.requiredPattern = evaluableCard.getRequiredPattern().clone();
-        this.requiredItems = Map.copyOf(evaluableCard.getRequiredItems());
     }
 
     /**
@@ -74,7 +61,7 @@ public class ImmEvaluableCard extends ImmCard {
      * @return a copy of the required pattern of the card
      */
     public Pair<Coordinate, Item>[] getRequiredPattern() {
-        return requiredPattern.clone();
+        return null;
     }
 
     /**
@@ -84,6 +71,6 @@ public class ImmEvaluableCard extends ImmCard {
      * @return a copy of the map of required items of the card
      */
     public Map<Item, Integer> getRequiredItems() {
-        return Map.copyOf(requiredItems);
+        return null;
     }
 }
