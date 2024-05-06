@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
+
 /**
  * A Record to represent a pair of elements.
  *
@@ -8,7 +10,7 @@ package it.polimi.ingsw.utils;
  * @param key   The key element of the Pair.
  * @param value The value element of the Pair.
  */
-public record Pair<T, U>(T key, U value) {
+public record Pair<T, U>(T key, U value) implements Serializable {
     /**
      * Constructs a new Pair Record with the given key and value elements.
      *

@@ -3,9 +3,7 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.AvailableLobbiesEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -38,6 +36,12 @@ public class MenuState extends ViewState {
             case 2:
                 availableLobbies();
                 break;
+            case 3:
+                reconnect();
+                break;
+            case 4:
+                profileSettings();
+                break;
             default:
                 return false;
         }
@@ -46,7 +50,6 @@ public class MenuState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        notifyResponse();
         switch (EventID.getByID(eventID)) {
             case EventID.CREATE_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
@@ -59,20 +62,51 @@ public class MenuState extends ViewState {
                 break;
             case EventID.AVAILABLE_LOBBIES:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
+                    showResponseMessage(message, 800);
                 } else {
                     showResponseMessage("Failed to get available lobbies from server: " + message, 2000);
+                    run();
+                }
+                break;
+            case EventID.JOIN_LOBBY:
+                if (feedback == Feedback.SUCCESS) {
+                    showResponseMessage(message, 2000);
+                    transition(new LobbyState(view));
+                } else {
+                    showResponseMessage("Failed to join lobby: " + message, 2000);
+                    availableLobbies();
+                }
+                break;
+            case EventID.GET_MY_OFFLINE_GAMES:
+                if (feedback == Feedback.SUCCESS) {
+                    showResponseMessage(message, 800);
+                } else {
+                    showResponseMessage("Failed to get offline games: " + message, 2000);
+                    run();
+                }
+                break;
+            case EventID.RECONNECT_TO_GAME:
+                if (feedback == Feedback.SUCCESS) {
+                    showResponseMessage(message, 2000);
+                    // TODO Reconnect to game status
+                } else {
+                    showResponseMessage("Failed to reconnect to game: " + message, 2000);
+                    reconnect();
                 }
                 break;
         }
+        notifyResponse();
     }
-
 
     private void createLobby() {
         String lobbyName;
         while (true) {
             view.printMessage("Please provide the lobby name:");
             lobbyName = view.getInput().trim();
+            if (lobbyName.startsWith("$")) {
+                if (lobbyName.equals("$exit")) run();
+                return;
+            }
             if (!lobbyName.isEmpty()) {
                 break;
             } else {
@@ -105,6 +139,48 @@ public class MenuState extends ViewState {
         Event event = new AvailableLobbiesEvent();
         controller.newViewEvent(event);
         waitForResponse();
+
+        if (!controller.getLobbies().isEmpty())
+            chooseLobby();
+        else run();
+    }
+
+    private void chooseLobby() {
+        view.printMessage("Choose a lobby ('-1' to exit):");
+        int choice = readIntFromInput(1, controller.getLobbies().size());
+        if (choice == -1) {
+            run();
+            return;
+        }
+        Event event = new JoinLobbyEvent(controller.getLobbies().get(choice - 1).getId());
+        controller.newViewEvent(event);
+        waitForResponse();
+    }
+
+    private void reconnect() {
+        Event event = new GetMyOfflineGamesEvent();
+        controller.newViewEvent(event);
+        waitForResponse();
+
+        if(!controller.getOfflineGames().isEmpty())
+            chooseReconnect();
+        else run();
+    }
+
+    private void chooseReconnect() {
+        view.printMessage("Choose the game to reconnect to ('-1' to exit):");
+        int choice = readIntFromInput(1, controller.getOfflineGames().size());
+        if (choice == -1) {
+            run();
+            return;
+        }
+        Event event = new ReconnectToGameEvent(controller.getOfflineGames().get(choice - 1).getId());
+        controller.newViewEvent(event);
+        waitForResponse();
+    }
+
+    private void profileSettings() {
+        transition(new ProfileSettingsState(view));
     }
 
     @Override

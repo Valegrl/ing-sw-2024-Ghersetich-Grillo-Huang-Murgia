@@ -50,11 +50,20 @@ public class ViewController implements ViewEventReceiver {
      */
     private final Queue<Event> tasksQueue = new LinkedList<>();
 
-
     /**
      * The account associated with the View.
      */
     private String username;
+
+    /**
+     * The available lobbies.
+     */
+    private List<LobbyState> lobbies;
+
+    /**
+     * The offline games.
+     */
+    private List<LobbyState> offlineGames;
 
     /*Immutable model part*/
     /**
@@ -339,9 +348,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
         if(view.getState().inMenu()){
+            lobbies = event.getLobbies();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
-            for(LobbyState lobby : event.getLobbies()){
-                message.append(lobby).append("\n");
+            for(int i = 0; i < lobbies.size(); i++) {
+                message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(lobbies.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
         }
@@ -379,7 +389,12 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            offlineGames = event.getGames();
+            StringBuilder message = new StringBuilder(event.getMessage() + "\n");
+            for(int i = 0; i < offlineGames.size(); i++) {
+                message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(offlineGames.get(i)).append("\n");
+            }
+            view.handleResponse(event.getID(), event.getFeedback(), message.toString());
         }
         else{
             System.out.println("Menu state: event in wrong state");
@@ -469,5 +484,17 @@ public class ViewController implements ViewEventReceiver {
         username = null;
 
         view.serverCrashed();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public List<LobbyState> getLobbies() {
+        return lobbies;
+    }
+
+    public List<LobbyState> getOfflineGames() {
+        return offlineGames;
     }
 }

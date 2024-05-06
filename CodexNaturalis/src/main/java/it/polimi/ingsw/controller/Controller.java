@@ -219,7 +219,7 @@ public class Controller {
 
         if (found != null){
             found.addLobbyPlayer(vv, virtualViewAccounts.get(vv), gl);
-            return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getReadyLobbyPlayers(), lobbyID + " lobby joined!"), found);
+            return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getReadyLobbyPlayers(), "'" + lobbyID + "' lobby joined!"), found);
         }
 
         return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby does not exist."), null);
@@ -282,7 +282,7 @@ public class Controller {
 
         if (collect.isEmpty())
             return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are no available lobbies.");
-        return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "Available lobbies:");
+        return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "Choose one of the available lobbies:");
     }
 
     /**
@@ -305,7 +305,7 @@ public class Controller {
 
         if (collect.isEmpty())
             return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "You do not have any available games.");
-        return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "These are all your available games.");
+        return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "Choose one of the available games:");
     }
 
     /**

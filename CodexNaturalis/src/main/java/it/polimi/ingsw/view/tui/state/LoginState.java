@@ -55,7 +55,7 @@ public class LoginState extends ViewState {
                 break;
             case REGISTER:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage("Registered user successfully! Now log in to your account.", 2000);
+                    showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
                 } else {
                     showResponseMessage("Registration failed: " + message, 2000);
                 }
@@ -68,8 +68,15 @@ public class LoginState extends ViewState {
     private void login(){
         view.printMessage("Please provide your username:");
         String user = view.getInput();
+        if (user.startsWith("$")) {
+            if (user.equals("$exit")) run();
+            return;
+        }
         view.printMessage("Please provide your password:");
         String psw = view.getInput();
+        if (psw.startsWith("$")) {
+            if (psw.equals("$exit")) run();
+        }
 
         Event event = new LoginEvent(user, psw);
         controller.newViewEvent(event);
@@ -80,8 +87,16 @@ public class LoginState extends ViewState {
     private void register(){
         view.printMessage("Please choose your username:");
         String user = view.getInput();
+        if (user.startsWith("$")) {
+            if (user.equals("$exit")) backToStateStart();
+            return;
+        }
         view.printMessage("Please choose your password:");
         String psw = view.getInput();
+        if (psw.startsWith("$")) {
+            if (psw.equals("$exit")) backToStateStart();
+            return;
+        }
 
         Event event = new RegisterEvent(user, psw);
         controller.newViewEvent(event);

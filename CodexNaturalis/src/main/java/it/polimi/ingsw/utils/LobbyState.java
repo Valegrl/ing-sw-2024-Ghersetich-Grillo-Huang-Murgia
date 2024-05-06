@@ -60,7 +60,7 @@ public class LobbyState implements Serializable {
 
     @Override
     public String toString() {
-        return "\u001B[1mLobby\u001B[0m: '" + id + "' " + onlinePlayers + "/" + requiredPlayers + " players.";
+        return id + "' " + onlinePlayers + "/" + requiredPlayers + " players.";
     }
 
     /**

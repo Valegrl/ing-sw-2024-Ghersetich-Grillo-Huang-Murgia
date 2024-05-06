@@ -54,7 +54,7 @@ public abstract class ViewState {
         while (true) {
             input = Integer.parseInt(view.getInput());
 
-            if (input >= lowerBound && input <= upperBound) {
+            if ((input >= lowerBound && input <= upperBound) || input == -1) {
                 break;
             } else {
                 view.printMessage("Invalid input. Try again.");
@@ -73,6 +73,10 @@ public abstract class ViewState {
                 }
             }
         }
+    }
+
+    public void backToStateStart() {
+        view.getState().run();
     }
 
     public void clearConsole() {

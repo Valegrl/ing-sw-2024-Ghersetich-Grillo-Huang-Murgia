@@ -25,6 +25,7 @@ class ImmResourceCardTest {
                 "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.INKWELL);
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPermanentResource();
@@ -49,6 +50,7 @@ class ImmResourceCardTest {
                 "    BL: empty  BR: empty";
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPermanentResource();
@@ -73,6 +75,7 @@ class ImmResourceCardTest {
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY);
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPoints();
