@@ -135,9 +135,7 @@ public class ViewInMenu implements ViewState {
     public void evaluateEvent(CreateLobbyEvent event) throws IllegalStateException {
         Feedback feedback = event.getFeedback();
         String message = event.getMessage();
-        String lobbyID = event.getLobbyID();
-        int requiredPlayers = event.getRequiredPlayers();
-        view.notifyCreatedLobby(feedback, message, lobbyID, requiredPlayers);
+        view.handleResponse(event.getID(), feedback, message);
     }
 
     @Override

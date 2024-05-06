@@ -8,6 +8,8 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
+import java.util.Arrays;
+
 public class LoginState extends ViewState {
 
     public LoginState(View view) {
@@ -18,7 +20,7 @@ public class LoginState extends ViewState {
     public void run() {
         clearConsole();
         view.printMessage("Choose an option:");
-        int choice = readChoiceFromInput("Login", "Register");
+        int choice = readChoiceFromInput(Arrays.asList("Login", "Register"));
 
         handleInput(choice);
     }
@@ -40,27 +42,28 @@ public class LoginState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        synchronized (viewLock) {
-            setResponseReceived(true);
-            viewLock.notify();
-        }
-        if (EventID.LOGIN.getID().equals(eventID)) {
-            if (feedback == Feedback.SUCCESS) {
-                showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
-                transition(new MenuState(view));
-            } else {
-                showResponseMessage("Login failed: " + message, 2000);
-                login();
-            }
-        } else if (EventID.REGISTER.getID().equals(eventID)) {
-            if (feedback == Feedback.SUCCESS) {
-                showResponseMessage("Registered user successfully! Now log in to your account.", 2000);
-            } else {
-                showResponseMessage("Registration failed: " + message, 2000);
-            }
-            run();
+        notifyResponse();
+        switch (EventID.getByID(eventID)) {
+            case LOGIN:
+                if (feedback == Feedback.SUCCESS) {
+                    showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
+                    transition(new MenuState(view));
+                } else {
+                    showResponseMessage("Login failed: " + message, 2000);
+                    login();
+                }
+                break;
+            case REGISTER:
+                if (feedback == Feedback.SUCCESS) {
+                    showResponseMessage("Registered user successfully! Now log in to your account.", 2000);
+                } else {
+                    showResponseMessage("Registration failed: " + message, 2000);
+                }
+                run();
+                break;
         }
     }
+
 
     private void login(){
         view.printMessage("Please provide your username:");
@@ -84,5 +87,10 @@ public class LoginState extends ViewState {
         controller.newViewEvent(event);
 
         waitForResponse();
+    }
+
+    @Override
+    public boolean inMenu() {
+        return true;
     }
 }

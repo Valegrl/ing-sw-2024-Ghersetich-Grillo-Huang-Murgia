@@ -3,7 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.controller.ViewController;
 
-import java.util.InputMismatchException;
+import java.util.List;
 
 public abstract class ViewState {
     protected View view;
@@ -30,31 +30,21 @@ public abstract class ViewState {
 
     abstract public void handleResponse(Feedback feedback, String message, String eventID);
 
-    protected int readChoiceFromInput(String opt1, String opt2){
-        String inputRead;
+    public boolean inMenu() {return false;};
+
+    public boolean inLobby() {return false;};
+
+    public boolean inGame() {return false;};
+
+    protected int readChoiceFromInput(List<String> options) {
         int choice = -1;
 
-        while(true) {
-            view.printMessage("1 - " + opt1);
-            view.printMessage("2 - " + opt2);
-            try {
-                inputRead = view.getInput();
-            } catch ( InputMismatchException ex){
-                view.printMessage("Invalid selection!");
-                continue;
-            }
-
-            try {
-                choice = Integer.parseInt(inputRead);
-            } catch (NumberFormatException e) {
-                view.printMessage("Invalid selection!");
-                continue;
-            }
-            if(choice != 1 && choice != 2)
-                view.printMessage("Invalid selection!");
-            else
-                break;
+        for (int i = 0; i < options.size(); i++) {
+            view.printMessage((i + 1) + " - " + options.get(i));
         }
+
+        choice = readIntFromInput(1, options.size());
+
         return choice;
     }
 
@@ -101,8 +91,11 @@ public abstract class ViewState {
         } catch (InterruptedException ignored) {}
     }
 
-    public void setResponseReceived(boolean responseReceived) {
-        this.responseReceived = responseReceived;
+    protected void notifyResponse() {
+        synchronized (viewLock) {
+            responseReceived = true;
+            viewLock.notifyAll();
+        }
     }
 
     public Object getViewLock() {

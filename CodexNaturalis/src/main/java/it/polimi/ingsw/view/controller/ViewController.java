@@ -135,6 +135,7 @@ public class ViewController implements ViewEventReceiver {
             @Override
             public void run(){
                 while (true){
+                    Event event;
                     synchronized (tasksQueue){
                         while(tasksQueue.isEmpty()){
                             try{
@@ -144,9 +145,9 @@ public class ViewController implements ViewEventReceiver {
                                 e.printStackTrace();
                             }
                         }
-                        Event event = tasksQueue.poll();
-                        event.receiveEvent(ViewController.this);
+                        event = tasksQueue.poll();
                     }
+                    event.receiveEvent(ViewController.this);
                 }
             }
         }.start();

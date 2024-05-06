@@ -4,8 +4,9 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
-public class LastCircleState extends ViewState {
-    public LastCircleState(View view) {
+public class ProfileSettingsState extends ViewState {
+
+    public ProfileSettingsState(View view) {
         super(view);
     }
 
@@ -16,7 +17,7 @@ public class LastCircleState extends ViewState {
 
     @Override
     public boolean handleInput(int input) {
-        return true;
+        return false;
     }
 
     @Override
@@ -25,7 +26,7 @@ public class LastCircleState extends ViewState {
     }
 
     @Override
-    public boolean inGame() {
+    public boolean inMenu() {
         return true;
     }
 }

@@ -16,6 +16,7 @@ import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -223,12 +224,11 @@ public enum EventID {
      * @param ID The ID of the event type.
      * @return The EventID, or INVALID if the ID does not match any EventID.
      */
-    private static EventID getByID(String ID) {
-        for (EventID eventID : EventID.values()) {
-            if (eventID.getID().equals(ID))
-                return eventID;
-        }
-        return INVALID;
+    public static EventID getByID(String ID) {
+        return Arrays.stream(values())
+                .filter(eventID -> eventID.getID().equals(ID))
+                .findFirst()
+                .orElse(INVALID);
     }
 
     /**

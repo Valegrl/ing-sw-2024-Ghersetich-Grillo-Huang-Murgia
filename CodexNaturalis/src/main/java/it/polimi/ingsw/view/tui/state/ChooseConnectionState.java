@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.tui.TUI;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 public class ChooseConnectionState extends ViewState {
     public ChooseConnectionState(TUI view) {
@@ -55,8 +56,13 @@ public class ChooseConnectionState extends ViewState {
 
     private boolean chooseConnection(){
         view.printMessage("Choose the connection type:");
-        int choice = readChoiceFromInput("SOCKET","RMI");
+        int choice = readChoiceFromInput(Arrays.asList("SOCKET", "RMI"));
 
         return handleInput(choice);
+    }
+
+    @Override
+    public boolean inMenu() {
+        return true;
     }
 }

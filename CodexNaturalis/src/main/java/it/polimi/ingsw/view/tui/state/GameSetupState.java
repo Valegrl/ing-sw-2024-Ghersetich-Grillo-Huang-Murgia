@@ -23,4 +23,9 @@ public class GameSetupState extends ViewState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
 
     }
+
+    @Override
+    public boolean inGame() {
+        return true;
+    }
 }
