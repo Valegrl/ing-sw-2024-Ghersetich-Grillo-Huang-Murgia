@@ -28,10 +28,10 @@ import java.util.Map;
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
  * It also receives events from the {@link ClientManager} and forwards them to the view to be processed.
+ * The class contains a model of the game in the client's local.
  * The class contains a list of event IDs that should be ignored and not forwarded as they can be processed locally.
  * The ViewController class uses two queues to manage events coming in and out:
  * - The first thread is responsible for taking events from the outQueue and sending them to the {@link ClientManager}.
- * - The second thread is responsible for taking events from the inQueue and evaluating them.
  */
 public class ViewController implements ViewEventReceiver {
 
@@ -202,17 +202,29 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
-
+        if(view.getState().inLobby()){
+            //TODO View has to know this client has been kicked out
+            this.gameId = null;
+        }
+        else{
+            System.out.println("Lobby state: event in wrong state");
+        }
 
     }
 
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
+        if(view.getState().inLobby()){
+
+        }
 
     }
 
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
+        if(view.getState().inGame()){
+
+        }
 
     }
 
@@ -238,12 +250,24 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChosenCardsSetupEvent event) {
-
+        if(view.getState().inGame()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            //TODO View has to handle seeing the options for setup, ie the objective cards
+        }
+        else{
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(ChosenTokenSetupEvent event) {
-
+        if(view.getState().inGame()){
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            //TODO View has to handle seeing the options for setup, token
+        }
+        else{
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -261,7 +285,6 @@ public class ViewController implements ViewEventReceiver {
 
     }
 
-    /*Events done on 4/05/2024*/
     //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
     //TODO (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
     //TODO should i print for IllegalStateException?
@@ -298,16 +321,21 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(QuitLobbyEvent event) {
         if(view.getState().inLobby()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 this.gameId = null;
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
+    /**
+     * The method checks if the client's view is in the menu state.
+     * It then builds a message containing all the available lobbies and sends it to the view.
+     * @param event The event to be handled.
+     */
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
         if(view.getState().inMenu()){
@@ -325,10 +353,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
         if(view.getState().inMenu()) {
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 this.gameId = event.getLobbyID();
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else {
             System.out.println("Menu state: event in wrong state!!");
@@ -338,10 +366,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Menu state: event in wrong state");
@@ -362,16 +390,21 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(JoinLobbyEvent event) {
         //TODO initialise immutable model ?
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.gameId = event.getLobbyID();
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Menu state: event in wrong state");
         }
     }
 
+    /**
+     * The method checks if the client's view is in the menu state.
+     * The ViewController gets the client's username and calls a method for setting it on the {@link View}.
+     * @param event The event to be handled.
+     */
     @Override
     public void evaluateEvent(LoginEvent event) {
         if(view.getState().inMenu()){
@@ -390,10 +423,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(LogoutEvent event) {
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Menu state: event in wrong state");
@@ -404,10 +437,10 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(ReconnectToGameEvent event) {
         //TODO Reinitialise the local model ? Connect directly to the game ?
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.gameId = event.getGameID();
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Menu state: event in wrong state");
