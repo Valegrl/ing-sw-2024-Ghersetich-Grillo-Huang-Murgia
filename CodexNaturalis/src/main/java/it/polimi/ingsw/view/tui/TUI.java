@@ -1,10 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
-import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
@@ -15,17 +11,19 @@ import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
 import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TUI implements View {
     private final Scanner in;
 
     private final PrintStream out;
 
+    private final ExecutorService executor;
+
     private String username;
 
     private final ViewController controller;
-
-    private final Object viewLock = new Object();
 
     private ViewState state;
 
@@ -34,6 +32,7 @@ public class TUI implements View {
         this.out = new PrintStream(System.out, true);
         this.controller = new ViewController(this);
         this.state = new ChooseConnectionState(this);
+        this.executor = Executors.newCachedThreadPool();
     }
 
     public void run() {
@@ -44,71 +43,7 @@ public class TUI implements View {
 
     @Override
     public void handleResponse(String eventID, Feedback feedback, String message) {
-        state.handleResponse(feedback, message, eventID);
-    }
-
-    private boolean loggedIn(){
-        out.println("Choose an option:");
-        // int choice = readChoiceFromInput("Login", "Register");
-
-        String user;
-        String psw;
-
-        out.println("Please provide your username:");
-        user = in.nextLine();
-        out.println("Please provide your password:");
-        psw = in.nextLine();
-
-        Event event;
-        /* if(choice == 1){
-            login();
-        } else {
-            event = new RegisterEvent(user, psw);
-
-        }*/
-
-        waitForResponse();
-
-        return true;
-    }
-
-    private boolean login(){
-        out.println("Please provide your username:");
-        String user = in.nextLine();
-        out.println("Please provide your password:");
-        String psw = in.nextLine();
-
-        Event event = new LoginEvent(user, psw);
-        controller.newViewEvent(event);
-
-        waitForResponse();
-
-        return true;
-    }
-
-    private boolean register(){
-        out.println("Please choose your username:");
-        String user = in.nextLine();
-        out.println("Please choose your password:");
-        String psw = in.nextLine();
-
-        Event event = new RegisterEvent(user, psw);
-        controller.newViewEvent(event);
-
-        waitForResponse();
-
-        return true;
-    }
-
-    private void waitForResponse(){
-        synchronized (viewLock){
-            try {
-                viewLock.wait();
-            } catch (InterruptedException e) {
-                System.err.println("Interrupted while waiting for server response: " + e.getMessage());
-                throw new RuntimeException(e);
-            }
-        }
+        executor.execute(() -> state.handleResponse(feedback, message, eventID));
     }
 
     public void clearConsole() {
@@ -150,16 +85,6 @@ public class TUI implements View {
             else{
                 out.println("Please try again later...");
             }
-        }
-    }
-
-    @Override
-    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){
-        printMessage(message);
-
-        if(feedback.equals(Feedback.SUCCESS)){
-            out.println("Lobby id: " + id);
-            out.println("Required players: " + requiredPlayers + ".");
         }
     }
 
@@ -249,6 +174,11 @@ public class TUI implements View {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public ViewState getState() {
+        return state;
     }
 
     @Override

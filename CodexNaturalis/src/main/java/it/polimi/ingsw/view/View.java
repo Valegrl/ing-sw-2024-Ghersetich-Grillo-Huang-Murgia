@@ -23,13 +23,13 @@ public interface View {
 
     String getUsername();
 
+    ViewState getState();
+
     void setUsername(String username);
 
     void handleResponse(String eventID, Feedback feedback, String message);
 
     void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies);
-
-    void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers);
 
     void notifyDeleteAccount(Feedback feedback, String message);
 

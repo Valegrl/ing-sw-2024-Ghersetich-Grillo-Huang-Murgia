@@ -36,6 +36,11 @@ public class GUI implements View {
     }
 
     @Override
+    public ViewState getState() {
+        return null;
+    }
+
+    @Override
     public void setUsername(String username) {
 
     }
@@ -47,9 +52,6 @@ public class GUI implements View {
 
     @Override
     public void displayAvailableLobbies(Feedback feedback, String message, List<LobbyState> availableLobbies) {}
-
-    @Override
-    public void notifyCreatedLobby(Feedback feedback, String message, String id, int requiredPlayers){}
 
     @Override
     public void notifyDeleteAccount(Feedback feedback, String message){}
