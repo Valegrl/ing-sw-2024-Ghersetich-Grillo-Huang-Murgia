@@ -131,7 +131,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
             try {
                 client.report(event);
             } catch (RemoteException e) {
-                System.err.println("The event cannot be sent to the client.");
+                System.err.println("The event cannot be sent to the client." + e.getMessage());
             }
         });
 

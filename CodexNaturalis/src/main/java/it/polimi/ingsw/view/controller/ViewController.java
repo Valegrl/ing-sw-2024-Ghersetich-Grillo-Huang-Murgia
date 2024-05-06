@@ -16,11 +16,8 @@ import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.network.clientSide.ClientManager;
-import it.polimi.ingsw.view.ViewState;
+import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
-import it.polimi.ingsw.view.tui.state.MenuState;
-import it.polimi.ingsw.view.tui.TUI;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -63,7 +60,7 @@ public class ViewController implements ViewEventReceiver {
     /**
      * The unique identifier of the game.
      */
-    private String id;
+    private String gameId;
 
     /**
      * The list of players in the game.
@@ -303,7 +300,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.getState().inLobby()){
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.id = null;
+                this.gameId = null;
             }
         }
         else{
@@ -314,7 +311,11 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            StringBuilder message = new StringBuilder(event.getMessage() + "\n");
+            for(LobbyState lobby : event.getLobbies()){
+                message.append(lobby).append("\n");
+            }
+            view.handleResponse(event.getID(), event.getFeedback(), message.toString());
         }
         else{
             System.out.println("Menu state: event in wrong state!!");
@@ -323,13 +324,13 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.id = event.getLobbyID();
+                this.gameId = event.getLobbyID();
             }
         }
-        else{
+        else {
             System.out.println("Menu state: event in wrong state!!");
         }
     }
@@ -363,7 +364,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.getState().inMenu()){
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.id = event.getLobbyID();
+                this.gameId = event.getLobbyID();
             }
         }
         else{
@@ -374,10 +375,12 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(LoginEvent event) {
         if(view.getState().inMenu()){
-            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.username = event.getUsername();
+                String username = event.getUsername();
+                this.username = username;
+                view.setUsername(username);
             }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
             System.out.println("Menu state: event in wrong state");
@@ -403,7 +406,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.getState().inMenu()){
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.id = event.getGameID();
+                this.gameId = event.getGameID();
             }
         }
         else{
@@ -415,9 +418,6 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(RegisterEvent event) {
         if(view.getState().inMenu()){
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-            if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.username = event.getAccount().getUsername();
-            }
         }
         else{
             System.out.println("Menu state: event in wrong state");

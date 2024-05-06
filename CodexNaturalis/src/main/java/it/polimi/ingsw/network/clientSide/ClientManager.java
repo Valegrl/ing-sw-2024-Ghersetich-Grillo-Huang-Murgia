@@ -119,6 +119,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
             @Override
             public void run() {
                 while(true){
+                    Event request;
                     synchronized(requestsQueue) {
                         while (requestsQueue.isEmpty()) {
                             try {
@@ -127,12 +128,12 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                                 e.printStackTrace();
                             }
                         }
-                        Event request = requestsQueue.poll();
-                        try {
-                            server.direct(request, ClientManager.this);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        request = requestsQueue.poll();
+                    }
+                    try {
+                        server.direct(request, ClientManager.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -142,6 +143,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
             @Override
             public void run(){
                 while(true) {
+                    Event response;
                     synchronized (responsesQueue) {
                         while (responsesQueue.isEmpty()) {
                             try {
@@ -151,19 +153,19 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                                 e.printStackTrace();
                             }
                         }
-                        Event response = responsesQueue.poll();
-                        if (response.getID().equals(EventID.PING.getID())) {
-                            sendPong();
-                        } else if (response.getID().equals(EventID.PONG.getID())) {
-                            synchronized (timerLock) {
-                                timer.cancel();
-                            }
-                        } else {
-                            try {
-                                viewController.externalEvent(response);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        response = responsesQueue.poll();
+                    }
+                    if (response.getID().equals(EventID.PING.getID())) {
+                        sendPong();
+                    } else if (response.getID().equals(EventID.PONG.getID())) {
+                        synchronized (timerLock) {
+                            timer.cancel();
+                        }
+                    } else {
+                        try {
+                            viewController.externalEvent(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -260,6 +262,10 @@ public class ClientManager extends UnicastRemoteObject implements Client {
     }
 
     private void serverCrashed() {
+        synchronized (timerLock) {
+            timer.cancel();
+            timer = new Timer();
+        }
         connectionOpen = false;
         System.err.println("Server crashed.");
         try {

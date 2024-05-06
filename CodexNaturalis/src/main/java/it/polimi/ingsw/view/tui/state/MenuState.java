@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.AvailableLobbiesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
 import it.polimi.ingsw.view.View;
@@ -35,6 +36,7 @@ public class MenuState extends ViewState {
                 createLobby();
                 break;
             case 2:
+                availableLobbies();
                 break;
             default:
                 return false;
@@ -57,11 +59,10 @@ public class MenuState extends ViewState {
                 break;
             case EventID.AVAILABLE_LOBBIES:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage("Registered user successfully! Now log in to your account.", 2000);
+                    showResponseMessage(message, 2000);
                 } else {
-                    showResponseMessage("Registration failed: " + message, 2000);
+                    showResponseMessage("Failed to get available lobbies from server: " + message, 2000);
                 }
-                run();
                 break;
         }
     }
@@ -97,6 +98,12 @@ public class MenuState extends ViewState {
         Event event = new CreateLobbyEvent(lobbyName, numPlayers);
         controller.newViewEvent(event);
 
+        waitForResponse();
+    }
+
+    private void availableLobbies() {
+        Event event = new AvailableLobbiesEvent();
+        controller.newViewEvent(event);
         waitForResponse();
     }
 

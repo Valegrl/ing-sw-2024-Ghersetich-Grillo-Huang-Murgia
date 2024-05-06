@@ -1,11 +1,12 @@
 package it.polimi.ingsw.utils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents the state of a lobby in a game.
  */
-public class LobbyState {
+public class LobbyState implements Serializable {
 
     /**
      * The unique identifier for a Lobby.
@@ -59,11 +60,7 @@ public class LobbyState {
 
     @Override
     public String toString() {
-        return "LobbyState{" +
-                "id='" + id + '\'' +
-                ", onlinePlayers=" + onlinePlayers +
-                ", requiredPlayers=" + requiredPlayers +
-                '}';
+        return "\u001B[1mLobby\u001B[0m: '" + id + "' " + onlinePlayers + "/" + requiredPlayers + " players.";
     }
 
     /**

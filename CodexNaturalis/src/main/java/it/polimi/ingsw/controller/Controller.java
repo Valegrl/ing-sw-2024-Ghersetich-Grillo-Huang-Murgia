@@ -281,8 +281,8 @@ public class Controller {
                 collect.add(new LobbyState(gc.getIdentifier(), gc.getOnlinePlayers().size(), gc.getRequiredPlayers()));
 
         if (collect.isEmpty())
-            return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are not available lobbies.");
-        return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "These are all the available lobbies.");
+            return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are no available lobbies.");
+        return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "Available lobbies:");
     }
 
     /**
