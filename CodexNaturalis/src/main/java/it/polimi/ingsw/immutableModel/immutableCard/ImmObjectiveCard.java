@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,44 +60,52 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements ViewCard
         sb.append("ObjectiveCard: ").append(this.getId()).append("\n");
         sb.append("  Points: ").append(this.getPoints()).append("\n");
         if(this.getId().equals("OC01") || this.getId().equals("OC03")){
+            sb.append("  Pattern: \n");
             sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
         }
         if(this.getId().equals("OC02") || this.getId().equals("OC04")){
+            sb.append("  Pattern: \n");
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
         }
         if(this.getId().equals("OC05")){
-            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append("  Pattern: \n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
-            sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
         }
         if(this.getId().equals("OC06")){
-            sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
+            sb.append("  Pattern: \n");
+            sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
-            sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
+            sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
         }
         if(this.getId().equals("OC07")){
+            sb.append("  Pattern: \n");
             sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
         }
         if(this.getId().equals("OC08")){
+            sb.append("  Pattern: \n");
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
             sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
         }
         if(this.getId().equals("OC09") || this.getId().equals("OC10") || this.getId().equals("OC11") || this.getId().equals("OC12") ){
-            sb.append("  Required: ").append("\n");
+            sb.append("  Required Items: ").append("\n");
             for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
                 sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
             }
         }
         if(this.getId().equals("OC13") || this.getId().equals("OC14") || this.getId().equals("OC15") || this.getId().equals("OC16") ){
-            sb.append("  Required: ").append("\n");
-            for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+            sb.append("  Required Items: ").append("\n");
+            List<Map.Entry<Item, Integer>> sortedItems = new ArrayList<>(requiredItems.entrySet());
+            sortedItems.sort(Map.Entry.comparingByKey(Comparator.comparing(Enum::name)));
+            for (Map.Entry<Item, Integer> entry : sortedItems) {
                 sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
             }
         }
