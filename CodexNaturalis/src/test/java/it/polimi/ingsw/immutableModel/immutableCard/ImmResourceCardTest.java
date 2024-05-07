@@ -1,7 +1,7 @@
 package it.polimi.ingsw.immutableModel.immutableCard;
 
-import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.ResourceCard;
+import it.polimi.ingsw.model.card.Item;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

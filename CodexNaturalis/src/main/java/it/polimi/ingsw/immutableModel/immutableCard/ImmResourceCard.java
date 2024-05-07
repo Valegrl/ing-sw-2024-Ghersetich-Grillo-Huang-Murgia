@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.card.*;
 
 /**
  * This class represents an immutable version of a ResourceCard.
- * It extends the ImmPlayableCard class and adds additional properties and methods related to the resource card.
+ * It extends the ImmPlayableCard class and adds additional properties and methods related to the resource card
  * The class is final, so it can't be extended.
  */
 public final class ImmResourceCard extends ImmPlayableCard implements ViewCard {
