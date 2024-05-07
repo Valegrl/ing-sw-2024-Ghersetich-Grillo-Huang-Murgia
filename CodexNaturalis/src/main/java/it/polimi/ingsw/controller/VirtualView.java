@@ -98,7 +98,7 @@ public class VirtualView {
     public void evaluateEvent(PlayerReadyEvent event){
         if(gameController != null) {
             listener.update(gameController.readyToStart(this));
-            gameController.startGame();
+            gameController.startCardsSetup();
         }
         else
             listener.update(new KickFromLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
