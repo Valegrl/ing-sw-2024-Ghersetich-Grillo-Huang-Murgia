@@ -9,9 +9,7 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.model.card.Item;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -117,5 +115,38 @@ public final class ImmPlayArea implements Serializable {
      */
     public Pair<Coordinate, ImmEvaluableCard> getSelectedCard() {
         return selectedCard;
+    }
+
+    public String printHand() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player's Hand: \n");
+        for (ImmPlayableCard card : this.hand) {
+            sb.append(card.printCard()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    public String printPlayedCards() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("COORDINATES: (0,0) -> ").append(this.startCard.getId()).append("\n");
+        for (Map.Entry<Coordinate, ImmPlayableCard> entry : this.playedCards.entrySet()) {
+            Coordinate coordinate = entry.getKey();
+            ImmPlayableCard card = entry.getValue();
+            sb.append("  COORDINATES: (").append(coordinate.getX()).append(",")
+                    .append(coordinate.getY()).append(") -> ").append(card.getId()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    //prints the uncovered items in alphabetical order
+    public String printUncoveredItems() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Uncovered Items:\n");
+        List<Map.Entry<Item, Integer>> entries = new ArrayList<>(this.uncoveredItems.entrySet());
+        entries.sort(Map.Entry.comparingByKey(Comparator.comparing(Item::toString)));
+        for (Map.Entry<Item, Integer> entry : entries) {
+            sb.append("  Item: #").append(entry.getValue()).append(" ").append(entry.getKey()).append("\n");
+        }
+        return sb.toString();
     }
 }
