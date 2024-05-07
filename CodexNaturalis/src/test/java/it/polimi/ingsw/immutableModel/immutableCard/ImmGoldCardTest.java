@@ -109,7 +109,7 @@ class ImmGoldCardTest {
         String expectedOutput = "GoldCard: " + Item.itemToColor(Item.FUNGI, "GC03") + "\n" +
                 "  Points: 1\n" +
                 "  Required Items: \n" +
-                "    Item: #1 manuscript\n" +
+                "    - #1 " + Item.itemToColor(Item.MANUSCRIPT) + " items\n" +
                 "  Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.MANUSCRIPT) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n" +

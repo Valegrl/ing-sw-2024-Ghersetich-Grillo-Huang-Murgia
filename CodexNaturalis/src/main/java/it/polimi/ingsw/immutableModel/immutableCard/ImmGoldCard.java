@@ -2,6 +2,7 @@ package it.polimi.ingsw.immutableModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.evaluator.CornerEvaluator;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +59,12 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         if(!this.getRequiredItems().isEmpty()) {
             sb.append("  Required Items: ");
             for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
-                sb.append("\n    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+                sb.append("\n    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items");
             }
+            sb.append("\n");
         }
         else if(this.getEvaluator() instanceof CornerEvaluator){
-            sb.append("  2 points for each overlapping corner of this card \n");
+            sb.append("  ").append(this.getPoints()).append(" points for each overlapping corner of this card \n");
         }
         else{
             sb.append("");
