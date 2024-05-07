@@ -1,7 +1,10 @@
 package it.polimi.ingsw.immutableModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.evaluator.CornerEvaluator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,17 +55,27 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         sb.append("  Points: ").append(this.getPoints()).append("\n");
-        sb.append("  Constraint: ").append("\n");
-        for (Map.Entry<Item, Integer> entry : this.getConstraint().entrySet()) {
-            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
+        if(!this.getRequiredItems().isEmpty()) {
+            sb.append("  Required Items: ");
+            for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
+                sb.append("\n    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+            }
+        }
+        else if(this.getEvaluator() instanceof CornerEvaluator){
+            sb.append("  2 points for each overlapping corner of this card \n");
+        }
+        else{
+            sb.append("");
         }
         Item[] corners = this.getCorners();
         sb.append("  Corners: \n");
         sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
         sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
-        sb.append("  Required Items: ").append("\n");
-        for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
-            sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+        sb.append("  Constraint: ");
+        List<Map.Entry<Item, Integer>> sortedConstraints = new ArrayList<>(this.getConstraint().entrySet());
+        sortedConstraints.sort(Map.Entry.<Item, Integer>comparingByValue().reversed());
+        for (Map.Entry<Item, Integer> entry : sortedConstraints) {
+            sb.append("\n    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
         }
         return sb.toString();
     }
@@ -76,7 +89,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         sb.append("  Corners: \n");
-        sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty");
+        sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty\n");
         return sb.toString();
     }
 }
