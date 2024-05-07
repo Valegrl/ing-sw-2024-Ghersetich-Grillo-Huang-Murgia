@@ -113,9 +113,11 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
         sb.append("  Back Permanent Resources: \n");
         List<Item> sortedResources = new ArrayList<>(this.getBackPermanentResources());
         sortedResources.sort(Comparator.comparing(Enum::name));
-        for (Item item : sortedResources) {
-            sb.append("    ").append(item.toString()).append("\n");
+        sb.append("    ");
+        for (int i = 0; i < sortedResources.size() - 1; i++) {
+            sb.append(Item.itemToColor(sortedResources.get(i))).append(", ");
         }
+        sb.append(Item.itemToColor(sortedResources.get(sortedResources.size() - 1))).append("\n");
         Item[] backCorners = this.getBackCorners();
         sb.append("  Back Corners: \n");
         sb.append("    TL: ").append(Item.itemToColor(backCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(backCorners[CornerIndex.TR.getIndex()])).append("\n");

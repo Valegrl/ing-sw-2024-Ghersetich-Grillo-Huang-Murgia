@@ -98,7 +98,7 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements ViewCard
         if(this.getId().equals("OC09") || this.getId().equals("OC10") || this.getId().equals("OC11") || this.getId().equals("OC12") ){
             sb.append("  Required Items: ").append("\n");
             for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
-                sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+                sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items").append("\n");
             }
         }
         if(this.getId().equals("OC13") || this.getId().equals("OC14") || this.getId().equals("OC15") || this.getId().equals("OC16") ){
@@ -106,7 +106,7 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements ViewCard
             List<Map.Entry<Item, Integer>> sortedItems = new ArrayList<>(requiredItems.entrySet());
             sortedItems.sort(Map.Entry.comparingByKey(Comparator.comparing(Enum::name)));
             for (Map.Entry<Item, Integer> entry : sortedItems) {
-                sb.append("    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType()).append("\n");
+                sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items").append("\n");
             }
         }
         return sb.toString();

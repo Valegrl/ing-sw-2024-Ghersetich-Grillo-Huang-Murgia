@@ -32,6 +32,7 @@ class ImmStartCardTest {
                 "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();
@@ -61,6 +62,7 @@ class ImmStartCardTest {
                 "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();
@@ -86,12 +88,13 @@ class ImmStartCardTest {
 
         String expectedOutput = "StartCard: " + "SC01" + "\n" +
                 "  Back Permanent Resources: \n" +
-                "    animal\n" +
+                "    " + Item.itemToColor(Item.ANIMAL) + "\n" +
                 "  Back Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
                 "    BL: " + Item.itemToColor(Item.ANIMAL) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();
@@ -119,14 +122,15 @@ class ImmStartCardTest {
 
         String expectedOutput = "StartCard: " + "SC06" + "\n" +
                 "  Back Permanent Resources: \n" +
-                "    animal\n" +
-                "    fungi\n" +
-                "    plant\n" +
+                "    " + Item.itemToColor(Item.ANIMAL) + ", " +
+                Item.itemToColor(Item.FUNGI) + ", " +
+                Item.itemToColor(Item.PLANT) + "\n" +
                 "  Back Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
                 "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();

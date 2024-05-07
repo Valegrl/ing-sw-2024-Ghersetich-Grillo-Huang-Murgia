@@ -75,8 +75,9 @@ public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
         List<Map.Entry<Item, Integer>> sortedConstraints = new ArrayList<>(this.getConstraint().entrySet());
         sortedConstraints.sort(Map.Entry.<Item, Integer>comparingByValue().reversed());
         for (Map.Entry<Item, Integer> entry : sortedConstraints) {
-            sb.append("\n    Item: #").append(entry.getValue()).append(" ").append(entry.getKey().getType());
+            sb.append("\n    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" resources");
         }
+        sb.append("\n");
         return sb.toString();
     }
 

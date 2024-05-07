@@ -37,9 +37,10 @@ class ImmGoldCardTest {
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "    BL: " + Item.itemToColor(Item.QUILL) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "  Constraint: \n" +
-                "    Item: #3 plant";
+                "    - #3 " + Item.itemToColor(Item.PLANT) + " resources\n";
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -74,6 +75,7 @@ class ImmGoldCardTest {
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -112,10 +114,11 @@ class ImmGoldCardTest {
                 "    TL: " + Item.itemToColor(Item.MANUSCRIPT) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "  Constraint: \n" +
-                "    Item: #2 fungi\n" +
-                "    Item: #1 insect";
+                "    - #2 " + Item.itemToColor(Item.FUNGI) + " resources\n" +
+                "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n";
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -154,6 +157,7 @@ class ImmGoldCardTest {
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -189,10 +193,11 @@ class ImmGoldCardTest {
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" +
                 "  Constraint: \n" +
-                "    Item: #3 fungi\n" +
-                "    Item: #1 insect";
+                "    - #3 " + Item.itemToColor(Item.FUNGI) + " resources\n" +
+                "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n";
 
         assertEquals(expectedOutput, card.printCard());
+        System.out.println(card.printCard());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -230,6 +235,7 @@ class ImmGoldCardTest {
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
