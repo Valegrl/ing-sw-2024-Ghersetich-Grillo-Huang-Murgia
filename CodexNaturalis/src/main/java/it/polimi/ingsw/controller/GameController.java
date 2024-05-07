@@ -347,7 +347,49 @@ public class GameController {
     }
 
     protected synchronized ChosenTokenSetupEvent chosenTokenSetup(VirtualView vv, Token color){
-        return null;
+        if (virtualViewAccounts.containsKey(vv)) {
+            if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken != null) {
+                if (timerSetupToken.value() != null) {
+
+                    String username = virtualViewAccounts.get(vv).getUsername();
+                    for (PlayerTokenSetup pts : setupColors)
+                        if (username.equals(pts.getUsername())) {
+                            if (pts.getToken() == null) {
+                                if (!pts.isDisconnectedAtLeastOnce()) {
+                                    if (availableTokens.contains(color)) {
+                                        boolean done = game.setupPlayerToken(username, color);
+                                        if (!done)
+                                            throw new RuntimeException("A fatal error occurred with the player's username: " + username);
+                                        pts.setToken(color);
+
+                                        List<String> toNotify = new ArrayList<>();
+                                        for (PlayerTokenSetup p : setupColors)
+                                            if (!p.isDisconnectedAtLeastOnce() && p.getToken() == null)
+                                                toNotify.add(p.getUsername());
+
+                                        String mes = "The player " + username + " has chosen the " + color.getColor() + " token.";
+                                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                                            if (toNotify.contains(entry.getKey().getUsername()))
+                                                entry.getValue().update(new ChooseTokenSetupEvent(availableTokens, mes));
+
+                                        return new ChosenTokenSetupEvent(Feedback.SUCCESS, "Your token setup has been chosen!");
+                                    }
+                                    else {
+                                        return new ChosenTokenSetupEvent(Feedback.FAILURE, "Token not available.");
+                                    }
+                                }
+                                return new ChosenTokenSetupEvent(Feedback.FAILURE, "You cannot choose after a disconnection, wait the timer.");
+                            }
+                            return new ChosenTokenSetupEvent(Feedback.FAILURE, "Choice has already been made.");
+                        }
+                    System.err.println("An error occurred during the chosen cards setup phase!");
+
+                }
+                return new ChosenTokenSetupEvent(Feedback.FAILURE, "The timer has run out! Your token setup has been assigned automatically.");
+            }
+            return new ChosenTokenSetupEvent(Feedback.FAILURE, "You can only choose during the token-setup phase.");
+        }
+        return new ChosenTokenSetupEvent(Feedback.FAILURE, "You are not in the game.");
     }
 
     private synchronized void autoTokenSetup() {
@@ -420,7 +462,7 @@ public class GameController {
         return null;
     }
 
-    protected synchronized void autoDrawCard() {
+    private synchronized void autoDrawCard() {
 
     }
 

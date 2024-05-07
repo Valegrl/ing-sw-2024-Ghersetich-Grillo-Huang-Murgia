@@ -6,6 +6,9 @@ import it.polimi.ingsw.eventUtils.event.Event;
 
 import java.lang.reflect.Type;
 
+/**
+ * This class is responsible for deserializing JSON into Event objects.
+ */
 public class EventDeserializer implements JsonDeserializer<Event> {
 
     @Override

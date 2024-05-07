@@ -11,14 +11,17 @@ import it.polimi.ingsw.utils.Pair;
 import java.util.*;
 
 /**
- * The {@link Controller} class is a Singleton that serves as a central point of control for managing game controllers.
- * It maintains a list of {@link GameController} instances, each corresponding to a game that is not yet in the
- * {@link GameStatus#ENDED} state.
+ * The {@link Controller} class is a Singleton that serves as the main hub for managing game controllers and user
+ * accounts in the application. It maintains a list of {@link GameController} instances, each corresponding to a
+ * game that is currently active.
  *
- * <p>The class provides methods to create and join lobbies, reconnect to a game, and retrieve lists of available
- * lobbies and games.</p>
+ * <p>This class is responsible for handling user login, logout, registration, and account deletion events. It also
+ * manages the creation and joining of game lobbies, as well as the reconnection of players to existing games.
+ * Furthermore, it provides methods to retrieve lists of available lobbies and offline games for a user.</p>
  *
- * <p>Use the {@link #getInstance()} method to get the single instance of this class.</p>
+ * The {@link Controller} class also manages the association between user accounts and their respective
+ * {@link VirtualView} instances, which represent the user's view of the game. Use the {@link #getInstance()}
+ * method to get the single instance of this class.
  */
 public class Controller {
 
