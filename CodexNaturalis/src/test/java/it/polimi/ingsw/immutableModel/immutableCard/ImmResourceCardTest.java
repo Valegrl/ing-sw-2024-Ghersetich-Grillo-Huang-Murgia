@@ -22,7 +22,7 @@ class ImmResourceCardTest {
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.PLANT, "RC16") + "\n" +
                 "  Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
-                "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.INKWELL);
+                "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.INKWELL)+ "\n";
 
         assertEquals(expectedOutput, card.printCard());
         System.out.println(card.printCard());
@@ -47,7 +47,7 @@ class ImmResourceCardTest {
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.PLANT, "RC16") + "\n" +
                 "  Corners: \n" +
                 "    TL: empty  TR: empty\n" +
-                "    BL: empty  BR: empty";
+                "    BL: empty  BR: empty\n";
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());
@@ -72,7 +72,7 @@ class ImmResourceCardTest {
                 "  Points: 1\n" +
                 "  Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.INSECT) + "  TR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
-                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY);
+                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n";
 
         assertEquals(expectedOutput, card.printCard());
         System.out.println(card.printCard());
@@ -99,9 +99,10 @@ class ImmResourceCardTest {
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.INSECT, "RC38") + "\n" +
                 "  Corners: \n" +
                 "    TL: empty  TR: empty\n" +
-                "    BL: empty  BR: empty";
+                "    BL: empty  BR: empty\n";
 
         assertEquals(expectedOutput, card.printCardBack());
+        System.out.println(card.printCardBack());
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPoints();
