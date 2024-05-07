@@ -29,7 +29,7 @@ class ImmStartCardTest {
         String expectedOutput = "StartCard: " + "SC01" + "\n" +
                 "  Front Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
-                "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL);
+                "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
         assertEquals(expectedOutput, card.printCard());
 
@@ -58,7 +58,7 @@ class ImmStartCardTest {
         String expectedOutput = "StartCard: " + "SC01" + "\n" +
                 "  Front Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
-                "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL);
+                "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
         assertEquals(expectedOutput, card.printCard());
 
@@ -89,7 +89,7 @@ class ImmStartCardTest {
                 "    animal\n" +
                 "  Back Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
-                "    BL: " + Item.itemToColor(Item.ANIMAL) + "  BR: " + Item.itemToColor(Item.EMPTY);
+                "    BL: " + Item.itemToColor(Item.ANIMAL) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
 
@@ -124,7 +124,7 @@ class ImmStartCardTest {
                 "    plant\n" +
                 "  Back Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
-                "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.HIDDEN);
+                "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
 
