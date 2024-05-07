@@ -109,4 +109,5 @@ class ImmResourceCardTest {
         verify(resourceCard, times(1)).getPermanentResource();
         verify(resourceCard, times(1)).getCorners();
     }
+
 }
