@@ -1,4 +1,4 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * This class represents an immutable version of a StartCard.
  * It extends the ImmCard class and adds additional properties and methods related to the start card.
  */
-public final class ImmStartCard extends ImmCard implements ViewCard{
+public final class ImmStartCard extends ImmCard implements CardToString {
     /**
      * The backPermanentResources is a list of Items representing the resources that the card provides permanently
      * on its back side.
@@ -122,6 +122,26 @@ public final class ImmStartCard extends ImmCard implements ViewCard{
         sb.append("  Back Corners: \n");
         sb.append("    TL: ").append(Item.itemToColor(backCorners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(backCorners[CornerIndex.TR.getIndex()])).append("\n");
         sb.append("    BL: ").append(Item.itemToColor(backCorners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(backCorners[CornerIndex.BR.getIndex()])).append("\n");
+        return sb.toString();
+    }
+
+    public String printSimpleCard(int indent) {
+        StringBuilder sb = new StringBuilder();
+        Item[] corners;
+        sb.append(" ".repeat(indent));
+        if (!flipped) {
+            corners = this.getFrontCorners();
+            sb.append("Showing face: front\n");
+        } else {
+            corners = this.getBackCorners();
+            sb.append("Showing face: back\n");
+        }
+        sb.append(" ".repeat(indent))
+          .append("Corners: \n")
+          .append(" ".repeat(indent + 2))
+          .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
+          .append(" ".repeat(indent + 2))
+          .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
 }

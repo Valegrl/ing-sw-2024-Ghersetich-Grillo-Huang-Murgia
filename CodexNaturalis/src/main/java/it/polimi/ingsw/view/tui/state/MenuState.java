@@ -16,6 +16,7 @@ public class MenuState extends ViewState {
 
     @Override
     public void run() {
+
         clearConsole();
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
@@ -149,7 +150,7 @@ public class MenuState extends ViewState {
         view.printMessage("Choose a lobby ('-1' to exit):");
         int choice = readIntFromInput(1, controller.getLobbies().size());
         if (choice == -1) {
-            run();
+            this.run();
             return;
         }
         Event event = new JoinLobbyEvent(controller.getLobbies().get(choice - 1).getId());
@@ -164,7 +165,8 @@ public class MenuState extends ViewState {
 
         if(!controller.getOfflineGames().isEmpty())
             chooseReconnect();
-        else run();
+        else
+            run();
     }
 
     private void chooseReconnect() {

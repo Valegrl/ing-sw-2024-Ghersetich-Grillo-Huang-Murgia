@@ -1,8 +1,7 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.evaluator.CornerEvaluator;
-import it.polimi.ingsw.model.evaluator.Evaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Map;
  * It extends the ImmPlayableCard class and adds additional properties and methods related to the gold card.
  * The class is final, so it can't be extended.
  */
-public final class ImmGoldCard extends ImmPlayableCard implements ViewCard {
+public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     /**
      * The constraint is a map where the keys are Items and the values are the quantity of each item required as
      * a constraint.

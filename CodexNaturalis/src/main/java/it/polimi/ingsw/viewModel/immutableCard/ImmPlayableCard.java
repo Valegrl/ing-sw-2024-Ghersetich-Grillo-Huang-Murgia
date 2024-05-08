@@ -1,4 +1,4 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 
@@ -9,7 +9,7 @@ import java.util.Map;
  * It extends the ImmEvaluableCard class and adds additional properties and methods related to the playability
  * of the card.
  */
-public class ImmPlayableCard extends ImmEvaluableCard implements ViewCard {
+public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
     /**
      * The permanentResource represents the resource that the card provides permanently.
      */
@@ -84,5 +84,19 @@ public class ImmPlayableCard extends ImmEvaluableCard implements ViewCard {
 
     public String printCardBack() {
         return null;
+    }
+
+    public String printSimpleCard(int indent) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" ".repeat(indent));
+        // if(!flipped) sb.append("Showing face: front\n");
+        // else sb.append("Showing face: back\n");
+        sb.append(" ".repeat(indent))
+          .append("Corners: \n")
+          .append(" ".repeat(indent + 2))
+          .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
+          .append(" ".repeat(indent + 2))
+          .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+        return sb.toString();
     }
 }

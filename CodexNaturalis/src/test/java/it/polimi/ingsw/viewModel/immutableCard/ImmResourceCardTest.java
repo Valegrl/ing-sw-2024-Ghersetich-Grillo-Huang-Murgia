@@ -1,4 +1,4 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.ResourceCard;
 import it.polimi.ingsw.model.card.Item;

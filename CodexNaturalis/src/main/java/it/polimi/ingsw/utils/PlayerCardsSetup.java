@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.immutableModel.immutableCard.ImmStartCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.card.StartCard;
 

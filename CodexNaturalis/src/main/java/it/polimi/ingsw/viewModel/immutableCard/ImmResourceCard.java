@@ -1,4 +1,4 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 
@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.card.*;
  * It extends the ImmPlayableCard class and adds additional properties and methods related to the resource card
  * The class is final, so it can't be extended.
  */
-public final class ImmResourceCard extends ImmPlayableCard implements ViewCard {
+public final class ImmResourceCard extends ImmPlayableCard implements CardToString {
 
     /**
      * Constructs an immutable representation of a resource card.

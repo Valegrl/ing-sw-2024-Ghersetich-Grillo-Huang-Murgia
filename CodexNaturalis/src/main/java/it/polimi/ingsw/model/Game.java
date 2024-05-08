@@ -512,7 +512,7 @@ public class Game {
      * @param user The username of the player to retrieve.
      * @return The {@link Player} associated with the given username.
      */
-    private Player getPlayerFromUsername(String user) {
+    public Player getPlayerFromUsername(String user) {
         return players.stream()
                 .filter(player -> player.getUsername().equals(user))
                 .findFirst()

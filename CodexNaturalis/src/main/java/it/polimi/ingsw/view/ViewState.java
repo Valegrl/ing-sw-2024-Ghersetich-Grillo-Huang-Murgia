@@ -10,8 +10,6 @@ public abstract class ViewState {
 
     protected final ViewController controller;
 
-    private boolean responseReceived = false;
-
     protected final Object viewLock = new Object();
 
     public ViewState(View view) {
@@ -65,12 +63,10 @@ public abstract class ViewState {
 
     protected void waitForResponse() {
         synchronized (viewLock) {
-            while (!responseReceived) {
-                try {
-                    viewLock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                viewLock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -97,7 +93,6 @@ public abstract class ViewState {
 
     protected void notifyResponse() {
         synchronized (viewLock) {
-            responseReceived = true;
             viewLock.notifyAll();
         }
     }

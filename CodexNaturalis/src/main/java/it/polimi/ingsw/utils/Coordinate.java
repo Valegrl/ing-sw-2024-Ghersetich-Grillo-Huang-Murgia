@@ -79,6 +79,11 @@ public class Coordinate implements Serializable {
         return Objects.hash(x, y);
     }
 
+    @Override
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
+    }
+
     /**
      * Sorts a list of {@code Coordinate} objects by their y-coordinates in ascending order.
      * If y-coordinates are equal, x-coordinates are compared and sorted in ascending order.

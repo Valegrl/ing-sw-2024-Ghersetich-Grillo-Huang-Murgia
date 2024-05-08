@@ -11,11 +11,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
-import it.polimi.ingsw.immutableModel.ImmPlayer;
-import it.polimi.ingsw.immutableModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.immutableModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.model.GameStatus;
-import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
@@ -24,7 +20,6 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Map;
 
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
@@ -52,7 +47,7 @@ public class ViewController implements ViewEventReceiver {
     private final Queue<Event> tasksQueue = new LinkedList<>();
 
     /**
-     * The account associated with the View.
+     * The username of the logged-in user.
      */
     private String username;
 
@@ -66,57 +61,15 @@ public class ViewController implements ViewEventReceiver {
      */
     private List<LobbyState> offlineGames;
 
-    /*Immutable model part*/
     /**
-     * The unique identifier of the game.
+     * The id of the joined lobby.
      */
-    private String gameId;
+    private String lobbyId;
 
     /**
-     * The list of players in the game.
+     * The {@link ViewModel} for the current game.
      */
-    private List<ImmPlayer> player;
-
-    /**
-     * The index of the player whose turn it is.
-     */
-    private int turnPlayerIndex;
-
-    /**
-     * The scoreboard of the game.
-     */
-    private Map<ImmPlayer, Integer> scoreboard;
-
-    /**
-     * The common objectives of the game.
-     */
-    private ImmObjectiveCard[] commonObjectives;
-
-    /**
-     * The current status of the game.
-     */
-    private GameStatus gameStatus;
-
-    /**
-     * The visible resource cards in the game.
-     */
-    private ImmPlayableCard[] visibleResourceCards;
-
-    /**
-     * The visible gold cards in the game.
-     */
-    private ImmPlayableCard[] visibleGoldCards;
-
-    /**
-     * The top card of the resource deck.
-     */
-    private Item topResourceDeck;
-
-    /**
-     * The top card of the gold deck.
-     */
-    private Item topGoldDeck;
-
+    private ViewModel model;
 
     /**
      * The constructor for the ViewController class.
@@ -214,7 +167,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
         if(view.getState().inLobby()){
             //TODO View has to know this client has been kicked out
-            this.gameId = null;
+            this.lobbyId = null;
         }
         else{
             System.out.println("Lobby state: event in wrong state");
@@ -337,7 +290,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(QuitLobbyEvent event) {
         if(view.getState().inLobby()){
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.gameId = null;
+                this.lobbyId = null;
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
@@ -354,6 +307,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
         if(view.getState().inMenu()){
+            lobbies = null;
             lobbies = event.getLobbies();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
             for(int i = 0; i < lobbies.size(); i++) {
@@ -370,7 +324,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(CreateLobbyEvent event) {
         if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.gameId = event.getLobbyID();
+                this.lobbyId = event.getLobbyID();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
@@ -412,7 +366,7 @@ public class ViewController implements ViewEventReceiver {
         //TODO initialise immutable model ?
         if(view.getState().inMenu()){
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.gameId = event.getLobbyID();
+                this.lobbyId = event.getLobbyID();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
@@ -459,7 +413,7 @@ public class ViewController implements ViewEventReceiver {
         //TODO Reinitialise the local model ? Connect directly to the game ?
         if(view.getState().inMenu()){
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.gameId = event.getGameID();
+                this.lobbyId = event.getGameID();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.immutableModel.immutableCard;
+package it.polimi.ingsw.viewModel.immutableCard;
 
 
 import it.polimi.ingsw.model.card.*;
@@ -15,7 +15,7 @@ import java.util.Map;
  * It extends the ImmEvaluableCard class and adds additional properties and methods related to the objective card.
  * The class is final, so it can't be extended.
  */
-public final class ImmObjectiveCard extends ImmEvaluableCard implements ViewCard{
+public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToString {
     /**
      * The requiredPattern is an array of pairs, each pair consists of a Coordinate and an Item.
      * It represents the pattern that needs to be matched on the board for the card to be evaluated.
