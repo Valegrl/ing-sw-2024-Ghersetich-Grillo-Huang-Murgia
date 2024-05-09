@@ -1,5 +1,8 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
+import it.polimi.ingsw.model.card.CornerIndex;
+import it.polimi.ingsw.model.card.PlayableCard;
+import it.polimi.ingsw.model.card.StartCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmEvaluableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
@@ -9,9 +12,7 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class SelfViewPlayArea implements Serializable {
@@ -81,6 +82,56 @@ public final class SelfViewPlayArea implements Serializable {
 
     public Pair<Coordinate, ImmEvaluableCard> getSelectedCard() {
         return selectedCard;
+    }
+
+    public String printAvailablePos(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player's available positions: \n");
+
+        Coordinate[] arrayCoordinate = {
+                new Coordinate(-1,1),
+                new Coordinate(1,1),
+                new Coordinate(1,-1),
+                new Coordinate(-1,-1)
+        };
+
+        Set<Coordinate> okPos = new HashSet<>();
+        Set<Coordinate> notOkPos = new HashSet<>();
+        Coordinate startCoordinate = new Coordinate(0, 0);
+        ImmStartCard sc = this.startCard;
+        Item[] temp;
+        int j;
+
+        temp = !sc.isFlipped() ? sc.getFrontCorners() : sc.getBackCorners();
+        notOkPos.add(startCoordinate);
+
+        /*check startCard's corners*/
+        for(CornerIndex i : CornerIndex.values()) {
+            j = i.getIndex();
+            if(temp[j] != Item.HIDDEN && temp[j] != Item.COVERED)
+                okPos.add(startCoordinate.sum(arrayCoordinate[j]));
+            else
+                notOkPos.add(startCoordinate.sum(arrayCoordinate[j]));
+        }
+
+        for(Coordinate pos : this.playedCards.keySet()) {
+            ImmPlayableCard currCard = this.playedCards.get(pos);
+            for(CornerIndex i : CornerIndex.values()) {
+                j = i.getIndex();
+                if(currCard.getCorners()[j] != Item.HIDDEN && currCard.getCorners()[j] != Item.COVERED)
+                    okPos.add(pos.sum(arrayCoordinate[j]));
+                else
+                    notOkPos.add(pos.sum(arrayCoordinate[j]));
+            }
+        }
+
+        okPos.removeAll(notOkPos);
+
+        List<Coordinate> availablePositions = new ArrayList<>(okPos);
+        for(Coordinate i : availablePositions){
+            sb.append(i).append("\n");
+        }
+        return sb.toString();
     }
 
     public String printHand() {
