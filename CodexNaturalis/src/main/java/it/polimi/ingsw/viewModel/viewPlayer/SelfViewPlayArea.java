@@ -1,11 +1,7 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
 import it.polimi.ingsw.model.card.CornerIndex;
-import it.polimi.ingsw.model.card.PlayableCard;
-import it.polimi.ingsw.model.card.StartCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmEvaluableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
+import it.polimi.ingsw.viewModel.immutableCard.*;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
@@ -148,10 +144,10 @@ public final class SelfViewPlayArea implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");
         for (ImmPlayableCard card : this.hand) {
-            // TODO
+               sb.append(card.printSimpleCard(2)).append("\n");
         }
         return sb.toString();
-    }
+        }
 
     public String printPlayedCards() {
         StringBuilder sb = new StringBuilder();
