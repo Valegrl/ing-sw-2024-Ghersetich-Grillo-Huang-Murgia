@@ -139,9 +139,9 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         sb.append(" ".repeat(indent))
           .append("Corners: \n")
           .append(" ".repeat(indent + 2))
-          .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
+          .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
           .append(" ".repeat(indent + 2))
-          .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+          .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
 }
