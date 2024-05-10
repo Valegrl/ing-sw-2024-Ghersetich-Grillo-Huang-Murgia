@@ -128,8 +128,18 @@ public final class SelfViewPlayArea implements Serializable {
         okPos.removeAll(notOkPos);
 
         List<Coordinate> availablePositions = new ArrayList<>(okPos);
+        int num = 0;
         for(Coordinate i : availablePositions){
-            sb.append(i).append("\n");
+            sb.append(i);
+            num++;
+
+            if(num == 4){
+                sb.append("\n");
+                num = 0;
+            }
+            else{
+                sb.append(" - ");
+            }
         }
         return sb.toString();
     }
