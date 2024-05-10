@@ -144,7 +144,7 @@ public final class SelfViewPlayArea implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");
         for (ImmPlayableCard card : this.hand) {
-               sb.append(card.printSimpleCard(2)).append("\n");
+               sb.append(card.printCard()).append("\n");
         }
         return sb.toString();
         }

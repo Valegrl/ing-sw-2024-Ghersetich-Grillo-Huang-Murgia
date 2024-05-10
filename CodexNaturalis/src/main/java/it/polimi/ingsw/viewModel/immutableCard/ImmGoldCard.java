@@ -51,6 +51,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
      *
      * @return a string representing the card details.
      */
+    @Override
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
@@ -87,6 +88,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
      *
      * @return a string representing the card details.
      */
+    @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");

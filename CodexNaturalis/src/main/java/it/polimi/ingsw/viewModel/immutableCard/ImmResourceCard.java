@@ -25,6 +25,7 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
      *
      * @return a string representing the card details.
      */
+    @Override
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
@@ -43,6 +44,7 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
      *
      * @return a string representing the card details.
      */
+    @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
