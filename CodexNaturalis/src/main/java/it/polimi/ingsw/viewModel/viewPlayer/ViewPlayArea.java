@@ -64,7 +64,7 @@ public final class ViewPlayArea implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");
         for (Item item : this.hand) {
-            // TODO
+            sb.append("  ").append(Item.itemToColor(item)).append("\n");
         }
         return sb.toString();
     }
