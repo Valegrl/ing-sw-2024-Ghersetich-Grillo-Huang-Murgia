@@ -144,7 +144,7 @@ public class Controller {
         Account account = virtualViewAccounts.get(vv);
         logout(vv);
         userAccounts.remove(account);
-        return new DeleteAccountEvent(Feedback.SUCCESS, "The account has been deleted!");
+        return new DeleteAccountEvent(Feedback.SUCCESS, "Account deleted successfully!");
     }
 
     /**

@@ -9,6 +9,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 import it.polimi.ingsw.model.player.Token;
@@ -67,6 +68,11 @@ public class ViewController implements ViewEventReceiver {
      * The offline games.
      */
     private List<LobbyState> offlineGames;
+
+    /**
+     * The list of players and their ready status in the lobby.
+     */
+    private List<Pair<String, Boolean>> readyStatusPlayers;
 
     /**
      * The id of the joined lobby.
@@ -339,6 +345,11 @@ public class ViewController implements ViewEventReceiver {
 
     }
 
+    @Override
+    public void evaluateEvent(GetLobbyInfoEvent event) {
+
+    }
+
     //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
     //TODO (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
     //TODO should i print for IllegalStateException?
@@ -453,6 +464,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.getState().inMenu()){
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.lobbyId = event.getLobbyID();
+                this.readyStatusPlayers = event.getReadyStatusPlayers();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }

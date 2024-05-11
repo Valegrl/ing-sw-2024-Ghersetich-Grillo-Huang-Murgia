@@ -6,6 +6,7 @@ import it.polimi.ingsw.eventUtils.event.fromModel.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 
@@ -120,6 +121,12 @@ public interface ViewEventReceiver {
      * @param event The event to be handled.
      */
     void evaluateEvent(QuitGameEvent event);
+
+    /**
+     * Handles the event of initializing lobby info when a player joins.
+     * @param event The event to be handled.
+     */
+    void evaluateEvent(GetLobbyInfoEvent event);
 
     /**
      * Handles the event of kicking a chosen player from the lobby.

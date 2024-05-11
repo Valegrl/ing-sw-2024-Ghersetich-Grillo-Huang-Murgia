@@ -11,6 +11,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
@@ -190,7 +191,12 @@ public enum EventID {
     /**
      * The {@link ServerCrashedEvent} ID.
      */
-    SERVER_CRASHED("SERVER_CRASHED", ServerCrashedEvent.class);
+    SERVER_CRASHED("SERVER_CRASHED", ServerCrashedEvent.class),
+
+    /**
+     * The {@link GetLobbyInfoEvent} ID.
+     */
+    GET_LOBBY_INFO("GET_LOBBY_INFO", GetLobbyInfoEvent.class);
 
     /**
      * The unique ID of the event type.
@@ -211,6 +217,7 @@ public enum EventID {
         localEvents.add(AVAILABLE_POSITIONS);
         localEvents.add(IS_MY_TURN);
         localEvents.add(SEE_OPPONENT_PLAY_AREA);
+        localEvents.add(GET_LOBBY_INFO);
     }
 
     /**
