@@ -7,9 +7,7 @@ import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
-import it.polimi.ingsw.model.exceptions.EmptyDeckException;
-import it.polimi.ingsw.model.exceptions.InvalidConstraintException;
-import it.polimi.ingsw.model.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
@@ -74,6 +72,9 @@ public class Game {
 
     private GameStatus backupGameStatus;
 
+    private boolean detectedLC;
+    private int circleChecker;
+
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
      * @param id The identifier of the Game.
@@ -111,6 +112,8 @@ public class Game {
 
         this.gameStatus = GameStatus.SETUP;
         this.backupGameStatus = GameStatus.RUNNING;
+        this.detectedLC = false;
+        this.circleChecker = -1;
 
         //TODO update listeners
     }
@@ -165,9 +168,9 @@ public class Game {
         while (!players.get(turnPlayerIndex).isOnline())
             turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
         if (onlinePlayersNumber() < 2)
-            setGameStatus(GameStatus.WAITING);
+            this.gameStatus = GameStatus.WAITING;
         else
-            setGameStatus(GameStatus.RUNNING);
+            this.gameStatus = GameStatus.RUNNING;
         //TODO  turn + status update method
     }
 
@@ -177,14 +180,23 @@ public class Game {
      * If the current player is the last player in the list, the turn wraps around to the first player.
      */
     public void newTurn() {
-        // TODO change status if needed (RUNNING->LAST_CIRCLE) and endGame
-        //  TODO: boolean detected (LAST_CIRCLE), int circleChecker (useful to start LAST_CIRCLE and ENDED)
-        if (onlinePlayersNumber() >= 2) {
-            do {
-                turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
-            } while (!players.get(turnPlayerIndex).isOnline());
-            //TODO turn + status update method (if not ended)
+        this.circleChecker = turnPlayerIndex;
+
+        do {
+            turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
+        } while (!players.get(turnPlayerIndex).isOnline());
+
+        if (detectedLC && this.gameStatus == GameStatus.RUNNING){
+            if (circleChecker > turnPlayerIndex)
+                this.gameStatus = GameStatus.LAST_CIRCLE;
         }
+        else if (this.gameStatus == GameStatus.LAST_CIRCLE){
+            if (circleChecker > turnPlayerIndex) {
+                endGame();
+                return;
+            }
+        }
+        //TODO turn + status update method (if not ended)
     }
 
     /**
@@ -198,24 +210,31 @@ public class Game {
      * Additionally, calculates the points earned by placing the card
      * and assigns them to the current {@link Player}.
      *
-     * @param c       The {@link PlayableCard} to be placed.
-     * @param pos     The {@link Coordinate} where the card should be placed on the {@link PlayArea}.
-     * @param flipped A boolean indicating whether the card should be flipped before placement.
-     * @throws InvalidConstraintException If the selected card does not satisfy its constraint for the current player.
+     * @param playableCardID    The {@link PlayableCard} to be placed.
+     * @param pos               The {@link Coordinate} where the card should be placed on the {@link PlayArea}.
+     * @param flipped           A boolean indicating whether the card should be flipped before placement.
+     * @throws Exception        If there are errors during the placement action for the current player.
      */
-    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped) throws InvalidConstraintException {
+    public void placeCard(String playableCardID, Coordinate pos, boolean flipped) throws Exception {
 
         Player currPlayer = players.get(turnPlayerIndex);
+
+        PlayableCard c = currPlayer.getPlayArea().getCardById(playableCardID);
+        if (c == null)
+            throw new Exception("You do not have a card with the provided ID.");
+
+        if (!currPlayer.getPlayArea().getAvailablePos().contains(pos))
+            throw new Exception("The provided position is not valid.");
+
         selectCard(c, pos, currPlayer.getUsername());
 
         boolean placeable;
         if (c.getCardType().equals(CardType.GOLD) && !flipped) {
             placeable = currPlayer.getPlayArea().checkConstraint(c);
             if (!placeable)
-                throw new InvalidConstraintException("The selected card does not satisfy its constraint for the current Player"); //TODO listener update, no exception
-        } else if (flipped) {
+                throw new Exception("The selected card does not satisfy its constraint.");
+        } else if (flipped)
             c.flipCard();
-        }
 
         currPlayer.getPlayArea().placeCard(c, pos, flipped);
 
@@ -238,7 +257,7 @@ public class Game {
      * @param chosenCard The index of the card to be drawn from the visible cards array.
      *                   If the value is not in the range [0, 2), a card is drawn from the top of the deck.
      */
-    public void drawCard(CardType chosenDeck, int chosenCard) {
+    public void drawCard(CardType chosenDeck, int chosenCard) throws Exception {
 
         PlayableCard drawnCard, newVisible;
 
@@ -264,12 +283,12 @@ public class Game {
                 drawnCard = resourceDeck.drawTop();
         }
 
-        if (drawnCard == null) throw new EmptyDeckException(); // TODO when controller is implemented, make non runtimeException?
+        if (drawnCard == null) throw new Exception("Can't draw a card from this position.");
 
         Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) setGameStatus(GameStatus.LAST_CIRCLE); //TODO boolean next circle: last_circle + update players
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) this.detectedLC = true; //TODO update players
 
         // TODO update model to listeners from VirtualView!!!!!!!
     }
@@ -305,7 +324,7 @@ public class Game {
         currScore += points;
 
         if (currScore >= 20 && !gameStatus.equals(GameStatus.LAST_CIRCLE))
-            setGameStatus(GameStatus.LAST_CIRCLE); //TODO boolean next circle: last_circle + update players
+            this.detectedLC = true; //TODO update players
         if (currScore > 29) currScore = 29;
 
         scoreboard.put(p, currScore);
@@ -329,7 +348,7 @@ public class Game {
         p.setOnline(false);
         if (onlinePlayersNumber() == 1 && !gameStatus.equals(GameStatus.SETUP)) {
             this.backupGameStatus = this.gameStatus;
-            setGameStatus(GameStatus.WAITING);
+            this.gameStatus = GameStatus.WAITING;
         }
     }
 
@@ -350,10 +369,11 @@ public class Game {
 
         p.setOnline(true);
         if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP)) {
-            setGameStatus(backupGameStatus);
+            this.gameStatus = backupGameStatus;
             if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
-                newTurn(); //TODO version with no updates. I will do them after the return from virtualView.
+                newTurn(); //TODO version with no updates. I will do them after the return from virtualView. (return value in reconnect for nextTurn call)
         }
+        //TODO restart new actionTimer (waiting player) or nextTurn
     }
 
     /**
@@ -376,7 +396,7 @@ public class Game {
             objPoints.put(p, playerObjPoints);
         }
 
-        setGameStatus(GameStatus.ENDED);
+        this.gameStatus = GameStatus.ENDED;
 
         return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
         //TODO update listeners with specif event. void method? + online players filter
@@ -507,13 +527,6 @@ public class Game {
     }
 
     /**
-     * Sets the Game status to the given one.
-     */
-    public void setGameStatus(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
-    }
-
-    /**
      * Retrieves the visibleResourceCards array.
      * @return {@link Game#visibleResourceCards}.
      */
@@ -586,10 +599,6 @@ public class Game {
         return backupGameStatus;
     }
 
-    public void setBackupGameStatus(GameStatus backupGameStatus) {
-        this.backupGameStatus = backupGameStatus;
-    }
-
     /**
      * @return true if it is the player's turn.
      */
@@ -597,8 +606,7 @@ public class Game {
         return players.get(turnPlayerIndex).getUsername().equals(player);
     }
 
-    public boolean updatePlayerWithModel(String player){
-        return false;
+    public String getCurrentPlayerUsername() {
+        return players.get(turnPlayerIndex).getUsername();
     }
-
 }

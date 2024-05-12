@@ -359,5 +359,19 @@ public class PlayArea {
         return this.startCard;
     }
 
+    /**
+     * Retrieves a card from the player's hand based on the provided card ID.
+     *
+     * @param playableCardID The ID of the card to be retrieved.
+     * @return The card with the matching ID if found in the player's hand, null otherwise.
+     */
+    public PlayableCard getCardById(String playableCardID) {
+        for (PlayableCard card : hand) {
+            if (card.getId().equals(playableCardID)) {
+                return card;
+            }
+        }
+        return null;
+    }
 }
 

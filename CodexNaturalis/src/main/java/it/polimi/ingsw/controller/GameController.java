@@ -33,7 +33,6 @@ import java.util.*;
  * The {@link GameController} is then added to the list of active game controllers in the {@link Controller} singleton.</p>
  */
 public class GameController {
-    //TODO review class, implementation
     /**
      * The Game identifier.
      */
@@ -84,17 +83,47 @@ public class GameController {
      */
     private final int requiredPlayers;
 
+    /**
+     * A list of PlayerCardsSetup objects, each representing the setup data for a player.
+     */
     private List<PlayerCardsSetup> setupData;
 
+    /**
+     * A list of PlayerTokenSetup objects, each representing the token setup data for a player.
+     */
     private List<PlayerTokenSetup> setupColors;
 
-    private List<Token> availableTokens;
+    /**
+     * A list of available tokens for the game.
+     */
+    private final List<Token> availableTokens;
 
-    private Pair<Timer, TimerTask> timerSetupCards = null;
-    private Pair<Timer, TimerTask> timerSetupToken = null;
+    /**
+     * A Pair object that holds a Timer and a TimerTask for the setup cards phase.
+     */
+    private Pair<Timer, TimerTask> setupCardsTimer = null;
+
+    /**
+     * A Pair object that holds a Timer and a TimerTask for the setup token phase.
+     */
+    private Pair<Timer, TimerTask> setupTokenTimer = null;
+
+    /**
+     * A flag indicating whether the current player, who has the turn, has placed a card.
+     */
     private boolean startedMove = false;
-    private Timer timerAction = null;
-    private Timer timerWaiting = null;
+
+    /**
+     * A Timer for the action phase of the game (place + draw in the {@link GameStatus#RUNNING} or only place in
+     * the {@link GameStatus#LAST_CIRCLE}).
+     */
+    private Timer actionTimer = null;
+
+    /**
+     * A Timer for the waiting phase of the game. This is applicable online if the game was previously in the
+     * {@link GameStatus#RUNNING} or in the {@link GameStatus#LAST_CIRCLE}).
+     */
+    private Timer waitingTimer = null;
 
 
     /**
@@ -121,6 +150,13 @@ public class GameController {
         Controller.getInstance().addToGameControllers(this);
     }
 
+    /**
+     * Adds a player to the lobby.
+     *
+     * @param vv The VirtualView associated with the player joining the lobby.
+     * @param account The account of the player joining the lobby, represented as a pair of strings (username, password).
+     * @param gl The GameListener associated with the player joining the lobby.
+     */
     protected synchronized void addLobbyPlayer(VirtualView vv, Account account, GameListener gl) {
         if (requiredPlayers > joinedPlayers.keySet().size()) {
             joinedPlayers.put(account, gl);
@@ -132,6 +168,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Kicks a player from the lobby. Only for the host player.
+     *
+     * @param vv The VirtualView associated with the player to be kicked.
+     * @param playerName The name of the player to be kicked.
+     * @return {@link KickFromLobbyEvent} indicating the result of the operation.
+     */
     protected synchronized KickFromLobbyEvent kickPlayer(VirtualView vv, String playerName) {
         if (!gameStarted) {
             if (vv.equals(hostQueue.peek())) {
@@ -167,6 +210,12 @@ public class GameController {
         return new KickFromLobbyEvent(Feedback.FAILURE, "You cannot kick other players during the game.");
     }
 
+    /**
+     * Marks a player as ready to start the game.
+     *
+     * @param vv The VirtualView associated with the player marking as ready.
+     * @return {@link PlayerReadyEvent} indicating the result of the operation.
+     */
     protected synchronized PlayerReadyEvent readyToStart(VirtualView vv) {
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
@@ -184,6 +233,12 @@ public class GameController {
         return new PlayerReadyEvent(Feedback.FAILURE, "The ready status applies only to the lobby phase.");
     }
 
+    /**
+     * Marks a player as not ready to start the game.
+     *
+     * @param vv The VirtualView associated with the player marking as not ready.
+     * @return {@link PlayerUnreadyEvent} indicating the result of the operation.
+     */
     protected synchronized PlayerUnreadyEvent unReadyToStart(VirtualView vv) {
         if (!gameStarted) {
             if (virtualViewAccounts.containsKey(vv)) {
@@ -201,6 +256,12 @@ public class GameController {
         return new PlayerUnreadyEvent(Feedback.FAILURE, "The unready status applies only to the lobby phase.");
     }
 
+    /**
+     * Allows a player to quit the lobby.
+     *
+     * @param vv The VirtualView associated with the player quitting the lobby.
+     * @return {@link QuitLobbyEvent} indicating the result of the operation.
+     */
     protected synchronized QuitLobbyEvent quitLobby(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv)){
             if (!gameStarted){
@@ -223,6 +284,9 @@ public class GameController {
         return new QuitLobbyEvent(Feedback.FAILURE, "You are not in the lobby.");
     }
 
+    /**
+     * Starts the cards setup phase of the game.
+     */
     protected synchronized void startCardsSetup() {
         if (!gameStarted){
             int count = 0;
@@ -250,15 +314,23 @@ public class GameController {
                     } else
                         System.err.println("An error occurred during the cards setup phase!");
                 }
-                this.timerSetupCards = setupCardsTimer();
+                this.setupCardsTimer = setupCardsTimer();
             }
         }
     }
 
+    /**
+     * Handles a player's choice of cards during the setup phase.
+     *
+     * @param vv The VirtualView associated with the player making the choice.
+     * @param ObjectiveCardID The ID of the objective card chosen by the player.
+     * @param StartCardFlipped Whether the player chose to flip the start card.
+     * @return {@link ChosenCardsSetupEvent} indicating the result of the operation.
+     */
     protected synchronized ChosenCardsSetupEvent chosenCardsSetup(VirtualView vv, String ObjectiveCardID, boolean StartCardFlipped) {
         if (virtualViewAccounts.containsKey(vv)) {
-            if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null) {
-                if (timerSetupCards.value() != null){
+            if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer == null) {
+                if (setupCardsTimer.value() != null){
 
                     String username = virtualViewAccounts.get(vv).getUsername();
                     for (PlayerCardsSetup p : setupData)
@@ -288,9 +360,14 @@ public class GameController {
         return new ChosenCardsSetupEvent(Feedback.FAILURE, "You are not in the game.");
     }
 
+    /**
+     * Automatically sets up the cards for players who have not chosen yet.
+     * This method is called when the timer for the card setup phase expires.
+     * It assigns the first objective card and does not flip the start card for each player who has not chosen yet.
+     * If a player is disconnected, their setup is also automatically assigned.
+     */
     private synchronized void autoCardsSetup() {
-        /* Check TimerTask, if expired, set up for all the false ones. */
-        if (timerSetupCards.value() == null) {
+        if (setupCardsTimer.value() == null) {
             for (PlayerCardsSetup p : setupData) {
                 String username = p.getUsername();
                 if (!p.isChosen()) {
@@ -304,7 +381,6 @@ public class GameController {
                 }
             }
         }
-        /* If the TimerTask has not expired, automatically set up for the disconnected ones. */
         else {
             for (PlayerCardsSetup p : setupData)
                 if (!p.isChosen() && !isPlayerOnline(p.getUsername())){
@@ -317,8 +393,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Starts the token setup phase of the game.
+     * This method is called after all players have chosen their cards during the card setup phase.
+     * It sends a ChooseTokenSetupEvent to all online players to prompt them to choose their token.
+     */
     protected synchronized void startTokenSetup() {
-        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null){
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer == null){
             autoCardsSetup();
             int countTrue = 0;
 
@@ -342,15 +423,22 @@ public class GameController {
                     setupColors.add(pts);
                 }
 
-                this.timerSetupToken = setupTokenTimer();
+                this.setupTokenTimer = setupTokenTimer();
             }
         }
     }
 
+    /**
+     * Handles a player's choice of token during the setup phase.
+     *
+     * @param vv The VirtualView associated with the player making the choice.
+     * @param color The color of the token chosen by the player.
+     * @return {@link ChosenTokenSetupEvent} indicating the result of the operation.
+     */
     protected synchronized ChosenTokenSetupEvent chosenTokenSetup(VirtualView vv, Token color){
         if (virtualViewAccounts.containsKey(vv)) {
-            if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken != null) {
-                if (timerSetupToken.value() != null) {
+            if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer != null) {
+                if (setupTokenTimer.value() != null) {
 
                     String username = virtualViewAccounts.get(vv).getUsername();
                     for (PlayerTokenSetup pts : setupColors)
@@ -393,13 +481,17 @@ public class GameController {
         return new ChosenTokenSetupEvent(Feedback.FAILURE, "You are not in the game.");
     }
 
+    /**
+     * Automatically sets up the tokens for players who have not chosen yet.
+     * This method is called when the timer for the token setup phase expires.
+     * It assigns a random available token for each player who has not chosen yet.
+     * If a player is disconnected, or if they were previously disconnected, their setup is automatically assigned.
+     * The setup for disconnected players is performed at the end, after all online players have chosen.
+     */
     private synchronized void autoTokenSetup() {
-        /* Check the TimerTask. If it has expired, perform a setup for all players who have a null token. */
-        if (timerSetupToken.value() == null)
+        if (setupTokenTimer.value() == null)
             assignToken();
 
-        /* If the TimerTask has not expired and all online players, who have never been disconnected at least once,
-           have a non-null token, perform an automatic setup on the remaining players if they have a null token. */
         else {
             int countOnlineDALO = 0;
             int tokensChosenNonDALO = 0;
@@ -418,6 +510,11 @@ public class GameController {
     }
 
     //TODO when to update the listener about the cards, token and hand?
+    /**
+     * Assigns a token to each player based on their setup data.
+     * This method is called after all players have chosen their tokens during the token setup phase.
+     * It updates each player's token in the game model.
+     */
     private synchronized void assignToken() {
         for (PlayerTokenSetup pts : setupColors)
             if (pts.getToken() == null){
@@ -437,8 +534,14 @@ public class GameController {
             }
     }
 
+
+    /**
+     * Starts the running phase of the game.
+     * This method is called after all players have chosen their tokens during the token setup phase.
+     * It initializes the game's turn and starts the action timer for the current player.
+     */
     protected synchronized void startRunning() {
-        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken != null){
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer != null){
             autoTokenSetup();
             int countTrue = 0;
 
@@ -451,45 +554,131 @@ public class GameController {
                 this.game.startTurn();
 
                 if (game.getGameStatus() == GameStatus.RUNNING)
-                    this.timerAction = playerActionTimer();
+                    this.actionTimer = playerActionTimer();
                 else
-                    this.timerWaiting = waitingStatusTimer();
+                    this.waitingTimer = waitingStatusTimer();
             }
         }
     }
 
-    protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped) {
-        /* if (running || last_circle) + turn + !startedMove */
+    /**
+     * Handles a player's action of placing a card during the game.
+     *
+     * @param vv The VirtualView associated with the player placing the card.
+     * @param cardID The ID of the card to be placed.
+     * @param pos The position where the card is to be placed.
+     * @param flipped Whether the card is to be placed face down.
+     * @return {@link PlaceCardEvent} indicating the result of the operation.
+     */
+    protected synchronized PlaceCardEvent placeCard(VirtualView vv, String cardID, Coordinate pos, boolean flipped) {
         if (virtualViewAccounts.containsKey(vv)) {
             if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING || game.getGameStatus() == GameStatus.LAST_CIRCLE)) {
-                if (game.isTurnPlayer(virtualViewAccounts.get(vv).getUsername())){
+                String username = virtualViewAccounts.get(vv).getUsername();
+                if (game.isTurnPlayer(username)){
                     if (!startedMove){
-
+                        try {
+                            game.placeCard(cardID, pos, flipped);
+                            if (game.getGameStatus() == GameStatus.LAST_CIRCLE){
+                                nextTurn(); //TODO check game.newTurn for updates
+                            } else
+                                this.startedMove = true;
+                            notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has placed a card.");
+                            return new PlaceCardEvent(Feedback.SUCCESS, "The card has been placed successfully!");
+                            //TODO update model from virtualView to everyone
+                        } catch (Exception e) {
+                            return new PlaceCardEvent(Feedback.FAILURE, e.getMessage());
+                        }
                     } else
                         return new PlaceCardEvent(Feedback.FAILURE, "You have already placed a card.");
                 } else
                     return new PlaceCardEvent(Feedback.FAILURE, "It is not your turn.");
             } else
-                return new PlaceCardEvent(Feedback.FAILURE, "You can only place a card during the specific phase.");
+                return new PlaceCardEvent(Feedback.FAILURE, "You can place a card during the specific phase.");
         } else
             return new PlaceCardEvent(Feedback.FAILURE, "You are not in the game.");
-        // return some value from model placeCard
-        return null;
     }
 
-    /* for the following two methods, manage the LAST-CIRCLE status */
-
+    /**
+     * Handles a player's action of drawing a card during the game.
+     *
+     * @param vv The VirtualView associated with the player drawing the card.
+     * @param type The type of the card to be drawn.
+     * @param index The index of the card to be drawn.
+     * @return {@link DrawCardEvent} indicating the result of the operation.
+     */
     protected synchronized DrawCardEvent drawCard(VirtualView vv, CardType type, int index) {
-        /* if running + turn + moveStarted + nextTurn */
-        // return some value from model drawCard
-        return null;
+        if (virtualViewAccounts.containsKey(vv)) {
+            if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING)) {
+                String username = virtualViewAccounts.get(vv).getUsername();
+                if (game.isTurnPlayer(username)) {
+                    if (startedMove) {
+                        try {
+                            game.drawCard(type, index);
+                            nextTurn(); //TODO check game.newTurn for updates
+                            notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has drawn a card.");
+                            return new DrawCardEvent(Feedback.SUCCESS, "The card has been drawn successfully!");
+                            //TODO update model from virtualView to everyone
+                        } catch (Exception e) {
+                            return new DrawCardEvent(Feedback.FAILURE, e.getMessage());
+                        }
+                    } else
+                        return new DrawCardEvent(Feedback.FAILURE, "You have to place a card first.");
+                } else
+                    return new DrawCardEvent(Feedback.FAILURE, "It is not your turn.");
+            } else
+                return new DrawCardEvent(Feedback.FAILURE, "You can draw a card during the specific phase.");
+        } else
+            return new DrawCardEvent(Feedback.FAILURE, "You are not in the game.");
     }
 
+
+    /**
+     * Automatically draws a card for the current player.
+     * This method is called when the timer for the player's action phase expires, the player has placed a card
+     * but has not drawn a card.
+     * It tries to draw a card from the resource deck or the gold deck, starting from the top.
+     * If all attempts fail, it throws a RuntimeException.
+     */
     private synchronized void autoDrawCard(boolean callNextTurn) {
-        /* if running + turn + startedMove + nextTurn(bool) */
-        // return some value from model drawCard
+        if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING)) {
+            if (startedMove) {
+                List<Pair<CardType, Integer>> drawOptions = new ArrayList<>(){{ //TODO config file
+                    add(new Pair<>(CardType.RESOURCE, 2));
+                    add(new Pair<>(CardType.GOLD, 2));
+                    add(new Pair<>(CardType.RESOURCE, 1));
+                    add(new Pair<>(CardType.RESOURCE, 0));
+                    add(new Pair<>(CardType.GOLD, 1));
+                    add(new Pair<>(CardType.GOLD, 0));
+                }};
+
+                int i = 0;
+                boolean success = false;
+                Pair<CardType, Integer> option;
+                while (!success && i < drawOptions.size()) {
+                    option = drawOptions.get(i);
+                    try {
+                        game.drawCard(option.key(), option.value());
+                        success = true;
+                    } catch (Exception e) {
+                        i++;
+                    }
+                }
+                if (i==drawOptions.size())
+                    throw new RuntimeException("There are no drawable cards.");
+
+                notifyAllOnlineGamePlayers("A new card has been automatically drawn for " + game.getCurrentPlayerUsername());
+                if (callNextTurn)
+                    nextTurn(); //TODO check game.newTurn for updates
+            }
+        }
     }
 
+    /**
+     * Allows a player to quit the game.
+     *
+     * @param vv The VirtualView associated with the player quitting the game.
+     * @return {@link QuitGameEvent} indicating the result of the operation.
+     */
     protected synchronized QuitGameEvent quitGame(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv)){
             if (gameStarted){
@@ -507,6 +696,13 @@ public class GameController {
             return new QuitGameEvent(Feedback.FAILURE, "You are not in the lobby.");
     }
 
+    /**
+     * Handles a player's disconnection from the game.
+     * This method is called when a player disconnects during the game.
+     * It updates the player's status and notifies the other players about the disconnection.
+     *
+     * @param vv The VirtualView associated with the player disconnecting.
+     */
     protected synchronized void disconnectFromGame(VirtualView vv) {
         if (virtualViewAccounts.containsKey(vv) && gameStarted){
             Account account = virtualViewAccounts.get(vv);
@@ -518,6 +714,15 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles a player's reconnection to the game.
+     * This method is called when a player reconnects during the game.
+     * It updates the player's status and notifies the other players about the reconnection.
+     *
+     * @param vv The VirtualView associated with the player reconnecting.
+     * @param account The account of the player reconnecting, represented as a pair of strings (username, password).
+     * @param gl The GameListener associated with the player reconnecting.
+     */
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
             String username = account.getUsername();
@@ -525,9 +730,9 @@ public class GameController {
 
             GameStatus gs = game.getGameStatus();
             if (gs == GameStatus.WAITING) {
-                this.timerWaiting.cancel();
-                this.timerWaiting = null;
-                this.timerAction = playerActionTimer();
+                this.waitingTimer.cancel();
+                this.waitingTimer = null;
+                this.actionTimer = playerActionTimer();
             }
 
             game.reconnectPlayer(account.getUsername(), gl);
@@ -538,16 +743,23 @@ public class GameController {
         }
     }
 
+    /**
+     * Creates a timer for the card setup phase of the game.
+     * This method is called when the card setup phase starts.
+     * It creates a Timer and a TimerTask that will call the autoCardsSetup method when the timer expires.
+     *
+     * @return A Pair object that holds the Timer and the TimerTask.
+     */
     private synchronized Pair<Timer, TimerTask> setupCardsTimer() {
-        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards == null) {
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
                     synchronized (GameController.this) {
-                        if (game.getGameStatus() == GameStatus.SETUP && timerSetupToken == null) {
+                        if (game.getGameStatus() == GameStatus.SETUP && setupTokenTimer == null) {
                             notifyAllOnlineGamePlayers("The timer has run out!");
-                            GameController.this.timerSetupCards = new Pair<>(timer, null);
+                            GameController.this.setupCardsTimer = new Pair<>(timer, null);
                             GameController.this.startTokenSetup();
                         }
                     }
@@ -559,8 +771,15 @@ public class GameController {
         else return null;
     }
 
+    /**
+     * Creates a timer for the token setup phase of the game.
+     * This method is called when the token setup phase starts.
+     * It creates a Timer and a TimerTask that will call the autoTokenSetup method when the timer expires.
+     *
+     * @return A Pair object that holds the Timer and the TimerTask.
+     */
     private synchronized Pair<Timer, TimerTask> setupTokenTimer() {
-        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && timerSetupCards != null && timerSetupToken == null) {
+        if (gameStarted && game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -568,7 +787,7 @@ public class GameController {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.SETUP) {
                             notifyAllOnlineGamePlayers("The timer has run out!");
-                            GameController.this.timerSetupToken = new Pair<>(timer, null);
+                            GameController.this.setupTokenTimer = new Pair<>(timer, null);
                             GameController.this.startRunning();
                         }
                     }
@@ -580,6 +799,13 @@ public class GameController {
         else return null;
     }
 
+    /**
+     * Creates a timer for the action phase of the game.
+     * This method is called when the action phase starts for a player.
+     * It creates a Timer that will call the autoDrawCard method when the timer expires, if needed.
+     *
+     * @return The Timer for the action phase.
+     */
     private synchronized Timer playerActionTimer(){
         if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING || game.getGameStatus() == GameStatus.LAST_CIRCLE)) {
             Timer timer = new Timer();
@@ -593,7 +819,7 @@ public class GameController {
                             if (gameStatus == GameStatus.RUNNING && startedMove)
                                 autoDrawCard(true);
                             else
-                                nextTurn();
+                                nextTurn(); //TODO check game.newTurn for updates
                         }
                     }
                 }
@@ -604,6 +830,13 @@ public class GameController {
         else return null;
     }
 
+    /**
+     * Creates a timer for the waiting phase of the game.
+     * This method is called when the waiting phase starts for a player.
+     * It creates a Timer that will call the deleteGame method when the timer expires.
+     *
+     * @return The Timer for the waiting phase.
+     */
     private synchronized Timer waitingStatusTimer() {
         if (gameStarted && game.getGameStatus() == GameStatus.WAITING) {
             Timer timer = new Timer();
@@ -625,6 +858,13 @@ public class GameController {
         else return null;
     }
 
+    /**
+     * Handles a player's disconnection during the game.
+     * This method is invoked when a player disconnects from or quits the game.
+     * It updates the player's status and notifies the other players about the disconnection.
+     *
+     * @param username The username of the player who disconnected/quit.
+     */
     private synchronized void handlePlayerOffline(String username) {
         if (gameStarted) {
             if (!getOnlinePlayers().isEmpty()) {
@@ -632,7 +872,7 @@ public class GameController {
 
                 GameStatus gs = game.getGameStatus();
                 if (gs == GameStatus.SETUP) {
-                    if (timerSetupToken == null) {
+                    if (setupTokenTimer == null) {
                         startTokenSetup();
                     } else {
                         for (PlayerTokenSetup pts : setupColors)
@@ -642,18 +882,24 @@ public class GameController {
                     }
 
                 } else if (gs == GameStatus.RUNNING) {
-                    /* if my turn and I have placed a card, autoDraw (true this.nextTurn) */
-                    /* if my turn and I haven't placed a card (true this.nextTurn) */
+                    if (game.isTurnPlayer(username)) {
+                        if (startedMove)
+                            autoDrawCard(true);
+                        else
+                            nextTurn(); //TODO check game.newTurn for updates
+                    }
 
                 } else if (gs == GameStatus.LAST_CIRCLE) {
-                    /* if my turn, (true this.nextTurn) */
+                    if (game.isTurnPlayer(username))
+                            nextTurn(); //TODO check game.newTurn for updates
 
                 } else if (game.getGameStatus() == GameStatus.WAITING && joinedPlayers.size() > 1) {
-                    /* (backup == RUNNING) if my turn and I have placed a card, autoDraw (false this.nextTurn) */
-                    /* (backup == RUNNING) if my turn and I haven't placed a card (false this.nextTurn) */
-                    /* (backup == LAST_CIRCLE) if my turn, (false this.nextTurn) */
-                    /* cancel playerActionTimer */
-                    timerWaiting = waitingStatusTimer();
+                    if (game.getBackupGameStatus() == GameStatus.RUNNING && game.isTurnPlayer(username))
+                        if (startedMove)
+                            autoDrawCard(false);
+
+                    this.actionTimer.cancel();
+                    this.waitingTimer = waitingStatusTimer();
                     //TODO notify with model method: gameStatus and turn
 
                 } else {
@@ -666,9 +912,11 @@ public class GameController {
         }
     }
 
+
     /**
      * Deletes the game.
-     * This method deletes the Game instance that this controller manages and removes this GameController from the
+     * This method is called when the game ends.
+     * It deletes the Game instance that this controller manages and removes this GameController from the
      * list of game controllers in the Controller singleton.
      */
     private synchronized void deleteGame() {
@@ -679,18 +927,23 @@ public class GameController {
         Controller.getInstance().removeFromGameControllers(this);
     }
 
+    /**
+     * Checks if the game has started.
+     * @return true if the game has started, false otherwise.
+     */
     protected synchronized boolean isGameStarted() {return gameStarted;}
 
     /**
-     * Retrieves the unique identifier of the game.
      * This method retrieves the unique identifier of the Game instance that this controller manages.
-     *
      * @return The unique identifier of the game.
      */
     protected synchronized String getIdentifier() {
         return id;
     }
 
+    /**
+     * @return A list of player usernames.
+     */
     protected synchronized List<String> getPlayers() {
         List<String> collect = new ArrayList<>();
         for (Account account : joinedPlayers.keySet())
@@ -698,6 +951,9 @@ public class GameController {
         return collect;
     }
 
+    /**
+     * @return A list of online player usernames.
+     */
     protected synchronized List<String> getOnlinePlayers() {
         List<String> collect = new ArrayList<>();
         for (Account account : virtualViewAccounts.values())
@@ -705,6 +961,9 @@ public class GameController {
         return collect;
     }
 
+    /**
+     * @return A map with player usernames as keys and their readiness status as values.
+     */
     protected synchronized Map<String, Boolean> getReadyLobbyPlayers() {
         Map<String, Boolean> collect = new LinkedHashMap<>();
         List<String> hostQueueNames = hostQueue.stream()
@@ -717,14 +976,21 @@ public class GameController {
                 collect.put(name, status);
             }
         }
-
         return collect;
     }
 
+    /**
+     * @return The number of players required to start the game.
+     */
     protected synchronized int getRequiredPlayers() {
         return requiredPlayers;
     }
 
+    /**
+     * Checks if a player is online.
+     * @param username The username of the player to check.
+     * @return true if the player is online, false otherwise.
+     */
     protected synchronized boolean isPlayerOnline(String username) {
         for (Account account : virtualViewAccounts.values()) {
             if (account.getUsername().equals(username))
@@ -733,11 +999,27 @@ public class GameController {
         return false;
     }
 
+    /**
+     * Advances the game to the next turn.
+     * This method is called when a player's turn ends.
+     * It updates the game's turn and starts the action timer for the next player.
+     */
     private synchronized void nextTurn(){
-        //TODO game.newTurn + cancel old ActionTimer
-        //TODO if !ENDED: new ActionTimer ; else deleteGame
+        this.startedMove = false;
+        this.actionTimer.cancel();
+        game.newTurn();
+
+        if (game.getGameStatus() != GameStatus.ENDED) {
+            this.actionTimer = playerActionTimer();
+        } else
+            deleteGame();
     }
 
+    /**
+     * Sends a message to all players in the lobby except for the specified player.
+     * @param username The username of the player to exclude.
+     * @param message The message to send.
+     */
     private void notifyAllLobbyPlayersExcept(String username, String message) {
         Map<String, Boolean> readyPlayers = getReadyLobbyPlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
@@ -745,6 +1027,10 @@ public class GameController {
                 entry.getValue().update(new UpdateLobbyPlayersEvent(readyPlayers, message));
     }
 
+    /**
+     * Sends a message to all online players in the game.
+     * @param message The message to send.
+     */
     private void notifyAllOnlineGamePlayers(String message) {
         List<String> onlinePlayers = getOnlinePlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
@@ -752,6 +1038,11 @@ public class GameController {
                 entry.getValue().update(new UpdateGamePlayersEvent(onlinePlayers, message));
     }
 
+    /**
+     * Sends a message to all online players in the game except for the specified player.
+     * @param username The username of the player to exclude.
+     * @param message The message to send.
+     */
     private void notifyAllOnlineGamePlayersExcept(String username, String message) {
         List<String> onlinePlayers = getOnlinePlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
@@ -761,6 +1052,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Sends a message to a specific online player in the game.
+     * @param username The username of the player to send the message to.
+     * @param message The message to send.
+     */
     private void notifySpecificOnlineGamePlayer(String username, String message) {
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
             String checkUsername = entry.getKey().getUsername();
