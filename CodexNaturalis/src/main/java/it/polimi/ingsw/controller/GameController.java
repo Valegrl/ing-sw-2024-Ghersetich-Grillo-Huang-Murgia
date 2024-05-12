@@ -293,7 +293,7 @@ public class GameController {
             for (Boolean isReady : readyLobbyPlayers.values())
                 if (isReady)
                     count++;
-            if (count == virtualViewAccounts.size()){
+            if (count == virtualViewAccounts.size() && count == requiredPlayers){
                 this.gameStarted = true;
                 notifyAllOnlineGamePlayers("The game has started!");
 

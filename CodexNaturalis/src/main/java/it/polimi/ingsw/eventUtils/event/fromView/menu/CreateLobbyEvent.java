@@ -7,7 +7,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
