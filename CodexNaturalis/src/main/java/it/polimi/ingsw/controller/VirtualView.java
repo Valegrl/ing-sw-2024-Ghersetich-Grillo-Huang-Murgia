@@ -307,7 +307,7 @@ public class VirtualView {
             gameController = response.value();
             listener.update(response.key());
         } else
-            listener.update(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "Some of the event's parameters are null."));
+            listener.update(new JoinLobbyEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
     }
 
     /**

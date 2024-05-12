@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * This class represents an event that is triggered when a user attempts to join a lobby.
+ * It contains information about the lobby such as its ID and the ready status of the players.
  */
 public class JoinLobbyEvent extends FeedbackEvent {
 
@@ -43,15 +44,30 @@ public class JoinLobbyEvent extends FeedbackEvent {
     /**
      * Constructor for the server side (Controller).
      * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
-     * It also initializes the list of players and their ready status with the provided list.
+     * The lobby ID is set to null and the ready status of the players is initialized.
      *
      * @param feedback The feedback for the event.
-     * @param usernames The list of players and their ready status.
      * @param message The message for the event.
      */
-    public JoinLobbyEvent(Feedback feedback, Map<String, Boolean> usernames, String message) {
+    public JoinLobbyEvent(Feedback feedback, String message) {
         super(id, feedback, message);
         this.lobbyID = null;
+        this.readyStatusPlayers = new LinkedHashMap<>();
+    }
+
+    /**
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also sets the lobby ID and initializes the ready status of the players with the provided map.
+     *
+     * @param feedback The feedback for the event.
+     * @param usernames The map of players and their ready status.
+     * @param lobbyID The ID of the lobby.
+     * @param message The message for the event.
+     */
+    public JoinLobbyEvent(Feedback feedback, Map<String, Boolean> usernames, String lobbyID, String message) {
+        super(id, feedback, message);
+        this.lobbyID = lobbyID;
         this.readyStatusPlayers = new LinkedHashMap<>(usernames);
     }
 
