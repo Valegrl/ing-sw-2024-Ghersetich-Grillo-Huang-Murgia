@@ -92,7 +92,8 @@ public class GameController {
 
     private Pair<Timer, TimerTask> timerSetupCards = null;
     private Pair<Timer, TimerTask> timerSetupToken = null;
-    private Pair<Timer, TimerTask> timerAction = null; /* ? */
+    private boolean startedMove = false;
+    private Timer timerAction = null;
     private Timer timerWaiting = null;
 
 
@@ -416,7 +417,7 @@ public class GameController {
         }
     }
 
-    //TODO How can I update the listener about the token in the model?
+    //TODO when to update the listener about the cards, token and hand?
     private synchronized void assignToken() {
         for (PlayerTokenSetup pts : setupColors)
             if (pts.getToken() == null){
@@ -447,23 +448,46 @@ public class GameController {
                 }
 
             if (setupColors.size() == countTrue) {
-                /* set Status + turn + check offline player for skip turn or waiting status */
+                this.game.startTurn();
+
+                if (game.getGameStatus() == GameStatus.RUNNING)
+                    this.timerAction = playerActionTimer();
+                else
+                    this.timerWaiting = waitingStatusTimer();
             }
         }
     }
 
     protected synchronized PlaceCardEvent placeCard(VirtualView vv, String CardID, Coordinate pos, boolean flipped) {
+        /* if (running || last_circle) + turn + !startedMove */
+        if (virtualViewAccounts.containsKey(vv)) {
+            if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING || game.getGameStatus() == GameStatus.LAST_CIRCLE)) {
+                if (game.isTurnPlayer(virtualViewAccounts.get(vv).getUsername())){
+                    if (!startedMove){
+
+                    } else
+                        return new PlaceCardEvent(Feedback.FAILURE, "You have already placed a card.");
+                } else
+                    return new PlaceCardEvent(Feedback.FAILURE, "It is not your turn.");
+            } else
+                return new PlaceCardEvent(Feedback.FAILURE, "You can only place a card during the specific phase.");
+        } else
+            return new PlaceCardEvent(Feedback.FAILURE, "You are not in the game.");
+        // return some value from model placeCard
         return null;
     }
 
     /* for the following two methods, manage the LAST-CIRCLE status */
 
     protected synchronized DrawCardEvent drawCard(VirtualView vv, CardType type, int index) {
+        /* if running + turn + moveStarted + nextTurn */
+        // return some value from model drawCard
         return null;
     }
 
-    private synchronized void autoDrawCard() {
-
+    private synchronized void autoDrawCard(boolean callNextTurn) {
+        /* if running + turn + startedMove + nextTurn(bool) */
+        // return some value from model drawCard
     }
 
     protected synchronized QuitGameEvent quitGame(VirtualView vv) {
@@ -496,16 +520,19 @@ public class GameController {
 
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            //TODO update others
+            String username = account.getUsername();
+            notifyAllOnlineGamePlayersExcept(username,  "The player " + username + " has reconnected to the game!");
 
             GameStatus gs = game.getGameStatus();
             if (gs == GameStatus.WAITING) {
                 this.timerWaiting.cancel();
                 this.timerWaiting = null;
-                //TODO manage backupStatus cases (waiting is possible only for running and last-circle). start timer again.
+                this.timerAction = playerActionTimer();
             }
 
-            game.reconnectPlayer(account.getUsername(), gl); //TODO: updated events from Model ?after return?, check timer/turn/gameStatus
+            game.reconnectPlayer(account.getUsername(), gl);
+            //TODO: updated events from Model ?after return?, !turn/gameStatus! (method from virtualView?)
+            //TODO: 2 methods: username with model + gameStatus and turn to others (n.b. in case, also newTurn does updates. solve it)
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
         }
@@ -553,8 +580,28 @@ public class GameController {
         else return null;
     }
 
-    private synchronized Pair<Timer, TimerTask> playerActionTimer(){
-        return null;
+    private synchronized Timer playerActionTimer(){
+        if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING || game.getGameStatus() == GameStatus.LAST_CIRCLE)) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    synchronized (GameController.this) {
+                        GameStatus gameStatus = game.getGameStatus();
+                        if (gameStatus == GameStatus.RUNNING || gameStatus == GameStatus.LAST_CIRCLE) {
+                            notifyAllOnlineGamePlayers("The timer has run out!");
+                            if (gameStatus == GameStatus.RUNNING && startedMove)
+                                autoDrawCard(true);
+                            else
+                                nextTurn();
+                        }
+                    }
+                }
+            };
+            timer.schedule(task, 60000 * 2); //TODO config file
+            return timer;
+        }
+        else return null;
     }
 
     private synchronized Timer waitingStatusTimer() {
@@ -581,7 +628,7 @@ public class GameController {
     private synchronized void handlePlayerOffline(String username) {
         if (gameStarted) {
             if (!getOnlinePlayers().isEmpty()) {
-                game.offlinePlayer(username); //TODO automatic actions in model  ?(place, draw, setup, status, turn)?
+                game.offlinePlayer(username);
 
                 GameStatus gs = game.getGameStatus();
                 if (gs == GameStatus.SETUP) {
@@ -595,15 +642,24 @@ public class GameController {
                     }
 
                 } else if (gs == GameStatus.RUNNING) {
+                    /* if my turn and I have placed a card, autoDraw (true this.nextTurn) */
+                    /* if my turn and I haven't placed a card (true this.nextTurn) */
 
                 } else if (gs == GameStatus.LAST_CIRCLE) {
+                    /* if my turn, (true this.nextTurn) */
 
-                } else if (gs == GameStatus.WAITING) {
+                } else if (game.getGameStatus() == GameStatus.WAITING && joinedPlayers.size() > 1) {
+                    /* (backup == RUNNING) if my turn and I have placed a card, autoDraw (false this.nextTurn) */
+                    /* (backup == RUNNING) if my turn and I haven't placed a card (false this.nextTurn) */
+                    /* (backup == LAST_CIRCLE) if my turn, (false this.nextTurn) */
+                    /* cancel playerActionTimer */
                     timerWaiting = waitingStatusTimer();
-                    ////TODO manage backupStatus cases (waiting is possible only for running and last-circle). stop current timer.
+                    //TODO notify with model method: gameStatus and turn
 
-                } else
-                    throw new RuntimeException("A fatal error occurred with the Game Status");
+                } else {
+                    game.endGame();
+                    deleteGame();
+                }
             }
             else
                 deleteGame();
@@ -649,10 +705,19 @@ public class GameController {
         return collect;
     }
 
-    protected List<Pair<String, Boolean>> getReadyLobbyPlayers() {
-        List<Pair<String, Boolean>> collect = new ArrayList<>();
-        for (Map.Entry<String, Boolean> entry : readyLobbyPlayers.entrySet())
-             collect.add(new Pair<>(entry.getKey(), entry.getValue()));
+    protected synchronized Map<String, Boolean> getReadyLobbyPlayers() {
+        Map<String, Boolean> collect = new LinkedHashMap<>();
+        List<String> hostQueueNames = hostQueue.stream()
+                .map(vv -> virtualViewAccounts.get(vv).getUsername())
+                .toList();
+
+        for (String name : hostQueueNames) {
+            Boolean status = readyLobbyPlayers.get(name);
+            if (status != null) {
+                collect.put(name, status);
+            }
+        }
+
         return collect;
     }
 
@@ -668,8 +733,13 @@ public class GameController {
         return false;
     }
 
+    private synchronized void nextTurn(){
+        //TODO game.newTurn + cancel old ActionTimer
+        //TODO if !ENDED: new ActionTimer ; else deleteGame
+    }
+
     private void notifyAllLobbyPlayersExcept(String username, String message) {
-        List<Pair<String, Boolean>> readyPlayers = getReadyLobbyPlayers();
+        Map<String, Boolean> readyPlayers = getReadyLobbyPlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
             if (!entry.getKey().getUsername().equals(username))
                 entry.getValue().update(new UpdateLobbyPlayersEvent(readyPlayers, message));

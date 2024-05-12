@@ -3,10 +3,9 @@ package it.polimi.ingsw.eventUtils.event.fromController;
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * This class represents an event that updates the list of players in the lobby.
@@ -20,10 +19,10 @@ public class UpdateLobbyPlayersEvent extends Event {
     private final static String id = EventID.UPDATE_LOBBY_PLAYERS.getID();
 
     /**
-     * The list of players in the lobby.
-     * Each pair in the list consists of a username and a boolean value indicating whether the player is ready.
+     * The map of players in the lobby.
+     * The map consists of a username and a boolean value indicating whether the player is ready.
      */
-    private final List<Pair<String, Boolean>> players;
+    private final Map<String, Boolean> players;
 
     /**
      * The message associated with the event.
@@ -33,21 +32,21 @@ public class UpdateLobbyPlayersEvent extends Event {
     /**
      * Constructs a new UpdateLobbyPlayersEvent with the unique identifier and the list of players.
      *
-     * @param pl The list of players in the lobby. Each pair in the list consists of a username
+     * @param pl The map of players in the lobby. The map consists of a username
      *           and a boolean value indicating whether the player is ready.
      */
-    public UpdateLobbyPlayersEvent(List<Pair<String, Boolean>> pl, String m) {
+    public UpdateLobbyPlayersEvent(Map<String, Boolean> pl, String m) {
         super(id);
-        this.players = new ArrayList<>(pl);
+        this.players = new LinkedHashMap<>(pl);
         this.message = m;
     }
 
     /**
-     * @return A copy of the list of players in the lobby. Each pair in the list consists of a username
+     * @return A copy of the map of players in the lobby. The map consists of a username
      *         and a boolean value indicating whether the player is ready.
      */
-    public List<Pair<String, Boolean>> getPlayers() {
-        return new ArrayList<>(players);
+    public Map<String, Boolean> getPlayers() {
+        return new LinkedHashMap<>(players);
     }
 
     /**

@@ -15,6 +15,7 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;
@@ -116,7 +117,7 @@ public class VirtualView {
         logger.log(Level.SEVERE, "Event not recognized.");
         listener.update(new InvalidEvent());
     }
-
+    //TODO check double methods (only if SUCCESS) + synchronized
     /**
      * Evaluates a {@link ChosenCardsSetupEvent} and forwards it to the appropriate controller.
      *
@@ -306,7 +307,7 @@ public class VirtualView {
             gameController = response.value();
             listener.update(response.key());
         } else
-            listener.update(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Some of the event's parameters are null."));
+            listener.update(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "Some of the event's parameters are null."));
     }
 
     /**
@@ -344,6 +345,7 @@ public class VirtualView {
             response = controller.reconnectToGame(this, listener, gameID);
             gameController = response.value();
             listener.update(response.key());
+            // TODO update from model if SUCCESS
         } else
             listener.update(new ReconnectToGameEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
     }

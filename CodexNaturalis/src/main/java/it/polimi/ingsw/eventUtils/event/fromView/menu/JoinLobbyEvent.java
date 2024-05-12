@@ -4,10 +4,9 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * This class represents an event that is triggered when a user attempts to join a lobby.
@@ -25,9 +24,9 @@ public class JoinLobbyEvent extends FeedbackEvent {
     private final String lobbyID;
 
     /**
-     * The list of players and their ready status in the lobby.
+     * The map of players and their ready status in the lobby.
      */
-    private final List<Pair<String, Boolean>> readyStatusPlayers;
+    private final Map<String, Boolean> readyStatusPlayers;
 
     /**
      * Constructor for the client side (View).
@@ -38,7 +37,7 @@ public class JoinLobbyEvent extends FeedbackEvent {
     public JoinLobbyEvent(String lobbyID) {
         super(id);
         this.lobbyID = lobbyID;
-        this.readyStatusPlayers = new ArrayList<>();
+        this.readyStatusPlayers = new LinkedHashMap<>();
     }
 
     /**
@@ -50,10 +49,10 @@ public class JoinLobbyEvent extends FeedbackEvent {
      * @param usernames The list of players and their ready status.
      * @param message The message for the event.
      */
-    public JoinLobbyEvent(Feedback feedback, List<Pair<String, Boolean>> usernames, String message) {
+    public JoinLobbyEvent(Feedback feedback, Map<String, Boolean> usernames, String message) {
         super(id, feedback, message);
         this.lobbyID = null;
-        this.readyStatusPlayers = new ArrayList<>(usernames);
+        this.readyStatusPlayers = new LinkedHashMap<>(usernames);
     }
 
     /**
@@ -64,9 +63,9 @@ public class JoinLobbyEvent extends FeedbackEvent {
     }
 
     /**
-     * @return A new list containing the players and their ready status.
+     * @return A new map containing the players and their ready status.
      */
-    public List<Pair<String, Boolean>> getReadyStatusPlayers() {
+    public Map<String, Boolean> getReadyStatusPlayers() {
         return readyStatusPlayers;
     }
 

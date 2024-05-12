@@ -158,13 +158,33 @@ public class Game {
         return cardsSetup;
     }
 
+    public void startTurn(){
+        this.turnPlayerIndex = 0;
+        if (onlinePlayersNumber() < 1)
+            throw new IllegalStateException("At least one player must be online to start.");
+        while (!players.get(turnPlayerIndex).isOnline())
+            turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
+        if (onlinePlayersNumber() < 2)
+            setGameStatus(GameStatus.WAITING);
+        else
+            setGameStatus(GameStatus.RUNNING);
+        //TODO  turn + status update method
+    }
+
     /**
      * Advances the game to the next player's turn.
      * This method increments the turnPlayerIndex to move to the next player in the player list.
      * If the current player is the last player in the list, the turn wraps around to the first player.
      */
     public void newTurn() {
-        turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
+        // TODO change status if needed (RUNNING->LAST_CIRCLE) and endGame
+        //  TODO: boolean detected (LAST_CIRCLE), int circleChecker (useful to start LAST_CIRCLE and ENDED)
+        if (onlinePlayersNumber() >= 2) {
+            do {
+                turnPlayerIndex = (turnPlayerIndex + 1) % players.size();
+            } while (!players.get(turnPlayerIndex).isOnline());
+            //TODO turn + status update method (if not ended)
+        }
     }
 
     /**
@@ -204,6 +224,7 @@ public class Game {
         if (points != 0)
             assignPoints(currPlayer, points);
 
+        // TODO update model to listeners from VirtualView!!!!!!!
     }
 
     /**
@@ -222,7 +243,7 @@ public class Game {
         PlayableCard drawnCard, newVisible;
 
         if (chosenDeck.equals(CardType.GOLD)) {
-            if (chosenCard >= 0 && chosenCard < 2) { // TODO constants?
+            if (chosenCard >= 0 && chosenCard < 2) {
                 drawnCard = visibleGoldCards[chosenCard];
                 newVisible = goldDeck.drawTop();
                 if (newVisible != null)
@@ -248,8 +269,9 @@ public class Game {
         Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) setGameStatus(GameStatus.LAST_CIRCLE);
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) setGameStatus(GameStatus.LAST_CIRCLE); //TODO boolean next circle: last_circle + update players
 
+        // TODO update model to listeners from VirtualView!!!!!!!
     }
 
     /**
@@ -283,7 +305,7 @@ public class Game {
         currScore += points;
 
         if (currScore >= 20 && !gameStatus.equals(GameStatus.LAST_CIRCLE))
-            setGameStatus(GameStatus.LAST_CIRCLE);
+            setGameStatus(GameStatus.LAST_CIRCLE); //TODO boolean next circle: last_circle + update players
         if (currScore > 29) currScore = 29;
 
         scoreboard.put(p, currScore);
@@ -302,7 +324,6 @@ public class Game {
      * @param user The Player's username.
      */
     public void offlinePlayer(String user) {
-        // TODO depending on the status and turn, do automatic actions. (maybe in gameController)
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
         p.setOnline(false);
@@ -310,7 +331,6 @@ public class Game {
             this.backupGameStatus = this.gameStatus;
             setGameStatus(GameStatus.WAITING);
         }
-        //CHECK update listeners already in gameController?
     }
 
     /**
@@ -320,9 +340,20 @@ public class Game {
     public void reconnectPlayer(String user, GameListener gl) {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
+
+        Player onlinePlayer = players.stream()
+                .filter(Player::isOnline)
+                .findFirst()
+                .orElse(null);
+        if (onlinePlayer == null)
+            throw new IllegalStateException("At least one player must be online.");
+
         p.setOnline(true);
-        if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP))
-            setGameStatus(backupGameStatus); //TODO review
+        if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP)) {
+            setGameStatus(backupGameStatus);
+            if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
+                newTurn(); //TODO version with no updates. I will do them after the return from virtualView.
+        }
     }
 
     /**
@@ -348,7 +379,7 @@ public class Game {
         setGameStatus(GameStatus.ENDED);
 
         return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
-        //TODO update listeners. void method?
+        //TODO update listeners with specif event. void method? + online players filter
     }
 
     /**
@@ -549,6 +580,14 @@ public class Game {
      */
     public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    public GameStatus getBackupGameStatus() {
+        return backupGameStatus;
+    }
+
+    public void setBackupGameStatus(GameStatus backupGameStatus) {
+        this.backupGameStatus = backupGameStatus;
     }
 
     /**

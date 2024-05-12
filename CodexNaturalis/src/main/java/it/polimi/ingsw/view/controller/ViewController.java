@@ -70,9 +70,9 @@ public class ViewController implements ViewEventReceiver {
     private List<LobbyState> offlineGames;
 
     /**
-     * The list of players and their ready status in the lobby.
+     * The map of players and their ready status in the lobby.
      */
-    private List<Pair<String, Boolean>> readyStatusPlayers;
+    private Map<String, Boolean> readyStatusPlayers;
 
     /**
      * The id of the joined lobby.
@@ -208,17 +208,17 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
         if(view.getState().inLobby()){
-            List<Pair<String, Boolean>> playersInLobby = event.getPlayers();
+            Map<String, Boolean> playersInLobby = event.getPlayers();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
 
             if(!playersInLobby.isEmpty()){
                 message.append("Current players:").append("\n");
-                for(Pair<String, Boolean> i : playersInLobby){
-                    if(i.value()){
-                        message.append(i.key()).append(" -  ").append("ready").append("\n");
+                for(Map.Entry<String, Boolean> i : playersInLobby.entrySet()){
+                    if(i.getValue()) {
+                        message.append(i.getKey()).append(" -  ").append("ready").append("\n");
                     }
-                    else{
-                        message.append(i.key()).append(" -  ").append("not ready").append("\n");
+                    else {
+                        message.append(i.getKey()).append(" -  ").append("not ready").append("\n");
                     }
                 }
             }

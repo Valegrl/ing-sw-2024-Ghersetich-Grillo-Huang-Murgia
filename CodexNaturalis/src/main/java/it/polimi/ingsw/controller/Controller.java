@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.GameListener;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
@@ -196,27 +195,27 @@ public class Controller {
         GameController found = null;
 
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "You must log in first."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "You must log in first."), null);
 
         if (lobbyID == null || lobbyID.isEmpty())
-            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The provided lobby ID is not valid."), null);
+            return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "The provided lobby ID is not valid."), null);
 
         Account account = virtualViewAccounts.get(vv);
         for (GameController gc : gameControllers) {
             if (gc.isPlayerOnline(account.getUsername())) {
                 if(gc.isGameStarted())
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Your account is already online in a game."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "Your account is already online in a game."), null);
                 else
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "Your account is already online in a lobby."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "Your account is already online in a lobby."), null);
             }
             if (gc.getIdentifier().equals(lobbyID)) {
                 if (!gc.isGameStarted()) {
                     if (gc.getRequiredPlayers() > gc.getPlayers().size())
                         found = gc;
                     else
-                        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby is already full."), null);
+                        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "The lobby is already full."), null);
                 } else
-                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby has already started a game."), null);
+                    return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "The lobby has already started a game."), null);
             }
         }
 
@@ -225,7 +224,7 @@ public class Controller {
             return new Pair<>(new JoinLobbyEvent(Feedback.SUCCESS, found.getReadyLobbyPlayers(), "'" + lobbyID + "' lobby joined!"), found);
         }
 
-        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new ArrayList<>(), "The lobby does not exist."), null);
+        return new Pair<>(new JoinLobbyEvent(Feedback.FAILURE, new LinkedHashMap<>(), "The lobby does not exist."), null);
     }
 
     /**
