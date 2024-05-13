@@ -16,6 +16,7 @@ public class MenuState extends ViewState {
 
     @Override
     public void run() {
+        view.stopInputRead(false);
 
         clearConsole();
         view.printMessage("Choose an option:");
@@ -51,6 +52,7 @@ public class MenuState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
+        notifyResponse();
         switch (EventID.getByID(eventID)) {
             case EventID.CREATE_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
@@ -139,11 +141,15 @@ public class MenuState extends ViewState {
     private void availableLobbies() {
         Event event = new AvailableLobbiesEvent();
         controller.newViewEvent(event);
+
         waitForResponse();
 
         if (!controller.getLobbies().isEmpty())
             chooseLobby();
-        else run();
+        else {
+            showResponseMessage("\nNo lobbies available.", 1000);
+            run();
+        }
     }
 
     private void chooseLobby() {

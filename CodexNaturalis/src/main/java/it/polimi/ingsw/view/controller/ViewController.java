@@ -13,8 +13,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
 import it.polimi.ingsw.model.player.Token;
-import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.utils.LobbyState;
@@ -22,13 +20,9 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
-import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayer;
 
 import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
@@ -91,7 +85,7 @@ public class ViewController implements ViewEventReceiver {
      */
     public ViewController(View view) {
         this.view = view;
-
+        this.readyStatusPlayers = new LinkedHashMap<>();
         try {
             this.clientManager = ClientManager.getInstance();
             clientManager.setViewController(this);
@@ -197,8 +191,8 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
         if(view.getState().inLobby()){
-            this.lobbyId = null;
-            view.handleResponse(event.getID(), null, null);
+            lobbyId = null;
+            view.handleResponse(event.getID(), null, event.getMessage());
         }
         else{
             System.out.println("Lobby state: event in wrong state");
@@ -208,21 +202,8 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
         if(view.getState().inLobby()){
-            Map<String, Boolean> playersInLobby = event.getPlayers();
-            StringBuilder message = new StringBuilder(event.getMessage() + "\n");
-
-            if(!playersInLobby.isEmpty()){
-                message.append("Current players:").append("\n");
-                for(Map.Entry<String, Boolean> i : playersInLobby.entrySet()){
-                    if(i.getValue()) {
-                        message.append(i.getKey()).append(" -  ").append("ready").append("\n");
-                    }
-                    else {
-                        message.append(i.getKey()).append(" -  ").append("not ready").append("\n");
-                    }
-                }
-            }
-            view.handleResponse(event.getID(), null, message.toString());
+            readyStatusPlayers = event.getPlayers();
+            view.handleResponse(event.getID(), null, event.getMessage());
         }
         else{
             System.out.println("Lobby state: event in the wrong state");
@@ -366,6 +347,8 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
         if(view.getState().inLobby()){
+            if (event.getFeedback().equals(Feedback.SUCCESS))
+                this.getReadyStatusPlayers().put(username, true);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
@@ -376,6 +359,8 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(PlayerUnreadyEvent event) {
         if(view.getState().inLobby()){
+            if (event.getFeedback().equals(Feedback.SUCCESS))
+                this.getReadyStatusPlayers().put(username, false);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
         else{
@@ -391,7 +376,7 @@ public class ViewController implements ViewEventReceiver {
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
-        else{
+        else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
@@ -404,15 +389,13 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
         if(view.getState().inMenu()){
-            lobbies = null;
             lobbies = event.getLobbies();
-            StringBuilder message = new StringBuilder(event.getMessage() + "\n");
+            StringBuilder message = new StringBuilder();
             for(int i = 0; i < lobbies.size(); i++) {
                 message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(lobbies.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state!!");
         }
     }
@@ -421,7 +404,8 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(CreateLobbyEvent event) {
         if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.lobbyId = event.getLobbyID();
+                lobbyId = event.getLobbyID();
+                readyStatusPlayers.put(username, false);
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         }
@@ -549,11 +533,36 @@ public class ViewController implements ViewEventReceiver {
         return username;
     }
 
+    public String getLobbyId() {
+        return lobbyId;
+    }
+
     public List<LobbyState> getLobbies() {
         return lobbies;
     }
 
     public List<LobbyState> getOfflineGames() {
         return offlineGames;
+    }
+
+    public Map.Entry<String, Boolean> getLobbyLeader() {
+        return readyStatusPlayers.entrySet().iterator().next();
+    }
+
+    public Map<String, Boolean> getReadyStatusPlayers() {
+        return readyStatusPlayers;
+    }
+
+    public boolean isLobbyLeader(){
+        return readyStatusPlayers.entrySet().iterator().next().getKey().equals(username);
+    }
+
+    public String lobbyPlayersMessage() {
+        StringBuilder m = new StringBuilder();
+        readyStatusPlayers.forEach((key, value) -> {
+            String readyStatusString = value ? "Ready" : "Not ready";
+            m.append("  ").append(key).append(" / ").append(readyStatusString).append("\n");
+        });
+        return m.toString();
     }
 }

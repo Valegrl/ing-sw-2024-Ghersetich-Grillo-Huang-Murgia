@@ -164,7 +164,7 @@ public class GameController {
             this.readyLobbyPlayers.put(account.getUsername(), false);
             this.hostQueue.add(vv);
 
-            notifyAllLobbyPlayersExcept(account.getUsername(), "New player " + account.getUsername() + " has joined!");
+            notifyAllLobbyPlayersExcept(account.getUsername(), account.getUsername() + " joined the lobby");
         }
     }
 
@@ -188,14 +188,14 @@ public class GameController {
                         }
                     }
                     if (remove == null)
-                        return new KickFromLobbyEvent(Feedback.FAILURE, "The player " + playerName + " is not in the lobby.");
+                        return new KickFromLobbyEvent(Feedback.FAILURE, "Player " + playerName + " is not in the lobby.");
                     else {
                         readyLobbyPlayers.remove(playerName);
                         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                             if (!entry.getKey().equals(virtualViewAccounts.get(remove)))
-                                entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + playerName + " has been kicked."));
+                                entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "Player " + playerName + " has been kicked."));
                             else
-                                entry.getValue().update(new KickedPlayerFromLobbyEvent("You have been kicked from the lobby " + id + "!"));
+                                entry.getValue().update(new KickedPlayerFromLobbyEvent("You have been kicked from the lobby '" + id + "'!"));
                         }
                         joinedPlayers.remove(account);
                         virtualViewAccounts.remove(remove);
@@ -224,7 +224,7 @@ public class GameController {
                     return new PlayerReadyEvent(Feedback.SUCCESS, "You were already ready.");
                 } else {
                     readyLobbyPlayers.put(account.getUsername(), true);
-                    notifyAllLobbyPlayersExcept(account.getUsername(), "The player " + account.getUsername() + " is ready!");
+                    notifyAllLobbyPlayersExcept(account.getUsername(), "Player " + account.getUsername() + " is ready!");
                     return new PlayerReadyEvent(Feedback.SUCCESS, "You are now ready!");
                 }
             }
@@ -273,11 +273,11 @@ public class GameController {
 
                 if (!joinedPlayers.isEmpty()){
                     for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                        entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + account.getUsername() + " has left the lobby!"));
+                        entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "Player " + account.getUsername() + " has left the lobby!"));
                 } else
                     deleteGame();
 
-                return new QuitLobbyEvent(Feedback.SUCCESS, "Quit successful!");
+                return new QuitLobbyEvent(Feedback.SUCCESS, "Successfully left the lobby.");
             } else
                 return new QuitLobbyEvent(Feedback.FAILURE, "You can only quit a lobby during the session.");
         }

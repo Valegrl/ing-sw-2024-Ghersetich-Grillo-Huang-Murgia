@@ -8,6 +8,9 @@ import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.List;
@@ -15,7 +18,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TUI implements View {
-    private final Scanner in;
+    BufferedReader in;
+
+    private boolean stopInputRead = false;
 
     private final PrintStream out;
 
@@ -28,7 +33,7 @@ public class TUI implements View {
     private ViewState state;
 
     public TUI() {
-        this.in = new Scanner(System.in);
+        this.in = new BufferedReader(new InputStreamReader(System.in));
         this.out = new PrintStream(System.out, true);
         this.controller = new ViewController(this);
         this.state = new ChooseConnectionState(this);
@@ -74,7 +79,20 @@ public class TUI implements View {
 
     @Override
     public String getInput() {
-        return in.nextLine();
+        String input = "-1";
+        try {
+            while (!in.ready() && !stopInputRead) {
+                Thread.sleep(200);
+            }
+            if (!stopInputRead)
+                input = in.readLine();
+        } catch (InterruptedException e) {
+            System.out.println("ConsoleInputReadTask() cancelled");
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return input;
     }
 
     public ViewController getController() {
@@ -98,5 +116,9 @@ public class TUI implements View {
     @Override
     public void setState(ViewState state) {
         this.state = state;
+    }
+
+    public void stopInputRead(boolean stopInputRead) {
+        this.stopInputRead = stopInputRead;
     }
 }

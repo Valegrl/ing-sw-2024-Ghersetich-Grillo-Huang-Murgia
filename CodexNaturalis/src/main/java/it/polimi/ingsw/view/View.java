@@ -27,6 +27,8 @@ public interface View {
 
     void setUsername(String username);
 
+    void stopInputRead(boolean stopInputRead);
+
     void handleResponse(String eventID, Feedback feedback, String message);
 
     void serverCrashed();

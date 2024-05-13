@@ -50,4 +50,9 @@ public class GUI implements View {
 
     }
 
+    @Override
+    public void stopInputRead(boolean stopInputRead) {
+
+    }
+
 }
