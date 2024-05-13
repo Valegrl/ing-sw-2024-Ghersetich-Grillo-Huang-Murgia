@@ -190,6 +190,7 @@ public class GameController {
                     if (remove == null)
                         return new KickFromLobbyEvent(Feedback.FAILURE, "The player " + playerName + " is not in the lobby.");
                     else {
+                        readyLobbyPlayers.remove(playerName);
                         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                             if (!entry.getKey().equals(virtualViewAccounts.get(remove)))
                                 entry.getValue().update(new UpdateLobbyPlayersEvent(getReadyLobbyPlayers(), "The player " + playerName + " has been kicked."));
@@ -198,7 +199,6 @@ public class GameController {
                         }
                         joinedPlayers.remove(account);
                         virtualViewAccounts.remove(remove);
-                        readyLobbyPlayers.remove(playerName);
                         hostQueue.remove(remove);
                         return new KickFromLobbyEvent(Feedback.SUCCESS, "Kick successful!");
                     }
@@ -297,7 +297,11 @@ public class GameController {
                 this.gameStarted = true;
                 notifyAllOnlineGamePlayers("The game has started!");
 
-                this.game = new Game(id, new ArrayList<>(readyLobbyPlayers.keySet()));
+                Map<String, GameListener> listeners = new HashMap<>();
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
+                    listeners.put(entry.getKey().getUsername(), entry.getValue());
+
+                this.game = new Game(id, listeners);
                 this.setupData = this.game.gameSetup();
 
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()){
@@ -306,7 +310,7 @@ public class GameController {
                             .filter(setup -> setup.getUsername().equals(username))
                             .findFirst()
                             .orElse(null);
-
+                    //TODO update everyone's model: pre-setup (hand, visible cards, decks, common objectives)
                     if (playerSetup != null) {
                         ImmObjectiveCard[] obj = playerSetup.getImmObjectiveCards();
                         ImmStartCard start = playerSetup.getImmStartCard();
@@ -343,6 +347,7 @@ public class GameController {
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         p.setChosen(true);
 
+                                        //TODO update everyone's model: startCard in playArea
                                         notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has chosen a card setup.");
                                         return new ChosenCardsSetupEvent(Feedback.SUCCESS, "Your cards setup has been chosen!");
                                     }
@@ -371,12 +376,13 @@ public class GameController {
             for (PlayerCardsSetup p : setupData) {
                 String username = p.getUsername();
                 if (!p.isChosen()) {
-                    //TODO: config file?
+                    //FIXME config file
                     boolean done = game.setupPlayerCards(username, p.getObjectiveCards()[0], false);
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                     p.setChosen(true);
 
+                    //TODO update everyone's model: startCard in playArea
                     notifySpecificOnlineGamePlayer(username, "Your cards setup has been assigned automatically.");
                 }
             }
@@ -384,11 +390,12 @@ public class GameController {
         else {
             for (PlayerCardsSetup p : setupData)
                 if (!p.isChosen() && !isPlayerOnline(p.getUsername())){
-                    //TODO: config file?
+                    //FIXME config file
                     boolean done = game.setupPlayerCards(p.getUsername(), p.getObjectiveCards()[0], false);
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + p.getUsername());
                     p.setChosen(true);
+                    //TODO update everyone's model: startCard in playArea
                 }
         }
     }
@@ -456,6 +463,7 @@ public class GameController {
                                             if (!p.isDisconnectedAtLeastOnce() && p.getToken() == null)
                                                 toNotify.add(p.getUsername());
 
+                                        //TODO update everyone's model: token in player
                                         String mes = "The player " + username + " has chosen the " + color.getColor() + " token.";
                                         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
                                             if (toNotify.contains(entry.getKey().getUsername()))
@@ -509,7 +517,6 @@ public class GameController {
         }
     }
 
-    //TODO when to update the listener about the cards, token and hand?
     /**
      * Assigns a token to each player based on their setup data.
      * This method is called after all players have chosen their tokens during the token setup phase.
@@ -527,6 +534,7 @@ public class GameController {
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                     pts.setToken(token);
 
+                    //TODO update everyone's model: token in player
                     notifySpecificOnlineGamePlayer(username, "Your token setup has been assigned automatically.");
                 }
                 else
@@ -551,7 +559,7 @@ public class GameController {
                 }
 
             if (setupColors.size() == countTrue) {
-                this.game.startTurn();
+                this.game.startTurn(); /* update from model */
 
                 if (game.getGameStatus() == GameStatus.RUNNING)
                     this.actionTimer = playerActionTimer();
@@ -642,7 +650,7 @@ public class GameController {
     private synchronized void autoDrawCard(boolean callNextTurn) {
         if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING)) {
             if (startedMove) {
-                List<Pair<CardType, Integer>> drawOptions = new ArrayList<>(){{ //TODO config file
+                List<Pair<CardType, Integer>> drawOptions = new ArrayList<>(){{ //FIXME config file
                     add(new Pair<>(CardType.RESOURCE, 2));
                     add(new Pair<>(CardType.GOLD, 2));
                     add(new Pair<>(CardType.RESOURCE, 1));
@@ -765,7 +773,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000); //TODO config file
+            timer.schedule(task, 60000); //FIXME config file
             return new Pair<>(timer, task);
         }
         else return null;
@@ -793,7 +801,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 30000); //TODO config file
+            timer.schedule(task, 30000); //FIXME config file
             return new Pair<>(timer, task);
         }
         else return null;
@@ -824,7 +832,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000 * 2); //TODO config file
+            timer.schedule(task, 60000 * 2); //FIXME config file
             return timer;
         }
         else return null;
@@ -852,7 +860,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000 * 2); //TODO config file
+            timer.schedule(task, 60000 * 2); //FIXME config file
             return timer;
         }
         else return null;
