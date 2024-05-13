@@ -87,7 +87,8 @@ public class TUI implements View {
                 Thread.sleep(200);
             }
             if (!stopInputRead)
-                input = in.readLine();
+                while(input.isEmpty() || input.equals("-1"))
+                    input = in.readLine();
         } catch (InterruptedException e) {
             System.out.println("ConsoleInputReadTask() cancelled");
             waitingForInput = false;
@@ -134,5 +135,14 @@ public class TUI implements View {
 
     public boolean isWaitingForInput() {
         return waitingForInput;
+    }
+
+    public void clearInput() {
+        try {
+            while(in.ready())
+                in.read();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

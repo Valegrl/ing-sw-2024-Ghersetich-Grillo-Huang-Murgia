@@ -28,4 +28,6 @@ public interface View {
     void handleResponse(String eventID, Feedback feedback, String message);
 
     void serverDisconnected();
+
+    void clearInput();
 }

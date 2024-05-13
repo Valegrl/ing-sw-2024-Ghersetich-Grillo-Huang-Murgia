@@ -47,13 +47,13 @@ public abstract class ViewState {
     }
 
     protected int readIntFromInput(int lowerBound, int upperBound) {
-        int input;
+        int input = -1;
         String inputString;
         while (true) {
             inputString = view.getInput();
             if (inputString.equals("$stop")) {
                 input = 0;
-            } else {
+            } else if (!inputString.isEmpty()) {
                 input = Integer.parseInt(inputString);
             }
 

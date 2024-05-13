@@ -82,6 +82,7 @@ public class LobbyState extends ViewState {
                 view.stopInputRead(true);
                 clearConsole();
                 showResponseMessage(message, 1000);
+                view.clearInput();
                 run();
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:

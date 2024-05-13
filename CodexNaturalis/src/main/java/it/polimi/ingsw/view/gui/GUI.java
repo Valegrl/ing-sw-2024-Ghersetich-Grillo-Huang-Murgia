@@ -15,6 +15,11 @@ public class GUI implements View {
 
     public void serverDisconnected(){}
 
+    @Override
+    public void clearInput() {
+
+    }
+
     public void setState(ViewState state){}
 
     @Override
