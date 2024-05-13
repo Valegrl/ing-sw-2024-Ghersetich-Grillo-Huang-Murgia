@@ -16,6 +16,7 @@ public class ChooseConnectionState extends ViewState {
     @Override
     public void run() {
         clearConsole();
+        view.stopInputRead(false);
         while(!chooseConnection());
         showResponseMessage("Connection with server established", 1000);
         this.transition(new LoginState(view));

@@ -7,7 +7,7 @@ import it.polimi.ingsw.view.tui.TUI;
 /*start client*/
 public class MainClient {
 
-    private final View view;
+    private static View view;
 
     public MainClient(View view) {
         this.view = view;
@@ -17,5 +17,10 @@ public class MainClient {
         System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
         MainClient client = new MainClient( (( args.length>0 ) && args[0].equals("-cli")) ? new TUI() : new GUI());
         client.view.run();
+    }
+
+    public static void restartTUI() {
+        view = new TUI();
+        view.run();
     }
 }

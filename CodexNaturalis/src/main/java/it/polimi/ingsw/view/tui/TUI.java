@@ -1,26 +1,28 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.utils.LobbyState;
+import it.polimi.ingsw.main.MainClient;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.tui.state.ChooseConnectionState;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.Scanner;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TUI implements View {
-    BufferedReader in;
+
+    private final BufferedReader in;
+
+    private boolean waitingForInput;
 
     private boolean stopInputRead = false;
+
+    private boolean serverDisconnected = false;
 
     private final PrintStream out;
 
@@ -60,16 +62,15 @@ public class TUI implements View {
         } catch (Exception ignored) {}
     }
 
-    public void serverCrashed() {
-        clearConsole();
-        out.println("Server crashed. Please try connecting again.");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public void serverDisconnected() {
+        if (isWaitingForInput()) {
+            serverDisconnected = true;
+            stopInputRead(true);
+        } else {
+            state.notifyResponse();
+            state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
+            MainClient.restartTUI();
         }
-        state = new ChooseConnectionState(this);
-        run();
     }
 
     @Override
@@ -80,6 +81,7 @@ public class TUI implements View {
     @Override
     public String getInput() {
         String input = "-1";
+        waitingForInput = true;
         try {
             while (!in.ready() && !stopInputRead) {
                 Thread.sleep(200);
@@ -88,10 +90,18 @@ public class TUI implements View {
                 input = in.readLine();
         } catch (InterruptedException e) {
             System.out.println("ConsoleInputReadTask() cancelled");
+            waitingForInput = false;
             return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if (stopInputRead && serverDisconnected) {
+            clearConsole();
+            state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
+            MainClient.restartTUI();
+            return "$stop";
+        }
+        waitingForInput = false;
         return input;
     }
 
@@ -120,5 +130,9 @@ public class TUI implements View {
 
     public void stopInputRead(boolean stopInputRead) {
         this.stopInputRead = stopInputRead;
+    }
+
+    public boolean isWaitingForInput() {
+        return waitingForInput;
     }
 }

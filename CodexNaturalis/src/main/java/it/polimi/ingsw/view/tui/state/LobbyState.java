@@ -7,6 +7,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -53,8 +54,10 @@ public class LobbyState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        notifyResponse();
         switch (EventID.getByID(eventID)) {
+            case EventID.GET_LOBBY_INFO:
+                view.printMessage(message);
+                break;
             case EventID.PLAYER_READY, EventID.PLAYER_UNREADY:
                 if (feedback == Feedback.FAILURE) {
                     showResponseMessage("Ready status change failed: " + message, 2000);
@@ -89,6 +92,7 @@ public class LobbyState extends ViewState {
             default:
                 break;
         }
+        notifyResponse();
     }
 
     @Override
@@ -165,7 +169,8 @@ public class LobbyState extends ViewState {
     }
 
     private void showLobbyInfo() {
-        view.printMessage("Lobby '" + controller.getLobbyId() + "':");
-        view.printMessage(controller.lobbyPlayersMessage());
+        Event event = new GetLobbyInfoEvent();
+        controller.newViewEvent(event);
+        waitForResponse();
     }
 }

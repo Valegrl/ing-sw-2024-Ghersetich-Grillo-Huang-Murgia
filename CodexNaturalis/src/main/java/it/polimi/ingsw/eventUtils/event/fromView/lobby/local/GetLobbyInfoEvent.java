@@ -8,7 +8,7 @@ import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 public class GetLobbyInfoEvent extends FeedbackEvent {
 
-    private final static String id = EventID.GET_MY_OFFLINE_GAMES.getID();
+    private final static String id = EventID.GET_LOBBY_INFO.getID();
 
     public GetLobbyInfoEvent() {
         super(id);

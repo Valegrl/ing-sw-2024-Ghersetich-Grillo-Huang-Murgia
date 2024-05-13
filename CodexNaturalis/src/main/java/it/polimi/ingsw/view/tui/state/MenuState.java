@@ -52,7 +52,6 @@ public class MenuState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        notifyResponse();
         switch (EventID.getByID(eventID)) {
             case EventID.CREATE_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
@@ -121,9 +120,12 @@ public class MenuState extends ViewState {
         while (true) {
             view.printMessage("Number of required players (2-4):");
             try {
-                numPlayers = Integer.parseInt(view.getInput());
+                numPlayers = readIntFromInput(2, 4);
                 if (numPlayers >= 2 && numPlayers <= 4) {
                     break;
+                } else if (numPlayers == -1) { // exit
+                    createLobby();
+                    return;
                 } else {
                     view.printMessage("Number of players must be between 2 and 4.");
                 }
@@ -147,7 +149,7 @@ public class MenuState extends ViewState {
         if (!controller.getLobbies().isEmpty())
             chooseLobby();
         else {
-            showResponseMessage("\nNo lobbies available.", 1000);
+            showResponseMessage("No lobbies available.", 1000);
             run();
         }
     }

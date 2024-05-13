@@ -1,11 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.utils.LobbyState;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.controller.ViewController;
-
-import java.util.List;
 
 public interface View {
 
@@ -31,5 +27,5 @@ public interface View {
 
     void handleResponse(String eventID, Feedback feedback, String message);
 
-    void serverCrashed();
+    void serverDisconnected();
 }

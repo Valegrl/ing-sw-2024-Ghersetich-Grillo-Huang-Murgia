@@ -69,13 +69,14 @@ public class LoginState extends ViewState {
         view.printMessage("Please provide your username:");
         String user = view.getInput();
         if (user.startsWith("$")) {
-            if (user.equals("$exit")) run();
+            if (user.equals("$exit")) backToStateStart();
             return;
         }
         view.printMessage("Please provide your password:");
         String psw = view.getInput();
         if (psw.startsWith("$")) {
-            if (psw.equals("$exit")) run();
+            if (psw.equals("$exit")) backToStateStart();
+            return;
         }
 
         Event event = new LoginEvent(user, psw);

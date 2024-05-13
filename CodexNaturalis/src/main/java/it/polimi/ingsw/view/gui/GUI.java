@@ -13,7 +13,7 @@ import java.util.List;
 public class GUI implements View {
     public void run(){}
 
-    public void serverCrashed(){}
+    public void serverDisconnected(){}
 
     public void setState(ViewState state){}
 

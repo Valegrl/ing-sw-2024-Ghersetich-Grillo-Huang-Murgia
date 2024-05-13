@@ -102,7 +102,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     }
                 }
                 try {
-                    Thread.sleep(3000 * 2);
+                    Thread.sleep(2000 * 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

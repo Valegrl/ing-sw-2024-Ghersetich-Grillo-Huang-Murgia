@@ -16,7 +16,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
-import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
+import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -189,9 +189,9 @@ public enum EventID {
     CLIENT_DISCONNECTED("CLIENT_DISCONNECTED", ClientDisconnectedEvent.class),
 
     /**
-     * The {@link ServerCrashedEvent} ID.
+     * The {@link ServerDisconnectedEvent} ID.
      */
-    SERVER_CRASHED("SERVER_CRASHED", ServerCrashedEvent.class),
+    SERVER_DISCONNECTED("SERVER_DISCONNECTED", ServerDisconnectedEvent.class),
 
     /**
      * The {@link GetLobbyInfoEvent} ID.

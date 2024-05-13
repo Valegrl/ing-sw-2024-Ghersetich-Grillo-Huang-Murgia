@@ -48,11 +48,16 @@ public abstract class ViewState {
 
     protected int readIntFromInput(int lowerBound, int upperBound) {
         int input;
-
+        String inputString;
         while (true) {
-            input = Integer.parseInt(view.getInput());
+            inputString = view.getInput();
+            if (inputString.equals("$stop")) {
+                input = 0;
+            } else {
+                input = Integer.parseInt(inputString);
+            }
 
-            if ((input >= lowerBound && input <= upperBound) || input == -1) {
+            if ((input >= lowerBound && input <= upperBound) || input == -1 || input == 0) {
                 break;
             } else {
                 view.printMessage("Invalid input. Try again.");
@@ -91,13 +96,9 @@ public abstract class ViewState {
         } catch (InterruptedException ignored) {}
     }
 
-    protected void notifyResponse() {
+    public void notifyResponse() {
         synchronized (viewLock) {
             viewLock.notifyAll();
         }
-    }
-
-    public Object getViewLock() {
-        return viewLock;
     }
 }

@@ -4,12 +4,16 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
+import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.controller.ViewController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -42,10 +46,14 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     private final Queue<Event> requestsQueue = new LinkedList<>();
 
+    private Thread requestsThread;
+
     /**
      * The queue of responses received from the server.
      */
     private final Queue<Event> responsesQueue = new LinkedList<>();
+
+    private Thread responsesThread;
 
     /**
      * The timer used to manage the connection with the server.
@@ -67,14 +75,12 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     public void initRMI(String registryAddress) throws RemoteException {
         try {
-            this.server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
-            this.server.join(this);
+            server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
+            server.join(this);
             connectionOpen = true;
             startPing();
-        }
-        catch(Exception e){
-            System.err.println("Client RMI exception:");
-            e.printStackTrace();
+        } catch (MalformedURLException | NotBoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -114,63 +120,58 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * @throws RemoteException If a communication-related exception occurs.
      */
     private ClientManager() throws RemoteException {
-        //TODO code review
-        new Thread(){
-            @Override
-            public void run() {
-                while(true){
-                    Event request;
-                    synchronized(requestsQueue) {
-                        while (requestsQueue.isEmpty()) {
-                            try {
-                                requestsQueue.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+        requestsThread = new Thread(() -> {
+            while(true){
+                Event request = null;
+                synchronized(requestsQueue) {
+                    while (requestsQueue.isEmpty()) {
+                        try {
+                            requestsQueue.wait();
+                        } catch (InterruptedException ignored) {
+                            return;
                         }
-                        request = requestsQueue.poll();
                     }
+                    request = requestsQueue.poll();
+                }
+                try {
+                    server.direct(request, ClientManager.this);
+                } catch (RemoteException e) {
+                    System.err.println("Cannot send event to server.");
+                }
+            }
+        });
+        requestsThread.start();
+
+        responsesThread = new Thread(() -> {
+            while(true) {
+                Event response = null;
+                synchronized (responsesQueue) {
+                    while (responsesQueue.isEmpty()) {
+                        try {
+                            responsesQueue.wait();
+                        }
+                        catch(InterruptedException ignored){
+                            return;
+                        }
+                    }
+                    response = responsesQueue.poll();
+                }
+                if (response.getID().equals(EventID.PING.getID())) {
+                    sendPong();
+                } else if (response.getID().equals(EventID.PONG.getID())) {
+                    synchronized (timerLock) {
+                        timer.cancel();
+                    }
+                } else {
                     try {
-                        server.direct(request, ClientManager.this);
+                        viewController.externalEvent(response);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }.start();
-
-        new Thread(){
-            @Override
-            public void run(){
-                while(true) {
-                    Event response;
-                    synchronized (responsesQueue) {
-                        while (responsesQueue.isEmpty()) {
-                            try {
-                                responsesQueue.wait();
-                            }
-                            catch(InterruptedException e){
-                                e.printStackTrace();
-                            }
-                        }
-                        response = responsesQueue.poll();
-                    }
-                    if (response.getID().equals(EventID.PING.getID())) {
-                        sendPong();
-                    } else if (response.getID().equals(EventID.PONG.getID())) {
-                        synchronized (timerLock) {
-                            timer.cancel();
-                        }
-                    } else {
-                        try {
-                            viewController.externalEvent(response);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }.start();
+        });
+        responsesThread.start();
     }
 
     /**
@@ -230,21 +231,21 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                         TimerTask task = new TimerTask() {
                             @Override
                             public void run() {
-                                System.out.println("No response from server.");
-                                serverCrashed();
+                                System.out.println("\nNo response from server.");
+                                serverDisconnected();
                             }
                         };
-                        timer.schedule(task, 3000); // TODO config file?
+                        timer.schedule(task, 2000); // TODO config file?
                     }
 
                     // sending PingEvent
                     // System.out.println("Sending ping to server.");
                     server.direct(new PingEvent(), this);
                 } catch (RemoteException e) {
-                    System.err.println("Cannot send ping to server.");
+                    System.err.println("\nCannot send ping to server.");
                 }
                 try {
-                    Thread.sleep(3000 * 2);
+                    Thread.sleep(2000 * 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -261,18 +262,20 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         }
     }
 
-    private void serverCrashed() {
+    private void serverDisconnected() {
+        requestsThread.interrupt();
+        responsesThread.interrupt();
         synchronized (timerLock) {
             timer.cancel();
             timer = new Timer();
         }
-        connectionOpen = false;
-        System.err.println("Server crashed.");
         try {
+            connectionOpen = false;
             server.closeConnection();
+            server = null;
         } catch (RemoteException ignored){} // ignored because rmi will always throw an exception when the server is offline
-        System.out.println("Server socket closed.");
-        viewController.serverCrashed();
+        viewController.externalEvent(new ServerDisconnectedEvent());
+        instance = null;
     }
 
 }

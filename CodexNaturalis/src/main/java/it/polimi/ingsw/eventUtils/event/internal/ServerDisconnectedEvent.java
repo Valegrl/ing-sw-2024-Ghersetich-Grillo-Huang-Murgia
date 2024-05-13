@@ -8,17 +8,17 @@ import it.polimi.ingsw.view.controller.ViewEventReceiver;
 /**
  * This class represents an event in the application that manages a server crash on the client side.
  */
- public class ServerCrashedEvent extends Event {
+ public class ServerDisconnectedEvent extends Event {
 
     /**
      * The unique identifier for this type of event.
      */
-    private final static String id = EventID.SERVER_CRASHED.getID();
+    private final static String id = EventID.SERVER_DISCONNECTED.getID();
 
     /**
      * Constructs a new ServerCrashedEvent.
      */
-    public ServerCrashedEvent() {
+    public ServerDisconnectedEvent() {
         super(id);
     }
 

@@ -11,7 +11,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
-import it.polimi.ingsw.eventUtils.event.internal.ServerCrashedEvent;
+import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
@@ -47,6 +47,8 @@ public class ViewController implements ViewEventReceiver {
      * The queue of events that are received and need to be processed.
      */
     private final Queue<Event> tasksQueue = new LinkedList<>();
+
+    private boolean taskQueueStopped = false;
 
     /**
      * The username of the logged-in user.
@@ -94,26 +96,23 @@ public class ViewController implements ViewEventReceiver {
         }
 
 
-        new Thread(){
-            @Override
-            public void run(){
-                while (true){
-                    Event event;
-                    synchronized (tasksQueue){
-                        while(tasksQueue.isEmpty()){
-                            try{
-                                tasksQueue.wait();
-                            }
-                            catch (InterruptedException e){
-                                e.printStackTrace();
-                            }
+        new Thread(() -> {
+            while (!taskQueueStopped) {
+                Event event;
+                synchronized (tasksQueue) {
+                    while(tasksQueue.isEmpty()) {
+                        try{
+                            tasksQueue.wait();
                         }
-                        event = tasksQueue.poll();
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    event.receiveEvent(ViewController.this);
+                    event = tasksQueue.poll();
                 }
+                event.receiveEvent(ViewController.this);
             }
-        }.start();
+        }).start();
     }
 
     /**
@@ -123,7 +122,7 @@ public class ViewController implements ViewEventReceiver {
      */
     public void newViewEvent(Event event) {
 
-        if(EventID.isLocal(event.getID())){
+        if(EventID.isLocal(event.getID())) {
             synchronized (tasksQueue) {
                 tasksQueue.add(event);
                 tasksQueue.notifyAll();
@@ -144,8 +143,8 @@ public class ViewController implements ViewEventReceiver {
      *
      * @param event The external event.
      */
-    public void externalEvent(Event event){
-        synchronized (tasksQueue){
+    public void externalEvent(Event event) {
+        synchronized (tasksQueue) {
             tasksQueue.add(event);
             tasksQueue.notifyAll();
         }
@@ -154,30 +153,28 @@ public class ViewController implements ViewEventReceiver {
     //TODO review evaluateEvent methods ChooseCardsSetupEvent and ChooseTokenSetupEvent
     @Override
     public void evaluateEvent(ChooseCardsSetupEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             ImmObjectiveCard[] objectiveCards = event.getObjectiveCards();
             ImmStartCard startCard = event.getStartCard();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n" + "Choose your secret objective card:" + "\n");
             message.append(objectiveCards[0].printCard()).append("\n").append(objectiveCards[1].printCard()).append("\n")
             .append("Choose side of the starting card").append("\n").append(startCard.printCard()).append("\n").append(startCard.printCardBack());
             view.handleResponse(event.getID(), null, message.toString());
-        }
-        else{
+        } else {
             System.out.println("Game state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             List<Token> availableColors = event.getAvailableColors();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
-            for(Token i : availableColors){
+            for(Token i : availableColors) {
                 message.append(i.getColor()).append("\n");
             }
             view.handleResponse(event.getID(), null, message.toString());
-        }
-        else{
+        } else {
             System.out.println("Game state: event in wrong state");
         }
 
@@ -190,29 +187,27 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             lobbyId = null;
             view.handleResponse(event.getID(), null, event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             readyStatusPlayers = event.getPlayers();
             view.handleResponse(event.getID(), null, event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Lobby state: event in the wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             //TODO use the model class for updating lobby players ?
             List<String> playersInGame = event.getPlayers();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
@@ -224,8 +219,7 @@ public class ViewController implements ViewEventReceiver {
                 }
             }
             view.handleResponse(event.getID(), null, message.toString());
-        }
-        else{
+        } else {
             System.out.println("Lobby state: event in the wrong state");
         }
     }
@@ -246,8 +240,7 @@ public class ViewController implements ViewEventReceiver {
             SelfViewPlayArea selfVPA = this.model.getSelfPlayer().getPlayArea();
             StringBuilder message = new StringBuilder(selfVPA.printAvailablePos());
             view.handleResponse(event.getID(), null, message.toString());
-        }
-        else{
+        } else {
             System.out.println("Game state: event in the wrong state");
         }
     }
@@ -267,8 +260,7 @@ public class ViewController implements ViewEventReceiver {
             }
             */
 
-        }
-        else{
+        } else {
             System.out.println("Game state: event in the wrong state");
         }
     }
@@ -280,29 +272,27 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChosenCardsSetupEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
             //TODO View has to handle seeing the options for setup, ie the objective cards
-        }
-        else{
+        } else {
             System.out.println("Game state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(ChosenTokenSetupEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             //TODO View has to handle seeing the options for setup, token
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Game state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(DrawCardEvent event) {
-        if(view.getState().inGame()){
+        if(view.getState().inGame()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 //TODO Update self playArea;
             }
@@ -310,8 +300,7 @@ public class ViewController implements ViewEventReceiver {
 
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Game state: event in wrong state");
         }
     }
@@ -328,7 +317,11 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(GetLobbyInfoEvent event) {
-
+        if(view.getState().inLobby()) {
+            view.handleResponse(event.getID(), null, lobbyInfoMessage());
+        } else {
+            System.out.println("Lobby state: event in wrong state");
+        }
     }
 
     //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
@@ -336,47 +329,43 @@ public class ViewController implements ViewEventReceiver {
     //TODO should i print for IllegalStateException?
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else{
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
                 this.getReadyStatusPlayers().put(username, true);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(PlayerUnreadyEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
                 this.getReadyStatusPlayers().put(username, false);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(QuitLobbyEvent event) {
-        if(view.getState().inLobby()){
+        if(view.getState().inLobby()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 this.lobbyId = null;
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else {
+        } else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
@@ -388,7 +377,7 @@ public class ViewController implements ViewEventReceiver {
      */
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             lobbies = event.getLobbies();
             StringBuilder message = new StringBuilder();
             for(int i = 0; i < lobbies.size(); i++) {
@@ -408,51 +397,47 @@ public class ViewController implements ViewEventReceiver {
                 readyStatusPlayers.put(username, false);
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else {
+        } else {
             System.out.println("Menu state: event in wrong state!!");
         }
     }
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
                 this.model = null;
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             offlineGames = event.getGames();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
             for(int i = 0; i < offlineGames.size(); i++) {
                 message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(offlineGames.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.lobbyId = event.getLobbyID();
                 this.readyStatusPlayers = event.getReadyStatusPlayers();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
@@ -464,69 +449,60 @@ public class ViewController implements ViewEventReceiver {
      */
     @Override
     public void evaluateEvent(LoginEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 String username = event.getUsername();
                 this.username = username;
                 view.setUsername(username);
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(LogoutEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
                 this.model = null;
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(ReconnectToGameEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.lobbyId = event.getGameID();
                 //TODO this.model should get from the server their model of the DCed game
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(RegisterEvent event) {
-        if(view.getState().inMenu()){
+        if(view.getState().inMenu()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        }
-        else{
+        } else {
             System.out.println("Menu state: event in wrong state");
         }
     }
 
     @Override
-    public void evaluateEvent(ServerCrashedEvent event) {
-
-    }
-
-    /**
-     * This method handles a server crash. //TODO: use event. Delete this method.
-     */
-    public void serverCrashed () {
+    public void evaluateEvent(ServerDisconnectedEvent event) {
         username = null;
-
-        view.serverCrashed();
+        lobbyId = null;
+        model = null;
+        taskQueueStopped = true;
+        view.serverDisconnected();
     }
 
     public String getUsername() {
@@ -557,8 +533,9 @@ public class ViewController implements ViewEventReceiver {
         return readyStatusPlayers.entrySet().iterator().next().getKey().equals(username);
     }
 
-    public String lobbyPlayersMessage() {
+    private String lobbyInfoMessage() {
         StringBuilder m = new StringBuilder();
+        m.append("Lobby '").append(lobbyId).append("':\n");
         readyStatusPlayers.forEach((key, value) -> {
             String readyStatusString = value ? "Ready" : "Not ready";
             m.append("  ").append(key).append(" / ").append(readyStatusString).append("\n");
