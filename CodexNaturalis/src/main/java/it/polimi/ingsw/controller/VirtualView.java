@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.InvalidEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
@@ -14,8 +16,6 @@ import it.polimi.ingsw.utils.Account;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;
@@ -361,6 +361,41 @@ public class VirtualView {
             listener.update(controller.register(account));
         else
             listener.update(new RegisterEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
+    }
+
+    /**
+     * Evaluates a ChatGMEvent and forwards it to the GameController.
+     *
+     * @param event The ChatGMEvent to be evaluated.
+     */
+    public void evaluateEvent(ChatGMEvent event){
+        if(gameController != null) {
+            String message = event.getMessage();
+            if (message != null)
+                listener.update(gameController.chatGlobalMessage(this, message));
+            else
+                listener.update(new ChatGMEvent(Feedback.FAILURE, null, "Message is null."));
+        } else {
+            listener.update(new ChatGMEvent(Feedback.FAILURE, null, "An unexpected action occurred."));
+        }
+    }
+
+    /**
+     * Evaluates a ChatPMEvent and forwards it to the GameController.
+     *
+     * @param event The ChatPMEvent to be evaluated.
+     */
+    public void evaluateEvent(ChatPMEvent event){
+        if(gameController != null) {
+            String recipient = event.getRecipient();
+            String message = event.getMessage();
+            if (recipient != null && message != null)
+                listener.update(gameController.chatPrivateMessage(this, recipient, message));
+            else
+                listener.update(new ChatPMEvent(Feedback.FAILURE, null, null, "Recipient or message is null."));
+        } else {
+            listener.update(new ChatPMEvent(Feedback.FAILURE, null, null, "An unexpected action occurred."));
+        }
     }
 
     /**

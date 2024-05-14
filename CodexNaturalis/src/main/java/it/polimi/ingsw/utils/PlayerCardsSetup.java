@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import it.polimi.ingsw.model.card.ObjectiveCard;
+import it.polimi.ingsw.model.card.StartCard;
 
 /**
  * This class represents the setup of cards for a player in the game.
@@ -24,16 +25,23 @@ public class PlayerCardsSetup {
     private final ObjectiveCard[] objectiveCards;
 
     /**
-     * Constructs a new PlayerCardsSetup with the specified username and secret objective cards.
+     * The start card assigned to the player.
+     */
+    private final StartCard startCard;
+
+    /**
+     * Constructs a new PlayerCardsSetup with the specified username, secret objective cards, and start card.
      * The chosen status is set to false by default.
      *
      * @param username the username of the player
      * @param objectiveCards an array of objective cards
+     * @param start the start card of the player
      */
-    public PlayerCardsSetup(String username, ObjectiveCard[] objectiveCards) {
+    public PlayerCardsSetup(String username, ObjectiveCard[] objectiveCards, StartCard start) {
         this.username = username;
         this.chosen = false;
         this.objectiveCards = objectiveCards;
+        this.startCard = start;
     }
 
     /**
@@ -60,6 +68,13 @@ public class PlayerCardsSetup {
      */
     public void setChosen(boolean chosen) {
         this.chosen = chosen;
+    }
+
+    /**
+     * @return The StartCard object representing the player's start card.
+     */
+    public StartCard getStartCard() {
+        return startCard;
     }
 
     /**

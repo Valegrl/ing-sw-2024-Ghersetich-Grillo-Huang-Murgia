@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.eventUtils.event.fromController.*;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
@@ -16,6 +18,7 @@ import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 
 import java.util.*;
+import java.util.Timer;
 
 /**
  * This class is responsible for managing the game logic.
@@ -297,7 +300,7 @@ public class GameController {
                     players.put(entry.getKey().getUsername(), entry.getValue());
 
                 this.game = new Game(id, players);
-                this.setupData = this.game.gameSetup();
+                this.setupData = this.game.gameSetup(); /* update from model */
                 this.setupCardsTimer = setupCardsTimer();
             }
         }
@@ -327,7 +330,6 @@ public class GameController {
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         p.setChosen(true);
 
-                                        //TODO update everyone's model: startCard in playArea
                                         notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has chosen a card setup.");
                                         return new ChosenCardsSetupEvent(Feedback.SUCCESS, "Your cards setup has been chosen!");
                                     }
@@ -362,8 +364,7 @@ public class GameController {
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                     p.setChosen(true);
 
-                    //TODO update everyone's model: startCard in playArea
-                    notifySpecificOnlineGamePlayer(username, "Your cards setup has been assigned automatically.");
+                    notifySpecificOnlineGamePlayer(username, "The timer has run out! Your cards setup has been assigned automatically.");
                 }
             }
         }
@@ -375,7 +376,6 @@ public class GameController {
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + p.getUsername());
                     p.setChosen(true);
-                    //TODO update everyone's model: startCard in playArea
                 }
         }
     }
@@ -438,16 +438,12 @@ public class GameController {
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         pts.setToken(color);
 
-                                        List<String> toNotify = new ArrayList<>();
-                                        for (PlayerTokenSetup p : setupColors)
-                                            if (!p.isDisconnectedAtLeastOnce() && p.getToken() == null)
-                                                toNotify.add(p.getUsername());
-
-                                        //TODO update everyone's model: token in player
                                         String mes = "The player " + username + " has chosen the " + color.getColor() + " token.";
-                                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                                            if (toNotify.contains(entry.getKey().getUsername()))
+                                        for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                                            String other = entry.getKey().getUsername();
+                                            if (isPlayerOnline(other) && !username.equals(other))
                                                 entry.getValue().update(new ChooseTokenSetupEvent(availableTokens, mes));
+                                        }
 
                                         return new ChosenTokenSetupEvent(Feedback.SUCCESS, "Your token setup has been chosen!");
                                     }
@@ -505,8 +501,7 @@ public class GameController {
     private synchronized void assignToken() {
         for (PlayerTokenSetup pts : setupColors)
             if (pts.getToken() == null){
-                int dim = availableTokens.size();
-                if (dim > 0){
+                if (!availableTokens.isEmpty()){
                     String username = pts.getUsername();
                     Token token = availableTokens.removeLast();
                     boolean done = game.setupPlayerToken(username, token);
@@ -514,8 +509,7 @@ public class GameController {
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                     pts.setToken(token);
 
-                    //TODO update everyone's model: token in player
-                    notifySpecificOnlineGamePlayer(username, "Your token setup has been assigned automatically.");
+                    notifySpecificOnlineGamePlayer(username, "The timer has run out! Your token setup has been assigned automatically.");
                 }
                 else
                     throw new RuntimeException("Token are not enough.");
@@ -746,7 +740,6 @@ public class GameController {
                 public void run() {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.SETUP && setupTokenTimer == null) {
-                            notifyAllOnlineGamePlayers("The timer has run out!");
                             GameController.this.setupCardsTimer = new Pair<>(timer, null);
                             GameController.this.startTokenSetup();
                         }
@@ -774,7 +767,6 @@ public class GameController {
                 public void run() {
                     synchronized (GameController.this) {
                         if (game.getGameStatus() == GameStatus.SETUP) {
-                            notifyAllOnlineGamePlayers("The timer has run out!");
                             GameController.this.setupTokenTimer = new Pair<>(timer, null);
                             GameController.this.startRunning();
                         }
@@ -1012,6 +1004,65 @@ public class GameController {
             this.actionTimer = playerActionTimer();
         } else
             deleteGame();
+    }
+
+    /**
+     * Sends a global chat message to all online players in the game.
+     * The message is sent from the player associated with the provided VirtualView.
+     *
+     * @param vv The VirtualView associated with the player sending the message.
+     * @param message The message to be sent.
+     * @return {@link ChatGMEvent} with feedback about the operation.
+     * @throws RuntimeException if the GameListener associated with a player is null.
+     */
+    protected synchronized ChatGMEvent chatGlobalMessage(VirtualView vv, String message){
+        if (virtualViewAccounts.containsKey(vv)) {
+            String sender = virtualViewAccounts.get(vv).getUsername();
+
+            for (Account account : joinedPlayers.keySet()) {
+                GameListener listener = joinedPlayers.get(account);
+                String other = account.getUsername();
+                if (listener != null) {
+                    if (isPlayerOnline(other) && !sender.equals(other))
+                        listener.update(new ChatGMEvent(Feedback.SUCCESS, sender, message));
+                } else
+                    throw new RuntimeException("Error with listener.");
+            }
+            return new ChatGMEvent(Feedback.SUCCESS, sender, message);
+        }
+        return new ChatGMEvent(Feedback.FAILURE, null, "You are not in the game.");
+    }
+
+    /**
+     * Sends a private chat message to a specific player in the game.
+     * The message is sent from the player associated with the provided VirtualView to the recipient.
+     *
+     * @param vv The VirtualView associated with the player sending the message.
+     * @param recipient The username of the player who will receive the message.
+     * @param message The message to be sent.
+     * @return {@link ChatPMEvent} with feedback about the operation.
+     * @throws RuntimeException if the GameListener associated with a player is null.
+     */
+    protected synchronized ChatPMEvent chatPrivateMessage(VirtualView vv, String recipient, String message){
+        if (virtualViewAccounts.containsKey(vv)) {
+            String sender = virtualViewAccounts.get(vv).getUsername();
+
+            for (Account account : joinedPlayers.keySet()) {
+                if (account.getUsername().equals(recipient)) {
+                    GameListener listener = joinedPlayers.get(account);
+                    if (listener != null) {
+                        if(isPlayerOnline(account.getUsername())) {
+                            listener.update(new ChatPMEvent(Feedback.SUCCESS, sender, recipient, message));
+                            return new ChatPMEvent(Feedback.SUCCESS, sender, recipient, message);
+                        } else
+                            return new ChatPMEvent(Feedback.FAILURE, null, recipient, "Player not online.");
+                    } else
+                        throw new RuntimeException("Error with listener.");
+                }
+            }
+            return new ChatPMEvent(Feedback.FAILURE, null, recipient, "Player not found.");
+        }
+        return new ChatPMEvent(Feedback.FAILURE, null, recipient, "You are not in the game.");
     }
 
     /**

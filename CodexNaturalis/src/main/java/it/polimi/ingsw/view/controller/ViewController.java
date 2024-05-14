@@ -6,6 +6,8 @@ import it.polimi.ingsw.eventUtils.event.fromController.*;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
@@ -162,19 +164,6 @@ public class ViewController implements ViewEventReceiver {
 
     //TODO review evaluateEvent methods ChooseCardsSetupEvent and ChooseTokenSetupEvent
     @Override
-    public void evaluateEvent(ChooseCardsSetupEvent event) {
-        if(view.getState().inGame()) {
-            setup = event.getViewSetup();
-            // TODO prepare message for the view
-            StringBuilder message = new StringBuilder("Assigned setup:\n\n");
-            message.append(setup.getStartCard().printSetupStartCard());
-            view.handleResponse(event.getID(), null, message.toString());
-        } else {
-            System.out.println("Game state: event in wrong state");
-        }
-    }
-
-    @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
         if(view.getState().inGame()) {
             List<Token> availableColors = event.getAvailableColors();
@@ -221,6 +210,19 @@ public class ViewController implements ViewEventReceiver {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Event in the wrong state");
+        }
+    }
+
+    @Override
+    public void evaluateEvent(ChooseCardsSetupEvent event) {
+        if(view.getState().inGame()) {
+            setup = event.getViewSetup();
+            // TODO prepare message for the view
+            StringBuilder message = new StringBuilder("Assigned setup:\n\n");
+            message.append(setup.getStartCard().printSetupStartCard());
+            view.handleResponse(event.getID(), null, message.toString());
+        } else {
+            System.out.println("Game state: event in wrong state");
         }
     }
 
@@ -494,6 +496,16 @@ public class ViewController implements ViewEventReceiver {
         } else {
             System.out.println("Menu state: event in wrong state");
         }
+    }
+
+    @Override
+    public void evaluateEvent(ChatGMEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(ChatPMEvent event) {
+
     }
 
     @Override

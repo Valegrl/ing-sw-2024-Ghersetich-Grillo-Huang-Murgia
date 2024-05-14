@@ -4,6 +4,8 @@ import it.polimi.ingsw.eventUtils.event.fromController.*;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
@@ -35,11 +37,6 @@ public enum EventID {
     CHOOSE_CARDS_SETUP("CHOOSE_CARDS_SETUP", ChooseCardsSetupEvent.class),
 
     /**
-     * The {@link ChooseTokenSetupEvent} ID.
-     */
-    CHOOSE_TOKEN_SETUP("CHOOSE_TOKEN_SETUP", ChooseTokenSetupEvent.class),
-
-    /**
      * The {@link InvalidEvent} ID.
      */
     INVALID("INVALID", InvalidEvent.class),
@@ -53,6 +50,11 @@ public enum EventID {
      * The {@link UpdateGamePlayersEvent} ID.
      */
     UPDATE_GAME_PLAYERS("UPDATE_GAME_PLAYERS", UpdateGamePlayersEvent.class),
+
+    /**
+     * The {@link ChooseTokenSetupEvent} ID.
+     */
+    CHOOSE_TOKEN_SETUP("CHOOSE_TOKEN_SETUP", ChooseTokenSetupEvent.class),
 
     /**
      * The {@link EndedGameEvent} ID.
@@ -173,6 +175,16 @@ public enum EventID {
      * The {@link RegisterEvent} ID.
      */
     REGISTER("REGISTER", RegisterEvent.class),
+
+    /**
+     * The {@link ChatGMEvent} ID.
+     */
+    CHAT_GM("CHAT_GM", ChatGMEvent.class),
+
+    /**
+     * The {@link ChatPMEvent} ID.
+     */
+    CHAT_PM("CHAT_PM", ChatPMEvent.class),
 
     /**
      * The {@link PingEvent} ID.

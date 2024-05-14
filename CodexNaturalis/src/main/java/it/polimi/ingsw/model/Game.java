@@ -167,17 +167,25 @@ public class Game {
 
             ObjectiveCard[] secretObjectiveChoices = new ObjectiveCard[2];
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++)
                 secretObjectiveChoices[i] = objectiveDeck.drawTop();
-            }
 
-            String username = p.getUsername();
-            cardsSetup.add(new PlayerCardsSetup(username, secretObjectiveChoices));
+            cardsSetup.add(new PlayerCardsSetup(p.getUsername(), secretObjectiveChoices, start));
+        }
 
-            ViewStartSetup setup = new ViewStartSetup(secretObjectiveChoices, start, hand, visibleGoldCards,
-                                                      topGoldDeck, visibleResourceCards, topResourceDeck, commonObjectives);
+        Map<String, List<PlayableCard>> playersHands = new HashMap<>();
+        for (Player player : players)
+            playersHands.put(player.getUsername(), player.getPlayArea().getHand());
+
+        for (PlayerCardsSetup pcs : cardsSetup){
+            String username = pcs.getUsername();
+            Map<String, List<PlayableCard>> hands = new HashMap<>(playersHands);
+            hands.remove(username);
+            ViewStartSetup setup = new ViewStartSetup(pcs.getObjectiveCards(), pcs.getStartCard(), playersHands.get(username),
+                                   visibleGoldCards, topGoldDeck, visibleResourceCards, topResourceDeck, commonObjectives, hands);
             listeners.notifyListener(username, new ChooseCardsSetupEvent(setup, "Choose your setup!"));
         }
+
         return cardsSetup;
     }
 
