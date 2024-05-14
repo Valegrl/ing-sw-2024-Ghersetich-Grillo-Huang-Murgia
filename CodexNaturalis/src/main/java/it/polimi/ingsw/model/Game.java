@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
+import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
@@ -13,6 +14,7 @@ import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
+import it.polimi.ingsw.viewModel.ViewStartSetup;
 
 /**
  * A class to represent a Codex Naturalis game.
@@ -162,8 +164,12 @@ public class Game {
                 secretObjectiveChoices[i] = objectiveDeck.drawTop();
             }
 
-            cardsSetup.add(new PlayerCardsSetup(p.getUsername(), secretObjectiveChoices, start, hand, visibleGoldCards,
-                                                topGoldDeck, visibleResourceCards, topResourceDeck, commonObjectives));
+            String username = p.getUsername();
+            cardsSetup.add(new PlayerCardsSetup(username, secretObjectiveChoices));
+
+            ViewStartSetup setup = new ViewStartSetup(secretObjectiveChoices, start, hand, visibleGoldCards,
+                                                      topGoldDeck, visibleResourceCards, topResourceDeck, commonObjectives);
+            listeners.notifyListener(username, new ChooseCardsSetupEvent(setup, "Choose your setup!"));
         }
         return cardsSetup;
     }

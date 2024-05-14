@@ -1,11 +1,9 @@
-package it.polimi.ingsw.eventUtils.event.fromController;
+package it.polimi.ingsw.eventUtils.event.fromModel;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**

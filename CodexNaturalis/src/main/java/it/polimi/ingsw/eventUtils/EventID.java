@@ -1,6 +1,7 @@
 package it.polimi.ingsw.eventUtils;
 
 import it.polimi.ingsw.eventUtils.event.fromController.*;
+import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;

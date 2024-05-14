@@ -301,19 +301,6 @@ public class GameController {
 
                 this.game = new Game(id, players);
                 this.setupData = this.game.gameSetup();
-
-                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()){
-                    String username = entry.getKey().getUsername();
-                    PlayerCardsSetup playerSetup = setupData.stream()
-                            .filter(setup -> setup.getUsername().equals(username))
-                            .findFirst()
-                            .orElse(null);
-
-                    if (playerSetup != null)
-                        entry.getValue().update(new ChooseCardsSetupEvent(playerSetup.getView(), "Choose your setup!"));
-                    else
-                        System.err.println("An error occurred during the cards setup phase!");
-                }
                 this.setupCardsTimer = setupCardsTimer();
             }
         }

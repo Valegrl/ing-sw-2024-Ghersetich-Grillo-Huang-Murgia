@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.controller;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.*;
+import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
@@ -154,8 +156,9 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ChooseCardsSetupEvent event) {
         if(view.getState().inGame()) {
-            ImmObjectiveCard[] objectiveCards = event.getObjectiveCards();
-            ImmStartCard startCard = event.getStartCard();
+            ViewStartSetup viewSetup = event.getViewSetup();
+            ImmObjectiveCard[] objectiveCards = viewSetup.getSecretObjectiveCards();
+            ImmStartCard startCard = viewSetup.getStartCard();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n" + "Choose your secret objective card:" + "\n");
             message.append(objectiveCards[0].printCard()).append("\n").append(objectiveCards[1].printCard()).append("\n")
             .append("Choose side of the starting card").append("\n").append(startCard.printCard()).append("\n").append(startCard.printCardBack());
@@ -209,7 +212,11 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(UpdateGamePlayersEvent event) {
         if(view.getState().inGame()) {
             //TODO use the model class for updating lobby players ?
-            List<String> playersInGame = event.getPlayers();
+            Map<String, Boolean> players = event.getPlayers();
+            List<String> playersInGame = players.entrySet().stream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .toList();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
 
             if(!playersInGame.isEmpty()){
