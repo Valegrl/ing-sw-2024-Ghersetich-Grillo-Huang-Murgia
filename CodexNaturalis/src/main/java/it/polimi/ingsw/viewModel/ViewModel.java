@@ -31,6 +31,8 @@ public class ViewModel implements Serializable {
 
     private final SelfViewPlayer selfPlayer;
 
+    private final List<String> playerUsernames;
+
     private int turnPlayerIndex;
 
     private final Map<String, Integer> scoreboard;
@@ -46,6 +48,7 @@ public class ViewModel implements Serializable {
                 .map(ViewPlayer::new)
                 .toList();
         this.selfPlayer = new SelfViewPlayer(model.getPlayerFromUsername(username));
+        this.playerUsernames = model.getPlayerUsernames();
         this.turnPlayerIndex = model.getTurnPlayerIndex();
         this.scoreboard = model.getScoreboard().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
@@ -94,6 +97,10 @@ public class ViewModel implements Serializable {
 
     public SelfViewPlayer getSelfPlayer() {
         return selfPlayer;
+    }
+
+    public List<String> getPlayerUsernames() {
+        return playerUsernames;
     }
 
     public int getTurnPlayerIndex() {

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
@@ -14,6 +15,7 @@ import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
+import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 
 /**
@@ -67,7 +69,7 @@ public class Game {
      */
     private final ObjectiveCard[] commonObjectives;
 
-    private GameListenersManager listeners;
+    private final GameListenersManager listeners;
 
     private GameStatus gameStatus;
 
@@ -185,8 +187,8 @@ public class Game {
         else
             this.gameStatus = GameStatus.RUNNING;
 
-        //TODO  turn + status update method
-        //listeners.notifyAllListeners(arguments);
+        for (Player p : players)
+            listeners.notifyAllListeners(new UpdateLocalModelEvent(new ViewModel(this, p.getUsername())));
     }
 
     /**
@@ -387,7 +389,7 @@ public class Game {
         if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP)) {
             this.gameStatus = backupGameStatus;
             if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
-                newTurn(); //TODO version with no updates. I will do them after the return from virtualView. (return value in reconnect for nextTurn call)
+                newTurn(); //TODO version with no updates. I will do them after the return to the virtualView. (return value in reconnect for nextTurn call)
         }
         //TODO restart new actionTimer (waiting player) or nextTurn
     }
