@@ -1,0 +1,32 @@
+#mainPane{
+    -fx-background-image: url(/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+.textField{
+
+}
+
+.passwordField{
+
+}
+.label {
+    -fx-text-fill: "RED";
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
+}
+
+.button{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 100;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: "transparent";
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.button:hover{
+    -fx-text-fill: #bbbbbb;
+}

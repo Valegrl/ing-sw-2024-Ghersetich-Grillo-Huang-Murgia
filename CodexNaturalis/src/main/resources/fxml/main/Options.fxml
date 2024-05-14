@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="mainPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.view.gui.GUI" prefHeight="1080.0" prefWidth="1920.0">
+    <VBox id="mainVbox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080" prefWidth="400" alignment="CENTER_LEFT">
+        <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen"/>
+        <Button mnemonicParsing="false" onAction="#goBack" text="Back"/>
+    </VBox>
+</AnchorPane>

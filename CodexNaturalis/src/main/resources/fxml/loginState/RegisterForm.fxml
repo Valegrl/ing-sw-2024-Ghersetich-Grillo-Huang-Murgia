@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="mainPane" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20">
+        <TextField fx:id="registerUsernameField" alignment="CENTER" maxHeight="110.0" maxWidth="200.0" prefHeight="50.0" prefWidth="400.0" promptText="Username">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </TextField>
+        <PasswordField fx:id="registerPasswordField" alignment="CENTER" maxHeight="110.0" maxWidth="200.0" prefHeight="50.0" prefWidth="400.0" promptText="Password">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="errorRegistration" text="" />
+        <Button mnemonicParsing="false" onAction="#submitRegister" text="Register" />
+        <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
+    </VBox>
+
+</AnchorPane>
