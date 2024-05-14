@@ -36,14 +36,6 @@ public class ChooseConnectionState extends ViewState {
         String IpSocket = IpSocketField.getText();
 
         if(IpSocket.isEmpty()){
-
-            /*
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error: address format");
-            alert.setHeaderText(null);
-            alert.setContentText("Field can't be left empty!");
-            alert.showAndWait();
-             */
             errorSocket.setText("Socket address can't be left empty!");
         }
         else{
@@ -68,11 +60,7 @@ public class ChooseConnectionState extends ViewState {
                 transition(controller);
 
             } catch (Exception exception) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error: connection");
-                alert.setHeaderText(null);
-                alert.setContentText("Cannot connect with socket. Make sure the IP provided is valid and try again later...");
-                alert.showAndWait();
+                errorSocket.setText("Cannot connect with Socket. Make sure the IP provided is valid an try again later...");
             }
         }
     }
@@ -82,13 +70,6 @@ public class ChooseConnectionState extends ViewState {
         String IpRmi = IpRmiField.getText();
 
         if(IpRmi.isEmpty()){
-            /*
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error: address format");
-            alert.setHeaderText(null);
-            alert.setContentText("Field can't be left empty!");
-            alert.showAndWait();
-            */
             errorRmi.setText("RMI address can't be left empty!");
         }
         else{
@@ -112,11 +93,7 @@ public class ChooseConnectionState extends ViewState {
                 transition(controller);
 
             } catch (Exception exception) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error: connection");
-                alert.setHeaderText(null);
-                alert.setContentText("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
-                alert.showAndWait();
+                errorRmi.setText("Cannot connect with RMI. Make sure the IP provided is valid an try again later...");
             }
         }
 

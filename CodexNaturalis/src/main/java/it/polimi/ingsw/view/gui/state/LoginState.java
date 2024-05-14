@@ -56,6 +56,7 @@ public class LoginState extends ViewState {
             register(registerUsername, registerPassword);
 
             //TODO implement in a way that it doesn't go to login if the registration fails!
+            /*This try and catch here basically moves the registration form to the LOGIN and REGISTER menu*/
             /*try {
                 Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 LoginState controller = this;

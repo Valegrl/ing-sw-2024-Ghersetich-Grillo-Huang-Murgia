@@ -64,7 +64,12 @@ public class GUI extends Application implements View {
 
     @Override
     public void start(Stage stage) throws IOException, NullPointerException{
+        /*This only has UPPERCASE letters*/
         Font.loadFont(getClass().getResourceAsStream("/font/BebasNeue-Regular.ttf"), 14);
+        /*This has both UPPERCASE and LOWERCASE letters, used for forms*/
+        Font.loadFont(getClass().getResourceAsStream("/font/BebasNeueNormal-Bold.otf"), 14);
+
+
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/main/Main.fxml"));
         Scene scene = new Scene(root);
 

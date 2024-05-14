@@ -12,6 +12,13 @@ Text{
     -fx-padding: 0;
 }
 
+.text-input{
+    -fx-text-fill: white;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-font-family: "Bebas Neue Normal Bold";
+    -fx-font-size: 40;
+}
+
 .button{
     -fx-text-fill: #ffffff;
     -fx-font-size: 100;

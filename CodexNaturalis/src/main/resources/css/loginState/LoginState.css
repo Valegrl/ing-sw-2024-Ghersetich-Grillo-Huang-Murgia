@@ -4,12 +4,18 @@
     -fx-background-size: cover;
 }
 
-.textField{
-
+.text-input{
+    -fx-text-fill: white;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-font-family: "Bebas Neue Normal Bold";
+    -fx-font-size: 40;
 }
 
-.passwordField{
-
+.password-input{
+    -fx-text-fill: white;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-font-family: "Bebas Neue Normal Bold";
+    -fx-font-size: 40;
 }
 .label {
     -fx-text-fill: "RED";
