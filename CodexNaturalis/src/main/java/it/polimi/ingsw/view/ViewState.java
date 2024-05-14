@@ -54,7 +54,12 @@ public abstract class ViewState {
             if (inputString.equals("$stop")) {
                 input = 0;
             } else if (!inputString.isEmpty()) {
-                input = Integer.parseInt(inputString);
+                try {
+                    input = Integer.parseInt(inputString);
+                } catch (NumberFormatException e) {
+                    view.printMessage("Invalid input. Try again.");
+                    continue;
+                }
             }
 
             if ((input >= lowerBound && input <= upperBound) || input == -1 || input == 0) {

@@ -127,21 +127,52 @@ public final class ImmStartCard extends ImmCard implements CardToString {
 
     public String printSimpleCard(int indent) {
         StringBuilder sb = new StringBuilder();
-        Item[] corners;
         sb.append(" ".repeat(indent));
         if (!flipped) {
-            corners = this.getFrontCorners();
             sb.append("Showing face: front\n");
         } else {
-            corners = this.getBackCorners();
             sb.append("Showing face: back\n");
         }
+        sb.append(printSimpleCardHelper(indent, flipped));
+        return sb.toString();
+    }
+
+    public String printSetupStartCard() {
+        int indent = 9;
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Start card: ")
+                .append(this.getId()).append("\n")
+                .append("    1- Front:\n")
+                .append(printSimpleCardHelper(indent, false));
+        sb.append("    2- Back:\n")
+                .append(printSimpleCardHelper(indent, true));
+        return sb.toString();
+    }
+
+    private String printSimpleCardHelper(int indent, boolean flipped) {
+        StringBuilder sb = new StringBuilder();
+        Item[] corners;
+        List<Item> permanentResources = null;
+        if (flipped) {
+            corners = this.getBackCorners();
+            permanentResources = getBackPermanentResources();
+        } else {
+            corners = this.getFrontCorners();
+        }
+        if (permanentResources != null) {
+            sb.append(" ".repeat(indent))
+                    .append("Permanent Resources: "); // TODO add permanent resources
+            for (int i = 0; i < permanentResources.size() - 1; i++) {
+                sb.append(Item.itemToColor(permanentResources.get(i))).append(", ");
+            }
+            sb.append(Item.itemToColor(permanentResources.getLast())).append("\n");
+        }
         sb.append(" ".repeat(indent))
-          .append("Corners: \n")
-          .append(" ".repeat(indent + 2))
-          .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
-          .append(" ".repeat(indent + 2))
-          .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+                .append("Corners: \n")
+                .append(" ".repeat(indent + 2))
+                .append("TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n")
+                .append(" ".repeat(indent + 2))
+                .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
 }

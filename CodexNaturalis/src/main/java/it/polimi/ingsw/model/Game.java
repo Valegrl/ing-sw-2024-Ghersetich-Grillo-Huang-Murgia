@@ -143,6 +143,11 @@ public class Game {
         Deck<StartCard> startDeck = new DeckFactory().createDeck(StartCard.class);
         Deck<ObjectiveCard> objectiveDeck = new DeckFactory().createDeck(ObjectiveCard.class);
 
+        for (int i = 0; i < visibleGoldCards.length; i++) {
+            visibleGoldCards[i] = goldDeck.drawTop();
+            visibleResourceCards[i] = resourceDeck.drawTop();
+        }
+
         for (int i = 0; i < commonObjectives.length; i++)
             commonObjectives[i] = objectiveDeck.drawTop();
 

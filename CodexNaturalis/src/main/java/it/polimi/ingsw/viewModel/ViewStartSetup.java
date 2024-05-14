@@ -8,6 +8,7 @@ import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  * It contains an array of immutable objective cards, an immutable start card, and other card-related attributes.
  * All cards are represented in their immutable form.
  */
-public class ViewStartSetup {
+public class ViewStartSetup implements Serializable {
     /**
      * An array of secret objective cards assigned to the player.
      */

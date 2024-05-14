@@ -90,6 +90,8 @@ public class LobbyState extends ViewState {
                 showResponseMessage(message, 2000);
                 transition(new MenuState(view));
                 break;
+            case EventID.UPDATE_GAME_PLAYERS:
+                transition(new GameSetupState(view));
             default:
                 break;
         }
@@ -114,7 +116,7 @@ public class LobbyState extends ViewState {
     }
 
     private void playerOptions() {
-        String readyStatusString = controller.getReadyStatusPlayers().get(view.getUsername()) ? "Unready" : "Ready";
+        String readyStatusString = controller.getPlayersStatus().get(view.getUsername()) ? "Unready" : "Ready";
 
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
@@ -126,7 +128,7 @@ public class LobbyState extends ViewState {
 
     private void toggleReadyStatus() {
         Event event;
-        if(controller.getReadyStatusPlayers().get(view.getUsername())) {
+        if(controller.getPlayersStatus().get(view.getUsername())) {
             event = new PlayerUnreadyEvent();
         } else {
             event = new PlayerReadyEvent();
@@ -144,8 +146,8 @@ public class LobbyState extends ViewState {
     private void kickPlayer() {
         view.printMessage("\nChoose a player to kick:");
         int choice = -1;
-        if (controller.getReadyStatusPlayers().size() > 1) {
-            choice = readChoiceFromInput(controller.getReadyStatusPlayers().keySet().stream().filter(p -> !p.equals(view.getUsername())).toList());
+        if (controller.getPlayersStatus().size() > 1) {
+            choice = readChoiceFromInput(controller.getPlayersStatus().keySet().stream().filter(p -> !p.equals(view.getUsername())).toList());
         } else {
             showResponseMessage("No players to kick.", 1000);
         }
@@ -156,7 +158,7 @@ public class LobbyState extends ViewState {
 
         int i = 1;
         String chosenUser = "";
-        for (String username : controller.getReadyStatusPlayers().keySet()) {
+        for (String username : controller.getPlayersStatus().keySet()) {
             if (!username.equals(view.getUsername())) {
                 if (i == choice) {
                     chosenUser = username;

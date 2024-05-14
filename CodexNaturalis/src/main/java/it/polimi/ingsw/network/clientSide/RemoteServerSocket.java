@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.eventUtils.EventDeserializer;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.model.deck.factory.EvaluatorDeserializer;
+import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 
@@ -89,6 +91,7 @@ public class RemoteServerSocket implements Server {
                 String jsonString = inputStream.readUTF();
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Event.class, new EventDeserializer())
+                        .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
                         .create();
                 Event event = gson.fromJson(jsonString, Event.class);
                 client.report(event);

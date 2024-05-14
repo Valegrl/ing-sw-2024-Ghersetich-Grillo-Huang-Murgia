@@ -57,6 +57,7 @@ public final class SelfViewPlayArea implements Serializable {
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
         this.uncoveredItems = Collections.unmodifiableMap(playArea.getUncoveredItems());
+        // TODO check if null and do something
         this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
     }
 

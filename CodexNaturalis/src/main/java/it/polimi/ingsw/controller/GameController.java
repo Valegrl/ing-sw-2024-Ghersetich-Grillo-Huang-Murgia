@@ -144,7 +144,7 @@ public class GameController {
         this.hostQueue.add(vv);
         this.id = gameID;
         this.requiredPlayers = nRequiredPlayers;
-        this.availableTokens = Arrays.asList(Token.values());
+        this.availableTokens = new ArrayList<>(List.of(Token.values()));
         Controller.getInstance().addToGameControllers(this);
     }
 
@@ -287,10 +287,7 @@ public class GameController {
      */
     protected synchronized void startCardsSetup() {
         if (!gameStarted){
-            int count = 0;
-            for (Boolean isReady : readyLobbyPlayers.values())
-                if (isReady)
-                    count++;
+            int count = readyLobbyPlayers.entrySet().stream().filter(Map.Entry::getValue).toList().size();
             if (count == virtualViewAccounts.size() && count == requiredPlayers){
                 this.gameStarted = true;
                 notifyAllOnlineGamePlayers("The game has started!");
@@ -511,7 +508,7 @@ public class GameController {
                 int dim = availableTokens.size();
                 if (dim > 0){
                     String username = pts.getUsername();
-                    Token token = availableTokens.remove(dim-1);
+                    Token token = availableTokens.removeLast();
                     boolean done = game.setupPlayerToken(username, token);
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
