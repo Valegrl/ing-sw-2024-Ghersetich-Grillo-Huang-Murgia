@@ -280,7 +280,7 @@ public class Controller {
 
         for (GameController gc : gameControllers)
             if (!gc.isGameStarted() && (gc.getRequiredPlayers() > gc.getPlayers().size()))
-                collect.add(new LobbyState(gc.getIdentifier(), gc.getOnlinePlayers().size(), gc.getRequiredPlayers()));
+                collect.add(new LobbyState(gc.getIdentifier(), gc.nOnlinePlayers(), gc.getRequiredPlayers()));
 
         if (collect.isEmpty())
             return new AvailableLobbiesEvent(Feedback.SUCCESS, collect, "There are no available lobbies.");
@@ -303,7 +303,7 @@ public class Controller {
 
         for (GameController gc : gameControllers)
             if (gc.isGameStarted() && gc.getPlayers().contains(username))
-                collect.add(new LobbyState(gc.getIdentifier(), gc.getOnlinePlayers().size(), gc.getRequiredPlayers()));
+                collect.add(new LobbyState(gc.getIdentifier(), gc.nOnlinePlayers(), gc.getRequiredPlayers()));
 
         if (collect.isEmpty())
             return new GetMyOfflineGamesEvent(Feedback.SUCCESS, collect, "You do not have any available games.");

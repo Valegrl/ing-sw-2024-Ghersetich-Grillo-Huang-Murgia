@@ -8,8 +8,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
@@ -297,11 +295,11 @@ public class GameController {
                 this.gameStarted = true;
                 notifyAllOnlineGamePlayers("The game has started!");
 
-                Map<String, GameListener> listeners = new HashMap<>();
+                Map<String, GameListener> players = new HashMap<>();
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
-                    listeners.put(entry.getKey().getUsername(), entry.getValue());
+                    players.put(entry.getKey().getUsername(), entry.getValue());
 
-                this.game = new Game(id, listeners);
+                this.game = new Game(id, players);
                 this.setupData = this.game.gameSetup();
 
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()){
@@ -310,12 +308,10 @@ public class GameController {
                             .filter(setup -> setup.getUsername().equals(username))
                             .findFirst()
                             .orElse(null);
-                    //TODO update everyone's model: pre-setup (hand, visible cards, decks, common objectives)
-                    if (playerSetup != null) {
-                        ImmObjectiveCard[] obj = playerSetup.getImmObjectiveCards();
-                        ImmStartCard start = playerSetup.getImmStartCard();
-                        entry.getValue().update(new ChooseCardsSetupEvent(obj, start, "Choose your setup!"));
-                    } else
+
+                    if (playerSetup != null)
+                        entry.getValue().update(new ChooseCardsSetupEvent(playerSetup.getView(), "Choose your setup!"));
+                    else
                         System.err.println("An error occurred during the cards setup phase!");
                 }
                 this.setupCardsTimer = setupCardsTimer();
@@ -875,7 +871,7 @@ public class GameController {
      */
     private synchronized void handlePlayerOffline(String username) {
         if (gameStarted) {
-            if (!getOnlinePlayers().isEmpty()) {
+            if (nOnlinePlayers() > 0) {
                 game.offlinePlayer(username);
 
                 GameStatus gs = game.getGameStatus();
@@ -960,13 +956,24 @@ public class GameController {
     }
 
     /**
-     * @return A list of online player usernames.
+     * @return A map of online player usernames.
      */
-    protected synchronized List<String> getOnlinePlayers() {
-        List<String> collect = new ArrayList<>();
-        for (Account account : virtualViewAccounts.values())
-            collect.add(account.getUsername());
+    protected synchronized Map<String, Boolean> getOnlinePlayers() {
+        Map<String, Boolean> collect = new HashMap<>();
+        for (Account account : joinedPlayers.keySet()) {
+            if (virtualViewAccounts.containsValue(account))
+                collect.put(account.getUsername(), true);
+            else
+                collect.put(account.getUsername(), false);
+        }
         return collect;
+    }
+
+    /**
+     * @return The number of online players.
+     */
+    protected synchronized int nOnlinePlayers() {
+        return virtualViewAccounts.size();
     }
 
     /**
@@ -1040,7 +1047,7 @@ public class GameController {
      * @param message The message to send.
      */
     private void notifyAllOnlineGamePlayers(String message) {
-        List<String> onlinePlayers = getOnlinePlayers();
+        Map<String, Boolean> onlinePlayers = getOnlinePlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet())
             if (isPlayerOnline(entry.getKey().getUsername()))
                 entry.getValue().update(new UpdateGamePlayersEvent(onlinePlayers, message));
@@ -1052,7 +1059,7 @@ public class GameController {
      * @param message The message to send.
      */
     private void notifyAllOnlineGamePlayersExcept(String username, String message) {
-        List<String> onlinePlayers = getOnlinePlayers();
+        Map<String, Boolean> onlinePlayers = getOnlinePlayers();
         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
             String otherUsername = entry.getKey().getUsername();
             if (!otherUsername.equals(username) && isPlayerOnline(otherUsername))

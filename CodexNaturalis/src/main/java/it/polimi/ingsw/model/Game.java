@@ -65,9 +65,8 @@ public class Game {
      */
     private final ObjectiveCard[] commonObjectives;
 
-    /**
-     *
-     */
+    private GameListenersManager listeners;
+
     private GameStatus gameStatus;
 
     private GameStatus backupGameStatus;
@@ -78,12 +77,19 @@ public class Game {
     /**
      * Constructs a new Game with the given id and the list of players' usernames.
      * @param id The identifier of the Game.
-     * @param usernames The list of usernames chosen by players.
+     * @param players The map of usernames chosen by players.
      */
-    public Game(String id, List<String> usernames) {
+    public Game(String id, Map<String, GameListener> players) {
+
         assert id != null : "Game id cannot be null";
 
-        assert usernames != null && !usernames.isEmpty() : "Usernames cannot be null or empty";
+        assert players != null && !players.isEmpty() : "Listeners map cannot be null or empty";
+
+        assert !players.containsKey(null) : "Listeners map cannot contain null keys";
+
+        assert !players.containsValue(null) : "Listeners map cannot contain null values";
+
+        Set<String> usernames = players.keySet();
 
         assert usernames.size() >= 2 && usernames.size() <= 4 : "Number of players must be between 2 and 4";
 
@@ -110,12 +116,11 @@ public class Game {
 
         this.commonObjectives = new ObjectiveCard[2];
 
+        this.listeners = new GameListenersManager(this, players);
         this.gameStatus = GameStatus.SETUP;
         this.backupGameStatus = GameStatus.RUNNING;
         this.detectedLC = false;
         this.circleChecker = -1;
-
-        //TODO update listeners
     }
 
     /**
@@ -137,16 +142,16 @@ public class Game {
         for (int i = 0; i < commonObjectives.length; i++)
             commonObjectives[i] = objectiveDeck.drawTop();
 
-        //TODO update listeners
-
         List<PlayerCardsSetup> cardsSetup = new ArrayList<>();
 
-        List<PlayableCard> hand = new ArrayList<>();
+        Item topGoldDeck = goldDeck.seeTopCard().getPermanentResource();
+        Item topResourceDeck = resourceDeck.seeTopCard().getPermanentResource();
 
         for (Player p : players) {
+            List<PlayableCard> hand = new ArrayList<>();
             hand.add(resourceDeck.drawTop());
             hand.add(resourceDeck.drawTop());
-            hand.add(goldDeck.drawTop()); //TODO When should the player be notified of the hand?
+            hand.add(goldDeck.drawTop());
 
             StartCard start = startDeck.drawTop();
             p.initPlayArea(hand, start);
@@ -156,7 +161,9 @@ public class Game {
             for (int i = 0; i < 2; i++) {
                 secretObjectiveChoices[i] = objectiveDeck.drawTop();
             }
-            cardsSetup.add(new PlayerCardsSetup(p.getUsername(), secretObjectiveChoices, start));
+
+            cardsSetup.add(new PlayerCardsSetup(p.getUsername(), secretObjectiveChoices, start, hand, visibleGoldCards,
+                                                topGoldDeck, visibleResourceCards, topResourceDeck, commonObjectives));
         }
         return cardsSetup;
     }
@@ -171,7 +178,9 @@ public class Game {
             this.gameStatus = GameStatus.WAITING;
         else
             this.gameStatus = GameStatus.RUNNING;
+
         //TODO  turn + status update method
+        //listeners.notifyAllListeners(arguments);
     }
 
     /**
@@ -301,7 +310,7 @@ public class Game {
      *             Can be null if the card to be selected is a {@link ObjectiveCard}.
      * @param user The username of the {@link Player} that selected the card.
      */
-    public void selectCard(EvaluableCard c, Coordinate pos, String user) {
+    private void selectCard(EvaluableCard c, Coordinate pos, String user) {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
 
@@ -368,6 +377,7 @@ public class Game {
             throw new IllegalStateException("At least one player must be online.");
 
         p.setOnline(true);
+        listeners.changeListener(user, gl);
         if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP)) {
             this.gameStatus = backupGameStatus;
             if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
@@ -550,6 +560,12 @@ public class Game {
         return players;
     }
 
+    public List<String> getPlayerUsernames() {
+        return players.stream()
+                .map(Player::getUsername)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Retrieves a player object based on the provided username.
      *
@@ -608,5 +624,12 @@ public class Game {
 
     public String getCurrentPlayerUsername() {
         return players.get(turnPlayerIndex).getUsername();
+    }
+
+    public Set<String> getOnlinePlayers() {
+        return players.stream()
+                .filter(Player::isOnline)
+                .map(Player::getUsername)
+                .collect(Collectors.toSet());
     }
 }

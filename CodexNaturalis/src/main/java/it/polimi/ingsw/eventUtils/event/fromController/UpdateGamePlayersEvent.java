@@ -6,7 +6,9 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents an event that updates the list of players in the game.
@@ -19,9 +21,9 @@ public class UpdateGamePlayersEvent extends Event {
     private final static String id = EventID.UPDATE_GAME_PLAYERS.getID();
 
     /**
-     * The list of players in the game.
+     * The map of online players in the game.
      */
-    private final List<String> players;
+    private final Map<String, Boolean> players;
 
     /**
      * The message associated with the event.
@@ -33,17 +35,17 @@ public class UpdateGamePlayersEvent extends Event {
      *
      * @param pl The list of players in the lobby.
      */
-    public UpdateGamePlayersEvent(List<String> pl, String m) {
+    public UpdateGamePlayersEvent(Map<String, Boolean> pl, String m) {
         super(id);
-        this.players = new ArrayList<>(pl);
+        this.players = new HashMap<>(pl);
         this.message = m;
     }
 
     /**
-     * @return A copy of the list of players in the game.
+     * @return A copy of the map of online players in the game.
      */
-    public List<String> getPlayers() {
-        return new ArrayList<>(players);
+    public Map<String, Boolean> getPlayers() {
+        return new HashMap<>(players);
     }
 
     /**

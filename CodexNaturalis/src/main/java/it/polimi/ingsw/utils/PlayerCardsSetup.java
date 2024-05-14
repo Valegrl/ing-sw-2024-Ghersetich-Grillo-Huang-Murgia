@@ -1,15 +1,16 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
+import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.model.card.PlayableCard;
+import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.card.StartCard;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class represents the setup of cards for a player in the game.
- * It contains the player's username, an array of objective cards, and a start card.
+ * It contains the player's username, an array of objective cards, a start card, and a view of the start setup.
  */
 public class PlayerCardsSetup {
     /**
@@ -34,31 +35,33 @@ public class PlayerCardsSetup {
     private final StartCard startCard;
 
     /**
-     * An array of immutable objective cards assigned to the player.
+     * The view of the start setup.
      */
-    private final ImmObjectiveCard[] immObjectiveCards;
+    private final ViewStartSetup view;
 
     /**
-     * The immutable start card assigned to the player.
-     */
-    private final ImmStartCard immStartCard;
-
-    /**
-     * Constructs a new PlayerCardsSetup with the specified username, objective cards, and start card.
+     * Constructs a new PlayerCardsSetup with the specified username, objective cards, start card, and view of the start setup.
+     * The chosen status is set to false by default.
      *
      * @param username the username of the player
      * @param objectiveCards an array of objective cards
      * @param start the start card
+     * @param hand an array of playable cards representing the player's hand
+     * @param goldVisible an array of playable cards representing the player's visible gold cards
+     * @param goldDeck an item representing the player's gold deck
+     * @param resourceVisible an array of playable cards representing the player's visible resource cards
+     * @param resourceDeck an item representing the player's resource deck
+     * @param commonObjectives an array of objective cards representing the common objectives
      */
-    public PlayerCardsSetup(String username, ObjectiveCard[] objectiveCards, StartCard start) {
+    public PlayerCardsSetup(String username, ObjectiveCard[] objectiveCards, StartCard start, List<PlayableCard> hand,
+                            PlayableCard[] goldVisible, Item goldDeck, PlayableCard[] resourceVisible, Item resourceDeck,
+                            ObjectiveCard[] commonObjectives) {
         this.username = username;
         this.chosen = false;
         this.objectiveCards = objectiveCards;
         this.startCard = start;
-        this.immObjectiveCards = Arrays.stream(objectiveCards)
-                .map(ImmObjectiveCard::new)
-                .toArray(ImmObjectiveCard[]::new);
-        this.immStartCard = new ImmStartCard(start);
+        this.view = new ViewStartSetup(objectiveCards, start, hand, goldVisible, goldDeck,
+                                       resourceVisible, resourceDeck, commonObjectives);
     }
 
     /**
@@ -102,16 +105,9 @@ public class PlayerCardsSetup {
     }
 
     /**
-     * @return an array of the player's immutable objective cards
+     * @return the view of the start setup
      */
-    public ImmObjectiveCard[] getImmObjectiveCards() {
-        return immObjectiveCards;
-    }
-
-    /**
-     * @return the player's immutable start card
-     */
-    public ImmStartCard getImmStartCard() {
-        return immStartCard;
+    public ViewStartSetup getView() {
+        return view;
     }
 }

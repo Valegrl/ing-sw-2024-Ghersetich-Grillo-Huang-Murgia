@@ -3,6 +3,7 @@ package it.polimi.ingsw.eventUtils.event.fromController;
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
@@ -18,46 +19,25 @@ public class ChooseCardsSetupEvent extends Event {
     private final static String id = EventID.CHOOSE_CARDS_SETUP.getID();
 
     /**
-     * An array of ImmObjectiveCard objects representing the objective cards for the game.
-     */
-    private final ImmObjectiveCard[] objectiveCards;
-
-    /**
-     * An ImmStartCard object representing the start card for the game.
-     */
-    private final ImmStartCard startCard;
-
-    /**
      * A string representing the message associated with this event.
      */
     private final String message;
 
     /**
-     * Constructs a new ChooseCardsSetupEvent with the given objective cards, start card, and message.
-     *
-     * @param obj   the array of ImmObjectiveCard objects representing the objective cards for the game
-     * @param start the ImmStartCard object representing the start card for the game
-     * @param m     the message associated with this event
+     * A ViewStartSetup object representing the setup of the game.
      */
-    public ChooseCardsSetupEvent(ImmObjectiveCard[] obj, ImmStartCard start, String m) {
+    private final ViewStartSetup viewSetup;
+
+    /**
+     * Constructs a new ChooseCardsSetupEvent with the given ViewStartSetup object and message.
+     *
+     * @param view the ViewStartSetup object representing the setup of the game
+     * @param m the message associated with this event
+     */
+    public ChooseCardsSetupEvent(ViewStartSetup view, String m) {
         super(id);
         this.message = m;
-        this.objectiveCards = obj;
-        this.startCard = start;
-    }
-
-    /**
-     * @return the array of ImmObjectiveCard objects representing the objective cards for the game
-     */
-    public ImmObjectiveCard[] getObjectiveCards() {
-        return objectiveCards;
-    }
-
-    /**
-     * @return the ImmStartCard object representing the start card for the game
-     */
-    public ImmStartCard getStartCard() {
-        return startCard;
+        this.viewSetup = view;
     }
 
     /**
@@ -65,6 +45,13 @@ public class ChooseCardsSetupEvent extends Event {
      */
     public String getMessage() {
         return message;
+    }
+
+    /**
+     * @return the ViewStartSetup object associated with this event
+     */
+    public ViewStartSetup getViewSetup() {
+        return viewSetup;
     }
 
     @Override
