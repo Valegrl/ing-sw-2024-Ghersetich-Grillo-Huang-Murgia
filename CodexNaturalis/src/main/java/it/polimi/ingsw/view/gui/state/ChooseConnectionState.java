@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.state;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.network.clientSide.ClientManager;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.fxml.FXML;
@@ -9,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -29,7 +29,12 @@ public class ChooseConnectionState extends ViewState {
     @FXML
     private TextField IpSocketField;
 
-    @FXML TextField IpRmiField;
+    @FXML
+    private TextField IpRmiField;
+
+    public ChooseConnectionState(View view) {
+        super(view);
+    }
 
     @FXML
     public void submitSocket(ActionEvent e){
@@ -46,16 +51,15 @@ public class ChooseConnectionState extends ViewState {
 
                 Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
-
-
                 LoginState controller = new LoginState(view);
                 loader.setController(controller);
                 Parent root = loader.load();
-                stage.getScene().setRoot(root);
-
                 String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-                stage.getScene().getStylesheets().clear();
-                stage.getScene().getStylesheets().add(css);
+
+                Scene scene = stage.getScene();
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(css);
+                scene.setRoot(root);
 
                 transition(controller);
 
@@ -80,15 +84,15 @@ public class ChooseConnectionState extends ViewState {
 
                 Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
-
                 LoginState controller = new LoginState(view);
                 loader.setController(controller);
                 Parent root = loader.load();
-                stage.getScene().setRoot(root);
-
                 String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-                stage.getScene().getStylesheets().clear();
-                stage.getScene().getStylesheets().add(css);
+
+                Scene scene = stage.getScene();
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(css);
+                scene.setRoot(root);
 
                 transition(controller);
 
@@ -103,14 +107,19 @@ public class ChooseConnectionState extends ViewState {
     public void goBackMain(ActionEvent e){
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/main/Main.fxml"));
-            String css = this.getClass().getResource("/css/main/Main.css").toExternalForm();
 
-            stage.getScene().getStylesheets().clear();
-            stage.getScene().getStylesheets().add(css);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
+            MainMenuState controller = new MainMenuState((GUI) view);
+            loader.setController(controller);
+            Parent root = loader.load();
+            String css = this.getClass().getResource("/css/main/MainMenu.css").toExternalForm();
 
-            stage.getScene().setRoot(root);
-            stage.show();
+            Scene scene = stage.getScene();
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(css);
+            scene.setRoot(root);
+
+            transition(controller);
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -121,20 +130,17 @@ public class ChooseConnectionState extends ViewState {
     public void goBackConnection(ActionEvent e){
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
 
-            ChooseConnectionState controller = new ChooseConnectionState((GUI) view);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/ChooseConnectionState.fxml"));
+            ChooseConnectionState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnectionState.css").toExternalForm();
 
+            Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
-
-            stage.getScene().setRoot(root);
-            stage.show();
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -145,20 +151,17 @@ public class ChooseConnectionState extends ViewState {
     public void setSocket(ActionEvent e){
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
 
-            ChooseConnectionState controller = this;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/SocketForm.fxml"));
+            ChooseConnectionState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnectionState.css").toExternalForm();
 
+            Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
-
-            stage.getScene().setRoot(root);
-            stage.show();
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -169,29 +172,24 @@ public class ChooseConnectionState extends ViewState {
     public void setRmi(ActionEvent e){
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            Scene scene = stage.getScene();
 
-            ChooseConnectionState controller = this;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/RmiForm.fxml"));
+            ChooseConnectionState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnectionState.css").toExternalForm();
 
+            Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
 
-            stage.getScene().setRoot(root);
-            stage.show();
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
         }
     }
 
-    public ChooseConnectionState(GUI view) {
-        super(view);
-    }
 
     @Override
     public void run() {
@@ -206,6 +204,7 @@ public class ChooseConnectionState extends ViewState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         // Not used
     }
+
 
     @Override
     public boolean inMenu() {

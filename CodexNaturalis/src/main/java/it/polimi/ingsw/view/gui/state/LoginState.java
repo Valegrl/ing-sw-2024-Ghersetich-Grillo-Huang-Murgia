@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -40,6 +41,14 @@ public class LoginState extends ViewState {
     @FXML
     private Label errorLogin;
 
+
+    public LoginState(View view) {
+        super(view);
+    }
+
+    @Override
+    public void run() {
+    }
 
     @FXML
     public void submitRegister(ActionEvent e){
@@ -92,7 +101,6 @@ public class LoginState extends ViewState {
             loginPasswordField.clear();
             errorLogin.setText("");
             login(loginUsername, loginPassword);
-
         }
     }
 
@@ -101,17 +109,17 @@ public class LoginState extends ViewState {
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
-            LoginState controller = this;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
+            LoginState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-            stage.getScene().getStylesheets().clear();
-            stage.getScene().getStylesheets().add(css);
 
-            stage.getScene().setRoot(root);
-            stage.show();
+            Scene scene = stage.getScene();
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(css);
+
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -123,17 +131,17 @@ public class LoginState extends ViewState {
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
-            LoginState controller = this;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/RegisterForm.fxml"));
+            LoginState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-            stage.getScene().getStylesheets().clear();
-            stage.getScene().getStylesheets().add(css);
 
-            stage.getScene().setRoot(root);
-            stage.show();
+            Scene scene = stage.getScene();
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(css);
+
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -146,29 +154,21 @@ public class LoginState extends ViewState {
         try {
             Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
 
-            LoginState controller = this;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
+            LoginState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-
             String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-            stage.getScene().getStylesheets().clear();
-            stage.getScene().getStylesheets().add(css);
 
-            stage.getScene().setRoot(root);
-            stage.show();
+            Scene scene = stage.getScene();
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(css);
+
+            scene.setRoot(root);
         }
         catch (IOException exception){
             exception.printStackTrace();
         }
-    }
-
-    public LoginState(View view) {
-        super(view);
-    }
-
-    @Override
-    public void run() {
     }
 
     @Override
@@ -195,6 +195,22 @@ public class LoginState extends ViewState {
             case REGISTER:
                 if (feedback == Feedback.SUCCESS) {
                     showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
+                    try {
+                        Stage stage = (Stage) registerUsernameField.getScene().getWindow();
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
+                        LoginState controller = this;
+                        loader.setController(controller);
+                        Parent root = loader.load();
+                        String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+
+                        Scene scene = stage.getScene();
+                        scene.getStylesheets().clear();
+                        scene.getStylesheets().add(css);
+
+                        scene.setRoot(root);
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
 
                 } else {
                     Platform.runLater(() -> errorRegistration.setText("Error " + message));
@@ -208,33 +224,16 @@ public class LoginState extends ViewState {
     /*Vital methods, dont' delete*/
     private void login(String loginUsername, String loginPassword){
         String user = loginUsername;
-        if (user.startsWith("$")) {
-            if (user.equals("$exit")) run();
-            return;
-        }
         String psw = loginPassword;
-        if (psw.startsWith("$")) {
-            if (psw.equals("$exit")) run();
-        }
 
         Event event = new LoginEvent(user, psw);
         controller.newViewEvent(event);
-
         waitForResponse();
     }
 
     private void register(String registerUsername, String registerPassword){
         String user = registerUsername;
-        if (user.startsWith("$")) {
-            if (user.equals("$exit")) backToStateStart();
-            return;
-        }
-
         String psw = registerPassword;
-        if (psw.startsWith("$")) {
-            if (psw.equals("$exit")) backToStateStart();
-            return;
-        }
 
         Event event = new RegisterEvent(user, psw);
         controller.newViewEvent(event);
