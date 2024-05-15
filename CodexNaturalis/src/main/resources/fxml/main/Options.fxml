@@ -6,8 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="mainPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" prefHeight="1080.0" prefWidth="1920.0">
-    <VBox id="mainVbox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080" prefWidth="400" alignment="CENTER_LEFT">
+<AnchorPane id="mainPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" >
+    <VBox id="mainVbox" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" alignment="CENTER_LEFT">
         <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen"/>
         <Button mnemonicParsing="false" onAction="#goBack" text="Back"/>
     </VBox>

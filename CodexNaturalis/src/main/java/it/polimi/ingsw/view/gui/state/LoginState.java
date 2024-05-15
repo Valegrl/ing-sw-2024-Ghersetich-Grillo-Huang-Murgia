@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -64,27 +65,6 @@ public class LoginState extends ViewState {
             errorRegistration.setText("");
             register(registerUsername, registerPassword);
 
-            //TODO implement in a way that it doesn't go to login if the registration fails!
-            /*This try and catch here basically moves the registration form to the LOGIN and REGISTER menu*/
-            /*try {
-                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                LoginState controller = this;
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginState.fxml"));
-                loader.setController(controller);
-                Parent root = loader.load();
-
-                String css = this.getClass().getResource("/css/LoginState.css").toExternalForm();
-                stage.getScene().getStylesheets().clear();
-                stage.getScene().getStylesheets().add(css);
-
-                stage.getScene().setRoot(root);
-                stage.show();
-            }
-            catch (IOException exception){
-                exception.printStackTrace();
-            }
-            */
-
         }
     }
 
@@ -115,6 +95,12 @@ public class LoginState extends ViewState {
             Parent root = loader.load();
             String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
 
+            loginPasswordField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    submitLogin(new ActionEvent());
+                }
+            });
+
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
@@ -136,6 +122,12 @@ public class LoginState extends ViewState {
             loader.setController(controller);
             Parent root = loader.load();
             String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+
+            registerPasswordField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    submitRegister(new ActionEvent());
+                }
+            });
 
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
@@ -194,23 +186,31 @@ public class LoginState extends ViewState {
                 break;
             case REGISTER:
                 if (feedback == Feedback.SUCCESS) {
+                    Platform.runLater(() -> {
+                        try {
+                            Stage stage = (Stage) registerUsernameField.getScene().getWindow();
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
+                            LoginState controller = this;
+                            loader.setController(controller);
+                            Parent root = loader.load();
+                            String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+
+                            loginPasswordField.setOnKeyPressed(event -> {
+                                if (event.getCode() == KeyCode.ENTER) {
+                                    submitLogin(new ActionEvent());
+                                }
+                            });
+
+                            Scene scene = stage.getScene();
+                            scene.getStylesheets().clear();
+                            scene.getStylesheets().add(css);
+
+                            scene.setRoot(root);
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+                    });
                     showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
-                    try {
-                        Stage stage = (Stage) registerUsernameField.getScene().getWindow();
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
-                        LoginState controller = this;
-                        loader.setController(controller);
-                        Parent root = loader.load();
-                        String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
-
-                        Scene scene = stage.getScene();
-                        scene.getStylesheets().clear();
-                        scene.getStylesheets().add(css);
-
-                        scene.setRoot(root);
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
 
                 } else {
                     Platform.runLater(() -> errorRegistration.setText("Error " + message));
@@ -237,7 +237,6 @@ public class LoginState extends ViewState {
 
         Event event = new RegisterEvent(user, psw);
         controller.newViewEvent(event);
-
         waitForResponse();
     }
 

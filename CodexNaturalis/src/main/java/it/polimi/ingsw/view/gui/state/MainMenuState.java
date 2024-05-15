@@ -31,6 +31,7 @@ public class MainMenuState extends ViewState {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/ChooseConnectionState.fxml"));
         ChooseConnectionState controller = new ChooseConnectionState(view);
         loader.setController(controller);
+
         Parent root = loader.load();
         String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnectionState.css").toExternalForm();
 

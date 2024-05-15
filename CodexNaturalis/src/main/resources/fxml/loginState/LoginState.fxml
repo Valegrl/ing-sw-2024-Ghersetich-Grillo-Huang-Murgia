@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<AnchorPane id="mainPane" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0">
+      <HBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20.0">
          <children>
             <Button alignment="CENTER" onAction="#login" mnemonicParsing="false" text="Login">
                <HBox.margin>

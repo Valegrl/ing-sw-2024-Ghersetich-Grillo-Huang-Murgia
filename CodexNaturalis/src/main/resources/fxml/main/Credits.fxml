@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="mainPane" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-      <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20">
+<AnchorPane id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+      <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
          <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="This game was made in special collaboration with Cranio Creations by:" textAlignment="CENTER" wrappingWidth="900.0" />
           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" />
           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Valerio Grillo" />

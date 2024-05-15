@@ -69,8 +69,7 @@ public class GUI extends Application implements View {
 
         stage.setResizable(false);
         stage.setFullScreen(true);
-        stage.setWidth(1920);
-        stage.setHeight(1080);
+
         stage.setScene(scene);
 
         stage.show();

@@ -10,15 +10,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
 
-public class ChooseConnectionState extends ViewState {
+
+public class ChooseConnectionState extends ViewState{
 
     @FXML
     private Label errorRmi;
@@ -32,13 +35,27 @@ public class ChooseConnectionState extends ViewState {
     @FXML
     private TextField IpRmiField;
 
+    @FXML
+    private Button submitSocketButton;
+
+    @FXML
+    private Button submitRmiButton;
+
+
     public ChooseConnectionState(View view) {
         super(view);
     }
 
+
+    @Override
+    public void run() {
+    }
+
+
     @FXML
-    public void submitSocket(ActionEvent e){
+    public void submitSocket(ActionEvent e) {
         String IpSocket = IpSocketField.getText();
+        System.out.println(IpSocket);
 
         if(IpSocket.isEmpty()){
             errorSocket.setText("Socket address can't be left empty!");
@@ -49,7 +66,7 @@ public class ChooseConnectionState extends ViewState {
             try {
                 ClientManager.getInstance().initSocket(IpSocket, 1098);
 
-                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                Stage stage = (Stage) IpSocketField.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
                 LoginState controller = new LoginState(view);
                 loader.setController(controller);
@@ -63,8 +80,8 @@ public class ChooseConnectionState extends ViewState {
 
                 transition(controller);
 
-            } catch (Exception exception) {
-                errorSocket.setText("Cannot connect with Socket. Make sure the IP provided is valid an try again later...");
+            } catch (IOException exception) {
+                errorSocket.setText("Cannot connect with Socket. Make sure the IP provided is valid and try again later...");
             }
         }
     }
@@ -82,7 +99,7 @@ public class ChooseConnectionState extends ViewState {
             try {
                 ClientManager.getInstance().initRMI(IpRmi);
 
-                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                Stage stage = (Stage) IpRmiField.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
                 LoginState controller = new LoginState(view);
                 loader.setController(controller);
@@ -96,11 +113,10 @@ public class ChooseConnectionState extends ViewState {
 
                 transition(controller);
 
-            } catch (Exception exception) {
-                errorRmi.setText("Cannot connect with RMI. Make sure the IP provided is valid an try again later...");
+            } catch (IOException exception) {
+                errorRmi.setText("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
             }
         }
-
     }
 
     @FXML
@@ -162,6 +178,14 @@ public class ChooseConnectionState extends ViewState {
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
             scene.setRoot(root);
+
+            IpSocketField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    submitSocket(new ActionEvent());
+                }
+            });
+
+
         }
         catch (IOException exception){
             exception.printStackTrace();
@@ -179,21 +203,26 @@ public class ChooseConnectionState extends ViewState {
             Parent root = loader.load();
             String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnectionState.css").toExternalForm();
 
+
+
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
 
             scene.setRoot(root);
+
+            IpRmiField.setOnKeyPressed(event -> {
+                if(event.getCode() == KeyCode.ENTER) {
+                    submitRmi(new ActionEvent());
+                }
+            });
+
         }
         catch (IOException exception){
             exception.printStackTrace();
         }
     }
 
-
-    @Override
-    public void run() {
-    }
 
     @Override
     public boolean handleInput(int input) {
