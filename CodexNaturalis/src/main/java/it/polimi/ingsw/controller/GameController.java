@@ -707,21 +707,30 @@ public class GameController {
      */
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            String username = account.getUsername();
-            notifyAllOnlineGamePlayersExcept(username,  "The player " + username + " has reconnected to the game!");
-
             GameStatus gs = game.getGameStatus();
+            String waitingPlayer;
+
             if (gs == GameStatus.WAITING) {
                 this.waitingTimer.cancel();
                 this.waitingTimer = null;
-                this.actionTimer = playerActionTimer();
+                waitingPlayer = virtualViewAccounts.values().stream().findFirst()
+                        .orElseThrow(() -> new NoSuchElementException("At least one player must be online."))
+                        .getUsername();
+                if (!game.isTurnPlayer(waitingPlayer))
+                    this.startedMove = false;
             }
 
-            game.reconnectPlayer(account.getUsername(), gl);
-            //TODO: updated events from Model ?after return?, !turn/gameStatus! (method from virtualView?)
-            //TODO: 2 methods: username with model + gameStatus and turn to others (n.b. in case, also newTurn does updates. solve it)
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
+            String username = account.getUsername();
+            notifyAllOnlineGamePlayersExcept(username,  "The player " + username + " has reconnected to the game!");
+
+            if(gs != GameStatus.SETUP)
+                this.actionTimer = playerActionTimer();
+            game.reconnectPlayer(account.getUsername(), gl);
+
+            if(game.getGameStatus() == GameStatus.ENDED)
+                deleteGame();
         }
     }
 
@@ -900,6 +909,7 @@ public class GameController {
      * list of game controllers in the Controller singleton.
      */
     private synchronized void deleteGame() {
+        actionTimer.cancel();
         joinedPlayers.clear();
         virtualViewAccounts.clear();
         readyLobbyPlayers.clear();

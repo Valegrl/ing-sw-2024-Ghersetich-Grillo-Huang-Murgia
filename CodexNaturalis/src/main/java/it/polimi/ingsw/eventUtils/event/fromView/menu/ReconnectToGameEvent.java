@@ -4,7 +4,9 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
+import it.polimi.ingsw.viewModel.ViewModel;
 
 /**
  * This class represents an event that is triggered when a user attempts to reconnect to a game.
@@ -21,6 +23,10 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      */
     private final String gameID;
 
+    private final ViewModel viewModel;
+
+    private final GameStatus gameStatus;
+
     /**
      * Constructor for the client side (View).
      * It initializes the superclass with the unique identifier for this event type and initializes the game ID.
@@ -30,6 +36,8 @@ public class ReconnectToGameEvent extends FeedbackEvent {
     public ReconnectToGameEvent(String gameID) {
         super(id);
         this.gameID = gameID;
+        this.gameStatus = null;
+        this.viewModel = null;
     }
 
     /**
@@ -40,9 +48,26 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      * @param feedback The feedback for the event.
      * @param message The message for the event.
      */
-    public ReconnectToGameEvent(Feedback feedback, String message) {
+    public ReconnectToGameEvent(Feedback feedback, String gameID, String message) {
         super(id, feedback, message);
-        this.gameID = null;
+        this.gameID = gameID;
+        this.gameStatus = null;
+        this.viewModel = null;
+    }
+
+    /**
+     * Constructor for the server side (Controller).
+     * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
+     * It also initializes the game ID with null.
+     *
+     * @param feedback The feedback for the event.
+     * @param message The message for the event.
+     */
+    public ReconnectToGameEvent(Feedback feedback, String gameID, GameStatus status, ViewModel model, String message) {
+        super(id, feedback, message);
+        this.gameID = gameID;
+        this.gameStatus = status;
+        this.viewModel = model;
     }
 
     /**
@@ -50,6 +75,14 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      */
     public String getGameID() {
         return gameID;
+    }
+
+    public ViewModel getViewModel() {
+        return viewModel;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 
     @Override

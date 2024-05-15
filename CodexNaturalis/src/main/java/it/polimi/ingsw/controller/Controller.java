@@ -241,19 +241,19 @@ public class Controller {
         GameController found = null;
 
         if (!virtualViewAccounts.containsKey(vv))
-            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "You must log in first."), null);
+            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "You must log in first."), null);
 
         if (gameID == null || gameID.isEmpty())
-            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The provided game ID is not allowed."), null);
+            return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "The provided game ID is not allowed."), null);
 
         Account account = virtualViewAccounts.get(vv);
         String username = account.getUsername();
         for (GameController gc : gameControllers){
             if (gc.isPlayerOnline(account.getUsername())) {
                 if(gc.isGameStarted())
-                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Your account is already online in a game."), null);
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "Your account is already online in a game."), null);
                 else
-                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "Your account is already online in a lobby."), null);
+                    return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "Your account is already online in a lobby."), null);
             }
             if (gc.isGameStarted() && gc.getIdentifier().equals(gameID) && gc.getPlayers().contains(username))
                 found = gc;
@@ -261,10 +261,10 @@ public class Controller {
 
         if (found != null){
             found.reconnectPlayer(vv, account, gl);
-            return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID + " game joined!"), found);
+            return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID, "ok"), found);
         }
 
-        return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, "The game does not exist, or you do not have the permission to enter it."), null);
+        return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "The game does not exist, or you do not have the permission to enter it."), null);
     }
 
     /**

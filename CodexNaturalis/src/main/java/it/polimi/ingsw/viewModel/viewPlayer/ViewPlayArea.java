@@ -1,8 +1,9 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
+import it.polimi.ingsw.model.card.CardType;
+import it.polimi.ingsw.viewModel.immutableCard.BackPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
-import it.polimi.ingsw.model.card.PlayableCard;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.card.Item;
@@ -21,25 +22,25 @@ import java.util.stream.Collectors;
  */
 public final class ViewPlayArea implements Serializable {
     /**
-     * The list of playable cards in the player's hand.
+     * The list of back representations of playable cards in the player's hand.
      */
-    private final List<Item> hand;
+    private final List<BackPlayableCard> hand;
 
     /**
-     * The start card of the player.
+     * The immutable representation of the start card of the player.
      */
     private final ImmStartCard startCard;
 
     /**
-     * The map of played cards in the play area.
+     * The map of immutable representations of played cards in the play area.
      * The keys are the coordinates where the cards are placed.
      */
     private final Map<Coordinate, ImmPlayableCard> playedCards;
 
     public ViewPlayArea(PlayArea playArea) {
         this.hand = playArea.getHand().stream()
-                .map(PlayableCard::getPermanentResource)
-                .toList();
+                .map(BackPlayableCard::new)
+                .collect(Collectors.toList());
         this.startCard = new ImmStartCard(playArea.getStartCard());
         this.playedCards = playArea.getPlayedCards().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
@@ -48,7 +49,7 @@ public final class ViewPlayArea implements Serializable {
                 ));
     }
 
-    public List<Item> getHand() {
+    public List<BackPlayableCard> getHand() {
         return hand;
     }
 
@@ -63,8 +64,10 @@ public final class ViewPlayArea implements Serializable {
     public String printHand() {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");
-        for (Item item : this.hand) {
-            sb.append("  ").append(Item.itemToColor(item)).append("\n");
+        for (BackPlayableCard card : this.hand) {
+            Item item = card.getItem();
+            String cardType = card.getCardType().toString();
+            sb.append("  ").append(cardType).append(" - ").append(Item.itemToColor(item)).append("\n");
         }
         return sb.toString();
     }

@@ -344,10 +344,10 @@ public class VirtualView {
             Pair<ReconnectToGameEvent, GameController> response;
             response = controller.reconnectToGame(this, listener, gameID);
             gameController = response.value();
-            listener.update(response.key());
-            // TODO update from model if SUCCESS
+            if(response.key().getFeedback() == Feedback.FAILURE)
+                listener.update(response.key());
         } else
-            listener.update(new ReconnectToGameEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
+            listener.update(new ReconnectToGameEvent(Feedback.FAILURE, null, "Some of the event's parameters are null."));
     }
 
     /**

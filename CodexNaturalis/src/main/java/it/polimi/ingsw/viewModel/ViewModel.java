@@ -41,6 +41,8 @@ public class ViewModel implements Serializable {
 
     private GameStatus gameStatus;
 
+    private final boolean detectedLC;
+
     public ViewModel(Game model, String username) {
         this.gameId = model.getId();
         this.opponents = model.getPlayers().stream()
@@ -59,6 +61,7 @@ public class ViewModel implements Serializable {
                 .map(ImmObjectiveCard::new)
                 .toArray(ImmObjectiveCard[]::new);
         this.gameStatus = model.getGameStatus();
+        this.detectedLC = model.isDetectedLC();
         this.visibleResourceCards = Arrays.stream(model.getVisibleResourceCards())
                 .map(ImmPlayableCard::new)
                 .toArray(ImmPlayableCard[]::new);
@@ -117,6 +120,10 @@ public class ViewModel implements Serializable {
 
     public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    public boolean isDetectedLC() {
+        return detectedLC;
     }
 
     public void setTopResourceDeck(Item topResourceDeck) {

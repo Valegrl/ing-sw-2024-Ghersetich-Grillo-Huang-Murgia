@@ -62,6 +62,25 @@ public class GameListenersManager {
     }
 
     /**
+     * Notifies all listeners except the one associated with the given username with the given event.
+     *
+     * @param username the username of the player whose listener is not to be notified
+     * @param event the event to be sent to all other listeners
+     */
+    public void notifyAllExceptOne(String username, Event event) {
+        Set<String> onlinePlayers = game.getOnlinePlayers();
+        for (Map.Entry<String, GameListener> entry : this.listeners.entrySet()) {
+            if (!entry.getKey().equals(username) && onlinePlayers.contains(entry.getKey())) {
+                GameListener listener = entry.getValue();
+                if (listener != null)
+                    listener.update(event);
+                else
+                    throw new IllegalArgumentException("No listener found for the provided username");
+            }
+        }
+    }
+
+    /**
      * Notifies all listeners with the given event.
      *
      * @param event the event to be sent to all listeners

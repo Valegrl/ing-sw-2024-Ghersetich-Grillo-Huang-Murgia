@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
@@ -227,6 +229,7 @@ public class Game {
             }
         }
         //TODO turn + status update method (if not ended)
+        //TODO all version and allExceptOne version
     }
 
     /**
@@ -273,7 +276,7 @@ public class Game {
         if (points != 0)
             assignPoints(currPlayer, points);
 
-        // TODO update model to listeners from VirtualView!!!!!!!
+        // TODO update others' model + placeCardEvent
     }
 
     /**
@@ -320,7 +323,7 @@ public class Game {
 
         if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) this.detectedLC = true; //TODO update players
 
-        // TODO update model to listeners from VirtualView!!!!!!!
+        // TODO update others' model + drawCardEvent
     }
 
     /**
@@ -393,18 +396,24 @@ public class Game {
         Player onlinePlayer = players.stream()
                 .filter(Player::isOnline)
                 .findFirst()
-                .orElse(null);
-        if (onlinePlayer == null)
-            throw new IllegalStateException("At least one player must be online.");
+                .orElseThrow(() -> new IllegalStateException("At least one player must be online."));
 
         p.setOnline(true);
         listeners.changeListener(user, gl);
-        if (onlinePlayersNumber() == 2 && !gameStatus.equals(GameStatus.SETUP)) {
+        if (onlinePlayersNumber() == 2 && gameStatus != GameStatus.SETUP) {
             this.gameStatus = backupGameStatus;
             if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
-                newTurn(); //TODO version with no updates. I will do them after the return to the virtualView. (return value in reconnect for nextTurn call)
+                newTurn(); //TODO update all except reconnected player
         }
-        //TODO restart new actionTimer (waiting player) or nextTurn
+
+        if (gameStatus != GameStatus.ENDED) {
+            ViewModel model;
+            if (gameStatus == GameStatus.SETUP)
+                model = null;
+            else
+                model = new ViewModel(this, user);
+            listeners.notifyListener(user, new ReconnectToGameEvent(Feedback.SUCCESS, id, gameStatus, model, id + " game joined!"));
+        }
     }
 
     /**
@@ -511,7 +520,6 @@ public class Game {
         if (flipStartCard)
             player.getPlayArea().getStartCard().flipCard();
 
-        //TODO update listeners
         return true;
     }
 
@@ -529,7 +537,6 @@ public class Game {
             return false;
 
         player.setToken(token);
-        //TODO update listeners
         return true;
     }
 
@@ -612,7 +619,7 @@ public class Game {
      * Retrieves Game's scoreboard.
      * @return {@link Game#scoreboard}.
      */
-    public Map<Player, Integer> getScoreboard() { // TODO String instead of Player?
+    public Map<Player, Integer> getScoreboard() {
         return scoreboard;
     }
 
@@ -652,5 +659,9 @@ public class Game {
                 .filter(Player::isOnline)
                 .map(Player::getUsername)
                 .collect(Collectors.toSet());
+    }
+
+    public boolean isDetectedLC() {
+        return detectedLC;
     }
 }
