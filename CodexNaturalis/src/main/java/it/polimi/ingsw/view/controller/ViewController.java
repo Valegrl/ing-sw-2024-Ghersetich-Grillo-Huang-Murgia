@@ -17,7 +17,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessagesList;
-import it.polimi.ingsw.utils.GlobalChatMessage;
+import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
@@ -87,7 +87,7 @@ public class ViewController implements ViewEventReceiver {
      * The list of global chat messages for the current game.
      * A maximum of 50 messages is stored.
      */
-    private final ChatMessagesList<GlobalChatMessage> globalChatMessages = new ChatMessagesList<>(50); // FIXME config
+    private final ChatMessagesList<ChatMessage> chatMessages = new ChatMessagesList<>(50); // FIXME config
 
     /**
      * The list of private chat messages received by the user.
@@ -513,7 +513,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChatGMEvent event) {
-        globalChatMessages.add(event.getGlobalChatMessage());
+        chatMessages.add(event.getGlobalChatMessage());
         if (view.getState().inChat()) {
             // TODO update view
         }

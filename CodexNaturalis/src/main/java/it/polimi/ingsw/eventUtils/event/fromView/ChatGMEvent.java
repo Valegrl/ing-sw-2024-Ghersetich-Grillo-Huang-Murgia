@@ -2,7 +2,7 @@ package it.polimi.ingsw.eventUtils.event.fromView;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.utils.GlobalChatMessage;
+import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
@@ -19,59 +19,46 @@ public class ChatGMEvent extends FeedbackEvent {
     /**
      * The message to be sent.
      */
-    private final GlobalChatMessage globalChatMessage;
+    private final ChatMessage chatMessage;
 
     /**
      * Constructor for the client side (View).
-     * The sender is set to null.
+     * It initializes the chat message with the provided value.
      *
-     * @param globalChatMessage The message to be sent.
+     * @param chatMessage The message to be sent.
      */
-    public ChatGMEvent(GlobalChatMessage globalChatMessage) {
+    public ChatGMEvent(ChatMessage chatMessage) {
         super(id);
-        this.globalChatMessage = globalChatMessage;
+        this.chatMessage = chatMessage;
     }
 
     /**
      * Constructor for the server side (Controller).
+     * It initializes the chat message, feedback, and feedback message with the provided values.
      *
      * @param feedback The feedback about the operation.
      * @param message The feedback message to be sent.
-     * @param chatGMEvent The Event containing the chat message to be sent.
+     * @param chatMessage The chat message to be sent.
      */
-    public ChatGMEvent(Feedback feedback, String message, ChatGMEvent chatGMEvent) {
+    public ChatGMEvent(Feedback feedback, String message, ChatMessage chatMessage) {
         super(id, feedback, message);
-        this.globalChatMessage = chatGMEvent.getGlobalChatMessage();
+        this.chatMessage = chatMessage;
     }
 
     /**
-     * @return The username of the sender.
+     * @return The {@link ChatMessage} to be sent.
      */
-    public String getSender() {
-        return globalChatMessage.getSender();
-    }
-
-    /**
-     * @return The message to be sent.
-     */
-    public String getText() {
-        return globalChatMessage.getMessage();
-    }
-
-    /**
-     * @return The {@link GlobalChatMessage} to be sent.
-     */
-    public GlobalChatMessage getGlobalChatMessage() {
-        return globalChatMessage;
+    public ChatMessage getGlobalChatMessage() {
+        return chatMessage;
     }
 
     @Override
     public void receiveEvent(ViewEventReceiver viewEventReceiver) {
-
+        viewEventReceiver.evaluateEvent(this);
     }
 
     @Override
     public void receiveEvent(VirtualView virtualView) {
-
+        virtualView.evaluateEvent(this);
     }
 }

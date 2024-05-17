@@ -2,7 +2,6 @@ package it.polimi.ingsw.eventUtils.event.fromView;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.utils.GlobalChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
@@ -24,9 +23,9 @@ public class ChatPMEvent extends FeedbackEvent{
 
     /**
      * Constructor for the client side (View).
-     * The sender is set to null.
+     * It initializes the private chat message with the provided value.
      *
-     * @param privateChatMessage The message to be sent.
+     * @param privateChatMessage The private message to be sent.
      */
     public ChatPMEvent(PrivateChatMessage privateChatMessage) {
         super(id);
@@ -35,35 +34,15 @@ public class ChatPMEvent extends FeedbackEvent{
 
     /**
      * Constructor for the server side (Controller).
+     * It initializes the private chat message, feedback, and feedback message with the provided values.
      *
      * @param feedback The feedback about the operation.
      * @param message The feedback message to be sent.
-     * @param chatPMEvent The Event containing the message to be sent.
+     * @param privateChatMessage The private message to be sent.
      */
-    public ChatPMEvent(Feedback feedback, String message, ChatPMEvent chatPMEvent) {
+    public ChatPMEvent(Feedback feedback, String message, PrivateChatMessage privateChatMessage) {
         super(id, feedback, message);
-        this.privateChatMessage = chatPMEvent.getPrivateChatMessage();
-    }
-
-    /**
-     * @return The username of the sender.
-     */
-    public String getSender() {
-        return privateChatMessage.getSender();
-    }
-
-    /**
-     * @return The username of the recipient.
-     */
-    public String getRecipient() {
-        return privateChatMessage.getRecipient();
-    }
-
-    /**
-     * @return The message to be sent.
-     */
-    public String getText() {
-        return privateChatMessage.getMessage();
+        this.privateChatMessage = privateChatMessage;
     }
 
     /**
@@ -75,11 +54,11 @@ public class ChatPMEvent extends FeedbackEvent{
 
     @Override
     public void receiveEvent(ViewEventReceiver viewEventReceiver) {
-
+        viewEventReceiver.evaluateEvent(this);
     }
 
     @Override
     public void receiveEvent(VirtualView virtualView) {
-
+        virtualView.evaluateEvent(this);
     }
 }
