@@ -34,6 +34,8 @@ public abstract class ViewState {
 
     public boolean inGame() {return false;};
 
+    public boolean inChat() {return false;};
+
     protected int readChoiceFromInput(List<String> options) {
         int choice = -1;
 

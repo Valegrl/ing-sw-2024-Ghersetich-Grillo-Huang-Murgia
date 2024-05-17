@@ -2,6 +2,8 @@ package it.polimi.ingsw.eventUtils.event.fromView;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.utils.GlobalChatMessage;
+import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
 /**
@@ -16,54 +18,59 @@ public class ChatPMEvent extends FeedbackEvent{
     private final static String id = EventID.CHAT_PM.getID();
 
     /**
-     * The username of the player who sent the message.
+     * The private message to be sent.
      */
-    private final String sender;
-
-    /**
-     * The username of the player who will receive the message.
-     */
-    private final String recipient;
+    private final PrivateChatMessage privateChatMessage;
 
     /**
      * Constructor for the client side (View).
      * The sender is set to null.
      *
-     * @param recipient The username of the player who will receive the message.
-     * @param message The message to be sent.
+     * @param privateChatMessage The message to be sent.
      */
-    public ChatPMEvent(String recipient, String message) {
+    public ChatPMEvent(PrivateChatMessage privateChatMessage) {
         super(id);
-        this.sender = null;
-        this.recipient = recipient;
+        this.privateChatMessage = privateChatMessage;
     }
 
     /**
      * Constructor for the server side (Controller).
      *
      * @param feedback The feedback about the operation.
-     * @param sender The username of the player who sent the message.
-     * @param recipient The username of the player who will receive the message.
-     * @param message The message to be sent.
+     * @param message The feedback message to be sent.
+     * @param chatPMEvent The Event containing the message to be sent.
      */
-    public ChatPMEvent(Feedback feedback, String sender, String recipient, String message) {
+    public ChatPMEvent(Feedback feedback, String message, ChatPMEvent chatPMEvent) {
         super(id, feedback, message);
-        this.sender = sender;
-        this.recipient = recipient;
+        this.privateChatMessage = chatPMEvent.getPrivateChatMessage();
     }
 
     /**
      * @return The username of the sender.
      */
     public String getSender() {
-        return sender;
+        return privateChatMessage.getSender();
     }
 
     /**
      * @return The username of the recipient.
      */
     public String getRecipient() {
-        return recipient;
+        return privateChatMessage.getRecipient();
+    }
+
+    /**
+     * @return The message to be sent.
+     */
+    public String getText() {
+        return privateChatMessage.getMessage();
+    }
+
+    /**
+     * @return The {@link PrivateChatMessage} to be sent.
+     */
+    public PrivateChatMessage getPrivateChatMessage() {
+        return privateChatMessage;
     }
 
     @Override

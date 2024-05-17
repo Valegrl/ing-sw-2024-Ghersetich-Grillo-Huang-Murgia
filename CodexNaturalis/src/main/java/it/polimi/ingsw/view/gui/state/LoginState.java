@@ -223,19 +223,13 @@ public class LoginState extends ViewState {
 
     /*Vital methods, dont' delete*/
     private void login(String loginUsername, String loginPassword){
-        String user = loginUsername;
-        String psw = loginPassword;
-
-        Event event = new LoginEvent(user, psw);
+        Event event = new LoginEvent(loginUsername, loginPassword);
         controller.newViewEvent(event);
         waitForResponse();
     }
 
     private void register(String registerUsername, String registerPassword){
-        String user = registerUsername;
-        String psw = registerPassword;
-
-        Event event = new RegisterEvent(user, psw);
+        Event event = new RegisterEvent(registerUsername, registerPassword);
         controller.newViewEvent(event);
         waitForResponse();
     }

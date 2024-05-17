@@ -10,13 +10,13 @@ public class MainClient {
     private static View view;
 
     public MainClient(View view) {
-        this.view = view;
+        MainClient.view = view;
     }
 
     public static void main(String[] args) {
         System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
-        MainClient client = new MainClient( (( args.length>0 ) && args[0].equals("-cli")) ? new TUI() : new GUI());
-        client.view.run();
+        MainClient.view = (( args.length>0 ) && args[0].equals("-cli")) ? new TUI() : new GUI();
+        view.run();
     }
 
     public static void restartTUI() {

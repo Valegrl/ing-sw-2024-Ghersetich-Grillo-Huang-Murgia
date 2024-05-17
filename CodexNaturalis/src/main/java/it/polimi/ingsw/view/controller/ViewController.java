@@ -16,13 +16,14 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.ChatMessagesList;
+import it.polimi.ingsw.utils.GlobalChatMessage;
+import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 
 import java.rmi.RemoteException;
@@ -81,6 +82,18 @@ public class ViewController implements ViewEventReceiver {
      * The id of the joined lobby.
      */
     private String lobbyId;
+
+    /**
+     * The list of global chat messages for the current game.
+     * A maximum of 50 messages is stored.
+     */
+    private final ChatMessagesList<GlobalChatMessage> globalChatMessages = new ChatMessagesList<>(50); // FIXME config
+
+    /**
+     * The list of private chat messages received by the user.
+     * A maximum of 50 messages is stored.
+     */
+    private final ChatMessagesList<PrivateChatMessage> privateChatMessages = new ChatMessagesList<>(50); // FIXME config
 
     /**
      * The setup of the game.
@@ -500,12 +513,18 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChatGMEvent event) {
-
+        globalChatMessages.add(event.getGlobalChatMessage());
+        if (view.getState().inChat()) {
+            // TODO update view
+        }
     }
 
     @Override
     public void evaluateEvent(ChatPMEvent event) {
-
+        privateChatMessages.add(event.getPrivateChatMessage());
+        if (view.getState().inChat()) {
+            // TODO update view
+        }
     }
 
     @Override
