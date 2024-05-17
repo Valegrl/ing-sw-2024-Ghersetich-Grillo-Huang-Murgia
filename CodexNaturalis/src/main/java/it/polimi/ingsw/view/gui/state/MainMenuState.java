@@ -110,6 +110,25 @@ public class MainMenuState extends ViewState {
         scene.setRoot(root);
     }
 
+    @FXML
+    public void goRules(ActionEvent e) throws Exception {
+        Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules/Rules.fxml"));
+        RulesState controller = new RulesState((GUI)view);
+        loader.setController(controller);
+
+        Parent root = loader.load();
+        String css = this.getClass().getResource("/css/rules/Rules.css").toExternalForm();
+
+        Scene scene = stage.getScene();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
+        scene.setRoot(root);
+
+        transition(controller);
+    }
+
     @Override
     public boolean handleInput(int input) {
         return false;

@@ -1,0 +1,32 @@
+.pagination {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+
+}
+
+.pagination .control-box {
+    -fx-background-color: transparent;
+}
+
+.pagination .control-box .number-button {
+    -fx-background-color: #ebe1b8;
+    -fx-text-fill: #000000;
+    -fx-border-color: #c8b052;
+    -fx-font-size: 20px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-padding: 5px 10px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+
+}
+
+.pagination .control-box .number-button:hover {
+    -fx-background-color: #c8b052;
+}
+
+.pagination .control-box .number-button:selected {
+    -fx-background-color: #c8b052;
+    -fx-text-fill: #ffffff;
+
+}

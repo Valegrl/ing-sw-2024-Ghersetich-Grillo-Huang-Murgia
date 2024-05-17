@@ -8,7 +8,7 @@
     <VBox id="mainVbox" alignment="CENTER_LEFT" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0">
         <Button mnemonicParsing="false" onAction="#goChooseConnection" text="Play"/>
         <Button mnemonicParsing="false" onAction="#goOptions" text="Options"/>
-        <Button mnemonicParsing="false" text="Rules"/>
+        <Button mnemonicParsing="false" onAction="#goRules" text="Rules"/>
         <Button mnemonicParsing="false" onAction="#goCredits" text="Credits"/>
         <Button mnemonicParsing="false" onAction="#exit" text="Exit"/>
     </VBox>
