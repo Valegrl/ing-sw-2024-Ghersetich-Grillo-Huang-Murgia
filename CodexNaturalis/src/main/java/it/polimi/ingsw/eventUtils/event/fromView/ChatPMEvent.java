@@ -48,7 +48,7 @@ public class ChatPMEvent extends FeedbackEvent{
     /**
      * @return The {@link PrivateChatMessage} to be sent.
      */
-    public PrivateChatMessage getPrivateChatMessage() {
+    public PrivateChatMessage getChatMessage() {
         return privateChatMessage;
     }
 

@@ -513,7 +513,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChatGMEvent event) {
-        chatMessages.add(event.getGlobalChatMessage());
+        chatMessages.add(event.getChatMessage());
         if (view.getState().inChat()) {
             // TODO update view
         }
@@ -521,7 +521,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChatPMEvent event) {
-        privateChatMessages.add(event.getPrivateChatMessage());
+        privateChatMessages.add(event.getChatMessage());
         if (view.getState().inChat()) {
             // TODO update view
         }

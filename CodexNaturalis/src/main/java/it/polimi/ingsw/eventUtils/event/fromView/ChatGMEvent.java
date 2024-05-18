@@ -48,7 +48,7 @@ public class ChatGMEvent extends FeedbackEvent {
     /**
      * @return The {@link ChatMessage} to be sent.
      */
-    public ChatMessage getGlobalChatMessage() {
+    public ChatMessage getChatMessage() {
         return chatMessage;
     }
 
