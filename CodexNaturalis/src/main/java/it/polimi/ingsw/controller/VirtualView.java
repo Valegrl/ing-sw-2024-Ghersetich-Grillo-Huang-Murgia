@@ -12,12 +12,12 @@ import it.polimi.ingsw.eventUtils.event.internal.ClientDisconnectedEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.player.Token;
-import it.polimi.ingsw.utils.Account;
-import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.*;
 
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -370,13 +370,19 @@ public class VirtualView {
      */
     public void evaluateEvent(ChatGMEvent event){
         if(gameController != null) {
-            String message = event.getMessage();
-            if (message != null)
-                listener.update(gameController.chatGlobalMessage(this, message));
-            else
-                listener.update(new ChatGMEvent(Feedback.FAILURE, null, "Message is null."));
+            ChatMessage chatMessage = event.getChatMessage();
+            if (chatMessage != null) {
+                String text = chatMessage.getMessage();
+                LocalTime time = chatMessage.getTime();
+                UUID id = chatMessage.getMessage_id();
+                if (text != null && time != null && id != null)
+                    listener.update(gameController.chatGlobalMessage(this, chatMessage));
+                else
+                    listener.update(new ChatGMEvent(Feedback.FAILURE, "Some information in the message is null.", chatMessage));
+            } else
+                listener.update(new ChatGMEvent(Feedback.FAILURE, "Message is null.", null));
         } else {
-            listener.update(new ChatGMEvent(Feedback.FAILURE, null, "An unexpected action occurred."));
+            listener.update(new ChatGMEvent(Feedback.FAILURE, "An unexpected action occurred.", null));
         }
     }
 
@@ -387,14 +393,20 @@ public class VirtualView {
      */
     public void evaluateEvent(ChatPMEvent event){
         if(gameController != null) {
-            String recipient = event.getRecipient();
-            String message = event.getMessage();
-            if (recipient != null && message != null)
-                listener.update(gameController.chatPrivateMessage(this, recipient, message));
-            else
-                listener.update(new ChatPMEvent(Feedback.FAILURE, null, null, "Recipient or message is null."));
+            PrivateChatMessage pChatMessage = event.getChatMessage();
+            if (pChatMessage != null) {
+                String text = pChatMessage.getMessage();
+                LocalTime time = pChatMessage.getTime();
+                UUID id = pChatMessage.getMessage_id();
+                String recipient = pChatMessage.getRecipient();
+                if (text != null && time != null && id != null && recipient != null)
+                    listener.update(gameController.chatPrivateMessage(this, pChatMessage));
+                else
+                    listener.update(new ChatPMEvent(Feedback.FAILURE, "Some information in the message is null.", pChatMessage));
+            } else
+                listener.update(new ChatPMEvent(Feedback.FAILURE, "Recipient or message is null.", null));
         } else {
-            listener.update(new ChatPMEvent(Feedback.FAILURE, null, null, "An unexpected action occurred."));
+            listener.update(new ChatPMEvent(Feedback.FAILURE, "An unexpected action occurred.", null));
         }
     }
 

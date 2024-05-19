@@ -1021,26 +1021,27 @@ public class GameController {
      * The message is sent from the player associated with the provided VirtualView.
      *
      * @param vv The VirtualView associated with the player sending the message.
-     * @param message The message to be sent.
+     * @param chatMessage The message to be sent.
      * @return {@link ChatGMEvent} with feedback about the operation.
      * @throws RuntimeException if the GameListener associated with a player is null.
      */
-    protected synchronized ChatGMEvent chatGlobalMessage(VirtualView vv, String message){
+    protected synchronized ChatGMEvent chatGlobalMessage(VirtualView vv, ChatMessage chatMessage){
         if (virtualViewAccounts.containsKey(vv)) {
             String sender = virtualViewAccounts.get(vv).getUsername();
+            chatMessage.setSender(sender);
 
             for (Account account : joinedPlayers.keySet()) {
                 GameListener listener = joinedPlayers.get(account);
                 String other = account.getUsername();
                 if (listener != null) {
                     if (isPlayerOnline(other) && !sender.equals(other))
-                        listener.update(new ChatGMEvent(Feedback.SUCCESS, sender, message));
+                        listener.update(new ChatGMEvent(Feedback.SUCCESS, "New chat message.", chatMessage));
                 } else
                     throw new RuntimeException("Error with listener.");
             }
-            return new ChatGMEvent(Feedback.SUCCESS, sender, message);
+            return new ChatGMEvent(Feedback.SUCCESS, "New chat message.", chatMessage);
         }
-        return new ChatGMEvent(Feedback.FAILURE, null, "You are not in the game.");
+        return new ChatGMEvent(Feedback.FAILURE,"You are not in the game.", chatMessage);
     }
 
     /**
@@ -1048,31 +1049,32 @@ public class GameController {
      * The message is sent from the player associated with the provided VirtualView to the recipient.
      *
      * @param vv The VirtualView associated with the player sending the message.
-     * @param recipient The username of the player who will receive the message.
-     * @param message The message to be sent.
+     * @param pChatMessage The message to be sent.
      * @return {@link ChatPMEvent} with feedback about the operation.
      * @throws RuntimeException if the GameListener associated with a player is null.
      */
-    protected synchronized ChatPMEvent chatPrivateMessage(VirtualView vv, String recipient, String message){
+    protected synchronized ChatPMEvent chatPrivateMessage(VirtualView vv, PrivateChatMessage pChatMessage){
         if (virtualViewAccounts.containsKey(vv)) {
             String sender = virtualViewAccounts.get(vv).getUsername();
+            pChatMessage.setSender(sender);
+            String recipient = pChatMessage.getRecipient();
 
             for (Account account : joinedPlayers.keySet()) {
                 if (account.getUsername().equals(recipient)) {
                     GameListener listener = joinedPlayers.get(account);
                     if (listener != null) {
                         if(isPlayerOnline(account.getUsername())) {
-                            listener.update(new ChatPMEvent(Feedback.SUCCESS, sender, recipient, message));
-                            return new ChatPMEvent(Feedback.SUCCESS, sender, recipient, message);
+                            listener.update(new ChatPMEvent(Feedback.SUCCESS,"New chat message.", pChatMessage));
+                            return new ChatPMEvent(Feedback.SUCCESS, "New chat message.", pChatMessage);
                         } else
-                            return new ChatPMEvent(Feedback.FAILURE, null, recipient, "Player not online.");
+                            return new ChatPMEvent(Feedback.FAILURE, "Player not online.", pChatMessage);
                     } else
                         throw new RuntimeException("Error with listener.");
                 }
             }
-            return new ChatPMEvent(Feedback.FAILURE, null, recipient, "Player not found.");
+            return new ChatPMEvent(Feedback.FAILURE, "Player not found.", pChatMessage);
         }
-        return new ChatPMEvent(Feedback.FAILURE, null, recipient, "You are not in the game.");
+        return new ChatPMEvent(Feedback.FAILURE, "You are not in the game.", pChatMessage);
     }
 
     /**
