@@ -909,7 +909,16 @@ public class GameController {
      * list of game controllers in the Controller singleton.
      */
     private synchronized void deleteGame() {
-        actionTimer.cancel();
+        if (gameStarted) {
+            GameStatus gc = game.getGameStatus();
+            if (gc == GameStatus.SETUP) {
+                if (setupTokenTimer == null)
+                    setupCardsTimer.key().cancel();
+                else
+                    setupTokenTimer.key().cancel();
+            }else if (gc == GameStatus.WAITING)
+                waitingTimer.cancel();
+        }
         joinedPlayers.clear();
         virtualViewAccounts.clear();
         readyLobbyPlayers.clear();
