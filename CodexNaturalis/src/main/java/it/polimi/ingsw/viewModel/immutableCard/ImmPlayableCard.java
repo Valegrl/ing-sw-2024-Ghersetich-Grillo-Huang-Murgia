@@ -5,30 +5,26 @@ import it.polimi.ingsw.model.card.*;
 import java.util.Map;
 
 /**
- * This class represents an immutable version of a PlayableCard.
- * It extends the ImmEvaluableCard class and adds additional properties and methods related to the playability
- * of the card.
+ * This class represents an immutable version of a {@link PlayableCard}.
  */
 public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
     /**
-     * The permanentResource represents the resource that the card provides permanently.
+     * The card's permanent resource.
      */
     private final Item permanentResource;
 
     /**
-     * The corners is an array of Items representing the resources located at the corners of the card.
+     * The card's corners' resources.
      */
     private final Item[] corners;
 
     /**
-     * The type represents the type of the card.
+     * The card's type.
      */
     private final CardType type;
 
     /**
-     * Constructs an immutable representation of a playable card.
-     * This constructor takes a PlayableCard object as an argument and extracts its properties to create an
-     * ImmPlayableCard object.
+     * Constructs an immutable representation of the given {@link PlayableCard}.
      *
      * @param playableCard the playable card to represent
      */
@@ -40,39 +36,32 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
     }
 
     /**
-     * This method allows access to the permanent resource of the card, which represents the resource that the
-     * card provides permanently.
-     *
-     * @return the permanent resource of the card
+     * Retrieves the card's permanent resource.
+     * @return {@link ImmPlayableCard#permanentResource}.
      */
     public Item getPermanentResource() {
         return permanentResource;
     }
 
     /**
-     * This method allows access to the array of corner resources of the card, which represents the resources
-     * located at the corners of the card.
-     *
-     * @return a copy of the array of corner resources of the card
+     * Retrieves the card's corners' resources.
+     * @return {@link ImmPlayableCard#corners}.
      */
     public Item[] getCorners() {
         return corners.clone();
     }
 
     /**
-     * This method allows access to the type of the card.
-     *
-     * @return the type of the card
+     * Retrieves the card's type.
+     * @return {@link ImmPlayableCard#type}.
      */
     public CardType getType() {
         return type;
     }
 
     /**
-     * This method is overridden from the superclass and returns null in this class.
-     * It is meant to be overridden in subclasses where a constraint is applicable.
-     *
-     * @return null
+     * Retrieves the card's required items.
+     * @return The required items to assign points.
      */
     public Map<Item, Integer> getConstraint() {
         return null;
@@ -86,9 +75,14 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
         return null;
     }
 
+    /**
+     * Returns a string representing the card's details in a simplified manner during a Command Line Interface(TUI) game.
+     * @param indent The number of spaces to indent the string.
+     * @return A string representing the card's details.
+     */
     public String printSimpleCard(int indent) {
         StringBuilder sb = new StringBuilder();
-        //sb.append(" ".repeat(indent));
+        //sb.append(" ".repeat(indent)); TODO add flipped attribute to model's PlayableCard
         // if(!flipped) sb.append("Showing face: front\n");
         // else sb.append("Showing face: back\n");
         sb.append(" ".repeat(indent))

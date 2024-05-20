@@ -8,26 +8,23 @@ import it.polimi.ingsw.utils.Pair;
 import java.util.Map;
 
 /**
- * This class represents an immutable version of an EvaluableCard.
- * It extends the ImmCard class and adds additional properties and methods related to the evaluation of the card.
+ * This class represents an immutable version of an {@link EvaluableCard}.
  */
 public class ImmEvaluableCard extends ImmCard {
     /**
-     * The evaluator is used to evaluate the card.
+     * The card's evaluator.
      */
     private final Evaluator evaluator;
 
     /**
-     * The points represent the score value of the card.
+     * The card's points.
      */
     private final int points;
 
     /**
-     * Constructs an immutable representation of an evaluable card.
-     * This constructor takes an EvaluableCard object as an argument and extracts its properties to create an
-     * ImmEvaluableCard object.
+     * Constructs an immutable representation of an evaluable card from the given {@link EvaluableCard}.
      *
-     * @param evaluableCard the evaluable card to represent
+     * @param evaluableCard The evaluable card to represent.
      */
     public ImmEvaluableCard(EvaluableCard evaluableCard) {
         super(evaluableCard);
@@ -36,39 +33,32 @@ public class ImmEvaluableCard extends ImmCard {
     }
 
     /**
-     * This method allows access to the evaluator of the card, which is used to evaluate the card.
-     *
-     * @return the evaluator of the card
+     * Retrieves the card's evaluator.
+     * @return {@link ImmEvaluableCard#evaluator}.
      */
     public Evaluator getEvaluator() {
         return evaluator;
     }
 
     /**
-     * This method allows access to the points of the card, which represent the score value of the card.
-     *
-     * @return the points of the card
+     * Retrieves the card's points.
+     * @return {@link ImmEvaluableCard#points}.
      */
     public int getPoints() {
         return points;
     }
 
     /**
-     * This method allows access to the required pattern of the card, which is an array of pairs, each pair consists
-     * of a Coordinate and an Item.
-     * It represents the pattern that needs to be matched on the PlayArea for the card to be evaluated.
-     *
-     * @return a copy of the required pattern of the card
+     * Retrieves the card's required pattern.
+     * @return The required pattern to assign points.
      */
     public Pair<Coordinate, Item>[] getRequiredPattern() {
         return null;
     }
 
     /**
-     * This method allows access to the map of required items of the card, where the keys are Items and the values are
-     * the quantity of each item required.
-     *
-     * @return a copy of the map of required items of the card
+     * Retrieves the card's required items.
+     * @return The required items to assign points.
      */
     public Map<Item, Integer> getRequiredItems() {
         return null;

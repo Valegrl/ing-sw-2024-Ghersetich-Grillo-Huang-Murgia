@@ -132,64 +132,72 @@ public class ViewStartSetup implements Serializable {
     }
 
     /**
-     * @return an array of the player's secret objective cards
+     * Retrieves the secret objective cards.
+     * @return {@link ViewStartSetup#secretObjectiveCards}.
      */
     public ImmObjectiveCard[] getSecretObjectiveCards() {
         return secretObjectiveCards;
     }
 
     /**
-     * @return the player's immutable start card
+     * Retrieves the start card.
+     * @return {@link ViewStartSetup#startCard}.
      */
     public ImmStartCard getStartCard() {
         return startCard;
     }
 
     /**
-     * @return a list of the player's immutable playable cards representing the hand
+     * Retrieves the player's hand.
+     * @return {@link ViewStartSetup#hand}.
      */
     public List<ImmPlayableCard> getHand() {
         return hand;
     }
 
     /**
-     * @return an array of the player's immutable playable cards representing the visible gold cards
+     * Retrieves the visible gold cards.
+     * @return {@link ViewStartSetup#visibleGoldCards}.
      */
     public ImmPlayableCard[] getVisibleGoldCards() {
         return visibleGoldCards;
     }
 
     /**
-     * @return the player's gold deck item
+     * Retrieves the gold deck top item.
+     * @return {@link ViewStartSetup#goldDeck}.
      */
     public Item getGoldDeck() {
         return goldDeck;
     }
 
     /**
-     * @return an array of the player's immutable playable cards representing the visible resource cards
+     * Retrieves the visible resource cards.
+     * @return {@link ViewStartSetup#visibleResourceCards}.
      */
     public ImmPlayableCard[] getVisibleResourceCards() {
         return visibleResourceCards;
     }
 
     /**
-     * @return the player's resource deck item
+     * Retrieves the resource deck top item.
+     * @return {@link ViewStartSetup#resourceDeck}.
      */
     public Item getResourceDeck() {
         return resourceDeck;
     }
 
     /**
-     * @return an array of the player's immutable objective cards representing the common objectives
+     * Retrieves the common objectives.
+     * @return {@link ViewStartSetup#commonObjectives}.
      */
     public ImmObjectiveCard[] getCommonObjectives() {
         return commonObjectives;
     }
 
     /**
-     * @return A map where the keys are the usernames of the opponents, and the values are lists of BackPlayableCard
-     * representing the opponents' back-hand cards.
+     * Retrieves the opponents' back-cards from their hand.
+     * @return {@link ViewStartSetup#opponentsBackHandCards}.
      */
     public Map<String, List<BackPlayableCard>> getOpponentsBackHandCards() {
         return opponentsBackHandCards;

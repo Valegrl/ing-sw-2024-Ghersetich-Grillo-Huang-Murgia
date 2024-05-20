@@ -3,28 +3,19 @@ package it.polimi.ingsw.viewModel.immutableCard;
 import it.polimi.ingsw.model.card.*;
 
 /**
- * This class represents an immutable version of a ResourceCard.
- * It extends the ImmPlayableCard class and adds additional properties and methods related to the resource card
- * The class is final, so it can't be extended.
+ * This class represents an immutable version of a {@link ResourceCard}.
  */
 public final class ImmResourceCard extends ImmPlayableCard implements CardToString {
 
     /**
-     * Constructs an immutable representation of a resource card.
-     * This constructor takes a ResourceCard object as an argument and extracts its properties to create an
-     * ImmResourceCard object.
+     * Constructs an immutable representation of the given {@link ResourceCard}.
      *
-     * @param resourceCard the resource card to represent
+     * @param resourceCard The resource card to represent.
      */
     public ImmResourceCard(ResourceCard resourceCard) {
         super(resourceCard);
     }
 
-    /**
-     * Prints the front of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
     @Override
     public String printCard() {
         StringBuilder sb = new StringBuilder();
@@ -39,11 +30,6 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
         return sb.toString();
     }
 
-    /**
-     * Prints the back of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
     @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();

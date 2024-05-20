@@ -6,16 +6,16 @@ package it.polimi.ingsw.viewModel.immutableCard;
  */
 public interface CardToString {
     /**
-     * Prints the front of a card during a Command Line Interface(TUI) game.
+     * Returns a string representing the front of a card during a Command Line Interface(TUI) game.
      *
-     * @return a string representing the card details.
+     * @return A string representing the card details.
      */
     String printCard();
 
     /**
-     * Prints the back of a card during a Command Line Interface(TUI) game.
+     * Returns a string representing the back of a card during a Command Line Interface(TUI) game.
      *
-     * @return a string representing the card details.
+     * @return A string representing the card details.
      */
     default String printCardBack() {
         return "";

@@ -114,6 +114,26 @@ public class TUI implements View {
     public void setFXMLController(FXMLController controller){
     }
 
+    @Override
+    public boolean inGame() {
+        return state.inGame();
+    }
+
+    @Override
+    public boolean inLobby() {
+        return state.inLobby();
+    }
+
+    @Override
+    public boolean inMenu() {
+        return state.inMenu();
+    }
+
+    @Override
+    public boolean inChat() {
+        return state.inChat();
+    }
+
     public ViewController getController() {
         return controller;
     }

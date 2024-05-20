@@ -8,7 +8,6 @@ import java.util.Objects;
 /**
  * This class represents an immutable version of a Card.
  * It is used to provide a read-only view of the card data.
- * The class is final, so it can't be extended.
  */
 public class ImmCard implements Serializable {
     /**
@@ -17,18 +16,17 @@ public class ImmCard implements Serializable {
     private final String id;
 
     /**
-     * Constructs an immutable representation of a card.
+     * Constructs an immutable representation of a card from a model's {@link Card}.
      *
-     * @param card the card to represent
+     * @param card The card to represent.
      */
     public ImmCard(Card card) {
         this.id = card.getId();
     }
 
     /**
-     * This method allows access to the ID of the card, which is a unique string that identifies the card.
-     *
-     * @return the unique identifier of the card
+     * Retrieves the card's unique identifier.
+     * @return {@link ImmCard#id}.
      */
     public String getId() {
         return id;

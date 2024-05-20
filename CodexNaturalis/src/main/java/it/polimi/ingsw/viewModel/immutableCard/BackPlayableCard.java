@@ -8,23 +8,23 @@ import java.io.Serializable;
 
 /**
  * Represents the back of a playable card in the game. This class is used to hide the details of a card from opponents.
- * It only exposes the card type and the permanent resource (item) of the card.
+ * It only exposes the card type and the permanent resource of the card.
  */
 public class BackPlayableCard implements Serializable {
     /**
-     * The type of the card.
+     * The card's type.
      */
     private final CardType cardType;
 
     /**
-     * The permanent resource (item) of the card.
+     * The permanent resource ({@link Item}) of the card.
      */
     private final Item item;
 
     /**
      * Constructs a new BackPlayableCard with the specified card type and item.
      *
-     * @param c the original PlayableCard from which to create the BackPlayableCard
+     * @param c The original PlayableCard from which to create the BackPlayableCard.
      */
     public BackPlayableCard(PlayableCard c) {
         this.cardType = c.getCardType();
@@ -32,14 +32,16 @@ public class BackPlayableCard implements Serializable {
     }
 
     /**
-     * @return The CardType enum value representing the type of this card.
+     * Retrieves the card's type.
+     * @return {@link BackPlayableCard#cardType}.
      */
     public CardType getCardType() {
         return cardType;
     }
 
     /**
-     * @return The Item object representing the permanent resource of this card.
+     * Retrieves the card's permanent resource.
+     * @return {@link BackPlayableCard#item}.
      */
     public Item getItem() {
         return item;

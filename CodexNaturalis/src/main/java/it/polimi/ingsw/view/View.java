@@ -7,11 +7,15 @@ public interface View {
 
     void run();
 
-    void setState(ViewState state);
-
     void setFXMLController(FXMLController controller);
 
-    //TODO add signature for specific-to-view methods that are called from controller EventReceiver
+    boolean inGame();
+
+    boolean inLobby();
+
+    boolean inMenu();
+
+    boolean inChat();
 
     void printMessage(String message);
 
@@ -24,6 +28,8 @@ public interface View {
     String getUsername();
 
     ViewState getState();
+
+    void setState(ViewState state);
 
     void setUsername(String username);
 

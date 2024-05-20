@@ -8,26 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class represents an immutable version of a GoldCard.
- * It extends the ImmPlayableCard class and adds additional properties and methods related to the gold card.
- * The class is final, so it can't be extended.
+ * This class represents an immutable version of a {@link GoldCard}.
  */
 public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     /**
-     * The constraint is a map where the keys are Items and the values are the quantity of each item required as
-     * a constraint.
+     * The constraint needed to place this card.
      */
     private final Map<Item, Integer> constraint;
 
     /**
-     * The requiredItems is a map where the keys are Items and the values are the quantity of each item required.
+     * The requiredItems needed to score points.
      */
     private final Map<Item, Integer> requiredItems;
 
     /**
-     * Constructs an immutable representation of a gold card.
-     * This constructor takes a GoldCard object as an argument and extracts its properties to create an
-     * ImmGoldCard object.
+     * Constructs an immutable representation of the given {@link GoldCard}.
      *
      * @param goldCard the gold card to represent
      */
@@ -46,11 +41,6 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
         return Map.copyOf(requiredItems);
     }
 
-    /**
-     * Prints the front of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
     @Override
     public String printCard() {
         StringBuilder sb = new StringBuilder();
@@ -83,11 +73,6 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
         return sb.toString();
     }
 
-    /**
-     * Prints the back of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
     @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();

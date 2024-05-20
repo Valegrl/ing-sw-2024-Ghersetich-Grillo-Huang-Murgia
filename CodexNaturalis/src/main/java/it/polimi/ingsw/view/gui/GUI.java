@@ -72,17 +72,32 @@ public class GUI extends Application implements View {
         this.FXMLController= nextController;
     }
 
+    @Override
+    public boolean inGame() {
+        return FXMLController.inGame();
+    }
+
+    @Override
+    public boolean inLobby() {
+        return FXMLController.inLobby();
+    }
+
+    @Override
+    public boolean inMenu() {
+        return FXMLController.inMenu();
+    }
+
+    @Override
+    public boolean inChat() {
+        return FXMLController.inChat();
+    }
+
     public FXMLController getFXMLController(){
         return this.FXMLController;
     }
 
     public Stage getStage(){
         return this.stage;
-    }
-
-    @Override
-    public void setState(ViewState state){
-        //this.state = state;
     }
 
     @Override
@@ -114,6 +129,11 @@ public class GUI extends Application implements View {
     public ViewState getState() {
         //return state;
         return null;
+    }
+
+    @Override
+    public void setState(ViewState state) {
+        // this.state = state;
     }
 
     @Override

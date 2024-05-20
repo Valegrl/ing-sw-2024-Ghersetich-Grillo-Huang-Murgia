@@ -8,37 +8,33 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * This class represents an immutable version of a StartCard.
- * It extends the ImmCard class and adds additional properties and methods related to the start card.
+ * This class represents an immutable version of a {@link StartCard}.
  */
 public final class ImmStartCard extends ImmCard implements CardToString {
     /**
-     * The backPermanentResources is a list of Items representing the resources that the card provides permanently
-     * on its back side.
+     * The card's permanent resources on the back side.
      */
     private final List<Item> backPermanentResources;
 
     /**
-     * The frontCorners is an array of Items representing the resources located at the corners of the card's front side.
+     * The card's front corners' Items.
      */
     private final Item[] frontCorners;
 
     /**
-     * The backCorners is an array of Items representing the resources located at the corners of the card's back side.
+     * The card's back corners' Items.
      */
     private final Item[] backCorners;
 
     /**
-     * The flipped is a boolean indicating whether the card is flipped or not.
+     * Boolean value that indicates if the card is flipped.
      */
     private final boolean flipped;
 
     /**
-     * Constructs an immutable representation of a start card.
-     * This constructor takes a StartCard object as an argument and extracts its properties to create an ImmStartCard
-     * object.
+     * Constructs an immutable representation of the given {@link StartCard}.
      *
-     * @param startCard the start card to represent
+     * @param startCard The start card to represent.
      */
     public ImmStartCard(StartCard startCard) {
         super(startCard);
@@ -49,49 +45,38 @@ public final class ImmStartCard extends ImmCard implements CardToString {
     }
 
     /**
-     * This method allows access to the list of back permanent resources of the card, which represents the resources
-     * that the card provides permanently on its back side.
-     *
-     * @return the back permanent resources of the card
+     * Retrieves the card's permanent resources on the back side.
+     * @return {@link ImmStartCard#backPermanentResources}.
      */
     public List<Item> getBackPermanentResources() {
         return backPermanentResources;
     }
 
     /**
-     * This method allows access to the array of front corner resources of the card, which represents the resources
-     * located at the corners of the card's front side.
-     *
-     * @return a copy of the array of front corner resources of the card
+     * Retrieves the card's front corners' Items.
+     * @return {@link ImmStartCard#frontCorners}.
      */
     public Item[] getFrontCorners() {
         return frontCorners.clone();
     }
 
     /**
-     * This method allows access to the array of back corner resources of the card, which represents the resources
-     * located at the corners of the card's back side.
-     *
-     * @return a copy of the array of back corner resources of the card
+     * Retrieves the card's back corners' Items.
+     * @return {@link ImmStartCard#backCorners}.
      */
     public Item[] getBackCorners() {
         return backCorners.clone();
     }
 
     /**
-     * This method allows access to the flipped status of the card, which indicates whether the card is flipped or not.
-     *
-     * @return the flipped status of the card
+     * Retrieves the card's flipped status.
+     * @return {@link ImmStartCard#flipped}.
      */
     public boolean isFlipped() {
         return flipped;
     }
 
-    /**
-     * Prints the front of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
+    @Override
     public String printCard() {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");
@@ -102,11 +87,7 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         return sb.toString();
     }
 
-    /**
-     * Prints the back of a card during a Command Line Interface(TUI) game.
-     *
-     * @return a string representing the card details.
-     */
+    @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");
@@ -125,6 +106,11 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representing the card's details in a simplified manner during a Command Line Interface(TUI) game.
+     * @param indent The number of spaces to indent the string.
+     * @return A string representing the card's details.
+     */
     public String printSimpleCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append(" ".repeat(indent));
@@ -137,6 +123,10 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representing the card's details for the setup phase during a Command Line Interface(TUI) game.
+     * @return A string representing the card's details.
+     */
     public String printSetupStartCard() {
         int indent = 9;
         StringBuilder sb = new StringBuilder();
@@ -149,6 +139,12 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         return sb.toString();
     }
 
+    /**
+     * Helper method to print the card's details in a simplified manner.
+     * @param indent The number of spaces to indent the string.
+     * @param flipped The boolean value that indicates if the card is flipped.
+     * @return A string representing the card's details.
+     */
     private String printSimpleCardHelper(int indent, boolean flipped) {
         StringBuilder sb = new StringBuilder();
         Item[] corners;
