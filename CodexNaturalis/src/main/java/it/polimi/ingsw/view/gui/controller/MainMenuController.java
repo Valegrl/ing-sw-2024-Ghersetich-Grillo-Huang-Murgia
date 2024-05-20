@@ -143,7 +143,7 @@ public class MainMenuController extends FXMLController {
     @FXML
     public void goRules(ActionEvent e) throws Exception {
 
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules/Rules.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules/Rules.fxml"));
         Parent root = loader.load();
         RulesController controller = loader.getController();
 
@@ -151,8 +151,6 @@ public class MainMenuController extends FXMLController {
         scene.setRoot(root);
 
         transition(controller);
-
-         */
 
     }
 
