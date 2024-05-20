@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.gui.state;
+package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.view.ViewState;
+import it.polimi.ingsw.view.FXMLController;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,16 +19,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class RulesState extends ViewState {
+public class RulesController extends FXMLController {
     @FXML
     private Pagination pagination;
     @FXML
     private ImageView imageView;
 
-    private Image[] images = new Image[6];
+    private final Image[] images = new Image[6];
 
-    public RulesState(GUI view){
-        super(view);
+    public RulesController(){
+        super();
         images[0] = new Image("/images/background/rules/rules1.png");
         images[1] = new Image("/images/background/rules/rules2.png");
         images[2] = new Image("/images/background/rules/rules3.png");
@@ -35,6 +36,7 @@ public class RulesState extends ViewState {
         images[4] = new Image("/images/background/rules/rules5.png");
         images[5] = new Image("/images/background/rules/rules6.png");
     }
+
 
 
     @FXML
@@ -45,6 +47,7 @@ public class RulesState extends ViewState {
         pagination.getStylesheets().add(getClass().getResource("/css/rules/Pagination.css").toExternalForm());
     }
 
+
     private Node createPage(int pageIndex) {
         VBox box = new VBox();
         Label label = new Label("Page " + (pageIndex + 1));
@@ -53,13 +56,11 @@ public class RulesState extends ViewState {
     }
 
     @Override
-    public void run() {
-        imageView.setImage(images[0]);
-    }
+    public void run(View view, Stage stage) {
+        this.view = view;
+        this.stage = stage;
 
-    @Override
-    public boolean handleInput(int input) {
-        return false;
+        imageView.setImage(images[0]);
     }
 
     @Override
@@ -75,19 +76,34 @@ public class RulesState extends ViewState {
 
     @FXML
     public void goBackMain(ActionEvent e){
+        /*
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
-            MainMenuState controller = new MainMenuState((GUI) view);
+            MainMenuController controller = new MainMenuController((GUI) view);
             loader.setController(controller);
             Parent root = loader.load();
-            String css = this.getClass().getResource("/css/main/MainMenu.css").toExternalForm();
+            String css = this.getClass().getResource("/css/main/Main.css").toExternalForm();
 
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
             scene.getStylesheets().add(css);
             scene.setRoot(root);
+        }
+        catch (IOException exception){
+            exception.printStackTrace();
+        }
+         */
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
+            Parent root = loader.load();
+            MainMenuController nextController = loader.getController();
+
+            Scene scene = stage.getScene();
+            scene.setRoot(root);
+
+            transition(nextController);
         }
         catch (IOException exception){
             exception.printStackTrace();

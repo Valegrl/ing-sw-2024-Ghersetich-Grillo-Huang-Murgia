@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.main.MainClient;
+import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -104,6 +105,9 @@ public class TUI implements View {
         }
         waitingForInput = false;
         return input;
+    }
+
+    public void setFXMLController(FXMLController controller){
     }
 
     public ViewController getController() {

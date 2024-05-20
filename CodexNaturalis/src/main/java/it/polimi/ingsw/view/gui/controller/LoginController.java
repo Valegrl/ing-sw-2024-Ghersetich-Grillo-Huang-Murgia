@@ -1,40 +1,51 @@
-package it.polimi.ingsw.view.gui.state;
+package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
+import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.ViewState;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginState extends ViewState {
+public class LoginController extends FXMLController {
 
     @FXML
-    TextField loginUsernameField;
+    private AnchorPane loginMenuFX;
 
     @FXML
-    PasswordField loginPasswordField;
+    private AnchorPane loginSubmitMenuFX;
 
     @FXML
-    TextField registerUsernameField;
+    private AnchorPane registerSubmitMenuFX;
 
     @FXML
-    PasswordField registerPasswordField;
+    private TextField loginUsernameField;
+
+    @FXML
+    private PasswordField loginPasswordField;
+
+    @FXML
+    private TextField registerUsernameField;
+
+    @FXML
+    private PasswordField registerPasswordField;
 
     @FXML
     private Label errorRegistration;
@@ -43,12 +54,27 @@ public class LoginState extends ViewState {
     private Label errorLogin;
 
 
-    public LoginState(View view) {
-        super(view);
+    public LoginController() {
+        super();
     }
 
     @Override
-    public void run() {
+    public void run(View view, Stage stage) {
+        this.view = view;
+        this.stage = stage;
+        this.controller = view.getController();
+
+        loginPasswordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submitLogin(new ActionEvent());
+            }
+        });
+
+        registerPasswordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submitRegister(new ActionEvent());
+            }
+        });
     }
 
     @FXML
@@ -64,7 +90,6 @@ public class LoginState extends ViewState {
             registerPasswordField.clear();
             errorRegistration.setText("");
             register(registerUsername, registerPassword);
-
         }
     }
 
@@ -86,20 +111,15 @@ public class LoginState extends ViewState {
 
     @FXML
     public void login(ActionEvent e){
+        /*
         try {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
-            LoginState controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
 
-            loginPasswordField.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    submitLogin(new ActionEvent());
-                }
-            });
+            Parent root = loader.load();
+            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
+
+
 
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
@@ -110,10 +130,18 @@ public class LoginState extends ViewState {
         catch (IOException exception){
             exception.printStackTrace();
         }
+
+         */
+
+        loginMenuFX.setVisible(false);
+        loginMenuFX.setManaged(false);
+        loginSubmitMenuFX.setVisible(true);
+        loginSubmitMenuFX.setManaged(true);
     }
 
     @FXML
     public void register(ActionEvent e){
+        /*
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
 
@@ -121,7 +149,7 @@ public class LoginState extends ViewState {
             LoginState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
 
             registerPasswordField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
@@ -138,19 +166,25 @@ public class LoginState extends ViewState {
         catch (IOException exception){
             exception.printStackTrace();
         }
+         */
 
+        loginMenuFX.setVisible(false);
+        loginMenuFX.setManaged(false);
+        registerSubmitMenuFX.setVisible(true);
+        registerSubmitMenuFX.setManaged(true);
     }
 
     @FXML
     public void goBack(ActionEvent e){
+        /*
         try {
             Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginState.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginMenu.fxml"));
             LoginState controller = this;
             loader.setController(controller);
             Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
 
             Scene scene = stage.getScene();
             scene.getStylesheets().clear();
@@ -161,12 +195,15 @@ public class LoginState extends ViewState {
         catch (IOException exception){
             exception.printStackTrace();
         }
+         */
+        loginMenuFX.setVisible(true);
+        loginMenuFX.setManaged(true);
+        loginSubmitMenuFX.setVisible(false);
+        loginSubmitMenuFX.setManaged(false);
+        registerSubmitMenuFX.setVisible(false);
+        registerSubmitMenuFX.setManaged(false);
     }
 
-    @Override
-    public boolean handleInput(int input) {
-        return false;
-    }
 
     /*Vital method, don't delete*/
     @Override
@@ -189,11 +226,11 @@ public class LoginState extends ViewState {
                     Platform.runLater(() -> {
                         try {
                             Stage stage = (Stage) registerUsernameField.getScene().getWindow();
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
-                            LoginState controller = this;
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginForm.fxml"));
+                            //LoginState controller = this;
                             loader.setController(controller);
                             Parent root = loader.load();
-                            String css = this.getClass().getResource("/css/loginState/LoginState.css").toExternalForm();
+                            String css = this.getClass().getResource("/css/login/Login.css").toExternalForm();
 
                             loginPasswordField.setOnKeyPressed(event -> {
                                 if (event.getCode() == KeyCode.ENTER) {
@@ -216,7 +253,7 @@ public class LoginState extends ViewState {
                     Platform.runLater(() -> errorRegistration.setText("Error " + message));
                     showResponseMessage("Registration failed: " + message, 2000);
                 }
-                run();
+                run(view, stage);
                 break;
         }
     }
@@ -238,4 +275,5 @@ public class LoginState extends ViewState {
     public boolean inMenu() {
         return true;
     }
+
 }

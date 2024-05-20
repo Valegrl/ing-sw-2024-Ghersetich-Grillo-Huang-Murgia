@@ -6,7 +6,8 @@
 
 <?import javafx.scene.control.Pagination?>
 
-<AnchorPane id="AnchorPane" style="-fx-background-image: url('/images/background/CodexNaturalisBackgroundDark.png'); -fx-background-repeat: stretch; -fx-background-size: cover; -fx-background-position: center center;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21">
+<AnchorPane id="AnchorPane" style="-fx-background-image: url('/images/background/CodexNaturalisBackgroundDark.png'); -fx-background-repeat: stretch; -fx-background-size: cover;
+-fx-background-position: center center;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" stylesheets="@../../css/rules/Rules.css">
     <ImageView fx:id="imageView" fitHeight="750" fitWidth="1500" layoutX="210.0" layoutY="55.0" />
     <Pagination fx:id="pagination" pageCount="6" AnchorPane.leftAnchor="300" AnchorPane.rightAnchor="300" layoutY="865.0" />
     <Button fx:id="backButton" AnchorPane.leftAnchor="900" AnchorPane.rightAnchor="900" layoutY="975.0" text="BACK" onAction="#goBackMain" />

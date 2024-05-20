@@ -9,6 +9,8 @@ public interface View {
 
     void setState(ViewState state);
 
+    void setFXMLController(FXMLController controller);
+
     //TODO add signature for specific-to-view methods that are called from controller EventReceiver
 
     void printMessage(String message);

@@ -98,7 +98,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
             connectionOpen = true;
             startPing();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         }
         new Thread(() -> {
             RemoteServerSocket serverSocket = (RemoteServerSocket) server;

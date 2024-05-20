@@ -15,8 +15,14 @@ Text{
 .text-input{
     -fx-text-fill: white;
     -fx-background-color: rgba(20, 20, 20, 0.5);
-    -fx-font-family: "Bebas Neue Normal Bold";
-    -fx-font-size: 40;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 50;
+}
+
+.text-field{
+    -fx-font-size: 40.0;
+    -fx-background-radius: 18 18 18 18;
+    -fx-border-radius: 18 18 18 18;
 }
 
 .button{

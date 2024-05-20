@@ -3,7 +3,8 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
 }
-#mainVbox{
+
+#optionsVbox{
     -fx-padding: 0 0 0 20;
 }
 
