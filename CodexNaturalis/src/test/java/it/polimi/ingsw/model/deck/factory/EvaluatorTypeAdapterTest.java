@@ -12,15 +12,15 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class EvaluatorDeserializerTest {
-    private EvaluatorDeserializer evaluatorDeserializer;
+public class EvaluatorTypeAdapterTest {
+    private EvaluatorTypeAdapter evaluatorTypeAdapter;
     private JsonDeserializationContext context;
     private JsonElement jsonElement;
     private JsonObject jsonObject;
 
     @BeforeEach
     void setUp() {
-        evaluatorDeserializer = new EvaluatorDeserializer();
+        evaluatorTypeAdapter = new EvaluatorTypeAdapter();
         context = Mockito.mock(JsonDeserializationContext.class);
         jsonElement = Mockito.mock(JsonElement.class);
         jsonObject = new JsonObject();
@@ -31,7 +31,7 @@ public class EvaluatorDeserializerTest {
     void testDeserializeBasicEvaluator() {
         jsonObject.addProperty("type", "BasicEvaluator");
         when(context.deserialize(jsonElement, BasicEvaluator.class)).thenReturn(new BasicEvaluator());
-        Evaluator result = evaluatorDeserializer.deserialize(jsonElement, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
         assertInstanceOf(BasicEvaluator.class, result);
     }
 
@@ -39,7 +39,7 @@ public class EvaluatorDeserializerTest {
     void testDeserializeCornerEvaluator() {
         jsonObject.addProperty("type", "CornerEvaluator");
         when(context.deserialize(jsonElement, CornerEvaluator.class)).thenReturn(new CornerEvaluator());
-        Evaluator result = evaluatorDeserializer.deserialize(jsonElement, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
         assertInstanceOf(CornerEvaluator.class, result);
     }
 
@@ -47,7 +47,7 @@ public class EvaluatorDeserializerTest {
     void testDeserializeItemEvaluator() {
         jsonObject.addProperty("type", "ItemEvaluator");
         when(context.deserialize(jsonElement, ItemEvaluator.class)).thenReturn(new ItemEvaluator());
-        Evaluator result = evaluatorDeserializer.deserialize(jsonElement, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
         assertInstanceOf(ItemEvaluator.class, result);
     }
 
@@ -55,20 +55,20 @@ public class EvaluatorDeserializerTest {
     void testDeserializePatternEvaluator() {
         jsonObject.addProperty("type", "PatternEvaluator");
         when(context.deserialize(jsonElement, PatternEvaluator.class)).thenReturn(new PatternEvaluator());
-        Evaluator result = evaluatorDeserializer.deserialize(jsonElement, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
         assertInstanceOf(PatternEvaluator.class, result);
     }
 
     @Test
     void testDeserializeUnknownEvaluator() {
         jsonObject.addProperty("type", "UnknownEvaluator");
-        Evaluator result = evaluatorDeserializer.deserialize(jsonElement, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
         assertNull(result);
     }
 
     @Test
     void testDeserializeNullJsonElement() {
-        Evaluator result = evaluatorDeserializer.deserialize(null, Evaluator.class, context);
+        Evaluator result = evaluatorTypeAdapter.deserialize(null, Evaluator.class, context);
         assertNull(result);
     }
 }

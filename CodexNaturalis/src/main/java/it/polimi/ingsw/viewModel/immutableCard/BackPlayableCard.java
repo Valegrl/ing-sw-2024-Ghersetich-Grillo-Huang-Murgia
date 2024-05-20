@@ -4,11 +4,13 @@ import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.PlayableCard;
 
+import java.io.Serializable;
+
 /**
  * Represents the back of a playable card in the game. This class is used to hide the details of a card from opponents.
  * It only exposes the card type and the permanent resource (item) of the card.
  */
-public class BackPlayableCard {
+public class BackPlayableCard implements Serializable {
     /**
      * The type of the card.
      */

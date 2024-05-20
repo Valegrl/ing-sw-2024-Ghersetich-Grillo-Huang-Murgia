@@ -39,9 +39,12 @@ public class LobbyState extends ViewState {
                 toggleReadyStatus();
                 break;
             case 2:
-                quitLobby();
+                transition(new ChatState(view, this));
                 break;
             case 3:
+                quitLobby();
+                break;
+            case 4:
                 if (controller.isLobbyLeader()) {
                     kickPlayer();
                 }
@@ -109,6 +112,7 @@ public class LobbyState extends ViewState {
         view.printMessage("Choose an option (lobby leader):");
         int choice = readChoiceFromInput(Arrays.asList(
                 readyStatusString
+                , "Open chat"
                 , "Leave lobby"
                 , "Kick player"));
 
@@ -121,6 +125,7 @@ public class LobbyState extends ViewState {
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 readyStatusString
+                , "Open chat"
                 , "Leave lobby"));
 
         handleInput(choice);

@@ -2,13 +2,15 @@ package it.polimi.ingsw.utils;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
 /**
  * This class represents a global chat message in the application.
  * Each ChatMessage has a sender, a message content, a timestamp, and a unique message ID.
  */
-public class ChatMessage implements Serializable {
+public class ChatMessage implements Serializable, Comparable<ChatMessage> {
 
     /**
      * The timestamp of when the message was created.
@@ -82,6 +84,11 @@ public class ChatMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + sender + "]: " + message;
+        return time.format(DateTimeFormatter.ofPattern("HH:mm")) + " [" + sender + "]: " + message;
+    }
+
+    @Override
+    public int compareTo(ChatMessage o) {
+        return this.time.compareTo(o.time);
     }
 }

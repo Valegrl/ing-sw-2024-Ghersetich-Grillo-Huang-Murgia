@@ -1,6 +1,5 @@
 package it.polimi.ingsw.utils;
 
-import java.awt.*;
 import java.util.LinkedList;
 
 public class ChatMessagesList<E> extends LinkedList<E> {
@@ -18,11 +17,10 @@ public class ChatMessagesList<E> extends LinkedList<E> {
         return super.add(message);
     }
 
-    public String printMessages() {
+    @Override
+    public String toString() {
         StringBuilder messages = new StringBuilder();
-        for (E message : this) {
-            messages.append(message).append("\n");
-        }
+        this.stream().sorted().forEach(message -> messages.append(message).append("\n"));
         messages.append("\n");
         return messages.toString();
     }

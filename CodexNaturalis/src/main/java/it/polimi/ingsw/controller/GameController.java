@@ -248,7 +248,7 @@ public class GameController {
                     return new PlayerUnreadyEvent(Feedback.SUCCESS, "You were already unready.");
                 } else {
                     readyLobbyPlayers.put(account.getUsername(), false);
-                    notifyAllLobbyPlayersExcept(account.getUsername(), "The player " + account.getUsername() + " is unready!");
+                    notifyAllLobbyPlayersExcept(account.getUsername(), "Player " + account.getUsername() + " is unready!");
                     return new PlayerUnreadyEvent(Feedback.SUCCESS, "You are now unready!");
                 }
             }
@@ -330,7 +330,7 @@ public class GameController {
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         p.setChosen(true);
 
-                                        notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has chosen a card setup.");
+                                        notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has chosen a card setup.");
                                         return new ChosenCardsSetupEvent(Feedback.SUCCESS, "Your cards setup has been chosen!");
                                     }
                                 return new ChosenCardsSetupEvent(Feedback.FAILURE, "The objective card ID is not valid.");
@@ -438,7 +438,7 @@ public class GameController {
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         pts.setToken(color);
 
-                                        String mes = "The player " + username + " has chosen the " + color.getColor() + " token.";
+                                        String mes = "Player " + username + " has chosen the " + color.getColor() + " token.";
                                         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                                             String other = entry.getKey().getUsername();
                                             if (isPlayerOnline(other) && !username.equals(other))
@@ -564,7 +564,7 @@ public class GameController {
                                 nextTurn(); //TODO check game.newTurn for updates
                             } else
                                 this.startedMove = true;
-                            notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has placed a card.");
+                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has placed a card.");
                             return new PlaceCardEvent(Feedback.SUCCESS, "The card has been placed successfully!");
                             //TODO update model from virtualView to everyone
                         } catch (Exception e) {
@@ -597,7 +597,7 @@ public class GameController {
                         try {
                             game.drawCard(type, index);
                             nextTurn(); //TODO check game.newTurn for updates
-                            notifyAllOnlineGamePlayersExcept(username, "The player " + username + " has drawn a card.");
+                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has drawn a card.");
                             return new DrawCardEvent(Feedback.SUCCESS, "The card has been drawn successfully!");
                             //TODO update model from virtualView to everyone
                         } catch (Exception e) {
@@ -668,7 +668,7 @@ public class GameController {
                 joinedPlayers.remove(account);
                 virtualViewAccounts.remove(vv);
 
-                notifyAllOnlineGamePlayers("The player " + account.getUsername() + " has left the game!");
+                notifyAllOnlineGamePlayers("Player " + account.getUsername() + " has left the game!");
                 handlePlayerOffline(account.getUsername());
 
                 return new QuitGameEvent(Feedback.SUCCESS, "Quit successful!");
@@ -691,7 +691,7 @@ public class GameController {
             joinedPlayers.put(account, null);
             virtualViewAccounts.remove(vv);
 
-            notifyAllOnlineGamePlayers("The player " + account.getUsername() + " has been disconnected!");
+            notifyAllOnlineGamePlayers("Player " + account.getUsername() + " has been disconnected!");
             handlePlayerOffline(account.getUsername());
         }
     }
@@ -723,7 +723,7 @@ public class GameController {
             joinedPlayers.put(account, gl);
             virtualViewAccounts.put(vv, account);
             String username = account.getUsername();
-            notifyAllOnlineGamePlayersExcept(username,  "The player " + username + " has reconnected to the game!");
+            notifyAllOnlineGamePlayersExcept(username,  "Player " + username + " has reconnected to the game!");
 
             if(gs != GameStatus.SETUP)
                 this.actionTimer = playerActionTimer();
@@ -909,7 +909,16 @@ public class GameController {
      * list of game controllers in the Controller singleton.
      */
     private synchronized void deleteGame() {
-        actionTimer.cancel();
+        if (gameStarted) {
+            GameStatus gc = game.getGameStatus();
+            if (gc == GameStatus.SETUP) {
+                if (setupTokenTimer == null)
+                    setupCardsTimer.key().cancel();
+                else
+                    setupTokenTimer.key().cancel();
+            }else if (gc == GameStatus.WAITING)
+                waitingTimer.cancel();
+        }
         joinedPlayers.clear();
         virtualViewAccounts.clear();
         readyLobbyPlayers.clear();

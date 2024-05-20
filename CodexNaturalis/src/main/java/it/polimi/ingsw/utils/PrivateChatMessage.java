@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * This class represents a private chat message in the application.
  * It extends the ChatMessage class and adds a recipient field to represent
@@ -33,6 +35,6 @@ public class PrivateChatMessage extends ChatMessage {
 
     @Override
     public String toString() {
-        return "\u001B[1mPM from [" + getSender() + "]\u001B[0m: " + getMessage();
+        return getTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " \u001B[1mPM from [" + getSender() + "]\u001B[0m: " + getMessage();
     }
 }
