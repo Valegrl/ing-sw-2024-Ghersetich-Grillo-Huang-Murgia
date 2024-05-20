@@ -38,6 +38,9 @@ public class ChatState extends ViewState {
             if (message.startsWith("$")) {
                 if (message.startsWith("$pm")) {
                     sendPrivateMessage(message);
+                } else {
+                    printMessage("Invalid command.");
+                    inputMessageBox();
                 }
             } else {
                 controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
@@ -84,7 +87,7 @@ public class ChatState extends ViewState {
             case EventID.UPDATE_GAME_PLAYERS:
                 inChat = false;
                 view.stopInputRead(true);
-                printMessage(""); // remove input box
+                printMessage("\r"); // remove input box
                 transition(new GameSetupState(view));
                 return;
             default:

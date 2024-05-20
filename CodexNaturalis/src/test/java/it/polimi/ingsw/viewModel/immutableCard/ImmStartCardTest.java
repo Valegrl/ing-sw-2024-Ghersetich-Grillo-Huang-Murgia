@@ -31,8 +31,8 @@ class ImmStartCardTest {
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
                 "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();
@@ -61,8 +61,8 @@ class ImmStartCardTest {
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
                 "    BL: " + Item.itemToColor(Item.INSECT) + "  BR: " + Item.itemToColor(Item.ANIMAL) + "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(startCard, times(1)).getId();
         verify(startCard, times(1)).getBackPermanentResources();

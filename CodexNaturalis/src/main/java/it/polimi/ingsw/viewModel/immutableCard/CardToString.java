@@ -10,7 +10,7 @@ public interface CardToString {
      *
      * @return A string representing the card details.
      */
-    String printCard();
+    String printCard(int indent);
 
     /**
      * Returns a string representing the back of a card during a Command Line Interface(TUI) game.

@@ -131,6 +131,17 @@ public class ViewStartSetup implements Serializable {
                 .toArray(ImmPlayableCard[]::new);
     }
 
+    public String printSetupObjCards() {
+        int indent = 7;
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Objective cards: \n")
+                .append("    1- ")
+                .append(secretObjectiveCards[0].printCard(indent))
+                .append("    2- ")
+                .append(secretObjectiveCards[1].printCard(indent));
+        return sb.toString();
+    }
+
     /**
      * Retrieves the secret objective cards.
      * @return {@link ViewStartSetup#secretObjectiveCards}.

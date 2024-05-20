@@ -42,7 +42,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     }
 
     @Override
-    public String printCard() {
+    public String printCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         sb.append("  Points: ").append(this.getPoints()).append("\n");

@@ -39,8 +39,8 @@ class ImmGoldCardTest {
                 "  Constraint: \n" +
                 "    - #3 " + Item.itemToColor(Item.PLANT) + " resources\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -117,8 +117,8 @@ class ImmGoldCardTest {
                 "    - #2 " + Item.itemToColor(Item.FUNGI) + " resources\n" +
                 "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();
@@ -196,8 +196,8 @@ class ImmGoldCardTest {
                 "    - #3 " + Item.itemToColor(Item.FUNGI) + " resources\n" +
                 "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(goldCard, times(1)).getId();
         verify(goldCard, times(1)).getPoints();

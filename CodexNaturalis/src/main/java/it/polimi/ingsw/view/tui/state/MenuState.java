@@ -64,6 +64,7 @@ public class MenuState extends ViewState {
                 break;
             case EventID.AVAILABLE_LOBBIES:
                 if (feedback == Feedback.SUCCESS) {
+                    clearConsole();
                     showResponseMessage(message, 0);
                 } else {
                     showResponseMessage("Failed to get available lobbies from server: " + message, 2000);

@@ -31,11 +31,13 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToSt
      */
     public ImmObjectiveCard(ObjectiveCard objectiveCard) {
         super(objectiveCard);
-        if (objectiveCard.getRequiredPattern() != null)
-            this.requiredPattern = objectiveCard.getRequiredPattern().clone();
+        Pair<Coordinate, Item>[] requiredPattern = objectiveCard.getRequiredPattern();
+        if (requiredPattern != null)
+            this.requiredPattern = requiredPattern.clone();
         else this.requiredPattern = null;
-        if (objectiveCard.getRequiredItems() != null)
-            this.requiredItems = Map.copyOf(objectiveCard.getRequiredItems());
+        Map<Item, Integer> reqItems = objectiveCard.getRequiredItems();
+        if (reqItems != null)
+            this.requiredItems = Map.copyOf(reqItems);
         else this.requiredItems = null;
     }
 
@@ -54,49 +56,72 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToSt
      *
      * @return A string representing the card details.
      */
-    public String printCard(){
+    @Override
+    public String printCard(int indent){
         StringBuilder sb = new StringBuilder();
-        sb.append("ObjectiveCard: ").append(this.getId()).append("\n");
-        sb.append("  Points: ").append(this.getPoints()).append("\n");
+        sb.append("ObjectiveCard: ").append(this.getId()).append("\n")
+            .append(" ".repeat(indent))
+            .append("  Points: ").append(this.getPoints()).append("\n")
+            .append(" ".repeat(indent));
         if(this.getId().equals("OC01") || this.getId().equals("OC03")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
         }
         if(this.getId().equals("OC02") || this.getId().equals("OC04")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "        |---|")).append("\n");
         }
         if(this.getId().equals("OC05")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
         }
         if(this.getId().equals("OC06")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
         }
         if(this.getId().equals("OC07")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
         }
         if(this.getId().equals("OC08")){
             sb.append("  Pattern: \n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[0].value(), "  |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[1].value(), "     |---|")).append("\n");
+            sb.append(" ".repeat(indent));
             sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
         }
         if(this.getId().equals("OC09") || this.getId().equals("OC10") || this.getId().equals("OC11") || this.getId().equals("OC12") ){
             sb.append("  Required Items: ").append("\n");
             for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+                sb.append(" ".repeat(indent));
                 sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items").append("\n");
             }
         }
@@ -105,6 +130,7 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToSt
             List<Map.Entry<Item, Integer>> sortedItems = new ArrayList<>(requiredItems.entrySet());
             sortedItems.sort(Map.Entry.comparingByKey(Comparator.comparing(Enum::name)));
             for (Map.Entry<Item, Integer> entry : sortedItems) {
+                sb.append(" ".repeat(indent));
                 sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items").append("\n");
             }
         }

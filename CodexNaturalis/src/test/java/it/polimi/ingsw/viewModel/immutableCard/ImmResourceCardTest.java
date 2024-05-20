@@ -24,8 +24,8 @@ class ImmResourceCardTest {
                 "    TL: " + Item.itemToColor(Item.FUNGI) + "  TR: " + Item.itemToColor(Item.PLANT) + "\n" +
                 "    BL: " + Item.itemToColor(Item.HIDDEN) + "  BR: " + Item.itemToColor(Item.INKWELL)+ "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPermanentResource();
@@ -74,8 +74,8 @@ class ImmResourceCardTest {
                 "    TL: " + Item.itemToColor(Item.INSECT) + "  TR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(resourceCard, times(1)).getId();
         verify(resourceCard, times(1)).getPoints();

@@ -17,7 +17,7 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
     }
 
     @Override
-    public String printCard() {
+    public String printCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         if (this.getPoints() != 0) {

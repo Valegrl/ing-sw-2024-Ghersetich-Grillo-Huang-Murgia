@@ -77,7 +77,7 @@ public final class ImmStartCard extends ImmCard implements CardToString {
     }
 
     @Override
-    public String printCard() {
+    public String printCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append("StartCard: ").append(this.getId()).append("\n");
         Item[] frontCorners = this.getFrontCorners();

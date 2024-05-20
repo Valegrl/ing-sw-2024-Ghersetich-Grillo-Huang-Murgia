@@ -67,7 +67,7 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
         return null;
     }
 
-    public String printCard() {
+    public String printCard(int indent) {
         return null;
     }
 

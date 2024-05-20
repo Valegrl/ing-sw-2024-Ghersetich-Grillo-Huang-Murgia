@@ -42,8 +42,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.FUNGI,"  |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -79,8 +79,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.PLANT,"        |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -116,8 +116,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.PLANT,"     |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -153,8 +153,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.INSECT,"  |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -190,8 +190,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.ANIMAL,"  |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -227,8 +227,8 @@ class ImmObjectiveCardTest {
                 Item.itemToColor(Item.INSECT ,"     |---|") +
                 "\n";
 
-        assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+        assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -258,8 +258,8 @@ class ImmObjectiveCardTest {
                 "    - #3 " + Item.itemToColor(Item.FUNGI) + " items\n";
 
 
-                assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+                assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
@@ -293,8 +293,8 @@ class ImmObjectiveCardTest {
                 "    - #1 " + Item.itemToColor(Item.QUILL) + " items\n";
 
 
-                assertEquals(expectedOutput, card.printCard());
-        System.out.println(card.printCard());
+                assertEquals(expectedOutput, card.printCard(0));
+        System.out.println(card.printCard(0));
 
         verify(objectiveCard, times(1)).getId();
         verify(objectiveCard, times(1)).getPoints();
