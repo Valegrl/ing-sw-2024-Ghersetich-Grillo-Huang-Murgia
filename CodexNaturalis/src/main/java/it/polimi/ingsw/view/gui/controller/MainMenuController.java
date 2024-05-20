@@ -16,14 +16,11 @@ import javafx.stage.Stage;
 
 public class MainMenuController extends FXMLController {
 
-    @FXML
-    private AnchorPane mainMenuFX;
+    @FXML private AnchorPane mainMenuFX;
 
-    @FXML
-    private AnchorPane optionsMenuFX;
+    @FXML private AnchorPane optionsMenuFX;
 
-    @FXML
-    private AnchorPane creditsMenuFX;
+    @FXML private AnchorPane creditsMenuFX;
 
 
     public MainMenuController(){

@@ -11,40 +11,38 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public final class SelfViewPlayArea implements Serializable {
     /**
-     * The list of playable cards in the player's hand.
+     * The player's hand.
      */
     private final List<ImmPlayableCard> hand;
 
     /**
-     * The start card of the player.
+     * The player's start card.
      */
     private final ImmStartCard startCard;
 
     /**
-     * The map of played cards in the play area.
-     * The keys are the coordinates where the cards are placed.
+     * The map of played cards in the play area, associated with their coordinates.
      */
     private final Map<Coordinate, ImmPlayableCard> playedCards;
 
     /**
-     * The map of uncovered items in the play area.
-     * The keys are the items and the values are their quantities.
+     * The map of uncovered items in the play area, each item is associated with its uncovered quantity.
      */
     private final Map<Item, Integer> uncoveredItems;
 
     /**
-     * The selected card in the play area.
-     * The key is the coordinate where the card is placed.
+     * The selected card in the play area and its coordinate.
      */
     private final Pair<Coordinate, ImmEvaluableCard> selectedCard;
 
 
     /**
-     * Constructs an immutable representation of a play area.
+     * Constructs an immutable representation of the given {@link PlayArea}.
      *
-     * @param playArea the play area to represent
+     * @param playArea The play area to represent.
      */
     public SelfViewPlayArea(PlayArea playArea) {
         this.hand = playArea.getHand().stream()
@@ -57,30 +55,56 @@ public final class SelfViewPlayArea implements Serializable {
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
         this.uncoveredItems = Collections.unmodifiableMap(playArea.getUncoveredItems());
-        // TODO check if null and do something
-        this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
+        if (playArea.getSelectedCard() == null)
+            this.selectedCard = null;
+        else
+            this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
     }
 
+    /**
+     * Retrieves the player's hand.
+     * @return {@link SelfViewPlayArea#hand}.
+     */
     public List<ImmPlayableCard> getHand() {
         return hand;
     }
 
+    /**
+     * Retrieves the player's start card.
+     * @return {@link SelfViewPlayArea#startCard}.
+     */
     public ImmStartCard getStartCard() {
         return startCard;
     }
 
+    /**
+     * Retrieves the map of played cards in the play area.
+     * @return {@link SelfViewPlayArea#playedCards}.
+     */
     public Map<Coordinate, ImmPlayableCard> getPlayedCards() {
         return playedCards;
     }
 
+    /**
+     * Retrieves the map of uncovered items in the play area.
+     * @return {@link SelfViewPlayArea#uncoveredItems}.
+     */
     public Map<Item, Integer> getUncoveredItems() {
         return uncoveredItems;
     }
 
+    /**
+     * Retrieves the selected card in the play area and its coordinate.
+     * @return {@link SelfViewPlayArea#selectedCard}.
+     */
     public Pair<Coordinate, ImmEvaluableCard> getSelectedCard() {
         return selectedCard;
     }
 
+    /**
+     * Returns a String representation of the available positions where the player can place a card.
+     * @return The string representation of the available positions.
+     */
     public String printAvailablePos(){
         StringBuilder sb = new StringBuilder();
         sb.append("Player's available positions: \n");
@@ -141,6 +165,10 @@ public final class SelfViewPlayArea implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * Returns a String representation of the player's hand.
+     * @return The string representation of the player's hand.
+     */
     public String printHand() {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");

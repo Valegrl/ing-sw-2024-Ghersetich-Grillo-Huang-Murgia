@@ -5,16 +5,19 @@ import it.polimi.ingsw.model.player.Player;
 
 import java.io.Serializable;
 
+/**
+ * Immutable representation of a {@link Player}.
+ */
 public class ViewPlayer extends AbstractViewPlayer implements Serializable {
     /**
-     * The play area of the player.
+     * The player's play area.
      */
     private ViewPlayArea playArea;
 
     /**
-     * Constructs an immutable representation of a player.
+     * Constructs an immutable representation of the given {@link Player}.
      *
-     * @param player the player to represent
+     * @param player The player to represent.
      */
     public ViewPlayer(Player player) {
         super(player);
@@ -22,15 +25,17 @@ public class ViewPlayer extends AbstractViewPlayer implements Serializable {
     }
 
     /**
-     * The play area is represented as an instance of the ImmPlayArea class, which includes the player's hand, start
-     * card, played cards, uncovered items, and selected card.
-     *
-     * @return the play area of the player
+     * Retrieves the play area of the player.
+     * @return {@link ViewPlayer#playArea}.
      */
     public ViewPlayArea getPlayArea() {
         return playArea;
     }
 
+    /**
+     * Sets the play area of the player.
+     * @param playArea the play area to set
+     */
     public void setPlayArea(PlayArea playArea) {
         this.playArea = new ViewPlayArea(playArea);
     }

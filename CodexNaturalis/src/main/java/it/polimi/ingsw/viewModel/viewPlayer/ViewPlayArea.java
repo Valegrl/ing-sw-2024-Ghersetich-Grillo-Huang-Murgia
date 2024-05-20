@@ -13,30 +13,29 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Immutable representation of the PlayArea class.
- * This class provides a read-only view of the player's play area, which can be safely shared across different threads.
- * All fields are final and initialized at construction time, and there are no setter methods.
- * The class also provides getter methods for all fields.
- *
- * @see it.polimi.ingsw.model.player.PlayArea
+ * Immutable representation of an opponent-player's {@link PlayArea}.
  */
 public final class ViewPlayArea implements Serializable {
     /**
-     * The list of back representations of playable cards in the player's hand.
+     * The list of immutable representations of cards in the opponent's hand.
      */
     private final List<BackPlayableCard> hand;
 
     /**
-     * The immutable representation of the start card of the player.
+     * The opponent's start card.
      */
     private final ImmStartCard startCard;
 
     /**
-     * The map of immutable representations of played cards in the play area.
-     * The keys are the coordinates where the cards are placed.
+     * The map of played cards in the play area, associated with their coordinates.
      */
     private final Map<Coordinate, ImmPlayableCard> playedCards;
 
+    /**
+     * Constructs an immutable representation of the given {@link PlayArea}.
+     *
+     * @param playArea The play area to represent.
+     */
     public ViewPlayArea(PlayArea playArea) {
         this.hand = playArea.getHand().stream()
                 .map(BackPlayableCard::new)
@@ -49,18 +48,34 @@ public final class ViewPlayArea implements Serializable {
                 ));
     }
 
+    /**
+     * Retrieves the list of immutable representations of cards in the opponent's hand.
+     * @return {@link ViewPlayArea#hand}.
+     */
     public List<BackPlayableCard> getHand() {
         return hand;
     }
 
+    /**
+     * Retrieves the opponent's start card.
+     * @return {@link ViewPlayArea#startCard}.
+     */
     public ImmStartCard getStartCard() {
         return startCard;
     }
 
+    /**
+     * Retrieves the map of played cards in the play area, associated with their coordinates.
+     * @return {@link ViewPlayArea#playedCards}.
+     */
     public Map<Coordinate, ImmPlayableCard> getPlayedCards() {
         return playedCards;
     }
 
+    /**
+     * Returns a string representation of the opponent's hand.
+     * @return A string representation of the opponent's hand.
+     */
     public String printHand() {
         StringBuilder sb = new StringBuilder();
         sb.append("Player's Hand: \n");
@@ -72,6 +87,10 @@ public final class ViewPlayArea implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the opponent's play area.
+     * @return A string representation of the opponent's play area.
+     */
     public String printPlayedCards() {
         StringBuilder sb = new StringBuilder();
         StringBuilder cardString = new StringBuilder();
