@@ -57,7 +57,7 @@ public class DeckFactory {
         File file = new File(jsonURI);
         try (FileReader reader = new FileReader(file)) {
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
+                    .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
                     .create();
             return gson.fromJson(reader, cardListType);
         } catch (IOException e) {

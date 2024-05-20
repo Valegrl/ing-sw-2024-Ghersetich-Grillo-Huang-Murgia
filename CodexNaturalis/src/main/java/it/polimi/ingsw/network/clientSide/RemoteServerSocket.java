@@ -2,18 +2,20 @@ package it.polimi.ingsw.network.clientSide;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.eventUtils.EventDeserializer;
+import it.polimi.ingsw.eventUtils.EventTypeAdapter;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.model.deck.factory.EvaluatorDeserializer;
+import it.polimi.ingsw.model.deck.factory.EvaluatorTypeAdapter;
 import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.LocalTimeTypeAdapter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.time.LocalTime;
 
 /**
  * The {@code RemoteServerSocket} class is used as a client-side stub.
@@ -70,7 +72,11 @@ public class RemoteServerSocket implements Server {
     @Override
     public void direct(Event event, Client client) throws RemoteException {
         try {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+                    .registerTypeAdapter(Event.class, new EventTypeAdapter())
+                    .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
+                    .create();
             String jsonString = gson.toJson(event);
             outputStream.writeUTF(jsonString);
             outputStream.flush();
@@ -90,8 +96,9 @@ public class RemoteServerSocket implements Server {
             if (!socket.isClosed()) {
                 String jsonString = inputStream.readUTF();
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Event.class, new EventDeserializer())
-                        .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
+                        .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+                        .registerTypeAdapter(Event.class, new EventTypeAdapter())
+                        .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
                         .create();
                 Event event = gson.fromJson(jsonString, Event.class);
                 client.report(event);
