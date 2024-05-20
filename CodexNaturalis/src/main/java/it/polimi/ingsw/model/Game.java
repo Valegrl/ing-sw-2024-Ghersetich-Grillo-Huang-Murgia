@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.NewTurnEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
@@ -21,7 +22,22 @@ import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 
 /**
- * A class to represent a Codex Naturalis game.
+ * This class represents the game Codex Naturalis. It manages the game state, including the players,
+ * the decks of cards, the visible cards, the turn order, the scoreboard, and the game status.
+ * It also handles the game setup, player actions such as placing and drawing cards, and the end of the game.
+ *<p></p>
+ * The game is identified by a unique ID. Each game has a resource deck and a gold deck,
+ * from which cards are drawn and placed in two visible card arrays.
+ * The game keeps track of the players and whose turn it is.
+ * The scoreboard keeps track of each player's score.
+ * The game status indicates the current phase of the game.
+ *<p></p>
+ * The class provides methods for game setup, player actions, and game end procedures.
+ * It also provides methods for retrieving game information such as the game ID,
+ * the top card of each deck, the visible cards, the players, the current player index,
+ * the scoreboard, and the common objectives.
+ *<p></p>
+ * The class ensures that the game rules are followed, and throws exceptions when illegal actions are attempted.
  */
 public class Game {
     /**
@@ -202,8 +218,10 @@ public class Game {
         else
             this.gameStatus = GameStatus.RUNNING;
 
-        for (Player p : players)
-            listeners.notifyAllListeners(new UpdateLocalModelEvent(new ViewModel(this, p.getUsername())));
+        for (Player p : players) {
+            String username = p.getUsername();
+            listeners.notifyListener(username, new UpdateLocalModelEvent(new ViewModel(this, username)));
+        }
     }
 
     /**
@@ -211,7 +229,7 @@ public class Game {
      * This method increments the turnPlayerIndex to move to the next player in the player list.
      * If the current player is the last player in the list, the turn wraps around to the first player.
      */
-    public void newTurn() {
+    public void newTurn(boolean notify) {
         this.circleChecker = turnPlayerIndex;
 
         do {
@@ -228,8 +246,9 @@ public class Game {
                 return;
             }
         }
-        //TODO turn + status update method (if not ended)
-        //TODO all version and allExceptOne version
+
+        if(notify)
+            listeners.notifyAllListeners(new NewTurnEvent(turnPlayerIndex, gameStatus));
     }
 
     /**
@@ -402,8 +421,11 @@ public class Game {
         listeners.changeListener(user, gl);
         if (onlinePlayersNumber() == 2 && gameStatus != GameStatus.SETUP) {
             this.gameStatus = backupGameStatus;
-            if (!onlinePlayer.equals(players.get(turnPlayerIndex)))
-                newTurn(); //TODO update all except reconnected player
+            if (!onlinePlayer.equals(players.get(turnPlayerIndex))) {
+                newTurn(false);
+                if (gameStatus != GameStatus.ENDED)
+                    listeners.notifyListener(onlinePlayer.getUsername(), new NewTurnEvent(turnPlayerIndex, gameStatus));
+            }
         }
 
         if (gameStatus != GameStatus.ENDED) {
@@ -421,10 +443,8 @@ public class Game {
      * <br>
      * This method calculates and assigns the total objective points earned by each player
      * by evaluating the {@link ObjectiveCard ObjectiveCards}.
-     *
-     * @return The ordered list of {@link Player Players}' usernames, based on the points scored.
      */
-    public List<String> endGame() {
+    public void endGame() {
 
         Map<Player, Integer> objPoints = new HashMap<>();
         int playerObjPoints;
@@ -438,8 +458,8 @@ public class Game {
 
         this.gameStatus = GameStatus.ENDED;
 
-        return getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
-        //TODO update listeners with specif event. void method? + online players filter
+        List<String> results =  getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
+        //TODO update listeners with specif event. Online players filter
     }
 
     /**

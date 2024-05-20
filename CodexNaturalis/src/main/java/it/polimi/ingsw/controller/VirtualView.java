@@ -117,7 +117,7 @@ public class VirtualView {
         logger.log(Level.SEVERE, "Event not recognized.");
         listener.update(new InvalidEvent());
     }
-    //TODO check double methods (only if SUCCESS) + synchronized
+
     /**
      * Evaluates a {@link ChosenCardsSetupEvent} and forwards it to the appropriate controller.
      *
@@ -128,8 +128,10 @@ public class VirtualView {
             String CardID = event.getObjectiveCardID();
             Boolean flipStartCard = event.getFlipStartCard();
             if (CardID != null && flipStartCard != null) {
-                listener.update(gameController.chosenCardsSetup(this, CardID, flipStartCard));
-                gameController.startTokenSetup();
+                ChosenCardsSetupEvent response = gameController.chosenCardsSetup(this, CardID, flipStartCard);
+                listener.update(response);
+                if (response.getFeedback() == Feedback.SUCCESS)
+                    gameController.startTokenSetup();
             } else
                 listener.update(new ChosenCardsSetupEvent(Feedback.FAILURE, "Some parameters of the event are null."));
         } else
@@ -145,8 +147,10 @@ public class VirtualView {
         if(gameController != null) {
             Token token = event.getColor();
             if (token != null) {
-                listener.update(gameController.chosenTokenSetup(this, token));
-                gameController.startRunning();
+                ChosenTokenSetupEvent response = gameController.chosenTokenSetup(this, token);
+                listener.update(response);
+                if (response.getFeedback() == Feedback.SUCCESS)
+                    gameController.startRunning();
             } else
                 listener.update(new ChosenCardsSetupEvent(Feedback.FAILURE, "Some parameters of the event are null."));
         } else
@@ -161,9 +165,11 @@ public class VirtualView {
     public void evaluateEvent(DrawCardEvent event){
         if(gameController != null) {
             CardType cardType = event.getCardType();
-            if (cardType != null)
-                listener.update(gameController.drawCard(this, cardType, event.getIndex()));
-            else
+            if (cardType != null) {
+                DrawCardEvent response = gameController.drawCard(this, cardType, event.getIndex());
+                if (response.getFeedback() == Feedback.FAILURE)
+                    listener.update(response);
+            } else
                 listener.update(new DrawCardEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
         }else
             listener.update(new DrawCardEvent(Feedback.FAILURE, "An unexpected action occurred."));
@@ -178,9 +184,11 @@ public class VirtualView {
         if(gameController != null) {
             String cardID = event.getCardID();
             Coordinate pos = event.getPos();
-            if (cardID != null && pos != null)
-                listener.update(gameController.placeCard(this, cardID, pos, event.isFlipped()));
-            else
+            if (cardID != null && pos != null) {
+                PlaceCardEvent response = gameController.placeCard(this, cardID, pos, event.isFlipped());
+                if (response.getFeedback() == Feedback.FAILURE)
+                    listener.update(response);
+            } else
                 listener.update(new PlaceCardEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
         } else
             listener.update(new PlaceCardEvent(Feedback.FAILURE, "An unexpected action occurred."));

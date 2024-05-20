@@ -53,9 +53,6 @@ public class GameListenersManager {
         if (listener != null) {
             if (game.getOnlinePlayers().contains(username))
                 listener.update(event);
-            /*else
-                log?
-            */
         } else {
             throw new IllegalArgumentException("No listener found for the provided username");
         }

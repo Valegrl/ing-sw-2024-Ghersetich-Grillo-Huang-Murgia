@@ -3,9 +3,7 @@ package it.polimi.ingsw.view.controller;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromController.*;
-import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.*;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -238,6 +236,31 @@ public class ViewController implements ViewEventReceiver {
         } else {
             System.out.println("Game state: event in wrong state");
         }
+    }
+
+    @Override
+    public void evaluateEvent(MyDrawCardEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(MyPlaceCardEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(NewTurnEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(OtherDrawCardEvent event) {
+
+    }
+
+    @Override
+    public void evaluateEvent(OtherPlaceCardEvent event) {
+
     }
 
     @Override

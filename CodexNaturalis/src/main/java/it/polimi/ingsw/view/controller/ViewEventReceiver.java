@@ -12,6 +12,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEven
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
+import it.polimi.ingsw.model.GameStatus;
 
 import java.util.logging.Logger;
 
@@ -36,10 +37,10 @@ public interface ViewEventReceiver {
     }
 
     /**
-     * Handles the event of the cards-setup from Server
-     * @param event The ChooseCardsSetupEvent to be handled.
+     * Handles the event of the token-setup from Server.
+     * @param event The ChooseTokenSetupEvent to be handled.
      */
-    void evaluateEvent(ChooseCardsSetupEvent event);
+    void evaluateEvent(ChooseTokenSetupEvent event);
 
     /**
      * Called when an invalid event is sent by the local player.
@@ -66,10 +67,40 @@ public interface ViewEventReceiver {
     void evaluateEvent(UpdateGamePlayersEvent event);
 
     /**
-     * Handles the event of the token-setup from Server.
-     * @param event The ChooseTokenSetupEvent to be handled.
+     * Handles the event of the cards-setup from Server
+     * @param event The ChooseCardsSetupEvent to be handled.
      */
-    void evaluateEvent(ChooseTokenSetupEvent event);
+    void evaluateEvent(ChooseCardsSetupEvent event);
+
+    /**
+     * Handles the successful draw card event of the local player.
+     * @param event The MyDrawCardEvent to be handled.
+     */
+    void evaluateEvent(MyDrawCardEvent event);
+
+    /**
+     * Handles the successful place card event of the local player.
+     * @param event The MyPlaceCardEvent to be handled.
+     */
+    void evaluateEvent(MyPlaceCardEvent event);
+
+    /**
+     * Handles the event of a new turn during {@link GameStatus#RUNNING}.
+     * @param event The NewTurnEvent to be handled.
+     */
+    void evaluateEvent(NewTurnEvent event);
+
+    /**
+     * Handles the successful draw card event of a remote player.
+     * @param event The OtherDrawCardEvent to be handled.
+     */
+    void evaluateEvent(OtherDrawCardEvent event);
+
+    /**
+     * Handles the successful place card event of a remote player.
+     * @param event The OtherPlaceCardEvent to be handled.
+     */
+    void evaluateEvent(OtherPlaceCardEvent event);
 
     /**
      * Handles the event of ended game.

@@ -1,9 +1,7 @@
 package it.polimi.ingsw.eventUtils;
 
 import it.polimi.ingsw.eventUtils.event.fromController.*;
-import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.*;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
@@ -33,9 +31,9 @@ import java.util.Set;
 public enum EventID {
 
     /**
-     * The {@link ChooseCardsSetupEvent} ID.
+     * The {@link ChooseTokenSetupEvent} ID.
      */
-    CHOOSE_CARDS_SETUP("CHOOSE_CARDS_SETUP", ChooseCardsSetupEvent.class),
+    CHOOSE_TOKEN_SETUP("CHOOSE_TOKEN_SETUP", ChooseTokenSetupEvent.class),
 
     /**
      * The {@link InvalidEvent} ID.
@@ -53,9 +51,34 @@ public enum EventID {
     UPDATE_GAME_PLAYERS("UPDATE_GAME_PLAYERS", UpdateGamePlayersEvent.class),
 
     /**
-     * The {@link ChooseTokenSetupEvent} ID.
+     * The {@link ChooseCardsSetupEvent} ID.
      */
-    CHOOSE_TOKEN_SETUP("CHOOSE_TOKEN_SETUP", ChooseTokenSetupEvent.class),
+    CHOOSE_CARDS_SETUP("CHOOSE_CARDS_SETUP", ChooseCardsSetupEvent.class),
+
+    /**
+     * The {@link MyDrawCardEvent} ID.
+     */
+    MY_DRAW_CARD("MY_DRAW_CARD", MyDrawCardEvent.class),
+
+    /**
+     * The {@link MyPlaceCardEvent} ID.
+     */
+    MY_PLACE_CARD("MY_PLACE_CARD", MyPlaceCardEvent.class),
+
+    /**
+     * The {@link NewTurnEvent} ID.
+     */
+    NEW_TURN("NEW_TURN", NewTurnEvent.class),
+
+    /**
+     * The {@link OtherDrawCardEvent} ID.
+     */
+    OTHER_DRAW_CARD("OTHER_DRAW_CARD", OtherDrawCardEvent.class),
+
+    /**
+     * The {@link OtherPlaceCardEvent} ID.
+     */
+    OTHER_PLACE_CARD("OTHER_PLACE_CARD", OtherPlaceCardEvent.class),
 
     /**
      * The {@link EndedGameEvent} ID.

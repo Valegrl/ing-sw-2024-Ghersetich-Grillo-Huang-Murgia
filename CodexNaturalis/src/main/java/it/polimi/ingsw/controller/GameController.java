@@ -559,14 +559,13 @@ public class GameController {
                 if (game.isTurnPlayer(username)){
                     if (!startedMove){
                         try {
-                            game.placeCard(cardID, pos, flipped);
+                            game.placeCard(cardID, pos, flipped); /* update from model */
                             if (game.getGameStatus() == GameStatus.LAST_CIRCLE){
-                                nextTurn(); //TODO check game.newTurn for updates
+                                nextTurn();
                             } else
                                 this.startedMove = true;
-                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has placed a card.");
-                            return new PlaceCardEvent(Feedback.SUCCESS, "The card has been placed successfully!");
-                            //TODO update model from virtualView to everyone
+                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has placed a card."); // TODO into placeCard
+                            return new PlaceCardEvent(Feedback.SUCCESS, null);
                         } catch (Exception e) {
                             return new PlaceCardEvent(Feedback.FAILURE, e.getMessage());
                         }
@@ -595,11 +594,10 @@ public class GameController {
                 if (game.isTurnPlayer(username)) {
                     if (startedMove) {
                         try {
-                            game.drawCard(type, index);
-                            nextTurn(); //TODO check game.newTurn for updates
-                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has drawn a card.");
-                            return new DrawCardEvent(Feedback.SUCCESS, "The card has been drawn successfully!");
-                            //TODO update model from virtualView to everyone
+                            game.drawCard(type, index); /* update from model */
+                            nextTurn();
+                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has drawn a card."); //TODO into drawCard
+                            return new DrawCardEvent(Feedback.SUCCESS, null);
                         } catch (Exception e) {
                             return new DrawCardEvent(Feedback.FAILURE, e.getMessage());
                         }
@@ -639,7 +637,7 @@ public class GameController {
                 while (!success && i < drawOptions.size()) {
                     option = drawOptions.get(i);
                     try {
-                        game.drawCard(option.key(), option.value());
+                        game.drawCard(option.key(), option.value()); /* update from model */
                         success = true;
                     } catch (Exception e) {
                         i++;
@@ -648,9 +646,9 @@ public class GameController {
                 if (i==drawOptions.size())
                     throw new RuntimeException("There are no drawable cards.");
 
-                notifyAllOnlineGamePlayers("A new card has been automatically drawn for " + game.getCurrentPlayerUsername());
+                notifyAllOnlineGamePlayers("A new card has been automatically drawn for " + game.getCurrentPlayerUsername()); //TODO into drawCard
                 if (callNextTurn)
-                    nextTurn(); //TODO check game.newTurn for updates
+                    nextTurn();
             }
         }
     }
@@ -707,17 +705,16 @@ public class GameController {
      */
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
-            GameStatus gs = game.getGameStatus();
             String waitingPlayer;
 
-            if (gs == GameStatus.WAITING) {
+            if (game.getGameStatus() == GameStatus.WAITING) {
                 this.waitingTimer.cancel();
-                this.waitingTimer = null;
                 waitingPlayer = virtualViewAccounts.values().stream().findFirst()
                         .orElseThrow(() -> new NoSuchElementException("At least one player must be online."))
                         .getUsername();
                 if (!game.isTurnPlayer(waitingPlayer))
                     this.startedMove = false;
+                this.actionTimer = playerActionTimer();
             }
 
             joinedPlayers.put(account, gl);
@@ -725,12 +722,12 @@ public class GameController {
             String username = account.getUsername();
             notifyAllOnlineGamePlayersExcept(username,  "Player " + username + " has reconnected to the game!");
 
-            if(gs != GameStatus.SETUP)
-                this.actionTimer = playerActionTimer();
             game.reconnectPlayer(account.getUsername(), gl);
 
-            if(game.getGameStatus() == GameStatus.ENDED)
+            if(game.getGameStatus() == GameStatus.ENDED) {
+                this.actionTimer.cancel();
                 deleteGame();
+            }
         }
     }
 
@@ -808,7 +805,7 @@ public class GameController {
                             if (gameStatus == GameStatus.RUNNING && startedMove)
                                 autoDrawCard(true);
                             else
-                                nextTurn(); //TODO check game.newTurn for updates
+                                nextTurn();
                         }
                     }
                 }
@@ -875,12 +872,12 @@ public class GameController {
                         if (startedMove)
                             autoDrawCard(true);
                         else
-                            nextTurn(); //TODO check game.newTurn for updates
+                            nextTurn();
                     }
 
                 } else if (gs == GameStatus.LAST_CIRCLE) {
                     if (game.isTurnPlayer(username))
-                            nextTurn(); //TODO check game.newTurn for updates
+                            nextTurn();
 
                 } else if (game.getGameStatus() == GameStatus.WAITING && joinedPlayers.size() > 1) {
                     if (game.getBackupGameStatus() == GameStatus.RUNNING && game.isTurnPlayer(username))
@@ -889,7 +886,6 @@ public class GameController {
 
                     this.actionTimer.cancel();
                     this.waitingTimer = waitingStatusTimer();
-                    //TODO notify with model method: gameStatus and turn
 
                 } else {
                     game.endGame();
@@ -1017,7 +1013,7 @@ public class GameController {
     private synchronized void nextTurn(){
         this.startedMove = false;
         this.actionTimer.cancel();
-        game.newTurn();
+        game.newTurn(true);
 
         if (game.getGameStatus() != GameStatus.ENDED) {
             this.actionTimer = playerActionTimer();
