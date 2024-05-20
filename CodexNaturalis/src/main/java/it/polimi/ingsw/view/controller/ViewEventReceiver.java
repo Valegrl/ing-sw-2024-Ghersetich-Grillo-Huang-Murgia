@@ -8,6 +8,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
@@ -136,6 +137,12 @@ public interface ViewEventReceiver {
      * @param event The event to be handled.
      */
     void evaluateEvent(GetLobbyInfoEvent event);
+
+    /**
+     * Handles the event of getting chat messages.
+     * @param event The event to be handled.
+     */
+    void evaluateEvent(GetChatMessagesEvent event);
 
     /**
      * Handles the event of kicking a chosen player from the lobby.

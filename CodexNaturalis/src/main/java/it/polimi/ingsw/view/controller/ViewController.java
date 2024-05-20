@@ -12,6 +12,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.*;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.*;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
@@ -198,7 +199,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
-        if(view.getState().inLobby()) {
+        if(view.getState().inLobby() || view.getState().inChat()) {
             lobbyId = null;
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -208,7 +209,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
-        if(view.getState().inLobby()) {
+        if(view.getState().inLobby() || view.getState().inChat()) {
             playersStatus = event.getPlayers();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -218,7 +219,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
-        if(view.getState().inLobby() || view.getState().inGame()) {
+        if(view.getState().inLobby() || view.getState().inGame() || view.getState().inChat()) {
             playersStatus = event.getPlayers();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -336,6 +337,16 @@ public class ViewController implements ViewEventReceiver {
             view.handleResponse(event.getID(), null, lobbyInfoMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
+        }
+    }
+
+    @Override
+    public void evaluateEvent(GetChatMessagesEvent event) {
+        if(view.getState().inChat()) {
+            ChatMessagesList<ChatMessage> messages = new ChatMessagesList<>(chatMessages.size() + privateChatMessages.size());
+            messages.addAll(chatMessages);
+            messages.addAll(privateChatMessages);
+            view.handleResponse(event.getID(), null, messages.toString());
         }
     }
 
@@ -513,17 +524,27 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChatGMEvent event) {
-        chatMessages.add(event.getChatMessage());
+        ChatMessage message = event.getChatMessage();
+        chatMessages.add(message);
         if (view.getState().inChat()) {
-            // TODO update view
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
+                view.handleResponse(event.getID(), event.getFeedback(), message.toString());
+            } else {
+                view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            }
         }
     }
 
     @Override
     public void evaluateEvent(ChatPMEvent event) {
-        privateChatMessages.add(event.getChatMessage());
+        PrivateChatMessage message = event.getChatMessage();
+        privateChatMessages.add(message);
         if (view.getState().inChat()) {
-            // TODO update view
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
+                view.handleResponse(event.getID(), event.getFeedback(), message.toString());
+            } else {
+                view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+            }
         }
     }
 
@@ -572,5 +593,10 @@ public class ViewController implements ViewEventReceiver {
             m.append("  ").append(key).append(" / ").append(readyStatusString).append("\n");
         });
         return m.toString();
+    }
+
+    public void sendMessage(String message) {
+        ChatGMEvent chatGMEvent = new ChatGMEvent(new ChatMessage(message));
+        newViewEvent(chatGMEvent);
     }
 }

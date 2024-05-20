@@ -79,6 +79,11 @@ public class TUI implements View {
     }
 
     @Override
+    public void print(String message) {
+        out.print(message);
+    }
+
+    @Override
     public String getInput() {
         String input = "-1";
         waitingForInput = true;
@@ -90,7 +95,6 @@ public class TUI implements View {
                 while(input.isEmpty() || input.equals("-1"))
                     input = in.readLine();
         } catch (InterruptedException e) {
-            System.out.println("ConsoleInputReadTask() cancelled");
             waitingForInput = false;
             return null;
         } catch (IOException e) {

@@ -13,6 +13,8 @@ public interface View {
 
     void printMessage(String message);
 
+    void print(String message);
+
     String getInput();
 
     ViewController getController();
