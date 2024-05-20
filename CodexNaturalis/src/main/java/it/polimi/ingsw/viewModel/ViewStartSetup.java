@@ -1,13 +1,7 @@
 package it.polimi.ingsw.viewModel;
 
-import it.polimi.ingsw.model.card.Item;
-import it.polimi.ingsw.model.card.ObjectiveCard;
-import it.polimi.ingsw.model.card.PlayableCard;
-import it.polimi.ingsw.model.card.StartCard;
-import it.polimi.ingsw.viewModel.immutableCard.BackPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
+import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.viewModel.immutableCard.*;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -91,8 +85,16 @@ public class ViewStartSetup implements Serializable {
         this.secretObjectiveCards = convertToImmObjectiveCards(objectiveCards);
         this.startCard = new ImmStartCard(start);
         this.hand = hand.stream()
-                    .map(ImmPlayableCard::new)
-                    .collect(Collectors.toList());
+                .map(card -> {
+                    if (card.getCardType().equals(CardType.GOLD)) {
+                        return new ImmGoldCard((GoldCard) card);
+                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
+                        return new ImmResourceCard((ResourceCard) card);
+                    } else {
+                        return new ImmPlayableCard(card);
+                    }
+                })
+                .toList();
         this.visibleGoldCards = convertToImmPlayableCards(goldVisible);
         this.goldDeck = goldDeck;
         this.visibleResourceCards = convertToImmPlayableCards(resourceVisible);
@@ -139,6 +141,19 @@ public class ViewStartSetup implements Serializable {
                 .append(secretObjectiveCards[0].printCard(indent))
                 .append("    2- ")
                 .append(secretObjectiveCards[1].printCard(indent));
+        return sb.toString();
+    }
+
+    public String printSetupHand() {
+        int indent = 6;
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Hand: \n");
+        for (int i = 0; i < hand.size(); i++) {
+            sb.append("    ")
+                    .append(i + 1)
+                    .append("- ")
+                    .append(hand.get(i).printCard(indent));
+        }
         return sb.toString();
     }
 

@@ -29,7 +29,11 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     public ImmGoldCard(GoldCard goldCard) {
         super(goldCard);
         this.constraint = Map.copyOf(goldCard.getConstraint());
-        this.requiredItems = Map.copyOf(goldCard.getRequiredItems());
+        Map<Item, Integer> requiredItems = goldCard.getRequiredItems();
+        if (requiredItems == null)
+            this.requiredItems = null;
+        else
+            this.requiredItems = Map.copyOf(requiredItems);
     }
 
     @Override
@@ -38,6 +42,8 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     }
     @Override
     public Map<Item, Integer> getRequiredItems() {
+        if (requiredItems == null)
+            return Map.of();
         return Map.copyOf(requiredItems);
     }
 
@@ -45,29 +51,38 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     public String printCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append(" ".repeat(indent));
         sb.append("  Points: ").append(this.getPoints()).append("\n");
         if(!this.getRequiredItems().isEmpty()) {
+            sb.append(" ".repeat(indent));
             sb.append("  Required Items: ");
             for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
-                sb.append("\n    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items");
+                sb.append("\n");
+                sb.append(" ".repeat(indent));
+                sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items");
             }
             sb.append("\n");
-        }
-        else if(this.getEvaluator() instanceof CornerEvaluator){
+        } else if(this.getEvaluator() instanceof CornerEvaluator) {
+            sb.append(" ".repeat(indent));
             sb.append("  ").append(this.getPoints()).append(" points for each overlapping corner of this card \n");
         }
-        else{
-            sb.append("");
-        }
+
         Item[] corners = this.getCorners();
+        sb.append(" ".repeat(indent));
         sb.append("  Corners: \n");
+        sb.append(" ".repeat(indent));
         sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append(" ".repeat(indent));
         sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
+
+        sb.append(" ".repeat(indent));
         sb.append("  Constraint: ");
         List<Map.Entry<Item, Integer>> sortedConstraints = new ArrayList<>(this.getConstraint().entrySet());
         sortedConstraints.sort(Map.Entry.<Item, Integer>comparingByValue().reversed());
         for (Map.Entry<Item, Integer> entry : sortedConstraints) {
-            sb.append("\n    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" resources");
+            sb.append("\n");
+            sb.append(" ".repeat(indent));
+            sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" resources");
         }
         sb.append("\n");
         return sb.toString();

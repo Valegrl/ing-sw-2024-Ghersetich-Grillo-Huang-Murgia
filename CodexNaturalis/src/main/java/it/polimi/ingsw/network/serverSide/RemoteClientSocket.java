@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.LocalTimeTypeAdapter;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCardTypeAdapter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -91,11 +93,12 @@ public class RemoteClientSocket implements Client {
      */
     public void readStream(){
         try {
-            String jsonString = (String) inputStream.readUTF();
+            String jsonString = inputStream.readUTF();
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
                     .registerTypeAdapter(Event.class, new EventTypeAdapter())
                     .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
+                    .registerTypeAdapter(ImmPlayableCard.class, new ImmPlayableCardTypeAdapter())
                     .create();
             Event event;
             event = gson.fromJson(jsonString, Event.class);

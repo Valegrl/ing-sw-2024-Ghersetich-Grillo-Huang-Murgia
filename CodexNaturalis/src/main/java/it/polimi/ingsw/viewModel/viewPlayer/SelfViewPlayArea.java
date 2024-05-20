@@ -1,8 +1,7 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
-import it.polimi.ingsw.model.card.CornerIndex;
+import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.viewModel.immutableCard.*;
-import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.Pair;
@@ -46,7 +45,15 @@ public final class SelfViewPlayArea implements Serializable {
      */
     public SelfViewPlayArea(PlayArea playArea) {
         this.hand = playArea.getHand().stream()
-                .map(ImmPlayableCard::new)
+                .map(card -> {
+                    if (card.getCardType().equals(CardType.GOLD)) {
+                        return new ImmGoldCard((GoldCard) card);
+                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
+                        return new ImmResourceCard((ResourceCard) card);
+                    } else {
+                        return new ImmPlayableCard(card);
+                    }
+                })
                 .toList();
         this.startCard = new ImmStartCard(playArea.getStartCard());
         this.playedCards = playArea.getPlayedCards().entrySet().stream()
@@ -58,7 +65,7 @@ public final class SelfViewPlayArea implements Serializable {
         if (playArea.getSelectedCard().key() == null)
             this.selectedCard = new Pair<>(null, null);
         else
-            this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
+            this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value())); // FIXME Dynamic type issue
     }
 
     /**

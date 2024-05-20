@@ -230,9 +230,20 @@ public class ViewController implements ViewEventReceiver {
         if(view.inGame()) {
             setup = event.getViewSetup();
             // TODO prepare message for the view
-            String message = "Assigned setup:\n" + setup.getStartCard().printSetupStartCard() + "\n" +
-                    setup.printSetupObjCards();
-            view.handleResponse(event.getID(), null, message);
+            StringBuilder message = new StringBuilder("Assigned setup:\n");
+            message.append(setup.getStartCard().printSetupStartCard()).append("\n");
+            message.append(setup.printSetupObjCards());
+            // end of assigned setup message: split[0]
+            message.append("%");
+            // start of hand message: split[1]
+            message.append(setup.printSetupHand());
+            message.append("%");
+            // start of common objectives message: split[2]
+            message.append(" ");
+            message.append("%");
+            // start of decks message: split[3]
+            message.append(" ");
+            view.handleResponse(event.getID(), null, message.toString());
         } else {
             System.out.println("Game state: event in wrong state");
         }

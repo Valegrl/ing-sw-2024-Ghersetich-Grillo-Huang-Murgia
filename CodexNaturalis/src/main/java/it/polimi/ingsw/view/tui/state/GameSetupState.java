@@ -11,12 +11,16 @@ public class GameSetupState extends ViewState {
 
     private String setupMessage;
 
+    private String handMessage;
+
     public GameSetupState(View view) {
         super(view);
     }
 
     @Override
     public void run() {
+        view.stopInputRead(true);
+        view.clearInput();
         clearConsole();
         view.printMessage("Game setup phase.\n");
         view.print("Waiting for the game to assign you a setup. . .");
@@ -32,6 +36,11 @@ public class GameSetupState extends ViewState {
                 break;
             case 2:
                 // See your assigned setup
+                clearConsole();
+                showResponseMessage(handMessage, 1000);
+                view.printMessage("Press and enter any key to go back: ");
+                view.getInput();
+                showSetupChoices();
                 break;
             case 3:
                 // See common objective cards
@@ -58,8 +67,11 @@ public class GameSetupState extends ViewState {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}
+                view.stopInputRead(false);
                 view.print("\r\033[2K");
-                setupMessage = message;
+                String[] m = message.split("%");
+                setupMessage = m[0];
+                handMessage = m[1];
                 showSetupChoices();
                 break;
             case EventID.UPDATE_GAME_PLAYERS:
@@ -69,11 +81,12 @@ public class GameSetupState extends ViewState {
     }
 
     private void showSetupChoices() {
+        clearConsole();
         view.printMessage(setupMessage);
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 "Choose setup"
-                , "See your assigned setup"
+                , "See your assigned hand"
                 , "See common objective cards"
                 , "See visible decks"
                 , "Open chat"

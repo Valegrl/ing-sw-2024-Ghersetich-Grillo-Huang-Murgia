@@ -21,11 +21,15 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
         StringBuilder sb = new StringBuilder();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         if (this.getPoints() != 0) {
+            sb.append(" ".repeat(indent));
             sb.append("  Points: ").append(this.getPoints()).append("\n");
         }
         Item[] corners = this.getCorners();
+        sb.append(" ".repeat(indent));
         sb.append("  Corners: \n");
+        sb.append(" ".repeat(indent));
         sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append(" ".repeat(indent));
         sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
