@@ -8,12 +8,12 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController"
-            prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
+            <!-- prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0"-->
     <children>
 
         <AnchorPane fx:id="inGameMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-                    stylesheets="@../../css/menu/menu.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
+                    stylesheets="@../../css/menu/menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
             <VBox alignment="CENTER" spacing="60" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                 <Text fx:id="usernameTextFX" textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="500.0"/>
                 <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
@@ -27,7 +27,7 @@
         </AnchorPane>
 
         <AnchorPane fx:id="lobbyCreateMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
-                    stylesheets="@../../css/menu/menu.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
+                    stylesheets="@../../css/menu/menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
             <VBox  alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
                 <TextField fx:id="lobbyNameField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Lobby name"/>
                 <TextField fx:id="numPlayersField" id="numPlayersField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="400.0" prefWidth="100.0" promptText="Number of players" />
@@ -38,15 +38,15 @@
         </AnchorPane>
 
         <AnchorPane fx:id="availableLobbiesMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
-                    stylesheets="@../../css/menu/menu.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
+                    stylesheets="@../../css/menu/menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
         </AnchorPane>
 
         <AnchorPane fx:id="reconnectGamesMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
-                    stylesheets="@../../css/menu/menu.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
+                    stylesheets="@../../css/menu/menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         </AnchorPane>
 
         <AnchorPane fx:id="profileSettingsMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
-                    stylesheets="@../../css/menu/menu.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
+                    stylesheets="@../../css/menu/menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
             <VBox fx:id="profileSettingsVBox" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
                 <Label fx:id="errorProfileSettings" text="" />
                 <Button mnemonicParsing="false" onAction="#notifyDeleteAccount" text="Delete account" />

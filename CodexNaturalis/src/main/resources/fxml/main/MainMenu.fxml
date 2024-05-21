@@ -6,12 +6,12 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.control.Pagination?>
+
+
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
 
-    <AnchorPane fx:id="mainMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0"
+    <AnchorPane fx:id="mainMenuFX" id="mainPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
                 xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/main/Main.css">
         <VBox id="mainVbox" alignment="CENTER_LEFT" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0">
             <Button mnemonicParsing="false" onAction="#goChooseConnection" text="Play"/>
@@ -22,16 +22,16 @@
         </VBox>
     </AnchorPane>
 
-    <AnchorPane fx:id="optionsMenuFX" id="mainPane" stylesheets="@../../css/main/Options.css" managed="false" visible="false" prefHeight="1080.0"
-                prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
+    <AnchorPane fx:id="optionsMenuFX" id="mainPane" stylesheets="@../../css/main/Options.css" managed="false" visible="false" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
     <VBox id="optionsVbox" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" alignment="CENTER_LEFT">
         <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen"/>
         <Button mnemonicParsing="false" onAction="#goBack" text="Back"/>
     </VBox>
     </AnchorPane>
 
-    <AnchorPane fx:id="creditsMenuFX"  id="mainPane" stylesheets="@../../css/main/Credits.css" managed="false" visible="false" prefHeight="1080.0"
-            prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
+    <AnchorPane fx:id="creditsMenuFX"  id="mainPane" stylesheets="@../../css/main/Credits.css" managed="false" visible="false" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
         <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
             <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="This game was made in special collaboration with Cranio Creations by:" textAlignment="CENTER" wrappingWidth="900.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" />
@@ -48,5 +48,6 @@
             </VBox>
         </VBox>
     </AnchorPane>
+
 
 </AnchorPane>

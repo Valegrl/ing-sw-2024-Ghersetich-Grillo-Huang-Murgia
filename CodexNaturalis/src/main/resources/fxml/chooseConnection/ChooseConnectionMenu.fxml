@@ -8,11 +8,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ChooseConnectionController"
-            prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ChooseConnectionController">
+            <!-- prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" -->
 
     <AnchorPane fx:id="chooseConnectionMenuFX" id="mainPane" stylesheets="@../../css/chooseConnection/ChooseConnection.css" xmlns="http://javafx.com/javafx/21"
-                xmlns:fx="http://javafx.com/fxml/1" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+                xmlns:fx="http://javafx.com/fxml/1" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <VBox alignment="CENTER" spacing="60" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <VBox alignment="CENTER" spacing="20">
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your connection type" textAlignment="CENTER" wrappingWidth="500.0" />
@@ -24,7 +24,7 @@
     </AnchorPane>
 
     <AnchorPane fx:id="rmiMenuFX" id="mainPane" visible="false" managed="false" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-                stylesheets="@../../css/chooseConnection/ChooseConnection.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+                stylesheets="@../../css/chooseConnection/ChooseConnection.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
     <VBox alignment="CENTER" spacing="40" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <VBox alignment="CENTER" spacing="20.0">
             <Text text="Enter Rmi IP Address:" />
@@ -37,7 +37,7 @@
     </AnchorPane>
 
     <AnchorPane fx:id="socketMenuFX" id="mainPane" visible="false" managed="false" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-                stylesheets="@../../css/chooseConnection/ChooseConnection.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+                stylesheets="@../../css/chooseConnection/ChooseConnection.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
     <VBox alignment="CENTER" spacing="40" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <VBox alignment="CENTER" spacing="20.0">
             <Text text="Enter Socket IP Address:" />
