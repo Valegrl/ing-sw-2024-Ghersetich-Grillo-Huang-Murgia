@@ -4,10 +4,20 @@
     -fx-background-size: cover;
 }
 
+#numPlayersField{
+    -fx-text-fill: white;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 50;
+}
+
+.deleteWarning{
+    -fx-fill: RED;
+}
 Text{
     -fx-fill: #ffffff;
-    -fx-font-size: 50;
-    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-size: 90;
+    -fx-font-family: "BebasNeuePro-Regular";
     -fx-border-width: 0;
     -fx-padding: 0;
 }
@@ -27,7 +37,7 @@ Text{
 
 .button{
     -fx-text-fill: #ffffff;
-    -fx-font-size: 100;
+    -fx-font-size: 80;
     -fx-font-family: "Bebas Neue Regular";
     -fx-background-color: transparent;
     -fx-border-width: 0;
@@ -39,7 +49,7 @@ Text{
 }
 
 .label{
-    -fx-text-fill: "RED";
+    -fx-text-fill: RED;
     -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
 }

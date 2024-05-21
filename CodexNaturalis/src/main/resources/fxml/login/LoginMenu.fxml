@@ -19,12 +19,12 @@
                   stylesheets="@../../css/login/Login.css" prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0" >
          <HBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20.0">
             <children>
-               <Button alignment="CENTER" onAction="#login" mnemonicParsing="false" text="Login">
+               <Button alignment="CENTER" onAction="#goLogin" mnemonicParsing="false" text="Login">
                   <HBox.margin>
                      <Insets right="30.0" />
                   </HBox.margin>
                </Button>
-               <Button alignment="CENTER" onAction="#register" mnemonicParsing="false" text="Register">
+               <Button alignment="CENTER" onAction="#goRegister" mnemonicParsing="false" text="Register">
                   <HBox.margin>
                      <Insets left="30.0" />
                   </HBox.margin>

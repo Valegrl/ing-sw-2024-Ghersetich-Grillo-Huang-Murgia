@@ -59,6 +59,7 @@ public class RulesController extends FXMLController {
     public void run(View view, Stage stage) {
         this.view = view;
         this.stage = stage;
+        this.controller = view.getController();
 
         imageView.setImage(images[0]);
     }

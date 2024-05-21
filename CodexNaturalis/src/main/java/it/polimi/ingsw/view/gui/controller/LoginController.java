@@ -18,8 +18,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -110,7 +108,7 @@ public class LoginController extends FXMLController {
     }
 
     @FXML
-    public void login(ActionEvent e){
+    public void goLogin(ActionEvent e){
         /*
         try {
 
@@ -140,7 +138,7 @@ public class LoginController extends FXMLController {
     }
 
     @FXML
-    public void register(ActionEvent e){
+    public void goRegister(ActionEvent e){
         /*
         try {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -196,6 +194,13 @@ public class LoginController extends FXMLController {
             exception.printStackTrace();
         }
          */
+        loginUsernameField.clear();
+        loginPasswordField.clear();
+        registerUsernameField.clear();
+        registerPasswordField.clear();
+        errorRegistration.setText("");
+        errorLogin.setText("");
+
         loginMenuFX.setVisible(true);
         loginMenuFX.setManaged(true);
         loginSubmitMenuFX.setVisible(false);
@@ -213,9 +218,19 @@ public class LoginController extends FXMLController {
         switch (EventID.getByID(eventID)) {
             case LOGIN:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
-                    //TODO IMPLEMENTATION
-                    /*transition(new MenuState(view));*/
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/inGame/InGameMenu.fxml"));
+                        Parent root = loader.load();
+                        MenuController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                        showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
+                    }
+                    catch (IOException exception){
+                        Platform.runLater(() -> errorLogin.setText("Error " + exception));
+                    }
                 } else {
                     Platform.runLater(() -> errorLogin.setText("Error " + message));
                     showResponseMessage("Login failed: " + message, 2000);
@@ -224,13 +239,14 @@ public class LoginController extends FXMLController {
             case REGISTER:
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
-                        try {
+                        /*try {
                             Stage stage = (Stage) registerUsernameField.getScene().getWindow();
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginForm.fxml"));
                             //LoginState controller = this;
                             loader.setController(controller);
                             Parent root = loader.load();
                             String css = this.getClass().getResource("/css/login/Login.css").toExternalForm();
+
 
                             loginPasswordField.setOnKeyPressed(event -> {
                                 if (event.getCode() == KeyCode.ENTER) {
@@ -243,9 +259,15 @@ public class LoginController extends FXMLController {
                             scene.getStylesheets().add(css);
 
                             scene.setRoot(root);
+
                         } catch (IOException exception) {
                             exception.printStackTrace();
                         }
+                         */
+                        registerSubmitMenuFX.setManaged(false);
+                        registerSubmitMenuFX.setVisible(false);
+                        loginSubmitMenuFX.setVisible(true);
+                        loginSubmitMenuFX.setManaged(true);
                     });
                     showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
 
@@ -253,7 +275,6 @@ public class LoginController extends FXMLController {
                     Platform.runLater(() -> errorRegistration.setText("Error " + message));
                     showResponseMessage("Registration failed: " + message, 2000);
                 }
-                run(view, stage);
                 break;
         }
     }

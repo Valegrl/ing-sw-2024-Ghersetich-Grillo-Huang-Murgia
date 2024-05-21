@@ -106,9 +106,7 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void print(String message) {
-
-    }
+    public void print(String message) {}
 
     @Override
     public ViewController getController() {

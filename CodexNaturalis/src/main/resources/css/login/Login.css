@@ -12,15 +12,15 @@
 }
 
 .text-field{
-    -fx-font-size: 40.0;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
+    -fx-font-size: 50.0;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
 }
 
 .password-field{
-    -fx-font-size: 40.0;
-    -fx-background-radius: 18 18 18 18;
-    -fx-border-radius: 18 18 18 18;
+    -fx-font-size: 50.0;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
 }
 
 .password-input{
