@@ -219,7 +219,7 @@ public class LoginController extends FXMLController {
             case LOGIN:
                 if (feedback == Feedback.SUCCESS) {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/inGame/InGameMenu.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menu/menu.fxml"));
                         Parent root = loader.load();
                         MenuController nextController = loader.getController();
 
