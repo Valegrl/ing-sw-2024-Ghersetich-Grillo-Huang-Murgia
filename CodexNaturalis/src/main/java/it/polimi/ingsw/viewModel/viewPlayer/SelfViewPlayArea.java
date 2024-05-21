@@ -1,6 +1,7 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.viewModel.CardConverter;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
@@ -11,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public final class SelfViewPlayArea implements Serializable {
+public final class SelfViewPlayArea implements Serializable, CardConverter {
     /**
      * The player's hand.
      */
@@ -35,7 +36,7 @@ public final class SelfViewPlayArea implements Serializable {
     /**
      * The selected card in the play area and its coordinate.
      */
-    private final Pair<Coordinate, ImmEvaluableCard> selectedCard;
+    private final Pair<Coordinate, ImmEvaluableCard> selectedCard; //TODO card converter (similar to ImmPlayableCard)
 
 
     /**
@@ -45,15 +46,7 @@ public final class SelfViewPlayArea implements Serializable {
      */
     public SelfViewPlayArea(PlayArea playArea) {
         this.hand = playArea.getHand().stream()
-                .map(card -> {
-                    if (card.getCardType().equals(CardType.GOLD)) {
-                        return new ImmGoldCard((GoldCard) card);
-                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
-                        return new ImmResourceCard((ResourceCard) card);
-                    } else {
-                        return new ImmPlayableCard(card);
-                    }
-                })
+                .map(this::convertToImmCardType)
                 .toList();
         this.startCard = new ImmStartCard(playArea.getStartCard());
         this.playedCards = playArea.getPlayedCards().entrySet().stream()

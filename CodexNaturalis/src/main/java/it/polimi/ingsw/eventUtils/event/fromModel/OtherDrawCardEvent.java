@@ -8,7 +8,6 @@ import it.polimi.ingsw.viewModel.turnAction.draw.OtherDrawCardData;
 
 /**
  * The OtherDrawCardEvent class represents an event that occurs when a card is drawn by another player.
- * It includes the data of the drawn card.
  */
 public class OtherDrawCardEvent extends Event {
 
@@ -18,18 +17,32 @@ public class OtherDrawCardEvent extends Event {
     private final static String id = EventID.OTHER_DRAW_CARD.getID();
 
     /**
+     * The message associated with the event.
+     */
+    private final String message;
+
+    /**
      * The data of the drawn card.
      */
     private final OtherDrawCardData otherDrawCardData;
 
     /**
-     * Constructs a new OtherDrawCardEvent with the given drawn card data.
+     * Constructs a new OtherDrawCardEvent with the given drawn card data and a message.
      *
      * @param data The data of the drawn card.
+     * @param message The message associated with the event.
      */
-    public OtherDrawCardEvent(OtherDrawCardData data) {
+    public OtherDrawCardEvent(OtherDrawCardData data, String message) {
         super(id);
         this.otherDrawCardData = data;
+        this.message = message;
+    }
+
+    /**
+     * @return The message associated with the event.
+     */
+    public String getMessage() {
+        return message;
     }
 
     /**

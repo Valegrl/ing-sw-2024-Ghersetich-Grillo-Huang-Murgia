@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * It contains an array of immutable objective cards, an immutable start card, and other card-related attributes.
  * All cards are represented in their immutable form.
  */
-public class ViewStartSetup implements Serializable {
+public class ViewStartSetup implements Serializable, CardConverter {
     /**
      * An array of secret objective cards assigned to the player.
      */
@@ -85,15 +85,7 @@ public class ViewStartSetup implements Serializable {
         this.secretObjectiveCards = convertToImmObjectiveCards(objectiveCards);
         this.startCard = new ImmStartCard(start);
         this.hand = hand.stream()
-                .map(card -> {
-                    if (card.getCardType().equals(CardType.GOLD)) {
-                        return new ImmGoldCard((GoldCard) card);
-                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
-                        return new ImmResourceCard((ResourceCard) card);
-                    } else {
-                        return new ImmPlayableCard(card);
-                    }
-                })
+                .map(this::convertToImmCardType)
                 .toList();
         this.visibleGoldCards = convertToImmPlayableCards(goldVisible);
         this.goldDeck = goldDeck;
@@ -129,15 +121,7 @@ public class ViewStartSetup implements Serializable {
      */
     private ImmPlayableCard[] convertToImmPlayableCards(PlayableCard[] cards) {
         return Arrays.stream(cards)
-                .map(card -> {
-                    if (card.getCardType().equals(CardType.GOLD)) {
-                        return new ImmGoldCard((GoldCard) card);
-                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
-                        return new ImmResourceCard((ResourceCard) card);
-                    } else {
-                        return new ImmPlayableCard(card);
-                    }
-                })
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
     }
 

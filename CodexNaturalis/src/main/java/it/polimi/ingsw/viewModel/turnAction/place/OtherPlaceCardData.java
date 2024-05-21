@@ -5,8 +5,6 @@ import it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea;
 
 /**
  * The OtherPlaceCardData class represents the data associated with the event of another player placing a card.
- * It includes the game status, a flag indicating if the last circle was detected, the opponent's username,
- * and the play area of the opponent.
  */
 public class OtherPlaceCardData extends PlaceCardData {
 
@@ -22,7 +20,6 @@ public class OtherPlaceCardData extends PlaceCardData {
 
     /**
      * Constructs a new OtherPlaceCardData with the given game model and username.
-     * It initializes the game status, detected last circle flag, and the play area of the opponent.
      *
      * @param model The game model.
      * @param username The username of the opponent.

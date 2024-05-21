@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 /**
  * The OtherDrawCardData class represents the data associated with the event of another player drawing a card.
- * It includes the game status, a flag indicating if the last circle was detected, the top card of the resource deck,
- * the top card of the gold deck, the visible resource and gold cards, and the hand of the other player.
  */
 public class OtherDrawCardData extends DrawCardData{
 
@@ -25,8 +23,6 @@ public class OtherDrawCardData extends DrawCardData{
 
     /**
      * Constructs a new OtherDrawCardData with the given game model and username.
-     * It initializes the game status, detected last circle flag, top cards of the decks, visible cards, and the hand
-     * of the other player.
      *
      * @param model The game model.
      * @param username The username of the other player.

@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 /**
  * The PlaceCardData class represents the data associated with the event of a player placing a card.
- * It includes the game status, a flag indicating if the last circle was detected, and the scoreboard of the game.
- * This class is abstract and should be extended.
  */
 public abstract class PlaceCardData implements Serializable {
 
@@ -31,7 +29,6 @@ public abstract class PlaceCardData implements Serializable {
 
     /**
      * Constructs a new PlaceCardData with the given game model.
-     * It initializes the game status, detected last circle flag, and the scoreboard of the game.
      *
      * @param model The game model.
      */

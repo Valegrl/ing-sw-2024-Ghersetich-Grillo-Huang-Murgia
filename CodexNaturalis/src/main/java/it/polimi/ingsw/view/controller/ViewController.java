@@ -250,12 +250,12 @@ public class ViewController implements ViewEventReceiver {
     }
 
     @Override
-    public void evaluateEvent(MyDrawCardEvent event) {
+    public void evaluateEvent(SelfDrawCardEvent event) {
 
     }
 
     @Override
-    public void evaluateEvent(MyPlaceCardEvent event) {
+    public void evaluateEvent(SelfPlaceCardEvent event) {
 
     }
 

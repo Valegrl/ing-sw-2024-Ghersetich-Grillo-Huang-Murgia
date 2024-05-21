@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.GoldCard;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.ResourceCard;
+import it.polimi.ingsw.viewModel.CardConverter;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 
 import java.io.Serializable;
@@ -12,10 +13,8 @@ import java.util.Arrays;
 
 /**
  * The DrawCardData class represents the data associated with the event of drawing a card.
- * It includes the game status, a flag indicating if the last circle was detected, the top card of the resource deck,
- * the top card of the gold deck, and the visible resource and gold cards. This class is abstract and should be extended.
  */
-public abstract class DrawCardData implements Serializable {
+public abstract class DrawCardData implements Serializable, CardConverter {
 
     /**
      * The status of the game.
@@ -49,7 +48,6 @@ public abstract class DrawCardData implements Serializable {
 
     /**
      * Constructs a new DrawCardData with the given game model.
-     * It initializes the game status, detected last circle flag, top cards of the decks, and visible cards.
      *
      * @param model The game model.
      */
@@ -61,10 +59,10 @@ public abstract class DrawCardData implements Serializable {
         GoldCard otherGC = model.seeGoldTopCard();
         this.topGoldDeck = otherGC == null ? null : otherGC.getPermanentResource();
         this.visibleResourceCards = Arrays.stream(model.getVisibleResourceCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
         this.visibleGoldCards = Arrays.stream(model.getVisibleGoldCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
     }
 

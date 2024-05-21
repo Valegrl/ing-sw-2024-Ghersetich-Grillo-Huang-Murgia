@@ -56,14 +56,14 @@ public enum EventID {
     CHOOSE_CARDS_SETUP("CHOOSE_CARDS_SETUP", ChooseCardsSetupEvent.class),
 
     /**
-     * The {@link MyDrawCardEvent} ID.
+     * The {@link SelfDrawCardEvent} ID.
      */
-    MY_DRAW_CARD("MY_DRAW_CARD", MyDrawCardEvent.class),
+    SELF_DRAW_CARD("SELF_DRAW_CARD", SelfDrawCardEvent.class),
 
     /**
-     * The {@link MyPlaceCardEvent} ID.
+     * The {@link SelfPlaceCardEvent} ID.
      */
-    MY_PLACE_CARD("MY_PLACE_CARD", MyPlaceCardEvent.class),
+    SELF_PLACE_CARD("SELF_PLACE_CARD", SelfPlaceCardEvent.class),
 
     /**
      * The {@link NewTurnEvent} ID.

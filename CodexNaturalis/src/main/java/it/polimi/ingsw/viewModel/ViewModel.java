@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * ViewModel is a class that represents a view of the game model.
  * It provides a way to get the state of the game without exposing the actual model.
  */
-public class ViewModel implements Serializable {
+public class ViewModel implements Serializable, CardConverter {
     /**
      * The id of the current game.
      */
@@ -113,10 +113,10 @@ public class ViewModel implements Serializable {
         this.gameStatus = model.getGameStatus();
         this.detectedLC = model.isDetectedLC();
         this.visibleResourceCards = Arrays.stream(model.getVisibleResourceCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
         this.visibleGoldCards = Arrays.stream(model.getVisibleGoldCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
         ResourceCard otherRC = model.seeResourceTopCard();
         this.topResourceDeck = otherRC == null ? null : otherRC.getPermanentResource();

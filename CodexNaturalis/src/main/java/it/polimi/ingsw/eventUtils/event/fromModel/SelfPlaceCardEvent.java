@@ -4,17 +4,17 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
-import it.polimi.ingsw.viewModel.turnAction.place.OtherPlaceCardData;
+import it.polimi.ingsw.viewModel.turnAction.place.SelfPlaceCardData;
 
 /**
- * The OtherPlaceCardEvent class represents an event that occurs when a card is placed by another player.
+ * The SelfPlaceCardEvent class represents an event that occurs when a card is placed by the current player.
  */
-public class OtherPlaceCardEvent extends Event {
+public class SelfPlaceCardEvent extends Event {
 
     /**
      * The id of the event.
      */
-    private final static String id = EventID.OTHER_PLACE_CARD.getID();
+    private final static String id = EventID.SELF_PLACE_CARD.getID();
 
     /**
      * The message associated with the event.
@@ -24,17 +24,17 @@ public class OtherPlaceCardEvent extends Event {
     /**
      * The data of the placed card.
      */
-    private final OtherPlaceCardData otherPlaceCardData;
+    private final SelfPlaceCardData selfPlaceCardData;
 
     /**
-     * Constructs a new OtherPlaceCardEvent with the given placed card data and a message.
+     * Constructs a new SelfPlaceCardEvent with the given placed card data and a message.
      *
      * @param data The data of the placed card.
      * @param message The message associated with the event.
      */
-    public OtherPlaceCardEvent(OtherPlaceCardData data, String message) {
+    public SelfPlaceCardEvent(SelfPlaceCardData data, String message) {
         super(id);
-        this.otherPlaceCardData = data;
+        this.selfPlaceCardData = data;
         this.message = message;
     }
 
@@ -48,8 +48,8 @@ public class OtherPlaceCardEvent extends Event {
     /**
      * @return The data of the placed card.
      */
-    public OtherPlaceCardData getOtherPlaceCardData() {
-        return otherPlaceCardData;
+    public SelfPlaceCardData getMyPlaceCardData() {
+        return selfPlaceCardData;
     }
 
     @Override

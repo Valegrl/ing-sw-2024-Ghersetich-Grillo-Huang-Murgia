@@ -561,10 +561,9 @@ public class GameController {
                         try {
                             game.placeCard(cardID, pos, flipped); /* update from model */
                             if (game.getGameStatus() == GameStatus.LAST_CIRCLE){
-                                nextTurn();
+                                nextTurn(); /* update from model */
                             } else
                                 this.startedMove = true;
-                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has placed a card."); // TODO into placeCard
                             return new PlaceCardEvent(Feedback.SUCCESS, null);
                         } catch (Exception e) {
                             return new PlaceCardEvent(Feedback.FAILURE, e.getMessage());
@@ -595,8 +594,7 @@ public class GameController {
                     if (startedMove) {
                         try {
                             game.drawCard(type, index); /* update from model */
-                            nextTurn();
-                            notifyAllOnlineGamePlayersExcept(username, "Player " + username + " has drawn a card."); //TODO into drawCard
+                            nextTurn(); /* update from model */
                             return new DrawCardEvent(Feedback.SUCCESS, null);
                         } catch (Exception e) {
                             return new DrawCardEvent(Feedback.FAILURE, e.getMessage());
@@ -646,9 +644,8 @@ public class GameController {
                 if (i==drawOptions.size())
                     throw new RuntimeException("There are no drawable cards.");
 
-                notifyAllOnlineGamePlayers("A new card has been automatically drawn for " + game.getCurrentPlayerUsername()); //TODO into drawCard
                 if (callNextTurn)
-                    nextTurn();
+                    nextTurn(); /* update from model */
             }
         }
     }
@@ -801,7 +798,9 @@ public class GameController {
                     synchronized (GameController.this) {
                         GameStatus gameStatus = game.getGameStatus();
                         if (gameStatus == GameStatus.RUNNING || gameStatus == GameStatus.LAST_CIRCLE) {
-                            notifyAllOnlineGamePlayers("The timer has run out!");
+                            String current = game.getCurrentPlayerUsername();
+                            notifySpecificOnlineGamePlayer(current, "Your time is up!");
+                            notifyAllOnlineGamePlayersExcept(current, "The timer for player " + current + " has run out!");
                             if (gameStatus == GameStatus.RUNNING && startedMove)
                                 autoDrawCard(true);
                             else

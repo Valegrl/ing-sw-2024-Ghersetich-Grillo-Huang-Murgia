@@ -4,17 +4,17 @@ import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
-import it.polimi.ingsw.viewModel.turnAction.place.OtherPlaceCardData;
+import it.polimi.ingsw.viewModel.turnAction.draw.SelfDrawCardData;
 
 /**
- * The OtherPlaceCardEvent class represents an event that occurs when a card is placed by another player.
+ * The SelfDrawCardEvent class represents an event that occurs when a card is drawn by the current player.
  */
-public class OtherPlaceCardEvent extends Event {
+public class SelfDrawCardEvent extends Event {
 
     /**
      * The id of the event.
      */
-    private final static String id = EventID.OTHER_PLACE_CARD.getID();
+    private final static String id = EventID.SELF_DRAW_CARD.getID();
 
     /**
      * The message associated with the event.
@@ -22,19 +22,19 @@ public class OtherPlaceCardEvent extends Event {
     private final String message;
 
     /**
-     * The data of the placed card.
+     * The data of the drawn card.
      */
-    private final OtherPlaceCardData otherPlaceCardData;
+    private final SelfDrawCardData selfDrawCardData;
 
     /**
-     * Constructs a new OtherPlaceCardEvent with the given placed card data and a message.
+     * Constructs a new SelfDrawCardEvent with the given drawn card data and a message.
      *
-     * @param data The data of the placed card.
+     * @param data The data of the drawn card.
      * @param message The message associated with the event.
      */
-    public OtherPlaceCardEvent(OtherPlaceCardData data, String message) {
+    public SelfDrawCardEvent(SelfDrawCardData data, String message) {
         super(id);
-        this.otherPlaceCardData = data;
+        this.selfDrawCardData = data;
         this.message = message;
     }
 
@@ -46,10 +46,10 @@ public class OtherPlaceCardEvent extends Event {
     }
 
     /**
-     * @return The data of the placed card.
+     * @return The data of the drawn card.
      */
-    public OtherPlaceCardData getOtherPlaceCardData() {
-        return otherPlaceCardData;
+    public SelfDrawCardData getMyDrawCardData() {
+        return selfDrawCardData;
     }
 
     @Override

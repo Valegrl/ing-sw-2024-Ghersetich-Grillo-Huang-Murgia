@@ -74,15 +74,15 @@ public interface ViewEventReceiver {
 
     /**
      * Handles the successful draw card event of the local player.
-     * @param event The MyDrawCardEvent to be handled.
+     * @param event The SelfDrawCardEvent to be handled.
      */
-    void evaluateEvent(MyDrawCardEvent event);
+    void evaluateEvent(SelfDrawCardEvent event);
 
     /**
      * Handles the successful place card event of the local player.
-     * @param event The MyPlaceCardEvent to be handled.
+     * @param event The SelfPlaceCardEvent to be handled.
      */
-    void evaluateEvent(MyPlaceCardEvent event);
+    void evaluateEvent(SelfPlaceCardEvent event);
 
     /**
      * Handles the event of a new turn during {@link GameStatus#RUNNING}.

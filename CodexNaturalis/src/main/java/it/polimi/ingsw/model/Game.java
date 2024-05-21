@@ -19,9 +19,9 @@ import it.polimi.ingsw.utils.PlayerCardsSetup;
 import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
-import it.polimi.ingsw.viewModel.turnAction.draw.MyDrawCardData;
+import it.polimi.ingsw.viewModel.turnAction.draw.SelfDrawCardData;
 import it.polimi.ingsw.viewModel.turnAction.draw.OtherDrawCardData;
-import it.polimi.ingsw.viewModel.turnAction.place.MyPlaceCardData;
+import it.polimi.ingsw.viewModel.turnAction.place.SelfPlaceCardData;
 import it.polimi.ingsw.viewModel.turnAction.place.OtherPlaceCardData;
 
 /**
@@ -326,10 +326,12 @@ public class Game {
             assignPoints(currPlayer, points);
 
         String currPlayerUsername = currPlayer.getUsername();
-        MyPlaceCardData myPlaceCardData = new MyPlaceCardData(this, currPlayerUsername);
+        SelfPlaceCardData selfPlaceCardData = new SelfPlaceCardData(this, currPlayerUsername);
         OtherPlaceCardData otherPlaceCardData = new OtherPlaceCardData(this, currPlayerUsername);
-        listeners.notifyListener(currPlayerUsername, new MyPlaceCardEvent(myPlaceCardData));
-        listeners.notifyAllExceptOne(currPlayerUsername, new OtherPlaceCardEvent(otherPlaceCardData));
+        String selfMessage = "Card placed!";
+        String otherMessage = "Player " + currPlayerUsername + " has placed a card.";
+        listeners.notifyListener(currPlayerUsername, new SelfPlaceCardEvent(selfPlaceCardData, selfMessage));
+        listeners.notifyAllExceptOne(currPlayerUsername, new OtherPlaceCardEvent(otherPlaceCardData, otherMessage));
     }
 
     /**
@@ -377,10 +379,12 @@ public class Game {
         if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) this.detectedLC = true;
 
         String currPlayerUsername = currPlayer.getUsername();
-        MyDrawCardData myDrawCardData = new MyDrawCardData(this, currPlayerUsername);
+        SelfDrawCardData selfDrawCardData = new SelfDrawCardData(this, currPlayerUsername);
         OtherDrawCardData otherDrawCardData = new OtherDrawCardData(this, currPlayerUsername);
-        listeners.notifyListener(currPlayerUsername, new MyDrawCardEvent(myDrawCardData));
-        listeners.notifyAllExceptOne(currPlayerUsername, new OtherDrawCardEvent(otherDrawCardData));
+        String selfMessage = "Card drawn!";
+        String otherMessage = "Player " + currPlayerUsername + " has drawn a card.";
+        listeners.notifyListener(currPlayerUsername, new SelfDrawCardEvent(selfDrawCardData, selfMessage));
+        listeners.notifyAllExceptOne(currPlayerUsername, new OtherDrawCardEvent(otherDrawCardData, otherMessage));
     }
 
     /**

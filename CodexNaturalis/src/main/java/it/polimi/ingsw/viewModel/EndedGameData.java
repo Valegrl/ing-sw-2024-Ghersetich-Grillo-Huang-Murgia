@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * scoreboard, tokens, and the state of the decks. It also includes the results of the game,
  * which is a list of player usernames who were online when the game ended, ordered by their scores.
  */
-public class EndedGameData implements Serializable {
+public class EndedGameData implements Serializable, CardConverter {
 
     /**
      * The id of the current game.
@@ -122,10 +122,10 @@ public class EndedGameData implements Serializable {
                 .map(ImmObjectiveCard::new)
                 .toArray(ImmObjectiveCard[]::new);
         this.visibleResourceCards = Arrays.stream(model.getVisibleResourceCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
         this.visibleGoldCards = Arrays.stream(model.getVisibleGoldCards())
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(this::convertToImmCardType)
                 .toArray(ImmPlayableCard[]::new);
         ResourceCard otherRC = model.seeResourceTopCard();
         this.topResourceDeck = otherRC == null ? null : otherRC.getPermanentResource();
