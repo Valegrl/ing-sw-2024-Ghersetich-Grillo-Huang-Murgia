@@ -134,11 +134,10 @@ public class PlayArea {
      *
      * @param c The card which is going to be placed.
      * @param pos The coordinates of the card.
-     * @param flipped Indicates if the card is placed flipped or not.
      * @throws MissingCardFromHandException If the played card is not present in the player's hand.
      * @throws NoCoveredCardsException If the card doesn't cover any other cards which is impossible.
      */
-    public void placeCard(PlayableCard c, Coordinate pos, boolean flipped){
+    public void placeCard(PlayableCard c, Coordinate pos){
         this.removeFromHand(c);
         Coordinate[] coveredCoordinates = newlyCoveredCards(pos);
 
@@ -183,10 +182,10 @@ public class PlayArea {
             }
         }
 
-        if(flipped) {
+        if(c.isFlipped()) {
             currItem = c.getPermanentResource();
             uncoveredItems.put(currItem, uncoveredItems.get(currItem) + 1);
-            for(CornerIndex i : CornerIndex.values())
+            for(CornerIndex i : CornerIndex.values()) /* redundant; just for test */
                 c.setCorner(Item.EMPTY, i.getIndex());
         } else {
             Item[] corners = c.getCorners();

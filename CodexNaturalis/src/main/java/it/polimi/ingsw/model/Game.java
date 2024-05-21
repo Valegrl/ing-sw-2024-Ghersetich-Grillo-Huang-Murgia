@@ -318,7 +318,7 @@ public class Game {
         } else if (flipped)
             c.flipCard();
 
-        currPlayer.getPlayArea().placeCard(c, pos, flipped);
+        currPlayer.getPlayArea().placeCard(c, pos);
 
         int points = c.getEvaluator().calculatePoints(currPlayer.getPlayArea());
 

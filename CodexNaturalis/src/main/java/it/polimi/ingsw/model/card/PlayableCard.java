@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.card;
 
 import it.polimi.ingsw.model.evaluator.Evaluator;
+import it.polimi.ingsw.model.player.PlayArea;
 
 import java.util.Map;
 
@@ -27,6 +28,13 @@ public abstract class PlayableCard extends EvaluableCard {
     private final CardType type;
 
     /**
+     * Indicates the current showing side of the PlayableCard.
+     * Flipped is false if the card is displayed with the front side,
+     * true if the card is displayed with the back side.
+     */
+    private boolean flipped;
+
+    /**
      * Constructs a new PlayableCard.
      *
      * @param id                A unique String associated with each card.
@@ -41,15 +49,7 @@ public abstract class PlayableCard extends EvaluableCard {
         this.permanentResource = permanentResource;
         this.corners = corners;
         this.type = type;
-    }
-
-    /**
-     * Flips the card by setting each corner as {@link Item#EMPTY empty}.
-     */
-    public void flipCard() {
-        for (CornerIndex c : CornerIndex.values()) {
-            corners[c.getIndex()] = Item.EMPTY;
-        }
+        this.flipped = false;
     }
 
     /**
@@ -96,5 +96,26 @@ public abstract class PlayableCard extends EvaluableCard {
      */
     public CardType getCardType() {
         return type;
+    }
+
+    /**
+     * Retrieves the showing side of the PlayableCard.
+     * true if it's flipped,
+     * false otherwise.
+     *
+     * @return The current showing side of the card, whether it's flipped or not.
+     */
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    /**
+     * Flips the card by setting each corner as {@link Item#EMPTY empty}.
+     */
+    public void flipCard() {
+        for (CornerIndex c : CornerIndex.values()) {
+            corners[c.getIndex()] = Item.EMPTY;
+        }
+        this.flipped = true;
     }
 }

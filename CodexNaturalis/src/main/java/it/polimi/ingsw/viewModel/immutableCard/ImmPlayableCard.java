@@ -24,6 +24,13 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
     private final CardType type;
 
     /**
+     * Indicates the current showing side of the ImmPlayableCard.
+     * Flipped is false if the card is displayed with the front side,
+     * true if the card is displayed with the back side.
+     */
+    private final boolean flipped;
+
+    /**
      * Constructs an immutable representation of the given {@link PlayableCard}.
      *
      * @param playableCard the playable card to represent
@@ -33,6 +40,7 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
         this.permanentResource = playableCard.getPermanentResource();
         this.corners = playableCard.getCorners().clone();
         this.type = playableCard.getCardType();
+        this.flipped = playableCard.isFlipped();
     }
 
     /**
@@ -67,6 +75,17 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
         return null;
     }
 
+    /**
+     * Retrieves the showing side of the ImmPlayableCard.
+     * true if it's flipped,
+     * false otherwise.
+     *
+     * @return The current showing side of the card, whether it's flipped or not.
+     */
+    public boolean isFlipped() {
+        return flipped;
+    }
+
     @Override
     public String printCard(int indent) {
         return null;
@@ -84,9 +103,9 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
      */
     public String printSimpleCard(int indent) {
         StringBuilder sb = new StringBuilder();
-        //sb.append(" ".repeat(indent)); TODO add flipped attribute to model's PlayableCard
-        // if(!flipped) sb.append("Showing face: front\n");
-        // else sb.append("Showing face: back\n");
+        sb.append(" ".repeat(indent));
+        if(!flipped) sb.append("Showing face: front\n");
+        else sb.append("Showing face: back\n");
         sb.append(" ".repeat(indent))
           .append("Corners: \n")
           .append(" ".repeat(indent + 2))

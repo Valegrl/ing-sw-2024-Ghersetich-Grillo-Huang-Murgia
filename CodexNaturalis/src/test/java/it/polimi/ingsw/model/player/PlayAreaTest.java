@@ -137,7 +137,7 @@ class PlayAreaTest {
         Mockito.when(playableCard.getPermanentResource()).thenReturn(Item.ANIMAL);
 
         playArea.addToHand(playableCard);
-        playArea.placeCard(playableCard, coordinate, false);
+        playArea.placeCard(playableCard, coordinate);
 
         assertEquals(playableCard, playArea.getCardByPos(coordinate));
         assertEquals(0, playArea.getUncoveredItems().get(Item.PLANT));
@@ -174,9 +174,10 @@ class PlayAreaTest {
         playArea1.addToHand(resourceCard2);
         playArea1.addToHand(goldCard1);
 
-        playArea1.placeCard(resourceCard1, new Coordinate(-1,1), false);
-        playArea1.placeCard(resourceCard2, new Coordinate(1,1), true);
-        playArea1.placeCard(goldCard1, new Coordinate(0,2), false);
+        playArea1.placeCard(resourceCard1, new Coordinate(-1,1));
+        resourceCard2.flipCard();
+        playArea1.placeCard(resourceCard2, new Coordinate(1,1));
+        playArea1.placeCard(goldCard1, new Coordinate(0,2));
 
         Map<Item, Integer> amount = playArea1.getUncoveredItems();
         List<Coordinate> freePos = playArea1.getAvailablePos();
@@ -215,7 +216,7 @@ class PlayAreaTest {
         PlayableCard playableCard = Mockito.mock(PlayableCard.class);
         Coordinate coordinate = new Coordinate(1, 1);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> playArea.placeCard(playableCard, coordinate, false));
+        Exception exception = assertThrows(RuntimeException.class, () -> playArea.placeCard(playableCard, coordinate));
         assertEquals("Your hand doesn't contain such card", exception.getMessage());
     }
 
@@ -226,7 +227,7 @@ class PlayAreaTest {
 
         playArea.addToHand(playableCard);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> playArea.placeCard(playableCard, coordinate, false));
+        Exception exception = assertThrows(RuntimeException.class, () -> playArea.placeCard(playableCard, coordinate));
         assertEquals("The card you placed didn't cover any other cards", exception.getMessage());
     }
 }
