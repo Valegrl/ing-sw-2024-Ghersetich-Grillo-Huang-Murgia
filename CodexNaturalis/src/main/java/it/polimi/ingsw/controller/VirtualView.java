@@ -33,6 +33,7 @@ import java.util.logging.Level;
  * The {@link GameListener} associated with this VirtualView receives updates about the game state, which are then
  * forwarded to the client.
  */
+@SuppressWarnings("all")
 public class VirtualView {
 
     /**

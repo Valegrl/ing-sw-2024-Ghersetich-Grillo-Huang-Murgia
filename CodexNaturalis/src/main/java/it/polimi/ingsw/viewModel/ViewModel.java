@@ -113,10 +113,10 @@ public class ViewModel implements Serializable {
         this.gameStatus = model.getGameStatus();
         this.detectedLC = model.isDetectedLC();
         this.visibleResourceCards = Arrays.stream(model.getVisibleResourceCards())
-                .map(ImmPlayableCard::new)
+                .map(card -> card == null ? null : new ImmPlayableCard(card))
                 .toArray(ImmPlayableCard[]::new);
         this.visibleGoldCards = Arrays.stream(model.getVisibleGoldCards())
-                .map(ImmPlayableCard::new)
+                .map(card -> card == null ? null : new ImmPlayableCard(card))
                 .toArray(ImmPlayableCard[]::new);
         ResourceCard otherRC = model.seeResourceTopCard();
         this.topResourceDeck = otherRC == null ? null : otherRC.getPermanentResource();

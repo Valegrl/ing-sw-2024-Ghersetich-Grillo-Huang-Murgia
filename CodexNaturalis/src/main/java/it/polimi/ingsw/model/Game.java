@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.NewTurnEvent;
 import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -18,6 +19,7 @@ import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
+import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 
@@ -458,8 +460,9 @@ public class Game {
 
         this.gameStatus = GameStatus.ENDED;
 
-        List<String> results =  getFinalLeaderboard(objPoints).stream().map(Player::getUsername).toList();
-        //TODO update listeners with specif event. Online players filter
+        List<Player> results =  getFinalLeaderboard(objPoints);
+        EndedGameData endedGameData = new EndedGameData(this, results);
+        listeners.notifyAllListeners(new EndedGameEvent(endedGameData));
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
-import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.viewModel.immutableCard.BackPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
@@ -19,7 +18,7 @@ public final class ViewPlayArea implements Serializable {
     /**
      * The list of immutable representations of cards in the opponent's hand.
      */
-    private final List<BackPlayableCard> hand;
+    private List<BackPlayableCard> hand;
 
     /**
      * The opponent's start card.
@@ -46,6 +45,14 @@ public final class ViewPlayArea implements Serializable {
                         Map.Entry::getKey,
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
+    }
+
+    /**
+     * Sets the opponent's hand with the given list of cards.
+     * @param hand The new list of {@link BackPlayableCard} objects representing the opponent's hand.
+     */
+    public void setHand(List<BackPlayableCard> hand) {
+        this.hand = hand;
     }
 
     /**

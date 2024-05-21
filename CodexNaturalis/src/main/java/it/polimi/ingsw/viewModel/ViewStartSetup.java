@@ -129,7 +129,7 @@ public class ViewStartSetup implements Serializable {
      */
     private ImmPlayableCard[] convertToImmPlayableCards(PlayableCard[] cards) {
         return Arrays.stream(cards)
-                .map(ImmPlayableCard::new)
+                .map(card -> card == null ? null : new ImmPlayableCard(card))
                 .toArray(ImmPlayableCard[]::new);
     }
 

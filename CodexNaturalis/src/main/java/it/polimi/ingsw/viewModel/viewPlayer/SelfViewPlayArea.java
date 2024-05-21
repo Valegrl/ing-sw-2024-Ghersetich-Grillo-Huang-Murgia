@@ -15,7 +15,7 @@ public final class SelfViewPlayArea implements Serializable {
     /**
      * The player's hand.
      */
-    private final List<ImmPlayableCard> hand;
+    private List<ImmPlayableCard> hand;
 
     /**
      * The player's start card.
@@ -66,6 +66,14 @@ public final class SelfViewPlayArea implements Serializable {
             this.selectedCard = new Pair<>(null, null);
         else
             this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value())); // FIXME Dynamic type issue
+    }
+
+    /**
+     * Sets the player's hand with the given list of cards.
+     * @param hand The new list of {@link ImmPlayableCard} objects representing the player's hand.
+     */
+    public void setHand(List<ImmPlayableCard> hand) {
+        this.hand = hand;
     }
 
     /**
