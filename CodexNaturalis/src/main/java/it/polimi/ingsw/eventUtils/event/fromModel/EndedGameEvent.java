@@ -25,11 +25,11 @@ public class EndedGameEvent extends Event {
     /**
      * Constructs a new EndedGameEvent with the given ended game data.
      *
-     * @param egd The data of the ended game.
+     * @param data The data of the ended game.
      */
-    public EndedGameEvent(EndedGameData egd) {
+    public EndedGameEvent(EndedGameData data) {
         super(id);
-        this.endedGameData = egd;
+        this.endedGameData = data;
     }
 
     /**

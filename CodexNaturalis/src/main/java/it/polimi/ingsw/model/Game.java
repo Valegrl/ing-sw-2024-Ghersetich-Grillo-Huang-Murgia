@@ -4,10 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
-import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.NewTurnEvent;
-import it.polimi.ingsw.eventUtils.event.fromModel.UpdateLocalModelEvent;
+import it.polimi.ingsw.eventUtils.event.fromModel.*;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.model.card.*;
@@ -22,6 +19,10 @@ import it.polimi.ingsw.utils.PlayerCardsSetup;
 import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
+import it.polimi.ingsw.viewModel.turnAction.draw.MyDrawCardData;
+import it.polimi.ingsw.viewModel.turnAction.draw.OtherDrawCardData;
+import it.polimi.ingsw.viewModel.turnAction.place.MyPlaceCardData;
+import it.polimi.ingsw.viewModel.turnAction.place.OtherPlaceCardData;
 
 /**
  * This class represents the game Codex Naturalis. It manages the game state, including the players,
@@ -48,12 +49,12 @@ public class Game {
     private final String id;
 
     /**
-     * The Game's {@link it.polimi.ingsw.model.card.ResourceCard resource cards} deck.
+     * The Game's {@link ResourceCard resource cards} deck.
      */
     private final Deck<ResourceCard> resourceDeck;
 
     /**
-     * The Game's {@link it.polimi.ingsw.model.card.GoldCard gold cards} deck.
+     * The Game's {@link GoldCard gold cards} deck.
      */
     private final Deck<GoldCard> goldDeck;
 
@@ -89,13 +90,32 @@ public class Game {
      */
     private final ObjectiveCard[] commonObjectives;
 
+    /**
+     * Manages the game listeners for each player in the game.
+     * It is responsible for changing, notifying, and notifying all listeners.
+     */
     private final GameListenersManager listeners;
 
+    /**
+     * Represents the current status of the game.
+     */
     private GameStatus gameStatus;
 
+    /**
+     * Represents the backup status of the game.
+     * It is used to store the previous game status when the game status changes to WAITING due to a player disconnecting.
+     */
     private GameStatus backupGameStatus;
 
+    /**
+     * A flag indicating if the last circle was detected.
+     * It is set to true when both the resource deck and the gold deck are empty or a player has reached 20 points.
+     */
     private boolean detectedLC;
+
+    /**
+     * Used to check if a circle of turns is ended.
+     */
     private int circleChecker;
 
     /**
@@ -209,6 +229,14 @@ public class Game {
         return cardsSetup;
     }
 
+    /**
+     * Starts the game by setting the turn to the first online player.
+     * If there is only one online player, the game status is set to WAITING.
+     * Otherwise, the game status is set to RUNNING.
+     * After setting the game status, it updates the local model for all players.
+     *
+     * @throws IllegalStateException If there are no online players when the method is called.
+     */
     public void startTurn(){
         this.turnPlayerIndex = 0;
         if (onlinePlayersNumber() < 1)
@@ -297,14 +325,18 @@ public class Game {
         if (points != 0)
             assignPoints(currPlayer, points);
 
-        // TODO update others' model + placeCardEvent
+        String currPlayerUsername = currPlayer.getUsername();
+        MyPlaceCardData myPlaceCardData = new MyPlaceCardData(this, currPlayerUsername);
+        OtherPlaceCardData otherPlaceCardData = new OtherPlaceCardData(this, currPlayerUsername);
+        listeners.notifyListener(currPlayerUsername, new MyPlaceCardEvent(myPlaceCardData));
+        listeners.notifyAllExceptOne(currPlayerUsername, new OtherPlaceCardEvent(otherPlaceCardData));
     }
 
     /**
      * Draws a card from the chosen deck or from the visible cards array.
      * If a card is drawn from the visible cards array, it is replaced with the top card from the corresponding deck.
      * If the corresponding deck is empty, it is replaced with the top card from the other deck.
-     * If both decks are empty, the game status is updated to LAST_CIRCLE.
+     * If both decks are empty, the {@link #detectedLC} is updated to true.
      * The drawn card is added to the current player's hand.
      *
      * @param chosenDeck The deck from which the card should be drawn.
@@ -342,9 +374,13 @@ public class Game {
         Player currPlayer = players.get(turnPlayerIndex);
         currPlayer.getPlayArea().addToHand(drawnCard);
 
-        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) this.detectedLC = true; //TODO update players
+        if (resourceDeck.getSize() == 0 && goldDeck.getSize() == 0) this.detectedLC = true;
 
-        // TODO update others' model + drawCardEvent
+        String currPlayerUsername = currPlayer.getUsername();
+        MyDrawCardData myDrawCardData = new MyDrawCardData(this, currPlayerUsername);
+        OtherDrawCardData otherDrawCardData = new OtherDrawCardData(this, currPlayerUsername);
+        listeners.notifyListener(currPlayerUsername, new MyDrawCardEvent(myDrawCardData));
+        listeners.notifyAllExceptOne(currPlayerUsername, new OtherDrawCardEvent(otherDrawCardData));
     }
 
     /**
@@ -364,7 +400,7 @@ public class Game {
 
     /**
      * Assigns the given points to the selected {@link Player} in the {@link Game#scoreboard}.
-     * If the updated score is at least 20, the game updates his {@link Game#gameStatus} status.
+     * If the updated score is at least 20, the {@link #detectedLC} is updated to true.
      * The maximum score of the {@link Game#scoreboard} is 29.
      *
      * @param p      The player to assign the points to.
@@ -378,12 +414,15 @@ public class Game {
         currScore += points;
 
         if (currScore >= 20 && !gameStatus.equals(GameStatus.LAST_CIRCLE))
-            this.detectedLC = true; //TODO update players
+            this.detectedLC = true;
         if (currScore > 29) currScore = 29;
 
         scoreboard.put(p, currScore);
     }
 
+    /**
+     * @return The number of online players.
+     */
     private int onlinePlayersNumber() {
         int i = 0;
         for (Player p: players) {
@@ -394,6 +433,9 @@ public class Game {
 
     /**
      * Sets the {@link Player}'s online status as false.
+     * If the number of online players drops to one and the game status is not SETUP,
+     * the game status is changed to WAITING.
+     *
      * @param user The Player's username.
      */
     public void offlinePlayer(String user) {
@@ -408,7 +450,15 @@ public class Game {
 
     /**
      * Sets the {@link Player}'s online status as true.
-     * @param user The Player's username.
+     * If the game status is not SETUP and there are at least two online players, the game status is restored to
+     * its backup status.
+     * If the game status is not SETUP and there is only one online player, the game status remains as WAITING.
+     * If the game status is not ENDED, it sends a ReconnectToGameEvent to the reconnected player.
+     *
+     * @param user The username of the player to reconnect.
+     * @param gl The game listener of the player to reconnect.
+     * @throws PlayerNotFoundException If there is no player with the provided username.
+     * @throws IllegalStateException If there are no online players when the method is called.
      */
     public void reconnectPlayer(String user, GameListener gl) {
         Player p = getPlayerFromUsername(user);
@@ -611,6 +661,9 @@ public class Game {
         return players;
     }
 
+    /**
+     * @return A list of usernames of all players in the game.
+     */
     public List<String> getPlayerUsernames() {
         return players.stream()
                 .map(Player::getUsername)
@@ -662,6 +715,12 @@ public class Game {
         return gameStatus;
     }
 
+    /**
+     * Retrieves the backup status of the game.
+     * The backup status is used to store the previous game status when the game status changes to WAITING due to a player disconnecting.
+     *
+     * @return The backup status of the game.
+     */
     public GameStatus getBackupGameStatus() {
         return backupGameStatus;
     }
@@ -673,10 +732,16 @@ public class Game {
         return players.get(turnPlayerIndex).getUsername().equals(player);
     }
 
+    /**
+     * @return The username of the player who currently has the turn.
+     */
     public String getCurrentPlayerUsername() {
         return players.get(turnPlayerIndex).getUsername();
     }
 
+    /**
+     * @return A set of usernames of all online players in the game.
+     */
     public Set<String> getOnlinePlayers() {
         return players.stream()
                 .filter(Player::isOnline)
@@ -684,6 +749,13 @@ public class Game {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Checks if the last circle was detected.
+     * The last circle is detected when both the resource deck and the gold deck are empty or a player has reached
+     * 20 points.
+     *
+     * @return True if the last circle was detected, false otherwise.
+     */
     public boolean isDetectedLC() {
         return detectedLC;
     }
