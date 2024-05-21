@@ -30,10 +30,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
         super(goldCard);
         this.constraint = Map.copyOf(goldCard.getConstraint());
         Map<Item, Integer> requiredItems = goldCard.getRequiredItems();
-        if (requiredItems == null)
-            this.requiredItems = null;
-        else
-            this.requiredItems = Map.copyOf(requiredItems);
+        this.requiredItems = (requiredItems == null ? null : Map.copyOf(requiredItems));
     }
 
     @Override

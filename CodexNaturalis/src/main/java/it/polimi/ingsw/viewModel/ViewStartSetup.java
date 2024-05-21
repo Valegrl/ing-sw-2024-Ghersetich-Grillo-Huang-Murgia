@@ -129,7 +129,15 @@ public class ViewStartSetup implements Serializable {
      */
     private ImmPlayableCard[] convertToImmPlayableCards(PlayableCard[] cards) {
         return Arrays.stream(cards)
-                .map(card -> card == null ? null : new ImmPlayableCard(card))
+                .map(card -> {
+                    if (card.getCardType().equals(CardType.GOLD)) {
+                        return new ImmGoldCard((GoldCard) card);
+                    } else if (card.getCardType().equals(CardType.RESOURCE)) {
+                        return new ImmResourceCard((ResourceCard) card);
+                    } else {
+                        return new ImmPlayableCard(card);
+                    }
+                })
                 .toArray(ImmPlayableCard[]::new);
     }
 
@@ -145,15 +153,53 @@ public class ViewStartSetup implements Serializable {
     }
 
     public String printSetupHand() {
-        int indent = 6;
+        int indent = 5;
         StringBuilder sb = new StringBuilder();
-        sb.append("  Hand: \n");
+        sb.append("Hand: \n");
         for (int i = 0; i < hand.size(); i++) {
-            sb.append("    ")
+            sb.append("  ")
                     .append(i + 1)
                     .append("- ")
                     .append(hand.get(i).printCard(indent));
         }
+        return sb.toString();
+    }
+
+    public String printSetupCommonObjectives() {
+        int indent = 5;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Common objectives: \n");
+        for (int i = 0; i < commonObjectives.length; i++) {
+            sb.append("  ")
+                    .append(i + 1)
+                    .append("- ")
+                    .append(commonObjectives[i].printCard(indent));
+        }
+        return sb.toString();
+    }
+
+    public String printSetupDecks() {
+        int indent = 12;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Decks: \n");
+        sb.append("  1- Gold deck:\n")
+                .append("       Top card: ")
+                .append(Item.itemToColor(goldDeck))
+                .append("\n")
+                .append("       Visible cards:\n")
+                .append("         1- ")
+                .append(visibleGoldCards[0].printCard(indent))
+                .append("         2- ")
+                .append(visibleGoldCards[1].printCard(indent));
+        sb.append("  2- Resource deck:\n")
+                .append("       Top card: ")
+                .append(Item.itemToColor(resourceDeck))
+                .append("\n")
+                .append("       Visible cards: \n")
+                .append("         1- ")
+                .append(visibleResourceCards[0].printCard(indent))
+                .append("         2- ")
+                .append(visibleResourceCards[1].printCard(indent));
         return sb.toString();
     }
 

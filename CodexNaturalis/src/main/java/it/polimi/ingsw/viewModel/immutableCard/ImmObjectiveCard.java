@@ -32,13 +32,9 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToSt
     public ImmObjectiveCard(ObjectiveCard objectiveCard) {
         super(objectiveCard);
         Pair<Coordinate, Item>[] requiredPattern = objectiveCard.getRequiredPattern();
-        if (requiredPattern != null)
-            this.requiredPattern = requiredPattern.clone();
-        else this.requiredPattern = null;
+        this.requiredPattern = (requiredPattern == null ? null: requiredPattern.clone());
         Map<Item, Integer> reqItems = objectiveCard.getRequiredItems();
-        if (reqItems != null)
-            this.requiredItems = Map.copyOf(reqItems);
-        else this.requiredItems = null;
+        this.requiredItems = (reqItems == null ? null: Map.copyOf(reqItems));
     }
 
     @Override

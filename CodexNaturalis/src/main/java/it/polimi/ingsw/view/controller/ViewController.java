@@ -239,10 +239,10 @@ public class ViewController implements ViewEventReceiver {
             message.append(setup.printSetupHand());
             message.append("%");
             // start of common objectives message: split[2]
-            message.append(" ");
+            message.append(setup.printSetupCommonObjectives());
             message.append("%");
             // start of decks message: split[3]
-            message.append(" ");
+            message.append(setup.printSetupDecks());
             view.handleResponse(event.getID(), null, message.toString());
         } else {
             System.out.println("Game state: event in wrong state");
