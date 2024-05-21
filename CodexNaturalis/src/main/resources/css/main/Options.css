@@ -4,10 +4,6 @@
     -fx-background-size: cover;
 }
 
-#optionsVbox{
-    -fx-padding: 0 0 0 20;
-}
-
 .button{
     -fx-text-fill: #ffffff;
     -fx-font-size: 100;

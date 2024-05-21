@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.controller;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,12 +28,12 @@ public class RulesController extends FXMLController {
 
     public RulesController(){
         super();
-        images[0] = new Image("/images/background/rules/rules1.png");
-        images[1] = new Image("/images/background/rules/rules2.png");
-        images[2] = new Image("/images/background/rules/rules3.png");
-        images[3] = new Image("/images/background/rules/rules4.png");
-        images[4] = new Image("/images/background/rules/rules5.png");
-        images[5] = new Image("/images/background/rules/rules6.png");
+        images[0] = new Image("/images/rules/rules1.png");
+        images[1] = new Image("/images/rules/rules2.png");
+        images[2] = new Image("/images/rules/rules3.png");
+        images[3] = new Image("/images/rules/rules4.png");
+        images[4] = new Image("/images/rules/rules5.png");
+        images[5] = new Image("/images/rules/rules6.png");
     }
 
 
@@ -97,7 +96,7 @@ public class RulesController extends FXMLController {
         }
          */
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
             Parent root = loader.load();
             MainMenuController nextController = loader.getController();
 

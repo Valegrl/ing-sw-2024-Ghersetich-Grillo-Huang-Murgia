@@ -4,14 +4,12 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
-import javafx.css.Rule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainMenuController extends FXMLController {
@@ -36,23 +34,8 @@ public class MainMenuController extends FXMLController {
 
     @FXML
     public void goChooseConnection(ActionEvent e) throws Exception {
-        /*Can't use the FXML standard loader as it requires a parameter-less constructor!*/
-        /*
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/ChooseConnectionMenu.fxml"));
-        ChooseConnectionState controller = new ChooseConnectionState(view);
-        loader.setController(controller);
 
-        Parent root = loader.load();
-        String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnection.css").toExternalForm();
-
-        Scene scene = stage.getScene();
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);
-        scene.setRoot(root);
-
-        transition(controller);
-         */
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnection/ChooseConnectionMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChooseConnectionMenu.fxml"));
         Parent root = loader.load();
         ChooseConnectionController nextController = loader.getController();
 
@@ -69,22 +52,6 @@ public class MainMenuController extends FXMLController {
 
     @FXML
     public void goOptions(ActionEvent e){
-        /*
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/Options.fxml"));
-        MainMenuController controller = this;
-        loader.setController(controller);
-        Parent root = loader.load();
-        String css = this.getClass().getResource("/css/main/Options.css").toExternalForm();
-
-        Scene scene = stage.getScene();
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);
-        scene.setRoot(root);
-         */
-        /*String css = this.getClass().getResource("/css/main/Options.css").toExternalForm();
-        mainMenuFX.getStylesheets().clear();
-        mainMenuFX.getStylesheets().add(css);
-         */
 
         mainMenuFX.setVisible(false);
         mainMenuFX.setManaged(false);
@@ -107,18 +74,6 @@ public class MainMenuController extends FXMLController {
 
     @FXML
     public void goBack(ActionEvent e){
-        /*
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
-        MainMenuController controller = this;
-        loader.setController(controller);
-        Parent root = loader.load();
-        String css = this.getClass().getResource("/css/main/Main.css").toExternalForm();
-
-        Scene scene = stage.getScene();
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);
-        scene.setRoot(root);
-         */
 
         mainMenuFX.setVisible(true);
         mainMenuFX.setManaged(true);
@@ -140,7 +95,7 @@ public class MainMenuController extends FXMLController {
     @FXML
     public void goRules(ActionEvent e) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules/Rules.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules.fxml"));
         Parent root = loader.load();
         RulesController controller = loader.getController();
 
@@ -148,7 +103,6 @@ public class MainMenuController extends FXMLController {
         scene.setRoot(root);
 
         transition(controller);
-
     }
 
     @Override

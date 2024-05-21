@@ -8,12 +8,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
@@ -43,12 +41,6 @@ public class ChooseConnectionController extends FXMLController {
 
     @FXML
     private TextField IpRmiField;
-
-    @FXML
-    private Button submitSocketButton;
-
-    @FXML
-    private Button submitRmiButton;
 
 
     public ChooseConnectionController() {
@@ -89,7 +81,7 @@ public class ChooseConnectionController extends FXMLController {
             try {
                 ClientManager.getInstance().initSocket(IpSocket, 1098);
                 /*Unhandled RemoteServer Exception if server is off ?*/
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
                 Parent root = loader.load();
                 LoginController nextController = loader.getController();
 
@@ -117,7 +109,7 @@ public class ChooseConnectionController extends FXMLController {
             try {
                 ClientManager.getInstance().initRMI(IpRmi);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
                 Parent root = loader.load();
                 LoginController nextController = loader.getController();
 
@@ -134,7 +126,7 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     public void goBackMain(ActionEvent e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
             Parent root = loader.load();
             MainMenuController nextController = loader.getController();
 
@@ -150,23 +142,6 @@ public class ChooseConnectionController extends FXMLController {
 
     @FXML
     public void goBackConnection(ActionEvent e){
-        /*
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/ChooseConnectionMenu.fxml"));
-            ChooseConnectionController controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnection.css").toExternalForm();
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-            scene.setRoot(root);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-         */
 
         chooseConnectionMenuFX.setVisible(true);
         chooseConnectionMenuFX.setManaged(true);
@@ -178,39 +153,6 @@ public class ChooseConnectionController extends FXMLController {
 
     @FXML
     public void setSocket(ActionEvent e){
-        /*
-        try {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/SocketForm.fxml"));
-            ChooseConnectionController controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnection.css").toExternalForm();
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-            scene.setRoot(root);
-
-            IpSocketField.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    submitSocket(new ActionEvent());
-                }
-
-            });
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-         */
-        /*IpSocketField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                submitSocket(new ActionEvent());
-            }
-        });
-         */
-
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
         socketMenuFX.setVisible(true);
@@ -219,40 +161,6 @@ public class ChooseConnectionController extends FXMLController {
 
     @FXML
     public void setRmi(ActionEvent e){
-        /*
-        try {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chooseConnectionState/RmiForm.fxml"));
-            ChooseConnectionController controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/chooseConnectionState/ChooseConnection.css").toExternalForm();
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-
-            scene.setRoot(root);
-
-            IpRmiField.setOnKeyPressed(event -> {
-                if(event.getCode() == KeyCode.ENTER) {
-                    submitRmi(new ActionEvent());
-                }
-            });
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-         */
-
-        /*Not needed as I can use setDefaultButton*/
-       /* IpRmiField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                submitRmi(new ActionEvent());
-            }
-        });
-        */
 
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);

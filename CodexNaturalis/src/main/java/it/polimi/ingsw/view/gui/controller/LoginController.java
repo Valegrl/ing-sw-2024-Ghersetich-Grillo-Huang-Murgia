@@ -109,27 +109,6 @@ public class LoginController extends FXMLController {
 
     @FXML
     public void goLogin(ActionEvent e){
-        /*
-        try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginForm.fxml"));
-
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
-
-
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-
-            scene.setRoot(root);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-
-         */
 
         loginMenuFX.setVisible(false);
         loginMenuFX.setManaged(false);
@@ -139,32 +118,6 @@ public class LoginController extends FXMLController {
 
     @FXML
     public void goRegister(ActionEvent e){
-        /*
-        try {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/RegisterForm.fxml"));
-            LoginState controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
-
-            registerPasswordField.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    submitRegister(new ActionEvent());
-                }
-            });
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-
-            scene.setRoot(root);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-         */
 
         loginMenuFX.setVisible(false);
         loginMenuFX.setManaged(false);
@@ -174,26 +127,7 @@ public class LoginController extends FXMLController {
 
     @FXML
     public void goBack(ActionEvent e){
-        /*
-        try {
-            Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginState/LoginMenu.fxml"));
-            LoginState controller = this;
-            loader.setController(controller);
-            Parent root = loader.load();
-            String css = this.getClass().getResource("/css/loginState/Login.css").toExternalForm();
-
-            Scene scene = stage.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(css);
-
-            scene.setRoot(root);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-         */
         loginUsernameField.clear();
         loginPasswordField.clear();
         registerUsernameField.clear();
@@ -210,7 +144,6 @@ public class LoginController extends FXMLController {
     }
 
 
-    /*Vital method, don't delete*/
     @Override
     @FXML
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -219,7 +152,7 @@ public class LoginController extends FXMLController {
             case LOGIN:
                 if (feedback == Feedback.SUCCESS) {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menu/menu.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
                         Parent root = loader.load();
                         MenuController nextController = loader.getController();
 
@@ -239,31 +172,6 @@ public class LoginController extends FXMLController {
             case REGISTER:
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
-                        /*try {
-                            Stage stage = (Stage) registerUsernameField.getScene().getWindow();
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginForm.fxml"));
-                            //LoginState controller = this;
-                            loader.setController(controller);
-                            Parent root = loader.load();
-                            String css = this.getClass().getResource("/css/login/Login.css").toExternalForm();
-
-
-                            loginPasswordField.setOnKeyPressed(event -> {
-                                if (event.getCode() == KeyCode.ENTER) {
-                                    submitLogin(new ActionEvent());
-                                }
-                            });
-
-                            Scene scene = stage.getScene();
-                            scene.getStylesheets().clear();
-                            scene.getStylesheets().add(css);
-
-                            scene.setRoot(root);
-
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
-                        }
-                         */
                         registerSubmitMenuFX.setManaged(false);
                         registerSubmitMenuFX.setVisible(false);
                         loginSubmitMenuFX.setVisible(true);

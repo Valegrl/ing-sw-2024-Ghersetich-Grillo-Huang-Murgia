@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<!--
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController"
+            prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080" maxWidth="1920.0">
+    <children>
+
+        <AnchorPane fx:id="menuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+                    stylesheets="@../css/Menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
+            <VBox alignment="CENTER" spacing="60" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                <Text fx:id="usernameTextFX" textAlignment="CENTER" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="500.0"/>
+                <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#goCreateLobby" text="Create lobby" textAlignment="CENTER" />
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#showAvailableLobbies" text="Show lobbies" textAlignment="CENTER" />
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#goReconnectGames" text="Reconnect to game" textAlignment="CENTER" />
+                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#showProfileSettings" text="Profile settings" textAlignment="CENTER" />
+                </VBox>
+                <Button alignment="CENTER" mnemonicParsing="false" onAction="#exit" text="Exit" textAlignment="CENTER" />
+            </VBox>
+        </AnchorPane>
+
+        <AnchorPane fx:id="lobbyCreateMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
+                    stylesheets="@../css/Menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
+            <VBox  alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
+                <TextField fx:id="lobbyNameField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Lobby name"/>
+                <TextField fx:id="numPlayersField" id="numPlayersField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="400.0" prefWidth="100.0" promptText="Number of players" />
+                <Label fx:id="errorLobbyCreate" text="" />
+                <Button mnemonicParsing="false" onAction="#submitCreateLobby" text="Create lobby" />
+                <Button  mnemonicParsing="false" onAction="#goBack" text="Back" />
+            </VBox>
+        </AnchorPane>
+
+        <AnchorPane fx:id="availableLobbiesMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
+                    stylesheets="@../css/Menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
+            <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
+                <Text text="Here the available lobbies:"/>
+                <ScrollPane>
+                    <TableView>
+
+                    </TableView>
+                </ScrollPane>
+                <Button text="Refresh" />
+                <Button text="Back" onAction="#goBack"/>
+            </VBox>
+        </AnchorPane>
+
+        <AnchorPane fx:id="reconnectGamesMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
+                    stylesheets="@../css/Menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        </AnchorPane>
+
+        <AnchorPane fx:id="profileSettingsMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" managed="false" visible="false"
+                    stylesheets="@../css/Menu.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" >
+            <VBox fx:id="profileSettingsVBox" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
+                <Label fx:id="errorProfileSettings" text="" />
+                <Button mnemonicParsing="false" onAction="#notifyDeleteAccount" text="Delete account" />
+                <Button  mnemonicParsing="false" onAction="#logout" text="Logout" />
+                <Button  mnemonicParsing="false" onAction="#goBack" text="Back" />
+            </VBox>
+            <VBox fx:id="confirmDeleteVBox" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20"
+                  managed="false" visible="false">
+                <Text id="deleteWarning" text="Are you sure you want to delete your account ?"/>
+                <Label fx:id="deleteAccountLabel" />
+                <Button mnemonicParsing="false" onAction="#confirmDeleteAccount" text="Yes" id="yesButton"/>
+                <Button mnemonicParsing="false" onAction="#rejectDeleteAccount" text="No"/>
+            </VBox>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
+-->
+
+<AnchorPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/Menu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
+   <children>
+      <AnchorPane fx:id="menuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Text fx:id="usernameTextFX" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1000.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" layoutX="281.0" layoutY="200.0" prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <children>
+                  <Button mnemonicParsing="false" text="Create lobby" onAction="#goCreateLobby"/>
+                  <Button mnemonicParsing="false" text="Show lobbies" onAction="#goAvailableLobbies"/>
+                  <Button mnemonicParsing="false" text="Reconnect to game"/>
+                  <Button mnemonicParsing="false" text="Profile settings" onAction="#goProfileSettings"/>
+                  <Button mnemonicParsing="false" text="Exit" onAction="#exit">
+                     <VBox.margin>
+                        <Insets top="60.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+
+       <AnchorPane fx:id="availableLobbiesMenuFX" managed="false" visible="false"></AnchorPane>
+       <AnchorPane fx:id="reconnectGamesMenuFX" managed="false" visible="false"></AnchorPane>
+
+      <AnchorPane fx:id="lobbyCreateMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="lobbyNameField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" promptText="Lobby name" />
+                  <TextField fx:id="numPlayersField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" promptText="Number of players" />
+                  <Label  fx:id="errorLobbyCreate" text="" textAlignment="CENTER" />
+                  <Button mnemonicParsing="false" text="Create" onAction="#submitCreateLobby"/>
+                  <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+
+      <AnchorPane fx:id="profileSettingsMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" managed="" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="profileSettingsVBox" alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="errorProfileSettings" alignment="CENTER" text="" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Logout" textAlignment="CENTER" onAction="#logout"/>
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Delete account" textAlignment="CENTER" onAction="#notifyDeleteAccount"/>
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBack">
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox fx:id="confirmDeleteVBox" alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Text id="deleteWarning" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account ?" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="40.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Button id="yesButton" mnemonicParsing="false" text="Yes" onAction="#confirmDeleteAccount"/>
+                  <Button mnemonicParsing="false" text="No" onAction="#rejectDeleteAccount"/>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+
+
+   </children>
+</AnchorPane>

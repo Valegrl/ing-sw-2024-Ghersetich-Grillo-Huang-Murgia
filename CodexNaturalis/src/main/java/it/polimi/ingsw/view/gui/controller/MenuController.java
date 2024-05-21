@@ -8,7 +8,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.DeleteAccountEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LogoutEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.tui.state.LoginState;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,12 +27,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController extends FXMLController {
-    //TODO Add Icon top-right of the GUI
+    //TODO Add Icon top-right of the GUI, DEBUG!
 
     private String username;
 
     @FXML
-    private AnchorPane inGameMenuFX;
+    private AnchorPane menuFX;
 
     @FXML
     private TextField lobbyNameField;
@@ -66,9 +65,6 @@ public class MenuController extends FXMLController {
     private VBox confirmDeleteVBox;
 
     @FXML
-    private Label deleteAccountLabel;
-
-    @FXML
     private Text usernameTextFX;
 
 
@@ -99,8 +95,8 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void goCreateLobby(){
-        inGameMenuFX.setManaged(false);
-        inGameMenuFX.setVisible(false);
+        menuFX.setManaged(false);
+        menuFX.setVisible(false);
         lobbyCreateMenuFX.setVisible(true);
         lobbyCreateMenuFX.setManaged(true);
     }
@@ -111,16 +107,67 @@ public class MenuController extends FXMLController {
     }
 
     @FXML
-    public void showAvailableLobbies(){
+    public void goAvailableLobbies(){
         //TODO add a refresh button for refreshing the available lobbies
+        menuFX.setManaged(false);
+        menuFX.setVisible(false);
+        availableLobbiesMenuFX.setVisible(true);
+        availableLobbiesMenuFX.setManaged(true);
     }
 
     @FXML
-    public void showProfileSettings(){
-        inGameMenuFX.setManaged(false);
-        inGameMenuFX.setVisible(false);
+    public void refreshAvailableLobbies(){
+
+    }
+
+    @FXML
+    public void goProfileSettings(){
+        menuFX.setManaged(false);
+        menuFX.setVisible(false);
         profileSettingsMenuFX.setVisible(true);
         profileSettingsMenuFX.setManaged(true);
+    }
+
+    //TODO Implement the deleteAccount in another controller ?
+
+    @FXML
+    public void notifyDeleteAccount(){
+        profileSettingsVBox.setManaged(false);
+        profileSettingsVBox.setVisible(false);
+        confirmDeleteVBox.setManaged(true);
+        confirmDeleteVBox.setVisible(true);
+    }
+
+    @FXML
+    public void confirmDeleteAccount(){
+        deleteAccount();
+    }
+
+    @FXML
+    public void rejectDeleteAccount(){
+        //TODO make it so the message appear for 1 sec before going back to profile settings
+        showResponseMessage("Your account was NOT deleted.", 1000);
+        //deleteAccountLabel.setText("Your account was NOT deleted.");
+
+        profileSettingsVBox.setManaged(true);
+        profileSettingsVBox.setVisible(true);
+        confirmDeleteVBox.setManaged(false);
+        confirmDeleteVBox.setVisible(false);
+    }
+
+    @FXML
+    public void logout(){
+        Event event = new LogoutEvent();
+        controller.newViewEvent(event);
+
+        waitForResponse();
+    }
+
+    private void deleteAccount() {
+        Event event = new DeleteAccountEvent();
+        controller.newViewEvent(event);
+
+        waitForResponse();
     }
 
     @FXML
@@ -146,7 +193,7 @@ public class MenuController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginMenu.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
                             Parent root = loader.load();
                             LoginController nextController = loader.getController();
 
@@ -155,13 +202,13 @@ public class MenuController extends FXMLController {
                             transition(nextController);
                         }
                         catch (IOException exception){
-                            Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
+                            //Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
                             showResponseMessage("Account deletion failed: " + message, 2000);
                         }
                     });
                     showResponseMessage("Account deleted successfully!", 1500);
                 } else {
-                    Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
+                    //Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
                     showResponseMessage("Account deletion failed: " + message, 2000);
                 }
 
@@ -170,7 +217,7 @@ public class MenuController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/LoginMenu.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
                             Parent root = loader.load();
                             LoginController nextController = loader.getController();
 
@@ -230,15 +277,10 @@ public class MenuController extends FXMLController {
         notifyResponse();
     }
 
-    @Override
-    public boolean inMenu(){
-        return  true;
-    }
-
     @FXML
     public void goBack(){
-        inGameMenuFX.setManaged(true);
-        inGameMenuFX.setVisible(true);
+        menuFX.setManaged(true);
+        menuFX.setVisible(true);
         lobbyCreateMenuFX.setVisible(false);
         lobbyCreateMenuFX.setManaged(false);
         availableLobbiesMenuFX.setVisible(false);
@@ -272,46 +314,9 @@ public class MenuController extends FXMLController {
         }
     }
 
-    //TODO Implement the deleteAccount in another controller ?
-    @FXML
-    public void notifyDeleteAccount(){
-        profileSettingsVBox.setManaged(false);
-        profileSettingsVBox.setVisible(false);
-        confirmDeleteVBox.setManaged(true);
-        confirmDeleteVBox.setVisible(true);
-    }
-
-    @FXML
-    public void confirmDeleteAccount(){
-        deleteAccount();
-    }
-
-    @FXML
-    public void rejectDeleteAccount(){
-        //TODO make it so the message appear for 1 sec before going back to profile settings
-        showResponseMessage("Your account was NOT deleted.", 1000);
-        deleteAccountLabel.setText("Your account was NOT deleted.");
-
-        profileSettingsVBox.setManaged(true);
-        profileSettingsVBox.setVisible(true);
-        confirmDeleteVBox.setManaged(false);
-        confirmDeleteVBox.setVisible(false);
-
-    }
-
-    @FXML
-    public void logout(){
-        Event event = new LogoutEvent();
-        controller.newViewEvent(event);
-
-        waitForResponse();
-    }
-
-    private void deleteAccount() {
-        Event event = new DeleteAccountEvent();
-        controller.newViewEvent(event);
-
-        waitForResponse();
+    @Override
+    public boolean inMenu(){
+        return  true;
     }
 
 }

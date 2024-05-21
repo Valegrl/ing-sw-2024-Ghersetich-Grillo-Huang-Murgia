@@ -5,7 +5,6 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
-import it.polimi.ingsw.view.gui.controller.MainMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,7 +52,7 @@ public class GUI extends Application implements View {
         /*This has both UPPERCASE and LOWERCASE letters, used for forms*/
         Font.loadFont(getClass().getResourceAsStream("/font/BebasNeuePro-Regular.ttf"), 14);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
         Parent root = loader.load();
 
         setFXMLController(loader.getController());
