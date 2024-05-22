@@ -5,6 +5,8 @@ import it.polimi.ingsw.view.controller.ViewController;
 
 import java.util.List;
 
+import static it.polimi.ingsw.utils.AnsiCodes.*;
+
 public abstract class ViewState {
     protected View view;
 
@@ -94,6 +96,14 @@ public abstract class ViewState {
             else
                 view.printMessage("\033[H\033[2J");
         } catch (Exception ignored) {}
+    }
+
+    public void clearLine() {
+        view.printMessage(MOVE_CURSOR_START + CLEAR_LINE);
+    }
+
+    public String boldText(String text) {
+        return BOLD + text + RESET;
     }
 
     public void showResponseMessage(String message, int sleepTime) {

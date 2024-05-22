@@ -127,13 +127,11 @@ public class ViewStartSetup implements Serializable, CardConverter {
 
     public String printSetupObjCards() {
         int indent = 7;
-        StringBuilder sb = new StringBuilder();
-        sb.append("  Objective cards: \n")
-                .append("    1- ")
-                .append(secretObjectiveCards[0].printCard(indent))
-                .append("    2- ")
-                .append(secretObjectiveCards[1].printCard(indent));
-        return sb.toString();
+        return "  Objective cards: \n" +
+                "    1- " +
+                secretObjectiveCards[0].printCard(indent) +
+                "    2- " +
+                secretObjectiveCards[1].printCard(indent);
     }
 
     public String printSetupHand() {
@@ -164,27 +162,25 @@ public class ViewStartSetup implements Serializable, CardConverter {
 
     public String printSetupDecks() {
         int indent = 12;
-        StringBuilder sb = new StringBuilder();
-        sb.append("Decks: \n");
-        sb.append("  1- Gold deck:\n")
-                .append("       Top card: ")
-                .append(Item.itemToColor(goldDeck))
-                .append("\n")
-                .append("       Visible cards:\n")
-                .append("         1- ")
-                .append(visibleGoldCards[0].printCard(indent))
-                .append("         2- ")
-                .append(visibleGoldCards[1].printCard(indent));
-        sb.append("  2- Resource deck:\n")
-                .append("       Top card: ")
-                .append(Item.itemToColor(resourceDeck))
-                .append("\n")
-                .append("       Visible cards: \n")
-                .append("         1- ")
-                .append(visibleResourceCards[0].printCard(indent))
-                .append("         2- ")
-                .append(visibleResourceCards[1].printCard(indent));
-        return sb.toString();
+        return "Decks: \n" +
+                "  1- Gold deck:\n" +
+                "       Top card: " +
+                Item.itemToColor(goldDeck) +
+                "\n" +
+                "       Visible cards:\n" +
+                "         1- " +
+                visibleGoldCards[0].printCard(indent) +
+                "         2- " +
+                visibleGoldCards[1].printCard(indent) +
+                "  2- Resource deck:\n" +
+                "       Top card: " +
+                Item.itemToColor(resourceDeck) +
+                "\n" +
+                "       Visible cards: \n" +
+                "         1- " +
+                visibleResourceCards[0].printCard(indent) +
+                "         2- " +
+                visibleResourceCards[1].printCard(indent);
     }
 
     /**

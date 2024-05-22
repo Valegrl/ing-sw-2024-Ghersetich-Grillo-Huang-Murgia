@@ -15,14 +15,12 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.player.Token;
-import it.polimi.ingsw.utils.ChatMessagesList;
-import it.polimi.ingsw.utils.ChatMessage;
-import it.polimi.ingsw.utils.PrivateChatMessage;
+import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
-import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
+import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 
 import java.rmi.RemoteException;
@@ -174,14 +172,13 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
-    //TODO review evaluateEvent methods ChooseCardsSetupEvent and ChooseTokenSetupEvent
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
-        if(view.inGame()) {
+        if(view.inGame() || view.inChat()) {
             List<Token> availableColors = event.getAvailableColors();
-            StringBuilder message = new StringBuilder(event.getMessage() + "\n");
-            for(Token i : availableColors) {
-                message.append(i.getColor()).append("\n");
+            StringBuilder message = new StringBuilder(availableColors.size() + "%" + event.getMessage() + "\n");
+            for(int i = 0; i < availableColors.size(); i++) {
+                message.append(i + 1).append("- ").append(availableColors.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), null, message.toString());
         } else {
@@ -324,7 +321,6 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(ChosenCardsSetupEvent event) {
         if(view.inGame()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-            //TODO View has to handle seeing the options for setup, ie the objective cards
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -481,7 +477,7 @@ public class ViewController implements ViewEventReceiver {
             offlineGames = event.getGames();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
             for(int i = 0; i < offlineGames.size(); i++) {
-                message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(offlineGames.get(i)).append("\n");
+                message.append("  ").append(AnsiCodes.BOLD).append(i + 1).append("- ").append(AnsiCodes.RESET).append(offlineGames.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
         } else {
@@ -632,5 +628,12 @@ public class ViewController implements ViewEventReceiver {
     public void sendMessage(String message) {
         ChatGMEvent chatGMEvent = new ChatGMEvent(new ChatMessage(message));
         newViewEvent(chatGMEvent);
+    }
+
+    public void chosenSetup(int chosenObj, boolean showingFace) {
+        assert chosenObj < 3 && chosenObj > 0;
+        String chosenObjective = setup.getSecretObjectiveCards()[chosenObj - 1].getId();
+        ChosenCardsSetupEvent chosenCardsSetupEvent = new ChosenCardsSetupEvent(chosenObjective, showingFace);
+        newViewEvent(chosenCardsSetupEvent);
     }
 }

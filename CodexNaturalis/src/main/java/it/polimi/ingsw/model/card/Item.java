@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.card;
 
 import java.io.Serializable;
+import static it.polimi.ingsw.utils.AnsiCodes.*;
 
 /**
  * An enumeration that represents the game Items.
@@ -102,49 +103,20 @@ public enum Item implements Serializable {
      */
     public static String itemToColor(Item item, String string) {
         return switch (item) {
-            /*
-             * Green color for plants then resets color to default.
-             * Then resets color to default.
-             */
-            case Item.PLANT -> ("\u001B[32m" + string + "\u001B[0m");
 
-            /*
-             * Cyan color for animals.
-             * Then resets color to default.
-             */
-            case Item.ANIMAL -> ("\u001B[36m" + string + "\u001B[0m");
+            case Item.PLANT -> (GREEN + string + RESET);
 
-            /*
-             * Red color for fungi.
-             * Then resets color to default.
-             */
-            case Item.FUNGI -> ("\u001B[31m" + string + "\u001B[0m");
+            case Item.ANIMAL -> (CYAN + string + RESET);
 
-            /*
-             * Purple color for insects.
-             * Then resets color to default.
-             */
-            case Item.INSECT -> ("\u001B[35m" + string + "\u001B[0m");
+            case Item.FUNGI -> (RED + string + RESET);
 
-            /*
-             * Yellow color for quills.
-             * Then resets color to default.
-             */
-            case Item.QUILL -> ("\u001B[33m" + string + "\u001B[0m");
+            case Item.INSECT -> (PURPLE + string + RESET);
 
-            /*
-             * Yellow color for inkwells.
-             * Then resets color to default.
-             */
-            case Item.INKWELL -> ("\u001B[33m" + string + "\u001B[0m");
+            case Item.QUILL, Item.INKWELL, Item.MANUSCRIPT -> (GOLD + string + RESET);
 
-            /*
-             * Yellow color for manuscripts.
-             * Then resets color to default.
-             */
-            case Item.MANUSCRIPT -> ("\u001B[33m" + string + "\u001B[0m");
+            case Item.EMPTY -> (BEIGE + string + RESET);
 
-            case Item.EMPTY, Item.HIDDEN, Item.COVERED -> string;
+            case Item.HIDDEN, Item.COVERED -> string;
         };
     }
 
@@ -156,50 +128,23 @@ public enum Item implements Serializable {
      */
     public static String itemToColor(Item item) {
         return switch (item) {
-            /*
-             * Green color for plants.
-             * Then resets color to default.
-             */
-            case Item.PLANT -> ("\u001B[32m" + Item.PLANT + "\u001B[0m");
 
-            /*
-             * Cyan color for animals.
-             * Then resets color to default.
-             */
-            case Item.ANIMAL -> ("\u001B[36m" + Item.ANIMAL + "\u001B[0m");
+            case Item.PLANT -> (GREEN + Item.PLANT + RESET);
 
-            /*
-             * Red color for fungi.
-             * Then resets color to default.
-             */
-            case Item.FUNGI -> ("\u001B[31m" + Item.FUNGI + "\u001B[0m");
+            case Item.ANIMAL -> (CYAN + Item.ANIMAL + RESET);
 
-            /*
-             * Purple color for insects.
-             * Then resets color to default.
-             */
-            case Item.INSECT -> ("\u001B[35m" + Item.INSECT + "\u001B[0m");
+            case Item.FUNGI -> (RED + Item.FUNGI + RESET);
 
-            /*
-             * Yellow color for quills.
-             * Then resets color to default.
-             */
-            case Item.QUILL -> ("\u001B[33m" + Item.QUILL + "\u001B[0m");
+            case Item.INSECT -> (PURPLE + Item.INSECT + RESET);
 
-            /*
-             * Yellow color for inkwells.
-             * Then resets color to default.
-             */
-            case Item.INKWELL -> ("\u001B[33m" + Item.INKWELL + "\u001B[0m");
+            case Item.QUILL -> (GOLD + Item.QUILL + RESET);
 
-            /*
-             * Yellow color for manuscripts.
-             * Then resets color to default.
-             */
-            case Item.MANUSCRIPT -> ("\u001B[33m" + Item.MANUSCRIPT + "\u001B[0m");
+            case Item.INKWELL -> (GOLD + Item.INKWELL + RESET);
 
+            case Item.MANUSCRIPT -> (GOLD + Item.MANUSCRIPT + RESET);
 
-            case Item.EMPTY -> Item.EMPTY.toString();
+            case Item.EMPTY -> (BEIGE + Item.EMPTY + RESET);
+
             case Item.HIDDEN -> Item.HIDDEN.toString();
             case Item.COVERED -> Item.COVERED.toString();
         };

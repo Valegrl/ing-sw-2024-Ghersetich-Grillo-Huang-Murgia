@@ -40,11 +40,25 @@ public enum Token implements Serializable {
         this.color = color;
     }
 
+    public static Token fromString(String color) {
+        for (Token t : Token.values()) {
+            if (t.color.equals(color)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     /**
      * Retrieves the name of the color associated with this Token.
      * @return The name of the color.
      */
     public String getColor() {
+        return color;
+    }
+
+    @Override
+    public String toString() {
         return color;
     }
 }

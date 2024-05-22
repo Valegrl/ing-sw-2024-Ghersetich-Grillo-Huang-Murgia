@@ -5,6 +5,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
+import static it.polimi.ingsw.utils.AnsiCodes.*;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.View;
@@ -18,6 +19,8 @@ public class ChatState extends ViewState {
 
     private boolean inChat = false;
 
+
+
     public ChatState(View view, ViewState previousState) {
         super(view);
         this.previousState = previousState;
@@ -26,7 +29,7 @@ public class ChatState extends ViewState {
     @Override
     public void run() {
         clearConsole();
-        view.printMessage("\u001B[1mGame chat\u001B[0m\n(type $exit to leave chat, '$pm username msg' to send a private message):");
+        view.printMessage(boldText("Game chat") + "\n(type $exit to leave chat, '$pm username msg' to send a private message):");
 
         inChat = true;
         controller.newViewEvent(new GetChatMessagesEvent());
@@ -44,8 +47,9 @@ public class ChatState extends ViewState {
                 }
             } else {
                 controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
-                view.print("\r\033[2K");
-                view.print("\u001B[A\u001B[2K\r");
+                clearLine();
+                view.print(CURSOR_UP_ONE);
+                clearLine();
             }
             message = view.getInput();
         }
@@ -76,20 +80,33 @@ public class ChatState extends ViewState {
                 }
                 break;
             case EventID.UPDATE_LOBBY_PLAYERS:
-                printMessage("\u001B[1mLobby info: \u001B[0m" + message);
+                printMessage(boldText("Lobby info: ") + message);
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:
                 inChat = false;
                 view.stopInputRead(true);
-                showResponseMessage("\r\033[2K" + message, 2000);
+                clearLine();
+                showResponseMessage(message, 2000);
                 transition(new MenuState(view));
                 return;
             case EventID.UPDATE_GAME_PLAYERS:
+                if (previousState.inLobby()) {
+                    inChat = false;
+                    view.stopInputRead(true);
+                    clearLine(); // remove input box
+                    transition(new GameSetupState(view));
+                } else if (previousState.inGame()) {
+                    printMessage(boldText("Game info: ") + message);
+                } else {
+                    throw new IllegalStateException("Unexpected previous state.");
+                }
+                break;
+            case EventID.UPDATE_LOCAL_MODEL:
                 inChat = false;
                 view.stopInputRead(true);
-                printMessage("\r"); // remove input box
-                transition(new GameSetupState(view));
-                return;
+                clearLine(); // remove input box
+                // TODO transition to game state
+                break;
             default:
                 break;
         }
@@ -124,7 +141,8 @@ public class ChatState extends ViewState {
     }
 
     private void printMessage(String message) {
-        view.printMessage("\r\033[2K" + message);
+        clearLine();
+        view.printMessage(message);
     }
 
     public boolean inChat() {

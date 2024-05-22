@@ -42,12 +42,14 @@ class ImmResourceCardTest {
 
         resourceCard.flipCard();
 
+        when(resourceCard.getCorners()).thenReturn(new Item[]{Item.EMPTY, Item.EMPTY, Item.EMPTY, Item.EMPTY});
+
         ImmResourceCard card = new ImmResourceCard(resourceCard);
 
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.PLANT, "RC16") + "\n" +
                 "  Corners: \n" +
-                "    TL: empty  TR: empty\n" +
-                "    BL: empty  BR: empty\n";
+                "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
+                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY)+ "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());
@@ -94,12 +96,15 @@ class ImmResourceCardTest {
 
         resourceCard.flipCard();
 
+        when(resourceCard.getCorners()).thenReturn(new Item[]{Item.EMPTY, Item.EMPTY, Item.EMPTY, Item.EMPTY});
+
+
         ImmResourceCard card = new ImmResourceCard(resourceCard);
 
         String expectedOutput = "ResourceCard: " + Item.itemToColor(Item.INSECT, "RC38") + "\n" +
                 "  Corners: \n" +
-                "    TL: empty  TR: empty\n" +
-                "    BL: empty  BR: empty\n";
+                "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
+                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY)+ "\n";
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());

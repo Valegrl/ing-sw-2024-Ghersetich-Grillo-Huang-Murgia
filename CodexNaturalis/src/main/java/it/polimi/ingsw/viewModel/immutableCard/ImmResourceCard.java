@@ -37,9 +37,11 @@ public final class ImmResourceCard extends ImmPlayableCard implements CardToStri
     @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
+        Item[] corners = this.getCorners();
         sb.append("ResourceCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         sb.append("  Corners: \n");
-        sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty\n");
+        sb.append("    TL: ").append(Item.itemToColor(corners[CornerIndex.TL.getIndex()])).append("  TR: ").append(Item.itemToColor(corners[CornerIndex.TR.getIndex()])).append("\n");
+        sb.append("    BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
 }

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenCardsSetupEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -45,6 +47,7 @@ public class GameSetupState extends ViewState {
         switch (input) {
             case 1:
                 // Choose setup
+                chooseSetup();
                 break;
             case 2:
                 // See your assigned setup
@@ -75,7 +78,7 @@ public class GameSetupState extends ViewState {
                 transition(new ChatState(view, this));
                 break;
             case 6:
-                // Quit game
+                // TODO Quit game
                 break;
             default:
                 return false;
@@ -91,7 +94,7 @@ public class GameSetupState extends ViewState {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}
                 view.stopInputRead(false);
-                view.print("\r\033[2K");
+                clearLine();
                 String[] m = message.split("%");
                 setupMessage = m[0];
                 handMessage = m[1];
@@ -100,7 +103,19 @@ public class GameSetupState extends ViewState {
                 showSetupChoices();
                 break;
             case EventID.UPDATE_GAME_PLAYERS:
-                showResponseMessage(message, 1000);
+                view.printMessage(message);
+                view.clearInput();
+                break;
+            case EventID.CHOSEN_CARDS_SETUP:
+                notifyResponse();
+                clearConsole();
+                view.printMessage(message);
+                view.printMessage("Wait for other players to chose their setup. . .\n");
+                break;
+            case EventID.CHOOSE_TOKEN_SETUP:
+                clearConsole();
+                String[] tokensMessage = message.split("%");
+                transition(new TokenSetupState(view, tokensMessage[1], Integer.parseInt(tokensMessage[0])));
                 break;
         }
     }
@@ -116,7 +131,18 @@ public class GameSetupState extends ViewState {
                 , "See visible decks"
                 , "Open chat"
                 , "Quit game"));
+        // TODO add backhand of opponents
         handleInput(choice);
+    }
+
+    private void chooseSetup() {
+        view.printMessage("Choose the showing face of the start card: ");
+        int chosenFace = readChoiceFromInput(Arrays.asList("Front", "Back"));
+        view.printMessage("Choose the secret objective card: ");
+        int chosenObjective = readChoiceFromInput(Arrays.asList("1", "2"));
+        controller.chosenSetup(chosenObjective, (chosenFace == 2)); // 1 is not flipped (false), 2 is flipped (true)
+
+        waitForResponse();
     }
 
     @Override

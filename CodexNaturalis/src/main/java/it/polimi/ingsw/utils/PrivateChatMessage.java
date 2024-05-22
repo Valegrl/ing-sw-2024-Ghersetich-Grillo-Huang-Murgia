@@ -35,6 +35,6 @@ public class PrivateChatMessage extends ChatMessage {
 
     @Override
     public String toString() {
-        return getTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " \u001B[1mPM from [" + getSender() + "]\u001B[0m: " + getMessage();
+        return getTime().format(DateTimeFormatter.ofPattern("HH:mm")) + AnsiCodes.BOLD + " PM from [" + getSender() + "]" + AnsiCodes.RESET + ": " + getMessage();
     }
 }

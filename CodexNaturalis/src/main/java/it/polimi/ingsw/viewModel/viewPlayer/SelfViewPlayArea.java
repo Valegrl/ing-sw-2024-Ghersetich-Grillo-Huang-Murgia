@@ -1,6 +1,7 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.viewModel.CardConverter;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import it.polimi.ingsw.model.player.PlayArea;
@@ -191,8 +192,8 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         StringBuilder cardString = new StringBuilder();
         int currIndent = 0;
 
-        sb.append("\u001B[1mPlayArea\u001B[0m:\n  (0,0) -> ").append(startCard.getId()).append("\n");
-        sb.append(startCard.printSimpleCard(11)).append("\n");
+        sb.append(AnsiCodes.BOLD + "PlayArea" + AnsiCodes.RESET + "\n  (0,0) -> ").append(startCard.getId()).append("\n");
+        sb.append(startCard.printPlacedCard(11)).append("\n");
         for (Map.Entry<Coordinate, ImmPlayableCard> entry : playedCards.entrySet()) {
             cardString.setLength(0);
             Coordinate coordinate = entry.getKey();
@@ -200,7 +201,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
             cardString.append("  ").append(coordinate).append(" -> ");
             currIndent = cardString.length();
             cardString.append(Item.itemToColor(card.getPermanentResource(), card.getId())).append("\n")
-                    .append(card.printSimpleCard(currIndent));
+                    .append(card.printPlacedCard(currIndent));
             sb.append(cardString);
         }
         return sb.toString();

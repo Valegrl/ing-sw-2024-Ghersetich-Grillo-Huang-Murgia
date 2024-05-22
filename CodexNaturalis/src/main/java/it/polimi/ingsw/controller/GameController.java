@@ -403,7 +403,7 @@ public class GameController {
                     String username = entry.getKey().getUsername();
                     PlayerTokenSetup pts = new PlayerTokenSetup(username);
                     if (isPlayerOnline(username))
-                        entry.getValue().update(new ChooseTokenSetupEvent(colors, "Choose your color!"));
+                        entry.getValue().update(new ChooseTokenSetupEvent(colors, "Choose your colored token from the following available ones:"));
                     else
                         pts.setDisconnected(true);
 

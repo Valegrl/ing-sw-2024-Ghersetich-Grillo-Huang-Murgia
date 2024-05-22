@@ -111,7 +111,7 @@ public final class ImmStartCard extends ImmCard implements CardToString {
      * @param indent The number of spaces to indent the string.
      * @return A string representing the card's details.
      */
-    public String printSimpleCard(int indent) {
+    public String printPlacedCard(int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append(" ".repeat(indent));
         if (!flipped) {
