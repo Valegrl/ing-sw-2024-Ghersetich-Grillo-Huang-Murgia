@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Immutable representation of the self-{@link Player}.
  */
-public class SelfViewPlayer extends AbstractViewPlayer implements Serializable {
+public class SelfViewPlayer extends AbstractViewPlayer {
     /**
      * The self-play area of the player.
      */

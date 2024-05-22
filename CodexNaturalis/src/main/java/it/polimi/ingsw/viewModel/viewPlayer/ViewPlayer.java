@@ -3,12 +3,10 @@ package it.polimi.ingsw.viewModel.viewPlayer;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Player;
 
-import java.io.Serializable;
-
 /**
  * Immutable representation of a {@link Player}.
  */
-public class ViewPlayer extends AbstractViewPlayer implements Serializable {
+public class ViewPlayer extends AbstractViewPlayer {
     /**
      * The player's play area.
      */

@@ -54,7 +54,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
                         Map.Entry::getKey,
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
-        this.uncoveredItems = Collections.unmodifiableMap(playArea.getUncoveredItems());
+        this.uncoveredItems = Map.copyOf(playArea.getUncoveredItems());
         if (playArea.getSelectedCard().key() == null)
             this.selectedCard = new Pair<>(null, null);
         else

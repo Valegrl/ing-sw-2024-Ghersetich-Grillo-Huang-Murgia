@@ -3,10 +3,12 @@ package it.polimi.ingsw.viewModel.viewPlayer;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Token;
 
+import java.io.Serializable;
+
 /**
  * Immutable representation of a player.
  */
-public abstract class AbstractViewPlayer {
+public abstract class AbstractViewPlayer implements Serializable {
     /**
      * The username of the player.
      */
