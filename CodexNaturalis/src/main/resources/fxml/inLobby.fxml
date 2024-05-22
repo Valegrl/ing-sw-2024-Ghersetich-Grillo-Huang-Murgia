@@ -27,7 +27,7 @@
                         </Button>
                         <ImageView fx:id="selfImage" fitHeight="340.0" fitWidth="260.0" layoutX="20.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Lobby/fungi.png" />
+                        <Image url="@../images/lobby/fungi.png" />
                      </image></ImageView>
 
                         <Text fx:id="selfText" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="300.0">
@@ -54,7 +54,7 @@
                         </Text>
                         <ImageView fx:id="playerImage1" fitHeight="340.0" fitWidth="260.0" layoutX="20.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Lobby/insect.png" />
+                        <Image url="@../images/lobby/insect.png" />
                      </image></ImageView>
 
                     </children>
@@ -71,7 +71,7 @@
                         </Button>
                         <ImageView fx:id="playerImage2" fitHeight="340.0" fitWidth="260.0" layoutX="20.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Lobby/animal.png" />
+                        <Image url="@../images/lobby/animal.png" />
                      </image></ImageView>
 
                         <Text fx:id="playerText2" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="299.9999999999998">
@@ -98,7 +98,7 @@
                         </Text>
                         <ImageView fx:id="playerImage3" fitHeight="340.0" fitWidth="260.0" layoutX="20.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Lobby/plant.png" />
+                        <Image url="@../images/lobby/plant.png" />
                      </image></ImageView>
 
                     </children>

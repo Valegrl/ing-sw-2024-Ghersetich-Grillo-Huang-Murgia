@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.gui.controller;
 
 
+import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.view.FXMLController;
+import it.polimi.ingsw.view.View;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -9,9 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 
-public class InLobbyController {
+public class InLobbyController extends FXMLController {
     @FXML
     private TextField chatInput;
 
@@ -78,6 +82,17 @@ public class InLobbyController {
     @FXML
     private Button showReady3;
 
+    public InLobbyController(){
+        super();
+    }
+
+    @Override
+    public void run(View view, Stage stage){
+        this.view = view;
+        this.stage = stage;
+        this.controller = view.getController();
+    }
+
 /*
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -142,5 +157,14 @@ public class InLobbyController {
     }
 
     //TODO chat implementation
+
+    @Override
+    public void handleResponse(Feedback feedback, String message, String eventID) {
+    }
+
+    @Override
+    public boolean inMenu(){
+        return false;
+    }
 }
 
