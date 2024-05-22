@@ -6,6 +6,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.DeleteAccountEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LogoutEvent;
+import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -50,9 +51,6 @@ public class MenuController extends FXMLController {
     private AnchorPane lobbyCreateMenuFX;
 
     @FXML
-    private AnchorPane availableLobbiesMenuFX;
-
-    @FXML
     private AnchorPane reconnectGamesMenuFX;
 
     @FXML
@@ -67,8 +65,6 @@ public class MenuController extends FXMLController {
     @FXML
     private Text usernameTextFX;
 
-
-    private TableView availableLobbiesTable;
 
     @Override
     public void run(View view, Stage stage) {
@@ -85,16 +81,11 @@ public class MenuController extends FXMLController {
             }
         });
 
-        /*TableView for seeing the available lobbies*/
-        availableLobbiesTable= new TableView();
-        availableLobbiesTable.setEditable(false);
-        TableColumn lobbyNameTableColumn = new TableColumn("Lobby name");
-        TableColumn numPayersTableColumn = new TableColumn("Last Name");
-        availableLobbiesTable.getColumns().addAll(lobbyNameTableColumn, numPayersTableColumn);
     }
 
     @FXML
     public void goCreateLobby(){
+        errorLobbyCreate.setText("");
         menuFX.setManaged(false);
         menuFX.setVisible(false);
         lobbyCreateMenuFX.setVisible(true);
@@ -108,11 +99,18 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void goAvailableLobbies(){
-        //TODO add a refresh button for refreshing the available lobbies
-        menuFX.setManaged(false);
-        menuFX.setVisible(false);
-        availableLobbiesMenuFX.setVisible(true);
-        availableLobbiesMenuFX.setManaged(true);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AvailableLobbiesMenu.fxml"));
+            Parent root = loader.load();
+            AvailableLobbiesController nextController = loader.getController();
+
+            Scene scene = stage.getScene();
+            scene.setRoot(root);
+            transition(nextController);
+        }
+        catch (IOException exception){
+            exception.printStackTrace();
+        }
     }
 
     @FXML
@@ -122,6 +120,7 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void goProfileSettings(){
+        errorProfileSettings.setText("");
         menuFX.setManaged(false);
         menuFX.setVisible(false);
         profileSettingsMenuFX.setVisible(true);
@@ -145,10 +144,8 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void rejectDeleteAccount(){
-        //TODO make it so the message appear for 1 sec before going back to profile settings
         showResponseMessage("Your account was NOT deleted.", 1000);
-        //deleteAccountLabel.setText("Your account was NOT deleted.");
-
+        errorProfileSettings.setText("Your account was not deleted.");
         profileSettingsVBox.setManaged(true);
         profileSettingsVBox.setVisible(true);
         confirmDeleteVBox.setManaged(false);
@@ -182,11 +179,11 @@ public class MenuController extends FXMLController {
         switch (EventID.getByID(eventID)) {
             case EventID.CREATE_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
+                    //showResponseMessage(message, 2000);
                     //transition(new LobbyState(view));
                 } else {
                     Platform.runLater(() -> errorLobbyCreate.setText("Lobby creation failed " + message));
-                    showResponseMessage("Lobby creation failed " + message, 2000);
+                    //showResponseMessage("Lobby creation failed " + message, 2000);
                 }
                 break;
             case EventID.DELETE_ACCOUNT:
@@ -202,14 +199,24 @@ public class MenuController extends FXMLController {
                             transition(nextController);
                         }
                         catch (IOException exception){
-                            //Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
-                            showResponseMessage("Account deletion failed: " + message, 2000);
+                            errorProfileSettings.setText("Account deletion failed " + message);
+                            confirmDeleteVBox.setManaged(false);
+                            confirmDeleteVBox.setVisible(false);
+                            profileSettingsVBox.setManaged(true);
+                            profileSettingsVBox.setVisible(true);
+                            //showResponseMessage("Account deletion failed: " + message, 2000);
                         }
                     });
-                    showResponseMessage("Account deleted successfully!", 1500);
+                    //showResponseMessage("Account deleted successfully!", 1500);
                 } else {
-                    //Platform.runLater(() -> deleteAccountLabel.setText("Account deletion failed " + message));
-                    showResponseMessage("Account deletion failed: " + message, 2000);
+                    Platform.runLater(() -> {
+                        errorProfileSettings.setText("Account deletion failed " + message);
+                        confirmDeleteVBox.setManaged(false);
+                        confirmDeleteVBox.setVisible(false);
+                        profileSettingsVBox.setManaged(true);
+                        profileSettingsVBox.setVisible(true);
+                    });
+                    //showResponseMessage("Account deletion failed: " + message, 2000);
                 }
 
                 break;
@@ -227,13 +234,13 @@ public class MenuController extends FXMLController {
                         }
                         catch (IOException exception){
                             Platform.runLater(() -> errorProfileSettings.setText("Logout failed " + message));
-                            showResponseMessage("Logout failed: " + message, 2000);
+                            //showResponseMessage("Logout failed: " + message, 2000);
                         }
                     });
-                    showResponseMessage(message, 1500);
+                    //showResponseMessage(message, 1500);
                 } else {
                     Platform.runLater(() -> errorProfileSettings.setText("Logout failed " + message));
-                    showResponseMessage("Logout failed: " + message, 2000);
+                    //showResponseMessage("Logout failed: " + message, 2000);
                 }
                 break;
 
@@ -283,8 +290,6 @@ public class MenuController extends FXMLController {
         menuFX.setVisible(true);
         lobbyCreateMenuFX.setVisible(false);
         lobbyCreateMenuFX.setManaged(false);
-        availableLobbiesMenuFX.setVisible(false);
-        availableLobbiesMenuFX.setManaged(false);
         reconnectGamesMenuFX.setVisible(false);
         reconnectGamesMenuFX.setManaged(false);
         profileSettingsMenuFX.setVisible(false);

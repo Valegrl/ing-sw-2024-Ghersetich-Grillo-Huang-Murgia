@@ -109,7 +109,6 @@
          </children>
       </AnchorPane>
 
-       <AnchorPane fx:id="availableLobbiesMenuFX" managed="false" visible="false"></AnchorPane>
        <AnchorPane fx:id="reconnectGamesMenuFX" managed="false" visible="false"></AnchorPane>
 
       <AnchorPane fx:id="lobbyCreateMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"

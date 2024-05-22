@@ -1,0 +1,111 @@
+#mainPane{
+    -fx-background-image: url(/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+#errorShowLobbies{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
+}
+
+.label{
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 20;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.button{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 60;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.button:hover{
+    -fx-text-fill: #bbbbbb;
+}
+
+.table-view{
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 30;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-insets: 0 10 0 10;
+    -fx-padding: 0 20 5 20;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+}
+
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:hover {
+    -fx-text-background-color: #bbbbbb;
+}
+
+.table-row-cell:odd{
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-color: rgba(200, 200, 200, 0.2);
+}
+.table-row-cell:even{
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-color: rgba(150, 150, 150, 0.2);
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 10;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #0D0D0D
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color: #0D0D0D
+}
+
+/*
+Text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 90;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+ */

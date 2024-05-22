@@ -36,6 +36,7 @@ public abstract class FXMLController {
 
     public boolean inChat() {return false;};
 
+    //TODO do i block the thread for the GUI ?
     protected void waitForResponse() {
         synchronized (viewLock) {
             try {

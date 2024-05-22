@@ -3,14 +3,6 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
 }
-/*
-#numPlayersField{
-    -fx-text-fill: #ffffff;
-    -fx-background-color: rgba(20, 20, 20, 0.5);
-    -fx-font-family: "BebasNeuePro-Regular";
-    -fx-font-size: 50;
-}
-*/
 
 #yesButton{
     -fx-text-fill: #FF0000;

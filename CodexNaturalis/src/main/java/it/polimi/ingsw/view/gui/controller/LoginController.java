@@ -159,14 +159,14 @@ public class LoginController extends FXMLController {
                         Scene scene = stage.getScene();
                         scene.setRoot(root);
                         transition(nextController);
-                        showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
+                        //showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
                     }
                     catch (IOException exception){
                         Platform.runLater(() -> errorLogin.setText("Error " + exception));
                     }
                 } else {
                     Platform.runLater(() -> errorLogin.setText("Error " + message));
-                    showResponseMessage("Login failed: " + message, 2000);
+                    //showResponseMessage("Login failed: " + message, 2000);
                 }
                 break;
             case REGISTER:
@@ -177,11 +177,11 @@ public class LoginController extends FXMLController {
                         loginSubmitMenuFX.setVisible(true);
                         loginSubmitMenuFX.setManaged(true);
                     });
-                    showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
+                    //showResponseMessage("Registered user successfully! Now log in to your account.", 1000);
 
                 } else {
                     Platform.runLater(() -> errorRegistration.setText("Error " + message));
-                    showResponseMessage("Registration failed: " + message, 2000);
+                    //showResponseMessage("Registration failed: " + message, 2000);
                 }
                 break;
         }
