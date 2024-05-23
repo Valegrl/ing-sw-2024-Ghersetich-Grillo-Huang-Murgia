@@ -73,12 +73,12 @@
          <top>
             <AnchorPane prefHeight="48.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lobbyName" layoutX="24.0" layoutY="12.0" text="LOBBY:  INGSWTEAM">
+                  <Label fx:id="lobbyName" layoutX="24.0" layoutY="12.0" text="LOBBY:  ">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Label>
-                  <Label layoutX="841.0" layoutY="11.0" text="Luca deve pescare dal mazzo">
+                  <Label fx:id="aboveText" layoutX="841.0" layoutY="11.0" prefHeight="26.0" prefWidth="210.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -185,7 +185,7 @@
                                     <Insets bottom="5.0" top="5.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Text fx:id="uncoveredUsername1" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LUCALUCALUCA" wrappingWidth="192.7313232421875" />
+                                    <Text fx:id="uncoveredUsername1" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER1" wrappingWidth="192.7313232421875" />
                                     <Pane layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0" style="-fx-background-color: c8b052;">
                                        <children>
                                           <Label fx:id="animalOcc1" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
@@ -263,7 +263,7 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <children>
-                                    <Text fx:id="uncoveredUsername2" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LUCALUCALUCA" wrappingWidth="192.7313232421875" />
+                                    <Text fx:id="uncoveredUsername2" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER2" wrappingWidth="192.7313232421875" />
                                     <Pane layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0" style="-fx-background-color: c8b052;">
                                        <children>
                                           <Label fx:id="animalOcc2" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
@@ -344,7 +344,7 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <children>
-                                    <Text fx:id="uncoveredUsername3" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LUCALUCALUCA" wrappingWidth="192.7313232421875" />
+                                    <Text fx:id="uncoveredUsername3" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER3" wrappingWidth="192.7313232421875" />
                                     <Pane layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0" style="-fx-background-color: c8b052;">
                                        <children>
                                           <Label fx:id="animalOcc3" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
@@ -425,7 +425,7 @@
                                     <Insets />
                                  </opaqueInsets>
                                  <children>
-                                    <Text fx:id="uncoveredUsername4" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LUCALUCALUCA" wrappingWidth="192.7313232421875" />
+                                    <Text fx:id="uncoveredUsername4" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER4" wrappingWidth="192.7313232421875" />
                                     <Pane layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0" style="-fx-background-color: c8b052;">
                                        <children>
                                           <Label fx:id="animalOcc4" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />

@@ -15,6 +15,9 @@ import javafx.scene.text.Text;
 
 public class InGameController {
 
+    @FXML
+    private Label aboveText;
+
 
     @FXML
     private Label animalOcc1;
