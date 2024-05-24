@@ -58,7 +58,7 @@ public class GUI extends Application implements View {
         setFXMLController(loader.getController());
         Scene scene = new Scene(root);
 
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.setFullScreen(true);
         stage.setScene(scene);
         this.stage = stage;

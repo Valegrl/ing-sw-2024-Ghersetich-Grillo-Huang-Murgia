@@ -56,7 +56,7 @@
         <AnchorPane fx:id="mainMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER_LEFT" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <Button mnemonicParsing="false" text="Play" onAction="#goChooseConnection"/>
                     <Button mnemonicParsing="false" text="Options" onAction="#goOptions"/>
                     <Button mnemonicParsing="false" text="Rules" onAction="#goRules"/>
@@ -72,7 +72,7 @@
         <AnchorPane fx:id="optionsMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Options.css" managed="false" visible="false" AnchorPane.bottomAnchor="0.0"
                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <Button mnemonicParsing="false" text="Fullscreen" onAction="#setFullscreen"/>
                     <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
                     <padding>

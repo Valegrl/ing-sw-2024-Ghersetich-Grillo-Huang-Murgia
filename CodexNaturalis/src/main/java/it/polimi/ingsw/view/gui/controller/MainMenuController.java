@@ -63,11 +63,11 @@ public class MainMenuController extends FXMLController {
     @FXML
     public void setFullscreen(ActionEvent e){
         if(!stage.isFullScreen()){
-            stage.setResizable(false);
+            //stage.setResizable(false);
             stage.setFullScreen(true);
         }
         else{
-            stage.setResizable(false);
+            //stage.setResizable(false);
             stage.setFullScreen(false);
         }
     }

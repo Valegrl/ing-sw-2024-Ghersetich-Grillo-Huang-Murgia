@@ -1,7 +1,9 @@
 #mainPane{
     -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png);
     -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-background-color: black;
 }
 
 Text{
