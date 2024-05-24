@@ -81,7 +81,7 @@ public class ChooseConnectionController extends FXMLController {
             try {
                 ClientManager.getInstance().initSocket(IpSocket, 1098);
                 /*Unhandled RemoteServer Exception if server is off ?*/
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
                 Parent root = loader.load();
                 LoginController nextController = loader.getController();
 
@@ -109,7 +109,7 @@ public class ChooseConnectionController extends FXMLController {
             try {
                 ClientManager.getInstance().initRMI(IpRmi);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
                 Parent root = loader.load();
                 LoginController nextController = loader.getController();
 
@@ -126,7 +126,7 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     public void goBackMain(ActionEvent e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
             Parent root = loader.load();
             MainMenuController nextController = loader.getController();
 

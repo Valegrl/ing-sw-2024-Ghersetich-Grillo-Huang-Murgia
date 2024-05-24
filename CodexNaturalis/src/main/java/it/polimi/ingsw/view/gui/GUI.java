@@ -48,11 +48,11 @@ public class GUI extends Application implements View {
     @Override
     public void start(Stage stage) throws IOException, NullPointerException{
         /*This only has UPPERCASE letters*/
-        Font.loadFont(getClass().getResourceAsStream("/font/BebasNeue-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream("/it/polimi/ingsw/font/BebasNeue-Regular.ttf"), 14);
         /*This has both UPPERCASE and LOWERCASE letters, used for forms*/
-        Font.loadFont(getClass().getResourceAsStream("/font/BebasNeuePro-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream("/it/polimi/ingsw/font/BebasNeuePro-Regular.ttf"), 14);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
         Parent root = loader.load();
 
         setFXMLController(loader.getController());

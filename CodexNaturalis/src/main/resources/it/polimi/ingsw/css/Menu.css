@@ -1,13 +1,25 @@
 #mainPane{
-    -fx-background-image: url(/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png);
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
 }
 
+#yesButton{
+    -fx-text-fill: #FF0000;
+}
+
+#yesButton:hover{
+    -fx-text-fill: #8b0000;
+}
+
+#deleteWarning{
+    -fx-font-family: "Bebas Neue Regular";
+}
+
 Text{
     -fx-fill: #ffffff;
-    -fx-font-size: 50;
-    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-size: 90;
+    -fx-font-family: "BebasNeuePro-Regular";
     -fx-border-width: 0;
     -fx-padding: 0;
 }
@@ -27,7 +39,7 @@ Text{
 
 .button{
     -fx-text-fill: #ffffff;
-    -fx-font-size: 100;
+    -fx-font-size: 80;
     -fx-font-family: "Bebas Neue Regular";
     -fx-background-color: transparent;
     -fx-border-width: 0;
@@ -39,7 +51,7 @@ Text{
 }
 
 .label{
-    -fx-text-fill: "RED";
+    -fx-text-fill: #FF0000;
     -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
 }

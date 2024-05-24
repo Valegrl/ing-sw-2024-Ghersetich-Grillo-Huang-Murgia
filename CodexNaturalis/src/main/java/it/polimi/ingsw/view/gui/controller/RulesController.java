@@ -43,7 +43,7 @@ public class RulesController extends FXMLController {
         pagination.setPageFactory(this::createPage);
         pagination.currentPageIndexProperty().addListener((obs, oldVal, newVal) ->
                 imageView.setImage(images[newVal.intValue()]));
-        pagination.getStylesheets().add(getClass().getResource("/css/rules/Pagination.css").toExternalForm());
+        pagination.getStylesheets().add(getClass().getResource("/it/polimi/ingsw/css/rules/Pagination.css").toExternalForm());
     }
 
 
@@ -96,7 +96,7 @@ public class RulesController extends FXMLController {
         }
          */
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
             Parent root = loader.load();
             MainMenuController nextController = loader.getController();
 

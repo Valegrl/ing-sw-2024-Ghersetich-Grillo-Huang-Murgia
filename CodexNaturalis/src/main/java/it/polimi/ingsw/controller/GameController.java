@@ -437,21 +437,21 @@ public class GameController {
                                         if (!done)
                                             throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                                         pts.setToken(color);
-
-                                        String mes = "Player " + username + " has chosen the " + color.getColor() + " token.";
+                                        availableTokens.remove(color);
+                                        String mes = "Player " + username + " has chosen the " + color + " token.";
                                         for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                                             String other = entry.getKey().getUsername();
                                             if (isPlayerOnline(other) && !username.equals(other))
                                                 entry.getValue().update(new ChooseTokenSetupEvent(availableTokens, mes));
                                         }
 
-                                        return new ChosenTokenSetupEvent(Feedback.SUCCESS, "Your token setup has been chosen!");
+                                        return new ChosenTokenSetupEvent(Feedback.SUCCESS, "Your colored token has been chosen successfully!");
                                     }
                                     else {
                                         return new ChosenTokenSetupEvent(Feedback.FAILURE, "Token not available.");
                                     }
                                 }
-                                return new ChosenTokenSetupEvent(Feedback.FAILURE, "You cannot choose after a disconnection, wait the timer.");
+                                return new ChosenTokenSetupEvent(Feedback.FAILURE, "You cannot choose after a disconnection, wait for the timer to run out.");
                             }
                             return new ChosenTokenSetupEvent(Feedback.FAILURE, "Choice has already been made.");
                         }

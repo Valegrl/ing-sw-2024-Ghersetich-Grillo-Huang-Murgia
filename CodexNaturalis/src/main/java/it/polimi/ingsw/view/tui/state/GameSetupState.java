@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenCardsSetupEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -114,8 +112,7 @@ public class GameSetupState extends ViewState {
                 break;
             case EventID.CHOOSE_TOKEN_SETUP:
                 clearConsole();
-                String[] tokensMessage = message.split("%");
-                transition(new TokenSetupState(view, tokensMessage[1], Integer.parseInt(tokensMessage[0])));
+                transition(new TokenSetupState(view, controller.availableTokensMessage(), controller.getAvailableTokens().size()));
                 break;
         }
     }
@@ -139,7 +136,7 @@ public class GameSetupState extends ViewState {
         view.printMessage("Choose the showing face of the start card: ");
         int chosenFace = readChoiceFromInput(Arrays.asList("Front", "Back"));
         view.printMessage("Choose the secret objective card: ");
-        int chosenObjective = readChoiceFromInput(Arrays.asList("1", "2"));
+        int chosenObjective = readChoiceFromInput(Arrays.asList("Card 1", "Card 2"));
         controller.chosenSetup(chosenObjective, (chosenFace == 2)); // 1 is not flipped (false), 2 is flipped (true)
 
         waitForResponse();

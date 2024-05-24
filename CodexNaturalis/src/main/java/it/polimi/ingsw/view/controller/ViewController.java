@@ -20,7 +20,6 @@ import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 
 import java.rmi.RemoteException;
@@ -96,6 +95,8 @@ public class ViewController implements ViewEventReceiver {
      * The setup of the game.
      */
     private ViewStartSetup setup;
+
+    private List<Token> availableTokens;
 
     /**
      * The {@link ViewModel} for the current game.
@@ -175,16 +176,11 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
         if(view.inGame() || view.inChat()) {
-            List<Token> availableColors = event.getAvailableColors();
-            StringBuilder message = new StringBuilder(availableColors.size() + "%" + event.getMessage() + "\n");
-            for(int i = 0; i < availableColors.size(); i++) {
-                message.append(i + 1).append("- ").append(availableColors.get(i)).append("\n");
-            }
-            view.handleResponse(event.getID(), null, message.toString());
+            availableTokens = event.getAvailableColors();
+            view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
         }
-
     }
 
     @Override
@@ -227,20 +223,19 @@ public class ViewController implements ViewEventReceiver {
         if(view.inGame()) {
             setup = event.getViewSetup();
             // TODO prepare message for the view
-            StringBuilder message = new StringBuilder("Assigned setup:\n");
-            message.append(setup.getStartCard().printSetupStartCard()).append("\n");
-            message.append(setup.printSetupObjCards());
-            // end of assigned setup message: split[0]
-            message.append("%");
-            // start of hand message: split[1]
-            message.append(setup.printSetupHand());
-            message.append("%");
-            // start of common objectives message: split[2]
-            message.append(setup.printSetupCommonObjectives());
-            message.append("%");
-            // start of decks message: split[3]
-            message.append(setup.printSetupDecks());
-            view.handleResponse(event.getID(), null, message.toString());
+            String message = "Assigned setup:\n" + setup.getStartCard().printSetupStartCard() + "\n" +
+                    setup.printSetupObjCards() +
+                    // end of assigned setup message: split[0]
+                    "%" +
+                    // start of hand message: split[1]
+                    setup.printSetupHand() +
+                    "%" +
+                    // start of common objectives message: split[2]
+                    setup.printSetupCommonObjectives() +
+                    "%" +
+                    // start of decks message: split[3]
+                    setup.printSetupDecks();
+            view.handleResponse(event.getID(), null, message);
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -278,7 +273,12 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLocalModelEvent event) {
-
+        model = event.getModel();
+        if (view.inGame()) {
+            view.handleResponse(event.getID(), null, "Game started!");
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -329,7 +329,6 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ChosenTokenSetupEvent event) {
         if(view.inGame()) {
-            //TODO View has to handle seeing the options for setup, token
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -611,6 +610,10 @@ public class ViewController implements ViewEventReceiver {
         return playersStatus;
     }
 
+    public List<Token> getAvailableTokens() {
+        return availableTokens;
+    }
+
     public boolean isLobbyLeader(){
         return playersStatus.entrySet().iterator().next().getKey().equals(username);
     }
@@ -625,15 +628,19 @@ public class ViewController implements ViewEventReceiver {
         return m.toString();
     }
 
-    public void sendMessage(String message) {
-        ChatGMEvent chatGMEvent = new ChatGMEvent(new ChatMessage(message));
-        newViewEvent(chatGMEvent);
-    }
-
     public void chosenSetup(int chosenObj, boolean showingFace) {
         assert chosenObj < 3 && chosenObj > 0;
         String chosenObjective = setup.getSecretObjectiveCards()[chosenObj - 1].getId();
         ChosenCardsSetupEvent chosenCardsSetupEvent = new ChosenCardsSetupEvent(chosenObjective, showingFace);
         newViewEvent(chosenCardsSetupEvent);
+    }
+
+    public String availableTokensMessage() {
+        StringBuilder m = new StringBuilder();
+        m.append("Choose your colored token from the following available ones:\n");
+        for(int i = 0; i < availableTokens.size(); i++) {
+            m.append("  ").append(i + 1).append("- ").append(availableTokens.get(i)).append("\n");
+        }
+        return m.toString();
     }
 }

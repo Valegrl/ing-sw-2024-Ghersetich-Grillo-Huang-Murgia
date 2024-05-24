@@ -17,5 +17,10 @@ public class AnsiCodes {
     public static final String CYAN = "\033[38;2;119;199;200m";
     public static final String BEIGE = "\033[38;2;228;220;182m";
 
+    public static final String BLUE_TOKEN = "\033[38;2;20;95;119m";
+    public static final String RED_TOKEN = "\033[38;2;194;57;48m";
+    public static final String GREEN_TOKEN = "\033[38;2;55;103;57m";
+    public static final String YELLOW_TOKEN = "\033[38;2;197;158;66m";
+
     public static final String BOLD = "\u001B[1m";
 }

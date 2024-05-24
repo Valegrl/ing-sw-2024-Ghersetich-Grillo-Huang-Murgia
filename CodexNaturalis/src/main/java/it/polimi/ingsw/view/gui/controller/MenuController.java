@@ -6,7 +6,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.DeleteAccountEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LogoutEvent;
-import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -16,8 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -100,7 +97,7 @@ public class MenuController extends FXMLController {
     @FXML
     public void goAvailableLobbies(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AvailableLobbiesMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/AvailableLobbiesMenu.fxml"));
             Parent root = loader.load();
             AvailableLobbiesController nextController = loader.getController();
 
@@ -190,7 +187,7 @@ public class MenuController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
                             Parent root = loader.load();
                             LoginController nextController = loader.getController();
 
@@ -224,7 +221,7 @@ public class MenuController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginMenu.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
                             Parent root = loader.load();
                             LoginController nextController = loader.getController();
 

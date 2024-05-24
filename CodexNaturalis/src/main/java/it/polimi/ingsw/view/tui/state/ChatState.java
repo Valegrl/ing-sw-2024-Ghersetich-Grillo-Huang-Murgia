@@ -81,15 +81,18 @@ public class ChatState extends ViewState {
                 break;
             case EventID.UPDATE_LOBBY_PLAYERS:
                 printMessage(boldText("Lobby info: ") + message);
+                view.clearInput();
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:
                 inChat = false;
                 view.stopInputRead(true);
+                view.clearInput();
                 clearLine();
                 showResponseMessage(message, 2000);
                 transition(new MenuState(view));
                 return;
             case EventID.UPDATE_GAME_PLAYERS:
+                view.clearInput();
                 if (previousState.inLobby()) {
                     inChat = false;
                     view.stopInputRead(true);

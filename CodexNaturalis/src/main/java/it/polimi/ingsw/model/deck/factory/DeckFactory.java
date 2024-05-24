@@ -20,10 +20,10 @@ import java.util.*;
 public class DeckFactory {
 
     Map<Class<?>, String> classToFile = new HashMap<>() {{
-        put(StartCard.class, "json/StartDeck.json");
-        put(ObjectiveCard.class, "json/ObjectiveDeck.json");
-        put(GoldCard.class, "json/GoldDeck.json");
-        put(ResourceCard.class, "json/ResourceDeck.json");
+        put(StartCard.class, "it/polimi/ingsw/json/StartDeck.json");
+        put(ObjectiveCard.class, "it/polimi/ingsw/json/ObjectiveDeck.json");
+        put(GoldCard.class, "it/polimi/ingsw/json/GoldDeck.json");
+        put(ResourceCard.class, "it/polimi/ingsw/json/ResourceDeck.json");
     }};
 
     public <T extends Card> Deck<T> createDeck(Class<T> cls) {

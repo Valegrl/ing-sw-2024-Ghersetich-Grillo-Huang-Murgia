@@ -35,7 +35,7 @@ public class MainMenuController extends FXMLController {
     @FXML
     public void goChooseConnection(ActionEvent e) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChooseConnectionMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ChooseConnectionMenu.fxml"));
         Parent root = loader.load();
         ChooseConnectionController nextController = loader.getController();
 
@@ -95,7 +95,7 @@ public class MainMenuController extends FXMLController {
     @FXML
     public void goRules(ActionEvent e) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Rules.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Rules.fxml"));
         Parent root = loader.load();
         RulesController controller = loader.getController();
 

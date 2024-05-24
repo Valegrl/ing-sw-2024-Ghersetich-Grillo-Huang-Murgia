@@ -99,7 +99,7 @@ public abstract class ViewState {
     }
 
     public void clearLine() {
-        view.printMessage(MOVE_CURSOR_START + CLEAR_LINE);
+        view.print(MOVE_CURSOR_START + CLEAR_LINE);
     }
 
     public String boldText(String text) {
