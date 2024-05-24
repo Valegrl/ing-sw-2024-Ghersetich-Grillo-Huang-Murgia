@@ -1,0 +1,64 @@
+#mainAnchor {
+    -fx-background-color: #f0f0f0;
+    -fx-background-image: url('/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDark.png');
+    -fx-background-repeat: stretch;
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+#vBox{
+    -fx-background-color: transparent;
+}
+#imageView {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 300px;
+}
+
+#backButton {
+    -fx-background-color: #ebe1b8;
+    -fx-border-color: #000000;
+    -fx-border-width: 3px;
+    -fx-text-fill: #000000;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-size: 27px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: pointer;
+}
+
+#backButton:hover {
+    -fx-background-color: #c8b052;
+    -fx-text-fill: #f0f0f0;
+}
+
+#pagination {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-arrows-visible: false;
+    -fx-page-information-visible: false;
+}
+
+#pagination .control-box {
+    -fx-background-color: transparent;
+}
+
+#pagination .control-box .number-button {
+    -fx-background-color: #ebe1b8;
+    -fx-text-fill: #000000;
+    -fx-border-color: #c8b052;
+    -fx-font-size: 20px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-padding: 5px 10px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+
+}
+
+#pagination .control-box .number-button:hover {
+    -fx-background-color: #c8b052;
+}
+
+#pagination .control-box .number-button:selected {
+    -fx-background-color: #c8b052;
+    -fx-text-fill: #ffffff;
+}
