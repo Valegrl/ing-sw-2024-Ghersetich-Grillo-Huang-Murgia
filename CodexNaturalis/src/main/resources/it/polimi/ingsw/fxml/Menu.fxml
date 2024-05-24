@@ -95,8 +95,7 @@
                   <Insets left="20.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" text="Create lobby" onAction="#goCreateLobby"/>
-                  <Button mnemonicParsing="false" text="Show lobbies" onAction="#goAvailableLobbies"/>
+                  <Button mnemonicParsing="false" text="Enter lobby" onAction="#goEnterLobbies"/>
                   <Button mnemonicParsing="false" text="Reconnect to game"/>
                   <Button mnemonicParsing="false" text="Profile settings" onAction="#goProfileSettings"/>
                   <Button mnemonicParsing="false" text="Exit" onAction="#exit">
@@ -104,23 +103,6 @@
                         <Insets top="60.0" />
                      </VBox.margin>
                   </Button>
-               </children>
-            </VBox>
-         </children>
-      </AnchorPane>
-
-       <AnchorPane fx:id="reconnectGamesMenuFX" managed="false" visible="false"></AnchorPane>
-
-      <AnchorPane fx:id="lobbyCreateMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <TextField fx:id="lobbyNameField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" promptText="Lobby name" />
-                  <TextField fx:id="numPlayersField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" promptText="Number of players" />
-                  <Label  fx:id="errorLobbyCreate" text="" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Create" onAction="#submitCreateLobby"/>
-                  <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
                </children>
             </VBox>
          </children>

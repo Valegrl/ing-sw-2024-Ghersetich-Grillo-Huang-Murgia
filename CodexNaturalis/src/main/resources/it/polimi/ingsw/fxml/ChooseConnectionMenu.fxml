@@ -89,13 +89,13 @@
                         <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1920.0" spacing="20.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter RMI IP address:" textAlignment="CENTER" />
-                                <TextField fx:id="IpRmiField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
+                                <TextField fx:id="ipRmiField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
                                 <Label fx:id="errorRmi"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="20.0">
                             <children>
-                                <Button fx:id="submitRmiButton" alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitRmi"/>
+                                <Button alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitRmi"/>
                                 <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBackConnection"/>
                             </children>
                         </VBox>
@@ -112,13 +112,13 @@
                         <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1920.0" spacing="20.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Socket IP address:" textAlignment="CENTER" />
-                                <TextField fx:id="IpSocketField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
+                                <TextField fx:id="ipSocketField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
                                 <Label fx:id="errorSocket"/>
                             </children>
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="20.0">
                             <children>
-                                <Button fx:id="submitSocketButton" alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitSocket"/>
+                                <Button  alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitSocket"/>
                                 <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBackConnection"/>
                             </children>
                         </VBox>

@@ -1,0 +1,75 @@
+#mainPane{
+    -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+#lobbyName{
+    -fx-font-size: 50;
+}
+
+#sendButton{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 50;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#chatTitle{
+    -fx-font-size: 50;
+}
+
+#vboxChat{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+  /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
+#stackPane0{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(241, 70, 36, 0.4);
+  /*  -fx-effect: dropshadow(gaussian, #F14624, 10, 0.5, 0, 0);*/
+}
+
+#stackPane1{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(159, 50, 158, 0.4);
+   /* -fx-effect: dropshadow(gaussian, #9F329E, 10, 0.5, 0, 0);*/
+}
+
+#stackPane2{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(115, 207, 196, 0.4);
+    /*-fx-effect: dropshadow(gaussian, #73CFC4, 10, 0.5, 0, 0);*/
+}
+
+#stackPane3{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(102, 200, 115, 0.4);
+   /* -fx-effect: dropshadow(gaussian, #66C873, 10, 0.5, 0, 0);*/
+}
+
+Text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 30;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.button{
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 50;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}

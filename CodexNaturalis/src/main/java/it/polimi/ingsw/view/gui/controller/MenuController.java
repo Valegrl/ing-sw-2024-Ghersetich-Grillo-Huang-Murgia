@@ -3,20 +3,16 @@ package it.polimi.ingsw.view.gui.controller;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.DeleteAccountEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LogoutEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -25,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController extends FXMLController {
+    //TODO move the lobby creation to the showAvailableLobbies, rename!
     //TODO Add Icon top-right of the GUI, DEBUG!
 
     private String username;
@@ -33,22 +30,7 @@ public class MenuController extends FXMLController {
     private AnchorPane menuFX;
 
     @FXML
-    private TextField lobbyNameField;
-
-    @FXML
-    private TextField numPlayersField;
-
-    @FXML
-    private Label errorLobbyCreate;
-
-    @FXML
     private Label errorProfileSettings;
-
-    @FXML
-    private AnchorPane lobbyCreateMenuFX;
-
-    @FXML
-    private AnchorPane reconnectGamesMenuFX;
 
     @FXML
     private AnchorPane profileSettingsMenuFX;
@@ -71,22 +53,6 @@ public class MenuController extends FXMLController {
         this.username = view.getUsername();
 
         usernameTextFX.setText("Hello " + username + " !");
-
-        numPlayersField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                submitCreateLobby(new ActionEvent());
-            }
-        });
-
-    }
-
-    @FXML
-    public void goCreateLobby(){
-        errorLobbyCreate.setText("");
-        menuFX.setManaged(false);
-        menuFX.setVisible(false);
-        lobbyCreateMenuFX.setVisible(true);
-        lobbyCreateMenuFX.setManaged(true);
     }
 
     @FXML
@@ -95,11 +61,11 @@ public class MenuController extends FXMLController {
     }
 
     @FXML
-    public void goAvailableLobbies(){
+    public void goEnterLobbies(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/AvailableLobbiesMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
             Parent root = loader.load();
-            AvailableLobbiesController nextController = loader.getController();
+            EnterLobbiesController nextController = loader.getController();
 
             Scene scene = stage.getScene();
             scene.setRoot(root);
@@ -108,11 +74,6 @@ public class MenuController extends FXMLController {
         catch (IOException exception){
             exception.printStackTrace();
         }
-    }
-
-    @FXML
-    public void refreshAvailableLobbies(){
-
     }
 
     @FXML
@@ -170,19 +131,11 @@ public class MenuController extends FXMLController {
         System.exit(0);
     }
 
+    //TODO use runLater() ?
     @FXML
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
-            case EventID.CREATE_LOBBY:
-                if (feedback == Feedback.SUCCESS) {
-                    //showResponseMessage(message, 2000);
-                    //transition(new LobbyState(view));
-                } else {
-                    Platform.runLater(() -> errorLobbyCreate.setText("Lobby creation failed " + message));
-                    //showResponseMessage("Lobby creation failed " + message, 2000);
-                }
-                break;
             case EventID.DELETE_ACCOUNT:
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
@@ -241,23 +194,7 @@ public class MenuController extends FXMLController {
                 }
                 break;
 
-            /*case EventID.AVAILABLE_LOBBIES:
-                if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 0);
-                } else {
-                    showResponseMessage("Failed to get available lobbies from server: " + message, 2000);
-                    run();
-                }
-                break;
-            case EventID.JOIN_LOBBY:
-                if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
-                    transition(new LobbyState(view));
-                } else {
-                    showResponseMessage("Failed to join lobby: " + message, 2000);
-                    availableLobbies();
-                }
-                break;
+            /*
             case EventID.GET_MY_OFFLINE_GAMES:
                 if (feedback == Feedback.SUCCESS) {
                     showResponseMessage(message, 800);
@@ -285,35 +222,8 @@ public class MenuController extends FXMLController {
     public void goBack(){
         menuFX.setManaged(true);
         menuFX.setVisible(true);
-        lobbyCreateMenuFX.setVisible(false);
-        lobbyCreateMenuFX.setManaged(false);
-        reconnectGamesMenuFX.setVisible(false);
-        reconnectGamesMenuFX.setManaged(false);
         profileSettingsMenuFX.setVisible(false);
         profileSettingsMenuFX.setManaged(false);
-    }
-
-    @FXML
-    private void submitCreateLobby(ActionEvent e) {
-        String lobbyName = lobbyNameField.getText();
-        try {
-            int numPlayers = Integer.parseInt(numPlayersField.getText());
-            if(numPlayers < 2 || numPlayers > 4){
-                errorLobbyCreate.setText("Number of players must be between 2 and 4.");
-            }
-            else {
-                lobbyNameField.clear();
-                numPlayersField.clear();
-                errorLobbyCreate.setText("");
-
-                Event event = new CreateLobbyEvent(lobbyName, numPlayers);
-                controller.newViewEvent(event);
-                waitForResponse();
-            }
-        }
-        catch (NumberFormatException exception){
-            errorLobbyCreate.setText("Invalid. Please put a number.");
-        }
     }
 
     @Override

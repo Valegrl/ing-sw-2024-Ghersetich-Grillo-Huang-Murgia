@@ -37,10 +37,10 @@ public class ChooseConnectionController extends FXMLController {
     private Label errorSocket;
 
     @FXML
-    private TextField IpSocketField;
+    private TextField ipSocketField;
 
     @FXML
-    private TextField IpRmiField;
+    private TextField ipRmiField;
 
 
     public ChooseConnectionController() {
@@ -54,29 +54,32 @@ public class ChooseConnectionController extends FXMLController {
         this.stage = stage;
         this.controller = view.getController();
 
-        IpSocketField.setOnKeyPressed(event -> {
+        ipSocketField.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 submitSocket(new ActionEvent());
             }
         });
 
-        IpRmiField.setOnKeyPressed(event -> {
+        ipRmiField.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 submitRmi(new ActionEvent());
             }
         });
+
+        ipSocketField.setText("127.0.0.1");
+        ipRmiField.setText("127.0.0.1");
     }
 
     @FXML
     public void submitSocket(ActionEvent e) {
-        String IpSocket = IpSocketField.getText();
+        String IpSocket = ipSocketField.getText();
         System.out.println(IpSocket);
 
         if(IpSocket.isEmpty()){
             errorSocket.setText("Socket address can't be left empty!");
         }
         else{
-            IpSocketField.clear();
+            ipSocketField.clear();
             errorSocket.setText("");
             try {
                 ClientManager.getInstance().initSocket(IpSocket, 1098);
@@ -97,14 +100,14 @@ public class ChooseConnectionController extends FXMLController {
 
     @FXML
     public void submitRmi(ActionEvent e){
-        String IpRmi = IpRmiField.getText();
+        String IpRmi = ipRmiField.getText();
         System.out.println(IpRmi);
 
         if(IpRmi.isEmpty()){
             errorRmi.setText("RMI address can't be left empty!");
         }
         else{
-            IpRmiField.clear();
+            ipRmiField.clear();
             errorRmi.setText("");
             try {
                 ClientManager.getInstance().initRMI(IpRmi);

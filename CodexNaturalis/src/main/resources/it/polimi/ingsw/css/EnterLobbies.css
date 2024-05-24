@@ -1,5 +1,5 @@
 #mainPane{
-    -fx-background-image: url(/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png);
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
 }
@@ -8,6 +8,12 @@
     -fx-text-fill: #ffffff;
     -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
+}
+
+#createLobbyVBox{
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
 }
 
 .label{
@@ -34,7 +40,7 @@
 .table-view{
     -fx-text-fill: #ffffff;
     -fx-font-family: "BebasNeuePro-Regular";
-    -fx-font-size: 30;
+    -fx-font-size: 40;
     -fx-background-color: rgba(255, 255, 255, 0.4);
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
@@ -100,12 +106,25 @@
     -fx-background-color: #0D0D0D
 }
 
-/*
+
 Text{
     -fx-fill: #ffffff;
-    -fx-font-size: 90;
+    -fx-font-size: 30;
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-border-width: 0;
     -fx-padding: 0;
 }
- */
+
+.text-input{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 30;
+}
+
+.text-field{
+    -fx-font-size: 30.0;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+}
+
