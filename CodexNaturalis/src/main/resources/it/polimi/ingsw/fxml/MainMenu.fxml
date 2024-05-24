@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.text.Text?>
-<?import javafx.geometry.Insets?>
 
 <!-- OLD CODE, REUSE IF SCREEN IS BROKEN
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080.0" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21"  AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
@@ -53,15 +52,14 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
     <children>
-        <AnchorPane fx:id="mainMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane id="mainPane" fx:id="mainMenuFX" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <Button mnemonicParsing="false" text="Play" onAction="#goChooseConnection"/>
-                    <Button mnemonicParsing="false" text="Options" onAction="#goOptions"/>
-                    <Button mnemonicParsing="false" text="Rules" onAction="#goRules"/>
-                    <Button mnemonicParsing="false" text="Credits" onAction="#goCredits" />
-                    <Button mnemonicParsing="false" text="Exit" onAction="#exit"/>
+                <VBox alignment="CENTER_LEFT" minHeight="216.0" minWidth="100.0" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goChooseConnection" text="Play" />
+                    <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goOptions" text="Options" />
+                    <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goRules" text="Rules" />
+                    <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goCredits" text="Credits" />
+                    <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#exit" text="Exit" />
                     <padding>
                         <Insets left="20.0" />
                     </padding>
@@ -69,12 +67,11 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane fx:id="optionsMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Options.css" managed="false" visible="false" AnchorPane.bottomAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane id="mainPane" fx:id="optionsMenuFX" managed="false" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Options.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <VBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <Button mnemonicParsing="false" text="Fullscreen" onAction="#setFullscreen"/>
-                    <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
+                    <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen" />
+                    <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
                     <padding>
                         <Insets left="20.0" />
                     </padding>
@@ -82,8 +79,7 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane fx:id="creditsMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Credits.css" managed="false" visible="false" AnchorPane.bottomAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane id="mainPane" fx:id="creditsMenuFX" managed="false" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Credits.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
@@ -98,7 +94,7 @@
                                 <Insets top="40.0" />
                             </VBox.margin>
                             <children>
-                                <Button mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBack"/>
+                                <Button mnemonicParsing="false" onAction="#goBack" text="Back" textAlignment="CENTER" />
                             </children>
                         </VBox>
                     </children>

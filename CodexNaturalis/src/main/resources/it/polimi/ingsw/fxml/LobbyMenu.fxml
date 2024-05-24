@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
@@ -21,10 +22,10 @@
                         <Insets top="20.0" />
                     </VBox.margin>
                 </Text>
-                <HBox fx:id="hBox" alignment="CENTER_LEFT" prefHeight="700.0" prefWidth="1920.0" spacing="20.0">
+                <HBox fx:id="hBox" alignment="CENTER" prefHeight="700.0" prefWidth="1920.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" >
                     <children>
 
-                        <StackPane fx:id="playerStackPane0" id="stackPane0" prefHeight="700.0" prefWidth="300.0" visible="false">
+                        <StackPane id="stackPane0" fx:id="playerStackPane0" prefHeight="700.0" prefWidth="300.0" visible="false">
                             <children>
                                 <VBox alignment="CENTER" prefHeight="700.0" prefWidth="300.0">
                                     <children>
@@ -52,7 +53,7 @@
                             </children>
                         </StackPane>
 
-                        <StackPane fx:id="playerStackPane1" id="stackPane1" prefHeight="700.0" prefWidth="300.0"  visible="false">
+                        <StackPane id="stackPane1" fx:id="playerStackPane1" prefHeight="700.0" prefWidth="300.0" visible="false">
                             <children>
                                 <VBox alignment="CENTER" prefHeight="700.0" prefWidth="300.0">
                                     <children>
@@ -73,13 +74,13 @@
                                             </VBox.margin>
                                         </Text>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ready" />
-                                        <Button fx:id="playerButton1" mnemonicParsing="false"/>
+                                        <Button fx:id="playerButton1" mnemonicParsing="false" />
                                     </children>
                                 </VBox>
                             </children>
                         </StackPane>
 
-                        <StackPane fx:id="playerStackPane2" id="stackPane2" prefHeight="700.0" prefWidth="300.0" visible="false">
+                        <StackPane id="stackPane2" fx:id="playerStackPane2" prefHeight="700.0" prefWidth="300.0" visible="false">
                             <children>
                                 <VBox alignment="CENTER" prefHeight="700.0" prefWidth="300.0">
                                     <children>
@@ -107,7 +108,7 @@
                             </children>
                         </StackPane>
 
-                        <StackPane fx:id="playerStackPane3" id="stackPane3" prefHeight="700.0" prefWidth="300.0" visible="false">
+                        <StackPane id="stackPane3" fx:id="playerStackPane3" prefHeight="700.0" prefWidth="300.0" visible="false">
                             <children>
                                 <VBox alignment="CENTER" prefHeight="700.0" prefWidth="300.0">
                                     <children>
@@ -157,7 +158,7 @@
                                 </Button>
                             </children>
                             <HBox.margin>
-                                <Insets left="40.0" />
+                                <Insets />
                             </HBox.margin>
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -167,9 +168,12 @@
                     <VBox.margin>
                         <Insets top="20.0" />
                     </VBox.margin>
-                    <padding>
-                        <Insets left="20.0" />
-                    </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
                 </HBox>
                 <Button alignment="CENTER" mnemonicParsing="false" text="Ready" textAlignment="CENTER" />
 
