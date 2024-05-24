@@ -75,3 +75,6 @@ Text{
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+.button:hover{
+    -fx-text-fill: #bbbbbb;
+}

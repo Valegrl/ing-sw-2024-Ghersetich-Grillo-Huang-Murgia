@@ -2,11 +2,19 @@ package it.polimi.ingsw.view.gui.controller;
 
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -16,10 +24,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 //TODO USE TOGGLE BUTTONS FOR THE READY
@@ -101,43 +108,74 @@ public class LobbyController extends FXMLController {
 
         setLobbyName(controller.getLobbyId());
 
-        if (controller.isLobbyLeader() && controller.getPlayersStatus().size() == 1) {
-            lobbyLeaderSetup();
-        }
-        else if (!controller.isLobbyLeader()){
-            lobbyUserSetup();
-        }
+        updateLobby();
     }
 
-    private void lobbyLeaderSetup(){
-        playerStackPane0.setVisible(true);
-        playerButton0.setText("Quit");
-        username0.setText(controller.getUsername());
-        //TODO add event listener for quitting
+    private void lobbyLeaderUpdate(){
+        int i = 0;
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(controller.getUsername().equals(user)){
+                playerStackPanes.get(i).setVisible(true);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(true);
+                playerButtons.get(i).setText("Quit");
+                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        quitLobby();
+                    }
+                });
+            }
+            else{
+            playerStackPanes.get(i).setVisible(true);
+            usernames.get(i).setText(user);
+            playerButtons.get(i).setVisible(true);
+            playerButtons.get(i).setText("Kick");
+            playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    kickPlayer(user);
+                }
+            });
+            }
+            i++;
+        }
+        while(i < 4){
+            playerStackPanes.get(i).setVisible(false);
+            playerButtons.get(i).setVisible(false);
+            usernames.get(i).setText("");
+            i++;
+        }
+
     }
 
-    private void lobbyUserSetup(){
+    private void lobbyUserUpdate(){
         //DEPENDING ON WHAT ORDER THE PLAYER JOINED HE SHOULD HAVE THE OTHER BUTTONS HIDDEN BUT NOT THEIRS
         int i = 0;
-        StackPane currPane;
-        Text currText;
-        Button currButton;
-
-        for(String username : controller.getPlayersStatus().keySet()){
-            currPane = playerStackPanes.get(i);
-            currText = usernames.get(i);
-            currButton = playerButtons.get(i);
-
-            currPane.setVisible(true);
-            currText.setText(username);
-            currButton.setVisible(false);
-            if(controller.getUsername().equals(username)){
-                currButton.setVisible(true);
-                currButton.setText("Quit");
-                //TODO add event listener for quitting
-
-                break;
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(controller.getUsername().equals(user)){
+                playerStackPanes.get(i).setVisible(true);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(true);
+                playerButtons.get(i).setText("Quit");
+                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        quitLobby();
+                    }
+                });
             }
+            else{
+                playerStackPanes.get(i).setVisible(true);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(false);
+            }
+            i++;
+        }
+        while( i< 4){
+            playerStackPanes.get(i).setVisible(false);
+            usernames.get(i).setText("");
+            playerButtons.get(i).setVisible(false);
             i++;
         }
     }
@@ -198,116 +236,79 @@ public class LobbyController extends FXMLController {
 
     //TODO chat implementation
 
+    @FXML
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case EventID.UPDATE_LOBBY_PLAYERS:
                 //showResponseMessage(message, 1000);
-                updateLobby();
+                Platform.runLater(this::updateLobby);
                 break;
+            case EventID.QUIT_LOBBY:
+                if(feedback == Feedback.SUCCESS){
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
+                            Parent root = loader.load();
+                            EnterLobbiesController nextController = loader.getController();
+
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                        }
+                        catch (IOException exception){
+                            exception.printStackTrace();
+                        }
+                    });
+                }
+                else{
+                    System.out.println("Something bad happened, you can't quit!");
+                }
+                break;
+            case EventID.KICKED_PLAYER_FROM_LOBBY:
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
+                        Parent root = loader.load();
+                        EnterLobbiesController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    }
+                    catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                });
         }
+        notifyResponse();;
     }
 
     private void updateLobby(){
-        Platform.runLater(() -> {
-            StackPane currPane;
-            Text currText;
-            Button currButton;
+        if (controller.isLobbyLeader()) {
+            lobbyLeaderUpdate();
+        }
+        else if (!controller.isLobbyLeader()){
+            lobbyUserUpdate();
+        }
+    }
 
-            List<String> usernameStrings = new ArrayList<>();
-            for (Text username : usernames) {
-                if (!username.getText().isEmpty()) {
-                    usernameStrings.add(username.getText());
-                }
-            }
-            List<String> actualUsernameStrings = new ArrayList<>(controller.getPlayersStatus().keySet());
 
-            int i = 0;
-            if (actualUsernameStrings.size() > usernameStrings.size()) {
-                if (controller.isLobbyLeader()) {
-                    for (String username : actualUsernameStrings) {
-                        currPane = playerStackPanes.get(i);
-                        currText = usernames.get(i);
-                        currButton = playerButtons.get(i);
-                        if (!usernameStrings.contains(username)) {
-                            currPane.setVisible(true);
-                            currText.setText(username);
-                            currButton.setText("Kick");
-                            //TODO add event listener for kicking;
+    private void quitLobby() {
+        Event event = new QuitLobbyEvent();
+        controller.newViewEvent(event);
+        waitForResponse();
+    }
 
-                        }
-                        i++;
-                    }
-                } else {
-                    for (String username : actualUsernameStrings) {
-                        currPane = playerStackPanes.get(i);
-                        currText = usernames.get(i);
-                        if (!usernameStrings.contains(username)) {
-                            currPane.setVisible(true);
-                            currText.setText(username);
-                        }
-                        i++;
-                    }
-                }
-
-            } else if (actualUsernameStrings.size() < usernameStrings.size()) {
-
-                if(controller.isLobbyLeader()){
-                    for (String username : usernameStrings){
-                        currPane = playerStackPanes.get(i);
-                        currText = usernames.get(i);
-                        currButton = playerButtons.get(i);
-                        if(username.equals(controller.getUsername())){
-                            currPane.setVisible(true);
-                            currText.setText(username);
-                            currButton.setVisible(true);
-                            currButton.setText("Quit");
-                            //TODO add event listener for quitting
-                        }
-                        else{
-                            if(actualUsernameStrings.contains(username)) {
-                                currPane.setVisible(true);
-                                currText.setText(username);
-                                currButton.setVisible(true);
-                                currButton.setText("Kick");
-                                //TODO add event listener for kicking;
-                            }
-                            else{
-                                currPane.setVisible(false);
-                                currText.setText("");
-                            }
-                        }
-                        i++;
-                    }
-                }
-                else{
-                    for(String username : usernameStrings){
-                        currPane = playerStackPanes.get(i);
-                        currText = usernames.get(i);
-                        currButton = playerButtons.get(i);
-                        if(username.equals(controller.getUsername())){
-                            currPane.setVisible(true);
-                            currText.setText(username);
-                            currButton.setVisible(true);
-                            currButton.setText("Quit");
-                            //TODO add listener for quitting
-                        }
-                        else{
-                            if(actualUsernameStrings.contains(username)){
-                                currPane.setVisible(true);
-                                currText.setText(username);
-                                currButton.setVisible(false);
-                            }
-                            else{
-                                currPane.setVisible(false);
-                                currText.setText("");
-                            }
-                        }
-                        i++;
-                    }
-                }
-            }
-        });
+    private void kickPlayer(String userToKick) {
+        if (controller.getPlayersStatus().size() > 1) {
+            Event event = new KickFromLobbyEvent(userToKick);
+            controller.newViewEvent(event);
+            waitForResponse();
+        }
+        else{
+            System.out.println("Nobody here but us chickens");
+        }
     }
 
 
