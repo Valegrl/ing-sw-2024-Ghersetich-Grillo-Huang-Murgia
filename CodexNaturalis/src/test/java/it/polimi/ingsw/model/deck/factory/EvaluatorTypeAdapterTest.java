@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.deck.factory;
 
+import com.google.gson.JsonParseException;
 import org.junit.jupiter.api.Test;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -62,8 +63,7 @@ public class EvaluatorTypeAdapterTest {
     @Test
     void testDeserializeUnknownEvaluator() {
         jsonObject.addProperty("type", "UnknownEvaluator");
-        Evaluator result = evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context);
-        assertNull(result);
+        assertThrows(JsonParseException.class, () -> evaluatorTypeAdapter.deserialize(jsonElement, Evaluator.class, context));
     }
 
     @Test

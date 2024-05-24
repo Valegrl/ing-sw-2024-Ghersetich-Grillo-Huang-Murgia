@@ -71,8 +71,8 @@ class ImmGoldCardTest {
 
         String expectedOutput = "GoldCard: " + Item.itemToColor(Item.PLANT, "GC17") + "\n" +
                 "  Corners: \n" +
-                "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
-                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
+                "    TL: " + Item.EMPTY + "  TR: " + Item.EMPTY + "\n" +
+                "    BL: " + Item.EMPTY + "  BR: " + Item.EMPTY + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());
@@ -153,8 +153,8 @@ class ImmGoldCardTest {
 
         String expectedOutput = "GoldCard: " + Item.itemToColor(Item.FUNGI, "GC03") + "\n" +
                 "  Corners: \n" +
-                "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
-                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
+                "    TL: " + Item.EMPTY + "  TR: " + Item.EMPTY + "\n" +
+                "    BL: " + Item.EMPTY + "  BR: " + Item.EMPTY + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());
@@ -231,8 +231,8 @@ class ImmGoldCardTest {
 
         String expectedOutput = "GoldCard: " + Item.itemToColor(Item.FUNGI, "GC06") + "\n" +
                 "  Corners: \n" +
-                "    TL: " + Item.itemToColor(Item.EMPTY) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
-                "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.EMPTY) + "\n" ;
+                "    TL: " + Item.EMPTY + "  TR: " + Item.EMPTY + "\n" +
+                "    BL: " + Item.EMPTY + "  BR: " + Item.EMPTY + "\n" ;
 
         assertEquals(expectedOutput, card.printCardBack());
         System.out.println(card.printCardBack());
