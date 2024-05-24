@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.eventUtils.EventTypeAdapter;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromModel.NewTurnEvent;
 import it.polimi.ingsw.model.deck.factory.EvaluatorTypeAdapter;
 import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
@@ -77,6 +78,11 @@ public class RemoteClientSocket implements Client {
                         .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
                         .create();
                 String jsonString = gson.toJson(event);
+
+                String id = event.getID();//FIXME just for testing
+                if (!(id.equals("PONG") || id.equals("PING")))
+                    System.out.println(socket.getPort() + " OUT: "+ id);
+
                 outputStream.writeUTF(jsonString);
                 outputStream.flush();
             }
@@ -102,6 +108,11 @@ public class RemoteClientSocket implements Client {
                     .create();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
+
+            String id = event.getID();//FIXME just for testing
+            if (!(id.equals("PONG") || id.equals("PING")))
+                System.out.println(socket.getPort() + " IN: "+ id);
+
             server.direct(event, this);
         } catch (IOException e) {
             if (!socket.isConnected())

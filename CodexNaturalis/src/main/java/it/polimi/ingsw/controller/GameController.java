@@ -703,15 +703,14 @@ public class GameController {
     protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
         if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
             String waitingPlayer;
-
-            if (game.getGameStatus() == GameStatus.WAITING) {
+            GameStatus preGS = game.getGameStatus();
+            if (preGS == GameStatus.WAITING) {
                 this.waitingTimer.cancel();
                 waitingPlayer = virtualViewAccounts.values().stream().findFirst()
                         .orElseThrow(() -> new NoSuchElementException("At least one player must be online."))
                         .getUsername();
                 if (!game.isTurnPlayer(waitingPlayer))
                     this.startedMove = false;
-                this.actionTimer = playerActionTimer();
             }
 
             joinedPlayers.put(account, gl);
@@ -721,10 +720,11 @@ public class GameController {
 
             game.reconnectPlayer(account.getUsername(), gl);
 
-            if(game.getGameStatus() == GameStatus.ENDED) {
-                this.actionTimer.cancel();
+            GameStatus newGS = game.getGameStatus();
+            if (preGS == GameStatus.WAITING && newGS != GameStatus.ENDED)
+                this.actionTimer = playerActionTimer();
+            else if (newGS == GameStatus.ENDED)
                 deleteGame();
-            }
         }
     }
 
