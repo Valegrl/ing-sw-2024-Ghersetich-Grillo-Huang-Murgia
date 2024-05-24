@@ -70,6 +70,7 @@ public class Rules1Controller extends FXMLController{
         // Not used
     }
 
+
     @Override
     public boolean inMenu() {
         return true;
