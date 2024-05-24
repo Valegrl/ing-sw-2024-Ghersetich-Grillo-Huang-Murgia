@@ -28,12 +28,12 @@ public class RulesController extends FXMLController {
 
     public RulesController(){
         super();
-        images[0] = new Image("/images/rules/rules1.png");
-        images[1] = new Image("/images/rules/rules2.png");
-        images[2] = new Image("/images/rules/rules3.png");
-        images[3] = new Image("/images/rules/rules4.png");
-        images[4] = new Image("/images/rules/rules5.png");
-        images[5] = new Image("/images/rules/rules6.png");
+        images[0] = new Image("/it/polimi/ingsw/images/rules/rules1.png");
+        images[1] = new Image("/it/polimi/ingsw/images/rules/rules2.png");
+        images[2] = new Image("/it/polimi/ingsw/images/rules/rules3.png");
+        images[3] = new Image("/it/polimi/ingsw/images/rules/rules4.png");
+        images[4] = new Image("/it/polimi/ingsw/images/rules/rules5.png");
+        images[5] = new Image("/it/polimi/ingsw/images/rules/rules6.png");
     }
 
 
