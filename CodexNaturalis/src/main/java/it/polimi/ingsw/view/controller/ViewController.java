@@ -192,6 +192,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
         if(view.inLobby() || view.inChat()) {
             lobbyId = null;
+            playersStatus = null;
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
@@ -284,9 +285,8 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(AvailablePositionsEvent event) {
         if(view.inGame()) {
-            SelfViewPlayArea selfVPA = this.model.getSelfPlayer().getPlayArea();
-            StringBuilder message = new StringBuilder(selfVPA.printAvailablePos());
-            view.handleResponse(event.getID(), null, message.toString());
+            SelfViewPlayArea selfVPA = model.getSelfPlayer().getPlayArea();
+            view.handleResponse(event.getID(), null, selfVPA.printAvailablePos());
         } else {
             System.out.println("Game state: event in the wrong state");
         }
@@ -395,7 +395,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(PlayerReadyEvent event) {
         if(view.inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
-                this.getPlayersStatus().put(username, true);
+                getPlayersStatus().put(username, true);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
@@ -406,7 +406,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(PlayerUnreadyEvent event) {
         if(view.inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
-                this.getPlayersStatus().put(username, false);
+                getPlayersStatus().put(username, false);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
@@ -417,7 +417,8 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(QuitLobbyEvent event) {
         if(view.inLobby()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                this.lobbyId = null;
+                lobbyId = null;
+                playersStatus = null;
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
@@ -449,6 +450,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 lobbyId = event.getLobbyID();
+                playersStatus = new LinkedHashMap<>();
                 playersStatus.put(username, false);
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
