@@ -43,7 +43,7 @@
    </center>
 
    <bottom>
-      <Label id="errorShowLobbies" fx:id="errorLobbies" alignment="CENTER" prefHeight="110.0" prefWidth="900.0" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+      <Label id="errorLobbies" fx:id="errorLobbies" alignment="CENTER" prefHeight="110.0" prefWidth="900.0" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
    </bottom>
 
    <right>

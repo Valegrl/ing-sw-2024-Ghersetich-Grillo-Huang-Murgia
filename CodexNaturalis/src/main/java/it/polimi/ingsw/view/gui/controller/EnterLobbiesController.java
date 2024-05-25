@@ -83,7 +83,7 @@ public class EnterLobbiesController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case EventID.AVAILABLE_LOBBIES:
-                if (feedback == Feedback.SUCCESS) {
+                if(feedback == Feedback.SUCCESS) {
                     //showResponseMessage(message, 0);
                 } else {
                     errorLobbies.setText("Failed to get available lobbies from server: " + message);
@@ -122,12 +122,15 @@ public class EnterLobbiesController extends FXMLController {
                             scene.setRoot(root);
                             transition(nextController);
                         } catch (IOException exception) {
-                            errorLobbies.setText("Failed to join lobby.");
+                            errorLobbies.setText("IOException: Failed to join lobby.");
                         }
                     });
                 }
                 else{
-                    Platform.runLater(() -> {errorLobbies.setText("Failed to join lobby: " + message);});
+                    Platform.runLater(() -> {
+                        errorLobbies.setText("Failed to join lobby: " + message);
+                        refreshLobbies();
+                    });
                 }
                 break;
         }
@@ -184,9 +187,14 @@ public class EnterLobbiesController extends FXMLController {
         int requiredNumber = (int) requiredNumSlider.getValue();
         lobbyNameField.clear();
 
-        Event event = new CreateLobbyEvent(lobbyName, requiredNumber);
-        controller.newViewEvent(event);
-        waitForResponse();
+        if(lobbyName.isEmpty()){
+          errorLobbies.setText("Lobby name can't be left empty!");
+        }
+        else {
+            Event event = new CreateLobbyEvent(lobbyName, requiredNumber);
+            controller.newViewEvent(event);
+            waitForResponse();
+        }
     }
 
     private void joinLobby(String lobbyID){

@@ -22,7 +22,6 @@ Text{
 }
 
 .text-field{
-    -fx-font-size: 50.0;
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
 }
