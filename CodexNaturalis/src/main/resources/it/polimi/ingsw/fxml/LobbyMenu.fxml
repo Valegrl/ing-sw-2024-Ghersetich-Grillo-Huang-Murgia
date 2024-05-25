@@ -48,7 +48,7 @@
                                                 <Insets bottom="20.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ready" />
+                                        <Text fx:id="readyStatus0" strokeType="OUTSIDE" strokeWidth="0.0" />
                                         <Button fx:id="playerButton0" mnemonicParsing="false" />
                                     </children>
                                 </VBox>
@@ -75,7 +75,7 @@
                                                 <Insets bottom="20.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ready" />
+                                        <Text fx:id="readyStatus1" strokeType="OUTSIDE" strokeWidth="0.0" />
                                         <Button fx:id="playerButton1" mnemonicParsing="false" />
                                     </children>
                                 </VBox>
@@ -103,7 +103,7 @@
                                                 <Insets bottom="20.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Unready" />
+                                        <Text fx:id="readyStatus2" strokeType="OUTSIDE" strokeWidth="0.0" />
                                         <Button fx:id="playerButton2" mnemonicParsing="false" />
                                     </children>
                                 </VBox>
@@ -130,7 +130,7 @@
                                                 <Insets bottom="20.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Unready" />
+                                        <Text fx:id="readyStatus3" strokeType="OUTSIDE" strokeWidth="0.0" />
                                         <Button fx:id="playerButton3" mnemonicParsing="false" />
                                     </children>
                                 </VBox>
@@ -166,7 +166,7 @@
                                     <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="User2" toggleGroup="$chatRadioButtons" visible="false"/>
                                  </children>
                               </VBox>
-                              <VBox alignment="CENTER_RIGHT" minHeight="100.0" minWidth="200.0" spacing="20.0">
+                              <VBox alignment="CENTER_LEFT" minHeight="100.0" minWidth="200.0" spacing="20.0">
                                  <children>
                                     <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="User3" toggleGroup="$chatRadioButtons" visible="false"/>
                                     <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="user4" toggleGroup="$chatRadioButtons" visible="false"/>
@@ -189,7 +189,7 @@
                         <Insets top="20.0" />
                     </VBox.margin>
                 </HBox>
-                <Button alignment="CENTER" mnemonicParsing="false" text="Ready" textAlignment="CENTER" />
+                <Button fx:id="readyButton" alignment="CENTER" mnemonicParsing="false" text="Ready" textAlignment="CENTER" onAction="#toggleReadyStatus"/>
 
             </children>
         </VBox>

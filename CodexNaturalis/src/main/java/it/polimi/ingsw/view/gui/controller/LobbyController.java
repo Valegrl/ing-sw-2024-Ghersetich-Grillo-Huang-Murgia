@@ -7,12 +7,15 @@ import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.gui.ToggleSwitch;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,8 +28,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -45,6 +50,8 @@ public class LobbyController extends FXMLController {
     private List<Button> playerButtons;
 
     private List<RadioButton> radioButtons;
+
+    private List<Text> readyStatuses;
 
     @FXML
     private TextField chatInput;
@@ -80,6 +87,18 @@ public class LobbyController extends FXMLController {
     private Text username3;
 
     @FXML
+    private Text readyStatus0;
+
+    @FXML
+    private Text readyStatus1;
+
+    @FXML
+    private Text readyStatus2;
+
+    @FXML
+    private Text readyStatus3;
+
+    @FXML
     private Button playerButton0;
 
     @FXML
@@ -103,6 +122,10 @@ public class LobbyController extends FXMLController {
     @FXML
     private RadioButton radioButton3;
 
+    @FXML
+    private Button readyButton;
+
+
     public LobbyController(){
         super();
     }
@@ -115,15 +138,16 @@ public class LobbyController extends FXMLController {
 
         playerStackPanes = Arrays.asList(playerStackPane0, playerStackPane1, playerStackPane2, playerStackPane3);
         usernames = Arrays.asList(username0, username1, username2, username3);
+        readyStatuses = Arrays.asList(readyStatus0, readyStatus1, readyStatus2, readyStatus3);
         playerButtons = Arrays.asList(playerButton0, playerButton1, playerButton2, playerButton3);
         radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
 
         setLobbyName(controller.getLobbyId());
         chatArea.appendText("Welcome to the lobby: " + controller.getLobbyId() + "\n");
+
         /*
         controller.newViewEvent(new GetChatMessagesEvent());
         waitForResponse();
-        implementato nella chat ?
          */
 
         chatInput.setOnAction(new EventHandler<ActionEvent>() {
@@ -141,8 +165,10 @@ public class LobbyController extends FXMLController {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
+            case EventID.PLAYER_READY, PLAYER_UNREADY:
+                Platform.runLater(this::updateLobby);
+                break;
             case EventID.UPDATE_LOBBY_PLAYERS:
-                //showResponseMessage(message, 1000);
                 Platform.runLater(this::updateLobby);
                 break;
             case EventID.QUIT_LOBBY:
@@ -217,6 +243,14 @@ public class LobbyController extends FXMLController {
 
         for(String user : controller.getPlayersStatus().keySet()){
             if(controller.getUsername().equals(user)){
+
+                if(controller.getPlayersStatus().get(user)){
+                    readyStatuses.get(i).setText("Ready");
+                }
+                else{
+                    readyStatuses.get(i).setText("Unready");
+                }
+
                 playerStackPanes.get(i).setVisible(true);
                 playerStackPanes.get(i).setEffect(highlight);
                 usernames.get(i).setText(user);
@@ -230,6 +264,15 @@ public class LobbyController extends FXMLController {
                 });
             }
             else{
+
+                if(controller.getPlayersStatus().get(user)){
+                    readyStatuses.get(i).setText("Ready");
+                }
+                else{
+                    readyStatuses.get(i).setText("Unready");
+                }
+
+
                 playerStackPanes.get(i).setVisible(true);
                 playerStackPanes.get(i).setEffect(null);
                 usernames.get(i).setText(user);
@@ -249,9 +292,9 @@ public class LobbyController extends FXMLController {
             playerStackPanes.get(i).setEffect(null);
             playerButtons.get(i).setVisible(false);
             usernames.get(i).setText("");
+            readyStatuses.get(i).setText("");
             i++;
         }
-
         updateChatOptions();
     }
 
@@ -265,6 +308,15 @@ public class LobbyController extends FXMLController {
         int i = 0;
         for(String user : controller.getPlayersStatus().keySet()){
             if(controller.getUsername().equals(user)){
+
+                if(controller.getPlayersStatus().get(user)){
+                    readyStatuses.get(i).setText("Ready");
+                }
+                else{
+                    readyStatuses.get(i).setText("Unready");
+                }
+
+
                 playerStackPanes.get(i).setVisible(true);
                 playerStackPanes.get(i).setEffect(highlight);
                 usernames.get(i).setText(user);
@@ -278,6 +330,14 @@ public class LobbyController extends FXMLController {
                 });
             }
             else{
+
+                if(controller.getPlayersStatus().get(user)){
+                    readyStatuses.get(i).setText("Ready");
+                }
+                else{
+                    readyStatuses.get(i).setText("Unready");
+                }
+
                 playerStackPanes.get(i).setVisible(true);
                 playerStackPanes.get(i).setEffect(null);
                 usernames.get(i).setText(user);
@@ -290,6 +350,7 @@ public class LobbyController extends FXMLController {
             playerStackPanes.get(i).setEffect(null);
             usernames.get(i).setText("");
             playerButtons.get(i).setVisible(false);
+            readyStatuses.get(i).setText("");
             i++;
         }
 
@@ -376,6 +437,22 @@ public class LobbyController extends FXMLController {
     private void sendPublicMessage(String message){
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
+
+    @FXML
+    public void toggleReadyStatus(){
+        Event event;
+        if(controller.getPlayersStatus().get(view.getUsername())){
+            readyButton.setText("Ready");
+            event = new PlayerUnreadyEvent();
+        }
+        else{
+            readyButton.setText("Unready");
+            event = new PlayerReadyEvent();
+        }
+        controller.newViewEvent(event);
+        waitForResponse();
+    }
+
 
     @Override
     public boolean inLobby(){

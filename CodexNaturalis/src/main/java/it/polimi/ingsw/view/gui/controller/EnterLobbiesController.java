@@ -107,7 +107,7 @@ public class EnterLobbiesController extends FXMLController {
                     });
                     showResponseMessage("Lobby created:" + message, 0);
                 } else {
-                    errorLobbies.setText("Lobby creation failed: " + message);
+                    Platform.runLater(() -> errorLobbies.setText("Lobby creation failed: " + message));
                 }
                 break;
             case  EventID.JOIN_LOBBY:

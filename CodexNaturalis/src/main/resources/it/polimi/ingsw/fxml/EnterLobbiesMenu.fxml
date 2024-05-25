@@ -12,17 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="mainPane" fx:id="availableLobbiesMenuFX" maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/EnterLobbies.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.EnterLobbiesController">
+<BorderPane id="mainPane" fx:id="availableLobbiesMenuFX" maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/EnterLobbies.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.EnterLobbiesController">
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="1920.0" spacing="780.0" BorderPane.alignment="CENTER_LEFT">
+      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="1500.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
-            <Button mnemonicParsing="false" onAction="#refreshLobbies" text="Refresh" />
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#refreshLobbies" text="Refresh" />
          </children>
-         <padding>
-            <Insets left="40.0" />
-         </padding>
       </HBox>
    </top>
 
@@ -62,8 +58,7 @@
                   <Insets bottom="50.0" top="50.0" />
                </VBox.margin>
             </TextField>
-            <Slider fx:id="requiredNumSlider" snapToTicks="true" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="2.0" minorTickCount="0" prefHeight="70.0"
-                    prefWidth="360.0" showTickLabels="true" showTickMarks="true" value="2.0" />
+            <Slider fx:id="requiredNumSlider" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="2.0" minorTickCount="0" prefHeight="70.0" prefWidth="360.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Players number" textAlignment="CENTER" />
             <Button mnemonicParsing="false" onAction="#submitCreateLobby" text="Create" textAlignment="CENTER">
                <VBox.margin>
