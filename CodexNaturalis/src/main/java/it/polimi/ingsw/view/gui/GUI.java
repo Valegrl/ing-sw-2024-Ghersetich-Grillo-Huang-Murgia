@@ -61,6 +61,9 @@ public class GUI extends Application implements View {
         stage.setResizable(true);
         stage.setFullScreen(true);
         stage.setScene(scene);
+        stage.setWidth(1920);
+        stage.setHeight(1080);
+
         this.stage = stage;
 
         FXMLController.run(this, stage);

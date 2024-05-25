@@ -21,8 +21,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController extends FXMLController {
-    //TODO move the lobby creation to the showAvailableLobbies, rename!
-    //TODO Add Icon top-right of the GUI, DEBUG!
 
     private String username;
 
@@ -84,8 +82,6 @@ public class MenuController extends FXMLController {
         profileSettingsMenuFX.setVisible(true);
         profileSettingsMenuFX.setManaged(true);
     }
-
-    //TODO Implement the deleteAccount in another controller ?
 
     @FXML
     public void notifyDeleteAccount(){

@@ -6,8 +6,8 @@
     -fx-background-color: black;
 }
 
-#errorShowLobbies{
-    -fx-text-fill: #ffffff;
+#errorLobbies{
+    -fx-text-fill: #FF0000;
     -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
 }
@@ -125,7 +125,6 @@ Text{
 }
 
 .text-field{
-    -fx-font-size: 30.0;
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
 }

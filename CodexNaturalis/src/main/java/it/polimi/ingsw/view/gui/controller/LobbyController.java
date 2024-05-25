@@ -3,9 +3,14 @@ package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
+import it.polimi.ingsw.utils.ChatMessage;
+import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -16,11 +21,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -29,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//TODO USE TOGGLE BUTTONS FOR THE READY
+//TODO USE TOGGLE BUTTONS FOR THE READY?
 public class LobbyController extends FXMLController {
 
     private List<StackPane> playerStackPanes;
@@ -38,6 +44,8 @@ public class LobbyController extends FXMLController {
 
     private List<Button> playerButtons;
 
+    private List<RadioButton> radioButtons;
+
     @FXML
     private TextField chatInput;
 
@@ -45,16 +53,7 @@ public class LobbyController extends FXMLController {
     private TextArea chatArea;
 
     @FXML
-    private Text chatText;
-
-    @FXML
-    private HBox hBox;
-
-    @FXML
     private Text lobbyName;
-
-    @FXML
-    private AnchorPane mainAnchor;
 
     @FXML
     private StackPane playerStackPane0;
@@ -92,6 +91,18 @@ public class LobbyController extends FXMLController {
     @FXML
     private Button playerButton3;
 
+    @FXML
+    private RadioButton generalRadioButton;
+
+    @FXML
+    private RadioButton radioButton1;
+
+    @FXML
+    private RadioButton radioButton2;
+
+    @FXML
+    private RadioButton radioButton3;
+
     public LobbyController(){
         super();
     }
@@ -105,136 +116,26 @@ public class LobbyController extends FXMLController {
         playerStackPanes = Arrays.asList(playerStackPane0, playerStackPane1, playerStackPane2, playerStackPane3);
         usernames = Arrays.asList(username0, username1, username2, username3);
         playerButtons = Arrays.asList(playerButton0, playerButton1, playerButton2, playerButton3);
+        radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
 
         setLobbyName(controller.getLobbyId());
+        chatArea.appendText("Welcome to the lobby: " + controller.getLobbyId() + "\n");
+        /*
+        controller.newViewEvent(new GetChatMessagesEvent());
+        waitForResponse();
+        implementato nella chat ?
+         */
+
+        chatInput.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                submitMessage();
+            }
+        });
 
         updateLobby();
     }
 
-    private void lobbyLeaderUpdate(){
-        int i = 0;
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(controller.getUsername().equals(user)){
-                playerStackPanes.get(i).setVisible(true);
-                usernames.get(i).setText(user);
-                playerButtons.get(i).setVisible(true);
-                playerButtons.get(i).setText("Quit");
-                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        quitLobby();
-                    }
-                });
-            }
-            else{
-            playerStackPanes.get(i).setVisible(true);
-            usernames.get(i).setText(user);
-            playerButtons.get(i).setVisible(true);
-            playerButtons.get(i).setText("Kick");
-            playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    kickPlayer(user);
-                }
-            });
-            }
-            i++;
-        }
-        while(i < 4){
-            playerStackPanes.get(i).setVisible(false);
-            playerButtons.get(i).setVisible(false);
-            usernames.get(i).setText("");
-            i++;
-        }
-
-    }
-
-    private void lobbyUserUpdate(){
-        //DEPENDING ON WHAT ORDER THE PLAYER JOINED HE SHOULD HAVE THE OTHER BUTTONS HIDDEN BUT NOT THEIRS
-        int i = 0;
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(controller.getUsername().equals(user)){
-                playerStackPanes.get(i).setVisible(true);
-                usernames.get(i).setText(user);
-                playerButtons.get(i).setVisible(true);
-                playerButtons.get(i).setText("Quit");
-                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        quitLobby();
-                    }
-                });
-            }
-            else{
-                playerStackPanes.get(i).setVisible(true);
-                usernames.get(i).setText(user);
-                playerButtons.get(i).setVisible(false);
-            }
-            i++;
-        }
-        while( i< 4){
-            playerStackPanes.get(i).setVisible(false);
-            usernames.get(i).setText("");
-            playerButtons.get(i).setVisible(false);
-            i++;
-        }
-    }
-
-    /**
-     * Method to set the name of the lobby
-     *
-     * @param lobbyName the name of the lobby
-     */
-    public void setLobbyName(String lobbyName) {
-        this.lobbyName.setText("LOBBY: " + lobbyName);
-    }
-
-    /**
-     * Method to dynamically set the information of the player in its box,
-     * where he can see his username, an image, and the ready button.
-     *
-     * @param username the username of the player
-     */
-    public void setSelfAnchor(String username) {
-
-    }
-
-    /**
-     * Method to dynamically set the information of the other players that entered the lobby,
-     * visualizing their username, an image, and if they are ready or not.
-     * @param username the name of the player.
-     */
-    public void showPlayerAnchor(String username) {
-        if(hBox.getChildren().size() == 1){
-            username1.setText(username);
-
-            //if player is ready, show the text ready
-            //showReady1.setText("Ready");
-
-            //playerAnchor1.setVisible(true);
-            //playerAnchor1.setManaged(true);
-        }
-        if(hBox.getChildren().size() == 2){
-            //playerText2.setText(username);
-
-            //if player is ready, show the text ready
-            //showReady2.setText("Ready");
-
-            //playerAnchor2.setVisible(true);
-            //playerAnchor2.setManaged(true);
-        }
-        if(hBox.getChildren().size() == 3){
-            //playerText3.setText(username);
-
-            //if player is ready, show the text ready
-            //showReady3.setText("Ready");
-
-            //playerAnchor3.setVisible(true);
-            //playerAnchor3.setManaged(true);
-        }
-    }
-
-    //TODO chat implementation
 
     @FXML
     @Override
@@ -280,6 +181,19 @@ public class LobbyController extends FXMLController {
                         exception.printStackTrace();
                     }
                 });
+                break;
+            case EventID.GET_CHAT_MESSAGES:
+                Platform.runLater(() ->{
+                    chatArea.appendText(message);
+                });
+                break;
+            case EventID.CHAT_GM, CHAT_PM:
+                if (feedback.equals(Feedback.SUCCESS)) {
+                    chatArea.appendText(message + "\n");
+                } else {
+                    System.out.println("Message unable to send!");
+                }
+                break;
         }
         notifyResponse();;
     }
@@ -291,6 +205,123 @@ public class LobbyController extends FXMLController {
         else if (!controller.isLobbyLeader()){
             lobbyUserUpdate();
         }
+    }
+
+    private void lobbyLeaderUpdate(){
+        int i = 0;
+        DropShadow highlight = new DropShadow();
+        highlight.setColor(Color.WHITE);
+        highlight.setRadius(10.0);
+        highlight.setOffsetX(0);
+        highlight.setOffsetY(0);
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(controller.getUsername().equals(user)){
+                playerStackPanes.get(i).setVisible(true);
+                playerStackPanes.get(i).setEffect(highlight);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(true);
+                playerButtons.get(i).setText("Quit");
+                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        quitLobby();
+                    }
+                });
+            }
+            else{
+                playerStackPanes.get(i).setVisible(true);
+                playerStackPanes.get(i).setEffect(null);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(true);
+                playerButtons.get(i).setText("Kick");
+                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        kickPlayer(user);
+                    }
+                });
+            }
+            i++;
+        }
+        while(i < playerStackPanes.size()){
+            playerStackPanes.get(i).setVisible(false);
+            playerStackPanes.get(i).setEffect(null);
+            playerButtons.get(i).setVisible(false);
+            usernames.get(i).setText("");
+            i++;
+        }
+
+        updateChatOptions();
+    }
+
+    private void lobbyUserUpdate(){
+        DropShadow highlight = new DropShadow();
+        highlight.setColor(Color.WHITE);
+        highlight.setRadius(10.0);
+        highlight.setOffsetX(0);
+        highlight.setOffsetY(0);
+
+        int i = 0;
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(controller.getUsername().equals(user)){
+                playerStackPanes.get(i).setVisible(true);
+                playerStackPanes.get(i).setEffect(highlight);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(true);
+                playerButtons.get(i).setText("Quit");
+                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        quitLobby();
+                    }
+                });
+            }
+            else{
+                playerStackPanes.get(i).setVisible(true);
+                playerStackPanes.get(i).setEffect(null);
+                usernames.get(i).setText(user);
+                playerButtons.get(i).setVisible(false);
+            }
+            i++;
+        }
+        while( i < playerStackPanes.size()){
+            playerStackPanes.get(i).setVisible(false);
+            playerStackPanes.get(i).setEffect(null);
+            usernames.get(i).setText("");
+            playerButtons.get(i).setVisible(false);
+            i++;
+        }
+
+        updateChatOptions();
+    }
+
+    private void updateChatOptions(){
+        int i = 0;
+        generalRadioButton.setSelected(true);
+        //TODO make it so the general button doesn't get selected everytime someone joins or leaves is more complex
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                radioButtons.get(i).setVisible(true);
+                radioButtons.get(i).setText(user);
+                i++;
+            }
+        }
+        while(i < radioButtons.size()){
+            radioButtons.get(i).setVisible(false);
+            radioButtons.get(i).setText("");
+            i++;
+        }
+    }
+
+    /**
+     * Method to set the name of the lobby
+     *
+     * @param lobbyName the name of the lobby
+     */
+    public void setLobbyName(String lobbyName) {
+        this.lobbyName.setText("LOBBY: " + lobbyName);
     }
 
 
@@ -311,9 +342,48 @@ public class LobbyController extends FXMLController {
         }
     }
 
+    @FXML
+    public void submitMessage(){
+        String message = chatInput.getText();
+
+        if(message.isEmpty()){
+
+        }
+        else {
+            if (generalRadioButton.isSelected()) {
+                sendPublicMessage(message);
+            } else {
+                for (RadioButton button : radioButtons) {
+                    if (button.isSelected()) {
+                        String username = button.getText();
+                        sendPrivateMessage(username, message);
+                    }
+                }
+            }
+        }
+        chatInput.clear();
+    }
+
+    private void sendPrivateMessage(String username, String message){
+        if(controller.getPlayersStatus().containsKey(username)) {
+            controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
+        }
+        else{
+            System.out.println("Error: player not in match");
+        }
+    }
+
+    private void sendPublicMessage(String message){
+        controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
+    }
 
     @Override
     public boolean inLobby(){
+        return true;
+    }
+
+    @Override
+    public boolean inChat(){
         return true;
     }
 }
