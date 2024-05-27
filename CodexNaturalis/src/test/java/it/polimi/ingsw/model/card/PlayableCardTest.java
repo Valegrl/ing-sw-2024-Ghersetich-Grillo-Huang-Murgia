@@ -18,7 +18,8 @@ class PlayableCardTest {
         evaluator = Mockito.mock(Evaluator.class);
         permanentResource = Mockito.mock(Item.class);
         corners = new Item[]{Mockito.mock(Item.class), Mockito.mock(Item.class), Mockito.mock(Item.class), Mockito.mock(Item.class)};
-        playableCard = Mockito.mock(PlayableCard.class, Mockito.withSettings().useConstructor("1", evaluator, 10, permanentResource, corners, CardType.GOLD).defaultAnswer(Mockito.CALLS_REAL_METHODS));
+        playableCard = Mockito.mock(PlayableCard.class, Mockito.withSettings().useConstructor("1",
+                evaluator, 10, permanentResource, corners, CardType.GOLD).defaultAnswer(Mockito.CALLS_REAL_METHODS));
     }
 
     @Test
@@ -71,5 +72,18 @@ class PlayableCardTest {
     @Test
     void testGetConstraint() {
         assertNull(playableCard.getConstraint());
+    }
+
+    @Test
+    void testIsFlipped() {
+        Evaluator evaluator = Mockito.mock(Evaluator.class);
+        Item permanentResource = Mockito.mock(Item.class);
+        Item[] corners = new Item[]{Mockito.mock(Item.class), Mockito.mock(Item.class), Mockito.mock(Item.class), Mockito.mock(Item.class)};
+        PlayableCard card = Mockito.mock(PlayableCard.class, Mockito.withSettings().useConstructor("1",
+                evaluator, 10, permanentResource, corners, CardType.GOLD).defaultAnswer(Mockito.CALLS_REAL_METHODS));
+
+        assertFalse(card.isFlipped());
+        card.flipCard();
+        assertTrue(card.isFlipped());
     }
 }

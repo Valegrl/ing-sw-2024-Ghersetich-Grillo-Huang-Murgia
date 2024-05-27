@@ -230,4 +230,33 @@ class PlayAreaTest {
         Exception exception = assertThrows(RuntimeException.class, () -> playArea.placeCard(playableCard, coordinate));
         assertEquals("The card you placed didn't cover any other cards", exception.getMessage());
     }
+
+    @Test
+    void testGetCardByIdValidId() {
+        PlayableCard card1 = Mockito.mock(PlayableCard.class);
+        Mockito.when(card1.getId()).thenReturn("PC01");
+
+        PlayableCard card2 = Mockito.mock(PlayableCard.class);
+        Mockito.when(card2.getId()).thenReturn("PC02");
+
+        List<PlayableCard> hand = Arrays.asList(card1, card2);
+        PlayArea playArea = new PlayArea(hand, startCard);
+
+        assertEquals(card1, playArea.getCardById("PC01"));
+        assertEquals(card2, playArea.getCardById("PC02"));
+    }
+
+    @Test
+    void testGetCardByIdInvalidId() {
+        PlayableCard card1 = Mockito.mock(PlayableCard.class);
+        Mockito.when(card1.getId()).thenReturn("PC01");
+
+        PlayableCard card2 = Mockito.mock(PlayableCard.class);
+        Mockito.when(card2.getId()).thenReturn("PC02");
+
+        List<PlayableCard> hand = Arrays.asList(card1, card2);
+        PlayArea playArea = new PlayArea(hand, startCard);
+
+        assertNull(playArea.getCardById("PC03"));
+    }
 }

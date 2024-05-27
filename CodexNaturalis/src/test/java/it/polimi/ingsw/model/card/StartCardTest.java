@@ -10,73 +10,77 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StartCardTest {
-    private StartCard startCard;
-    private Item item1;
-    private Item item2;
+    private StartCard card;
 
     @BeforeEach
     void setUp() {
-        item1 = Mockito.mock(Item.class);
-        item2 = Mockito.mock(Item.class);
-        List<Item> backPermanentResources = Arrays.asList(item1, item2);
+        List<Item> backPermanentResources = Arrays.asList(Item.PLANT, Item.ANIMAL);
 
         Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};
         Item[] backCorners = new Item[]{Item.EMPTY, Item.PLANT, Item.EMPTY, Item.INSECT};
         boolean flipped = false;
 
-        startCard = new StartCard("1", backPermanentResources, frontCorners, backCorners, flipped);
+        card = new StartCard("1", backPermanentResources, frontCorners, backCorners, flipped);
     }
 
     @Test
-    void flipCard() {
-        assertFalse(startCard.isFlipped());
-        startCard.flipCard();
-        assertTrue(startCard.isFlipped());
+    void testFlipCard() {
+        assertFalse(card.isFlipped());
+        card.flipCard();
+        assertTrue(card.isFlipped());
     }
 
     @Test
-    void getBackPermanentResources() {
-        List<Item> resources = startCard.getBackPermanentResources();
-        assertEquals(2, resources.size());
-        assertTrue(resources.contains(item1));
-        assertTrue(resources.contains(item2));
+    void testGetBackPermanentResources() {
+        List<Item> resources = Arrays.asList(Item.PLANT, Item.ANIMAL);
+        assertEquals(resources, card.getBackPermanentResources());
     }
 
     @Test
-    void getFrontCorners() {
-        Item[] corners = startCard.getFrontCorners();
-        assertEquals(4, corners.length);
+    void testGetFrontCorners() {
+        Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};;
+        assertArrayEquals(frontCorners, card.getFrontCorners());
     }
 
     @Test
-    void setFrontCorner() {
-        Item item3 = Mockito.mock(Item.class);
-        startCard.setFrontCorner(item3, 0);
-        assertEquals(item3, startCard.getFrontCorners()[0]);
+    void testSetFrontCornerValidIndex() {
+        card.setFrontCorner(Item.FUNGI, 1);
+        assertEquals(Item.FUNGI, card.getFrontCorners()[1]);
     }
 
     @Test
-    void getBackCorners() {
-        Item[] corners = startCard.getBackCorners();
-        assertEquals(4, corners.length);
+    void testSetFrontCornerInvalidIndex() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setFrontCorner(Item.FUNGI, -1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setFrontCorner(Item.FUNGI, card.getFrontCorners().length));
     }
 
     @Test
-    void setBackCorner() {
-        Item item3 = Mockito.mock(Item.class);
-        startCard.setBackCorner(item3, 0);
-        assertEquals(item3, startCard.getBackCorners()[0]);
+    void testGetBackCorners() {
+        Item[] backCorners = new Item[]{Item.EMPTY, Item.PLANT, Item.EMPTY, Item.INSECT};
+        assertArrayEquals(backCorners, card.getBackCorners());
+    }
+
+    @Test
+    void testSetBackCornerValidIndex() {
+        card.setBackCorner(Item.FUNGI, 1);
+        assertEquals(Item.FUNGI, card.getBackCorners()[1]);
+    }
+
+    @Test
+    void testSetBackCornerInvalidIndex() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setBackCorner(Item.FUNGI, -1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setBackCorner(Item.FUNGI, card.getBackCorners().length));
     }
 
     @Test
     void setFrontCornerOutOfBounds() {
         Item item3 = Mockito.mock(Item.class);
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> startCard.setFrontCorner(item3, 5));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setFrontCorner(item3, 5));
     }
 
     @Test
     void setBackCornerOutOfBounds() {
         Item item3 = Mockito.mock(Item.class);
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> startCard.setBackCorner(item3, 5));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> card.setBackCorner(item3, 5));
     }
 }

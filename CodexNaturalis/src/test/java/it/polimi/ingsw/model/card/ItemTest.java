@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.card;
 
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.utils.AnsiCodes.*;
+import static it.polimi.ingsw.utils.AnsiCodes.RESET;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemTest {
@@ -47,5 +49,33 @@ class ItemTest {
         assertEquals(Item.HIDDEN, Item.getItemFromString("hidden"));
         assertEquals(Item.COVERED, Item.getItemFromString("covered"));
         assertNull(Item.getItemFromString("nonexistent"));
+    }
+
+    @Test
+    void itemToColorWithItemAndString() {
+        assertEquals(GREEN + "test" + RESET, Item.itemToColor(Item.PLANT, "test"));
+        assertEquals(CYAN + "test" + RESET, Item.itemToColor(Item.ANIMAL, "test"));
+        assertEquals(RED + "test" + RESET, Item.itemToColor(Item.FUNGI, "test"));
+        assertEquals(PURPLE + "test" + RESET, Item.itemToColor(Item.INSECT, "test"));
+        assertEquals(GOLD + "test" + RESET, Item.itemToColor(Item.QUILL, "test"));
+        assertEquals(GOLD + "test" + RESET, Item.itemToColor(Item.INKWELL, "test"));
+        assertEquals(GOLD + "test" + RESET, Item.itemToColor(Item.MANUSCRIPT, "test"));
+        assertEquals(BEIGE + "test" + RESET, Item.itemToColor(Item.EMPTY, "test"));
+        assertEquals("test", Item.itemToColor(Item.HIDDEN, "test"));
+        assertEquals("test", Item.itemToColor(Item.COVERED, "test"));
+    }
+
+    @Test
+    void itemToColorWithItem() {
+        assertEquals(GREEN + Item.PLANT + RESET, Item.itemToColor(Item.PLANT));
+        assertEquals(CYAN + Item.ANIMAL + RESET, Item.itemToColor(Item.ANIMAL));
+        assertEquals(RED + Item.FUNGI + RESET, Item.itemToColor(Item.FUNGI));
+        assertEquals(PURPLE + Item.INSECT + RESET, Item.itemToColor(Item.INSECT));
+        assertEquals(GOLD + Item.QUILL + RESET, Item.itemToColor(Item.QUILL));
+        assertEquals(GOLD + Item.INKWELL + RESET, Item.itemToColor(Item.INKWELL));
+        assertEquals(GOLD + Item.MANUSCRIPT + RESET, Item.itemToColor(Item.MANUSCRIPT));
+        assertEquals(BEIGE + Item.EMPTY + RESET, Item.itemToColor(Item.EMPTY));
+        assertEquals(Item.HIDDEN.toString(), Item.itemToColor(Item.HIDDEN));
+        assertEquals(Item.COVERED.toString(), Item.itemToColor(Item.COVERED));
     }
 }

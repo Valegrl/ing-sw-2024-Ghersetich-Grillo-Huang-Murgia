@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.deck.factory;
 
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import org.junit.jupiter.api.Test;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import it.polimi.ingsw.model.evaluator.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
@@ -70,5 +67,70 @@ public class EvaluatorTypeAdapterTest {
     void testDeserializeNullJsonElement() {
         Evaluator result = evaluatorTypeAdapter.deserialize(null, Evaluator.class, context);
         assertNull(result);
+    }
+
+    @Test
+    void testSerializeBasicEvaluator() {
+        EvaluatorTypeAdapter adapter = new EvaluatorTypeAdapter();
+        JsonSerializationContext context = Mockito.mock(JsonSerializationContext.class);
+        Evaluator basicEvaluator = new BasicEvaluator();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", "BasicEvaluator");
+        Mockito.when(context.serialize(basicEvaluator, BasicEvaluator.class)).thenReturn(jsonObject);
+
+        JsonElement result = adapter.serialize(basicEvaluator, Evaluator.class, context);
+        assertEquals("BasicEvaluator", result.getAsJsonObject().get("type").getAsString());
+    }
+
+    @Test
+    void testSerializeCornerEvaluator() {
+        EvaluatorTypeAdapter adapter = new EvaluatorTypeAdapter();
+        JsonSerializationContext context = Mockito.mock(JsonSerializationContext.class);
+        Evaluator cornerEvaluator = new CornerEvaluator();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", "CornerEvaluator");
+        Mockito.when(context.serialize(cornerEvaluator, CornerEvaluator.class)).thenReturn(jsonObject);
+
+        JsonElement result = adapter.serialize(cornerEvaluator, Evaluator.class, context);
+        assertEquals("CornerEvaluator", result.getAsJsonObject().get("type").getAsString());
+    }
+
+    @Test
+    void testSerializeItemEvaluator() {
+        EvaluatorTypeAdapter adapter = new EvaluatorTypeAdapter();
+        JsonSerializationContext context = Mockito.mock(JsonSerializationContext.class);
+        Evaluator itemEvaluator = new ItemEvaluator();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", "ItemEvaluator");
+        Mockito.when(context.serialize(itemEvaluator, ItemEvaluator.class)).thenReturn(jsonObject);
+
+        JsonElement result = adapter.serialize(itemEvaluator, Evaluator.class, context);
+        assertEquals("ItemEvaluator", result.getAsJsonObject().get("type").getAsString());
+    }
+
+    @Test
+    void testSerializePatternEvaluator() {
+        EvaluatorTypeAdapter adapter = new EvaluatorTypeAdapter();
+        JsonSerializationContext context = Mockito.mock(JsonSerializationContext.class);
+        Evaluator patternEvaluator = new PatternEvaluator();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", "PatternEvaluator");
+        Mockito.when(context.serialize(patternEvaluator, PatternEvaluator.class)).thenReturn(jsonObject);
+
+        JsonElement result = adapter.serialize(patternEvaluator, Evaluator.class, context);
+        assertEquals("PatternEvaluator", result.getAsJsonObject().get("type").getAsString());
+    }
+
+    @Test
+    void testSerializeUnknownEvaluator() {
+        EvaluatorTypeAdapter adapter = new EvaluatorTypeAdapter();
+        JsonSerializationContext context = Mockito.mock(JsonSerializationContext.class);
+        Evaluator unknownEvaluator = Mockito.mock(Evaluator.class);
+
+        assertThrows(NullPointerException.class, () -> adapter.serialize(unknownEvaluator, Evaluator.class, context));
     }
 }

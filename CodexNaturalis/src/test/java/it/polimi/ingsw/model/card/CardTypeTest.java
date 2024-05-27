@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.card;
 
+import it.polimi.ingsw.utils.AnsiCodes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,5 +29,11 @@ import static org.junit.jupiter.api.Assertions.*;
         void valueOf() {
             assertEquals(CardType.GOLD, CardType.valueOf("GOLD"));
             assertEquals(CardType.RESOURCE, CardType.valueOf("RESOURCE"));
+        }
+
+        @Test
+        void testTypeToColor() {
+            assertEquals(AnsiCodes.GOLD_BACKGROUND, CardType.GOLD.TypeToColor());
+            assertEquals("", CardType.RESOURCE.TypeToColor());
         }
     }

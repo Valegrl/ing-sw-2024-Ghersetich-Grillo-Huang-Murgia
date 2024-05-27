@@ -87,4 +87,51 @@ class PlayerTest {
     void testToString() {
         assertEquals(username, player.toString());
     }
+
+    @Test
+    void testEqualsSameObject() {
+        Player player1 = new Player("testUser");
+        assertEquals(player1, player1);
+    }
+
+    @Test
+    void testEqualsDifferentObjectSameUsername() {
+        Player player1 = new Player("testUser");
+        Player player2 = new Player("testUser");
+        assertEquals(player1, player2);
+    }
+
+    @Test
+    void testEqualsDifferentObjectDifferentUsername() {
+        Player player1 = new Player("testUser1");
+        Player player2 = new Player("testUser2");
+        assertNotEquals(player1, player2);
+    }
+
+    @Test
+    void testEqualsNull() {
+        Player player1 = new Player("testUser");
+        assertNotEquals(null, player1);
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        Player player1 = new Player("testUser");
+        String notAPlayer = "testUser";
+        assertNotEquals(player1, notAPlayer);
+    }
+
+    @Test
+    void testHashCodeSameUsername() {
+        Player player1 = new Player("testUser");
+        Player player2 = new Player("testUser");
+        assertEquals(player1.hashCode(), player2.hashCode());
+    }
+
+    @Test
+    void testHashCodeDifferentUsername() {
+        Player player1 = new Player("testUser1");
+        Player player2 = new Player("testUser2");
+        assertNotEquals(player1.hashCode(), player2.hashCode());
+    }
 }

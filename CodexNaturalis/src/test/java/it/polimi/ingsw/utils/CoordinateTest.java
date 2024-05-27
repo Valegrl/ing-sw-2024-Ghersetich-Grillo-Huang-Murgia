@@ -77,4 +77,10 @@ class CoordinateTest {
         assertEquals(c1, sortedCoordinates.get(2));
         assertEquals(c3, sortedCoordinates.get(3));
     }
+
+    @Test
+    void testToString() {
+        Coordinate c = new Coordinate(1, 2);
+        assertEquals("(1, 2)", c.toString());
+    }
 }
