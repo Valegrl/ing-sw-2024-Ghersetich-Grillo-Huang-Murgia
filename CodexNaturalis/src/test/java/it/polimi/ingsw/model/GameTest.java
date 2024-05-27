@@ -70,6 +70,46 @@ class GameTest {
         game.newTurn(true);
         assertEquals(game.getGameStatus(), GameStatus.RUNNING);
 
+        exceptionThrown = true;
+        i = 1;
+        pos = new Coordinate(1,1);
+
+        while (exceptionThrown && i <= 40) {
+            String playableCardID = String.format("GC%02d", i);
+
+            try {
+                game.placeCard(playableCardID, pos, false);
+            } catch (Exception e) {
+                if ("You do not have a card with the provided ID.".equals(e.getMessage())) {
+                    i++;
+                } else if ("The selected card does not satisfy its constraint.".equals(e.getMessage())) {
+                    exceptionThrown = false;
+                }
+            }
+        }
+        assert i<=40;
+
+        exceptionThrown = true;
+        i = 1;
+        pos = new Coordinate(1,1);
+
+        while (exceptionThrown && i <= 40) {
+            String playableCardID = String.format("RC%02d", i);
+
+            try {
+                game.placeCard(playableCardID, pos, true);
+                exceptionThrown = false;
+            } catch (Exception e) {
+                i++;
+            }
+        }
+        assert i<=40;
+
+        assertDoesNotThrow(() -> game.drawCard(CardType.RESOURCE, 0));
+
+        game.newTurn(true);
+        assertEquals(game.getGameStatus(), GameStatus.RUNNING);
+
         game.offlinePlayer(username1);
         assertEquals(game.getGameStatus(), GameStatus.WAITING);
 

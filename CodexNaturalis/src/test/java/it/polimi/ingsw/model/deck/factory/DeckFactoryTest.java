@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class DeckFactoryTest {
+class DeckFactoryTest {
     private DeckFactory deckFactory;
     private ClassLoader classLoader;
 

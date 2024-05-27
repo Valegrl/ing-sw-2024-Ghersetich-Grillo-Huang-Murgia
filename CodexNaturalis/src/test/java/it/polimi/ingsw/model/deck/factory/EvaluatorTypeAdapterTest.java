@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class EvaluatorTypeAdapterTest {
+class EvaluatorTypeAdapterTest {
     private EvaluatorTypeAdapter evaluatorTypeAdapter;
     private JsonDeserializationContext context;
     private JsonElement jsonElement;
