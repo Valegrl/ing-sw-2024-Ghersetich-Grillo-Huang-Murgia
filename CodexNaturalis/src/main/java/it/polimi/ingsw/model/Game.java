@@ -201,6 +201,7 @@ public class Game {
             hand.add(resourceDeck.drawTop());
             hand.add(resourceDeck.drawTop());
             hand.add(goldDeck.drawTop());
+            Collections.shuffle(hand);
 
             StartCard start = startDeck.drawTop();
             p.initPlayArea(hand, start);
