@@ -3,6 +3,7 @@ package it.polimi.ingsw.viewModel.immutableCard;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.PlayableCard;
+import it.polimi.ingsw.utils.AnsiCodes;
 
 import java.io.Serializable;
 
@@ -45,5 +46,10 @@ public class BackPlayableCard implements Serializable {
      */
     public Item getItem() {
         return item;
+    }
+
+    @Override
+    public String toString() {
+        return cardType.TypeToColor() + Item.itemToColor(item) + AnsiCodes.RESET;
     }
 }

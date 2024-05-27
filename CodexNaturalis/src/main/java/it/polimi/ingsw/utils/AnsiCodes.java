@@ -23,4 +23,6 @@ public class AnsiCodes {
     public static final String YELLOW_TOKEN = "\033[38;2;197;158;66m";
 
     public static final String BOLD = "\u001B[1m";
+
+    public static final String GOLD_BACKGROUND = "\u001B[48;2;179;165;30m";
 }

@@ -666,7 +666,7 @@ public class GameController {
                 notifyAllOnlineGamePlayers("Player " + account.getUsername() + " has left the game!");
                 handlePlayerOffline(account.getUsername());
 
-                return new QuitGameEvent(Feedback.SUCCESS, "Quit successful!");
+                return new QuitGameEvent(Feedback.SUCCESS, "Successfully abandoned the current game!");
             } else
                 return new QuitGameEvent(Feedback.FAILURE, "You can only quit a game during the session.");
         } else

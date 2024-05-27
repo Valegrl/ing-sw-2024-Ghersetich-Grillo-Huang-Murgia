@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -18,6 +20,8 @@ public class GameSetupState extends ViewState {
     private String commObjectivesMessage;
 
     private String decksMessage;
+
+    private String opponentsHandsMessage;
 
     public GameSetupState(View view) {
         super(view);
@@ -72,11 +76,20 @@ public class GameSetupState extends ViewState {
                 showSetupChoices();
                 break;
             case 5:
+                // See opponents' hands
+                clearConsole();
+                showResponseMessage(opponentsHandsMessage, 500);
+                view.printMessage("Press and enter any key to go back: ");
+                view.getInput();
+                showSetupChoices();
+                break;
+            case 6:
                 inChat = true;
                 transition(new ChatState(view, this));
                 break;
-            case 6:
-                // TODO Quit game
+            case 7:
+                // Quit game
+                quitGame();
                 break;
             default:
                 return false;
@@ -87,7 +100,7 @@ public class GameSetupState extends ViewState {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
-            case EventID.CHOOSE_CARDS_SETUP:
+            case CHOOSE_CARDS_SETUP:
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}
@@ -98,21 +111,32 @@ public class GameSetupState extends ViewState {
                 handMessage = m[1];
                 commObjectivesMessage = m[2];
                 decksMessage = m[3];
+                opponentsHandsMessage = m[4];
                 showSetupChoices();
                 break;
-            case EventID.UPDATE_GAME_PLAYERS:
+            case UPDATE_GAME_PLAYERS:
                 view.printMessage(message);
                 view.clearInput();
                 break;
-            case EventID.CHOSEN_CARDS_SETUP:
+            case CHOSEN_CARDS_SETUP:
                 notifyResponse();
                 clearConsole();
                 view.printMessage(message);
                 view.printMessage("Wait for other players to chose their setup. . .\n");
                 break;
-            case EventID.CHOOSE_TOKEN_SETUP:
+            case CHOOSE_TOKEN_SETUP:
                 clearConsole();
                 transition(new TokenSetupState(view, controller.availableTokensMessage(), controller.getAvailableTokens().size()));
+                break;
+            case QUIT_GAME:
+                if (feedback == Feedback.SUCCESS) {
+                    notifyResponse();
+                    showResponseMessage(message, 1500);
+                    transition(new MenuState(view));
+                } else {
+                    showResponseMessage("Failed to quit game: " + message, 2000);
+                    showSetupChoices();
+                }
                 break;
         }
     }
@@ -126,9 +150,9 @@ public class GameSetupState extends ViewState {
                 , "See your assigned hand"
                 , "See common objective cards"
                 , "See visible decks"
+                , "See opponents' hands"
                 , "Open chat"
                 , "Quit game"));
-        // TODO add backhand of opponents
         handleInput(choice);
     }
 
@@ -140,6 +164,19 @@ public class GameSetupState extends ViewState {
         controller.chosenSetup(chosenObjective, (chosenFace == 2)); // 1 is not flipped (false), 2 is flipped (true)
 
         waitForResponse();
+    }
+
+    private void quitGame() {
+        view.printMessage("Are you sure you want to abandon the current game?:");
+        int choice = readChoiceFromInput(Arrays.asList("Yes", "No"));
+        if (choice == 1) {
+            Event event = new QuitGameEvent();
+            controller.newViewEvent(event);
+            waitForResponse();
+        } else {
+            showResponseMessage("You are still in the game.", 200);
+            showSetupChoices();
+        }
     }
 
     @Override

@@ -191,8 +191,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
         if(view.inLobby() || view.inChat()) {
-            lobbyId = null;
-            playersStatus = null;
+            clearViewData();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
@@ -223,7 +222,6 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(ChooseCardsSetupEvent event) {
         if(view.inGame()) {
             setup = event.getViewSetup();
-            // TODO prepare message for the view
             String message = "Assigned setup:\n" + setup.getStartCard().printSetupStartCard() + "\n" +
                     setup.printSetupObjCards() +
                     // end of assigned setup message: split[0]
@@ -235,7 +233,10 @@ public class ViewController implements ViewEventReceiver {
                     setup.printSetupCommonObjectives() +
                     "%" +
                     // start of decks message: split[3]
-                    setup.printSetupDecks();
+                    setup.printSetupDecks() +
+                    "%" +
+                    // start of hands message: split[4]
+                    setup.printSetupOpponentsHands();
             view.handleResponse(event.getID(), null, message);
         } else {
             System.out.println("Game state: event in wrong state");
@@ -357,7 +358,14 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(QuitGameEvent event) {
-        setup = null;
+        if (view.inGame()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
+                clearViewData();
+            }
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -380,8 +388,8 @@ public class ViewController implements ViewEventReceiver {
     }
 
     //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
-    //TODO (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
-    //TODO should i print for IllegalStateException?
+    // (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
+    // should i print for IllegalStateException?
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
         if(view.inLobby()) {
@@ -417,8 +425,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(QuitLobbyEvent event) {
         if(view.inLobby()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
-                lobbyId = null;
-                playersStatus = null;
+                clearViewData();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
@@ -464,7 +471,7 @@ public class ViewController implements ViewEventReceiver {
         if(view.inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
-                this.model = null;
+                clearViewData();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
@@ -522,8 +529,8 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(LogoutEvent event) {
         if(view.inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.username = null;
-                this.model = null;
+                username = null;
+                clearViewData();
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
@@ -582,10 +589,19 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ServerDisconnectedEvent event) {
         username = null;
-        lobbyId = null;
-        model = null;
+        clearViewData();
         taskQueueStopped = true;
         view.serverDisconnected();
+    }
+
+    private void clearViewData() {
+        model = null;
+        playersStatus = null;
+        lobbyId = null;
+        setup = null;
+        availableTokens = null;
+        chatMessages.clear();
+        privateChatMessages.clear();
     }
 
     public String getUsername() {

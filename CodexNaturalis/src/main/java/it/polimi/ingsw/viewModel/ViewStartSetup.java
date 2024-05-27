@@ -183,6 +183,21 @@ public class ViewStartSetup implements Serializable, CardConverter {
                 visibleResourceCards[1].printCard(indent);
     }
 
+    public String printSetupOpponentsHands() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, List<BackPlayableCard>> entry : opponentsBackHandCards.entrySet()) {
+            sb.append("- ")
+                    .append(entry.getKey())
+                    .append(": [ ");
+            for (BackPlayableCard card : entry.getValue()) {
+                sb.append(card)
+                        .append(" ");
+            }
+            sb.append("]\n");
+        }
+        return sb.toString();
+    }
+
     /**
      * Retrieves the secret objective cards.
      * @return {@link ViewStartSetup#secretObjectiveCards}.

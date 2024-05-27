@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.card;
 
+import it.polimi.ingsw.utils.AnsiCodes;
+
 import java.io.Serializable;
 
 /**
@@ -28,6 +30,19 @@ public enum CardType implements Serializable {
      */
     CardType(String type) {
         this.type = type;
+    }
+
+    /**
+     * Converts the type of this CardType to a colored background AnsiCode.
+     *
+     * @return The color code associated to this CardType.
+     */
+    public String TypeToColor() {
+        if (this == GOLD) {
+            return AnsiCodes.GOLD_BACKGROUND;
+        } else {
+            return "";
+        }
     }
 
     /**

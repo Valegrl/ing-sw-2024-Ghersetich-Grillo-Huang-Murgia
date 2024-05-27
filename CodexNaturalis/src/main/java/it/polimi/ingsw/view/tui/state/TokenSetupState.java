@@ -1,8 +1,10 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
@@ -51,7 +53,7 @@ public class TokenSetupState extends ViewState {
                 transition(new ChatState(view, this));
                 break;
             case 3:
-                // TODO quit game
+                quitGame();
                 break;
             default:
                 return false;
@@ -92,6 +94,16 @@ public class TokenSetupState extends ViewState {
                 clearConsole();
                 showResponseMessage(message, 1000);
                 break;
+            case QUIT_GAME:
+                if (feedback == Feedback.SUCCESS) {
+                    notifyResponse();
+                    showResponseMessage(message, 1500);
+                    transition(new MenuState(view));
+                } else {
+                    showResponseMessage("Failed to quit game: " + message, 2000);
+                    run();
+                }
+                break;
             default:
                 break;
         }
@@ -120,6 +132,19 @@ public class TokenSetupState extends ViewState {
             return Token.fromString(matcher.group(1));
         } else {
             return null;
+        }
+    }
+
+    private void quitGame() {
+        view.printMessage("Are you sure you want to abandon the current game?:");
+        int choice = readChoiceFromInput(Arrays.asList("Yes", "No"));
+        if (choice == 1) {
+            Event event = new QuitGameEvent();
+            controller.newViewEvent(event);
+            waitForResponse();
+        } else {
+            showResponseMessage("You are still in the game.", 200);
+            run();
         }
     }
 
