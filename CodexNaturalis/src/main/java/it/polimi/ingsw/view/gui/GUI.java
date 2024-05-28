@@ -21,22 +21,55 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * GUI class extends Application and implements View.
+ * It represents the graphical user interface of the application.
+ */
 public class GUI extends Application implements View {
 
+    /**
+     * The main stage of the application where all scenes are displayed.
+     * * The GUI never changes its stage during its time.
+     */
     private Stage stage;
 
+    /**
+     * A Scanner object for reading input from the user.
+     */
     private final Scanner in;
 
+    /**
+     * A PrintStream object for outputting messages to the user.
+     */
     private final PrintStream out;
 
+    /**
+     * Executor for managing threads.
+     */
     private final ExecutorService executor;
 
+    /**
+     * The username of the user who is using this instance of GUI.
+     */
     private String username;
 
+    /**
+     * The {@link ViewController} this GUI is associated with which is used for handling view events.
+     */
     private final ViewController controller;
 
+    /**
+     * The current {@link FXMLController} for managing the current FXML scene.
+     * I.E if the user is in the main menu, this parameter is going to be
+     * {@link it.polimi.ingsw.view.gui.controller.MainMenuController}
+     */
     private FXMLController FXMLController;
 
+    /**
+     * GUI class extends Application and implements View.
+     * It represents the graphical user interface of the application.
+     * Initializes the Scanner, PrintStream, ViewController, and ExecutorService.
+     */
     public GUI() {
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out, true);
@@ -44,10 +77,23 @@ public class GUI extends Application implements View {
         this.executor = Executors.newCachedThreadPool();
     }
 
+
+    /**
+     * Method to launch the JavaFX application.
+     * It's called by the {@link MainClient} in the main method.
+     */
     public void run(){
         launch();
     }
 
+    /**
+     * Method to start the JavaFX application.
+     * It's only used in the initialization of the GUI.
+     * Loads the fonts, sets up the FXMLLoader, sets up the scene and the stage.
+     * @param stage The main stage of the application
+     * @throws IOException If there is an error loading the FXML file
+     * @throws NullPointerException If the FXML file is not found
+     */
     @Override
     public void start(Stage stage) throws IOException, NullPointerException{
         /*This only has UPPERCASE letters*/
@@ -73,34 +119,62 @@ public class GUI extends Application implements View {
         stage.show();
     }
 
+    /**
+     * Method to set the {@link FXMLController} of this GUI.
+     * @param nextController The new FXMLController
+     */
     public void setFXMLController(FXMLController nextController){
         this.FXMLController= nextController;
     }
 
+    /**
+     * Tells if the GUI is in game.
+     * @return A boolean depending on whether the current menu is in game or not.
+     */
     @Override
     public boolean inGame() {
         return FXMLController.inGame();
     }
 
+    /**
+     * Tells if the GUI is in a lobby phase.
+     * @return A boolean depending on whether the current menu is in lobby or not.
+     */
     @Override
     public boolean inLobby() {
         return FXMLController.inLobby();
     }
 
+    /**
+     * Tells if the GUI is in a menu and is outside a game and lobby.
+     * @return A boolean depending on whether the current menu is in menu or not.
+     */
     @Override
     public boolean inMenu() {
         return FXMLController.inMenu();
     }
 
+    /**
+     * Tells if the GUI is in a menu that has the chat.
+     * @return A boolean depending on whether the current menu is in chat or not.
+     */
     @Override
     public boolean inChat() {
         return FXMLController.inChat();
     }
 
+    /**
+     * Return the current GUI's FXMLController.
+     * @return {@link FXMLController}
+     */
     public FXMLController getFXMLController(){
         return this.FXMLController;
     }
 
+    /**
+     * Return the current stage of the GUI, used for switching between scenes.
+     * @return {@link Stage}
+     */
     public Stage getStage(){
         return this.stage;
     }
@@ -113,6 +187,10 @@ public class GUI extends Application implements View {
     @Override
     public void print(String message) {}
 
+    /**
+     * Returns the instance of {@link ViewController} this GUI is associated with.
+     * @return {@link ViewController}
+     */
     @Override
     public ViewController getController() {
         return controller;
@@ -139,6 +217,10 @@ public class GUI extends Application implements View {
         // this.state = state;
     }
 
+    /**
+     * Sets the username for this GUI
+     * @param username the username to be set for this GUI.
+     */
     @Override
     public void setUsername(String username) {
         this.username = username;
@@ -153,6 +235,10 @@ public class GUI extends Application implements View {
     public void stopInputRead(boolean stopInputRead) {
     }
 
+    /**
+     * Handles server disconnection by loading the server disconnection menu.
+     * This method could be called in any menu.
+     */
     public void serverDisconnected(){
         Platform.runLater(() -> {
             try {
@@ -167,6 +253,10 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * Method to close the GUI.
+     * Calls Platform.exit() and System.exit(0) to close the application.
+     */
     @FXML
     public void closeGui() {
         Platform.exit();

@@ -19,6 +19,10 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 
 
+/**
+ * The ChooseConnectionController class is responsible for handling the user interface that allows the user to choose the type of connection (RMI or Socket).
+ * It extends the FXMLController class.
+ */
 public class ChooseConnectionController extends FXMLController {
 
     @FXML
@@ -42,12 +46,19 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     private TextField ipRmiField;
 
-
+    /**
+     * Default constructor for ChooseConnectionController.
+     */
     public ChooseConnectionController() {
         super();
     }
 
-
+    /**
+     * Initializes the controller with the given view and stage.
+     * Sets up key press events for the IP address text fields.
+     * @param view The view associated with this controller
+     * @param stage The stage in which the FXML view is shown
+     */
     @Override
     public void run(View view, Stage stage) {
         this.view = view;
@@ -70,6 +81,11 @@ public class ChooseConnectionController extends FXMLController {
         ipRmiField.setText("127.0.0.1");
     }
 
+
+    /**
+     * Sends the submission of the Socket connection form.
+     * @param e The action event associated with the form submission.
+     */
     @FXML
     public void submitSocket(ActionEvent e) {
         String IpSocket = ipSocketField.getText();
@@ -98,6 +114,11 @@ public class ChooseConnectionController extends FXMLController {
         }
     }
 
+
+    /**
+     * Sends the submission of the Socket connection form.
+     * @param e The action event associated with the form submission.
+     */
     @FXML
     public void submitRmi(ActionEvent e){
         String IpRmi = ipRmiField.getText();
@@ -126,8 +147,12 @@ public class ChooseConnectionController extends FXMLController {
         }
     }
 
+    /**
+     * Handles the action of going back to the main menu. It loads a new FXML scene, creates the associated
+     * FXMLController and transitions to the new scene.
+     */
     @FXML
-    public void goBackMain(ActionEvent e){
+    public void goBackMain(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
             Parent root = loader.load();
@@ -143,8 +168,11 @@ public class ChooseConnectionController extends FXMLController {
         }
     }
 
+    /**
+     * Handles the action of going back to the connection choice menu.
+     */
     @FXML
-    public void goBackConnection(ActionEvent e){
+    public void goBackConnection(){
 
         chooseConnectionMenuFX.setVisible(true);
         chooseConnectionMenuFX.setManaged(true);
@@ -154,16 +182,22 @@ public class ChooseConnectionController extends FXMLController {
         rmiMenuFX.setManaged(false);
     }
 
+    /**
+     * Handles the action of choosing the Socket connection type.
+     */
     @FXML
-    public void setSocket(ActionEvent e){
+    public void setSocket(){
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
         socketMenuFX.setVisible(true);
         socketMenuFX.setManaged(true);
     }
 
+    /**
+     * Handles the action of choosing the RMI connection type.
+     */
     @FXML
-    public void setRmi(ActionEvent e){
+    public void setRmi(){
 
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
@@ -171,11 +205,22 @@ public class ChooseConnectionController extends FXMLController {
         rmiMenuFX.setManaged(true);
     }
 
+    /**
+     * Handles the response from the server.
+     * This method is not used in this controller.
+     * @param feedback The feedback from the server
+     * @param message The message associated with the feedback
+     * @param eventID The ID of the event
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         // Not used
     }
 
+    /**
+     * Indicates whether the user is in the menu.
+     * @return true since the user is in the menu when this controller is active
+     */
     @Override
     public boolean inMenu() {
         return true;
