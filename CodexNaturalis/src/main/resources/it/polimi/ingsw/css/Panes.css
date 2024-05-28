@@ -1,0 +1,15 @@
+.mainPane{
+    -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDark.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-background-color: black;
+}
+
+.genericPane{
+    -fx-background-image: url(/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-background-color: black;
+}

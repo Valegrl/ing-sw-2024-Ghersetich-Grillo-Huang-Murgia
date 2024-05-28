@@ -1,0 +1,62 @@
+.button{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 100;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.button:hover{
+    -fx-text-fill: #bbbbbb;
+}
+
+.buttonSmall{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 80;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.buttonSmall:hover{
+    -fx-text-fill: #bbbbbb;
+}
+
+.buttonSmallest{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 60;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.buttonSmallest:hover{
+    -fx-text-fill: #bbbbbb;
+}
+
+.radio-button{
+    -fx-font-size: 20;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-text-fill: #ffffff;
+}
+
+#deleteButton{
+    -fx-text-fill: #FF0000;
+    -fx-font-size: 80;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#deleteButton:hover{
+    -fx-text-fill: #8b0000;
+    -fx-font-size: 80;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}

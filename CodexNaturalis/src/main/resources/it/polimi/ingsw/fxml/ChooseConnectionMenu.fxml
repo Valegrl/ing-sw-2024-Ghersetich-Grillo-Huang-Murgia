@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <!--
@@ -53,25 +53,21 @@
 </AnchorPane>
 -->
 
-<?import javafx.geometry.Insets?>
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/ChooseConnection.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ChooseConnectionController">
+<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Buttons.css, @../css/Labels.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ChooseConnectionController">
 
     <children>
-        <AnchorPane fx:id="chooseConnectionMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                    AnchorPane.topAnchor="0.0" >
+        <AnchorPane fx:id="chooseConnectionMenuFX" styleClass="genericPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your connection type" textAlignment="CENTER">
                             <VBox.margin>
                                 <Insets bottom="60.0" />
                             </VBox.margin>
                         </Text>
-                        <Button alignment="CENTER" mnemonicParsing="false" text="Socket" textAlignment="CENTER" onAction="#setSocket"/>
-                        <Button alignment="CENTER" mnemonicParsing="false" text="RMI" textAlignment="CENTER" onAction="#setRmi"/>
-                        <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBackMain">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#setSocket" text="Socket" textAlignment="CENTER" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#setRmi" text="RMI" textAlignment="CENTER" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#goBackMain" text="Back" textAlignment="CENTER">
                             <VBox.margin>
                                 <Insets top="60.0" />
                             </VBox.margin>
@@ -81,22 +77,21 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane fx:id="rmiMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" visible="false" managed="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="rmiMenuFX" managed="false" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1920.0" spacing="20.0">
+                        <VBox alignment="CENTER" spacing="20.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter RMI IP address:" textAlignment="CENTER" />
                                 <TextField fx:id="ipRmiField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
-                                <Label fx:id="errorRmi"/>
+                                <Label fx:id="errorRmi" styleClass="labelError" />
                             </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="20.0">
+                        <VBox alignment="CENTER" spacing="20.0">
                             <children>
-                                <Button alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitRmi"/>
-                                <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBackConnection"/>
+                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#submitRmi" text="Submit" textAlignment="CENTER" />
+                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#goBackConnection" text="Back" textAlignment="CENTER" />
                             </children>
                         </VBox>
                     </children>
@@ -104,22 +99,21 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane fx:id="socketMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" visible="false" managed="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="socketMenuFX" managed="false" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1920.0" spacing="20.0">
+                        <VBox alignment="CENTER" spacing="20.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Socket IP address:" textAlignment="CENTER" />
                                 <TextField fx:id="ipSocketField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="100.0" prefWidth="400.0" />
-                                <Label fx:id="errorSocket"/>
+                                <Label fx:id="errorSocket" styleClass="labelError" />
                             </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="20.0">
+                        <VBox alignment="CENTER" spacing="20.0">
                             <children>
-                                <Button  alignment="CENTER" mnemonicParsing="false" text="Submit" textAlignment="CENTER" onAction="#submitSocket"/>
-                                <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBackConnection"/>
+                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#submitSocket" text="Submit" textAlignment="CENTER" />
+                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#goBackConnection" text="Back" textAlignment="CENTER" />
                             </children>
                         </VBox>
                     </children>

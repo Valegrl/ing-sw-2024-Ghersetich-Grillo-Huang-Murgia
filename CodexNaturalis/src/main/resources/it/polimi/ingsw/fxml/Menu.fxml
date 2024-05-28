@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -77,28 +76,27 @@
 </AnchorPane>
 -->
 
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/Menu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
+<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Buttons.css, @../css/Labels.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
    <children>
-      <AnchorPane fx:id="menuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="menuFX" styleClass="genericPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER_LEFT" minHeight="200.0" minWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Text fx:id="usernameTextFX" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1000.0" />
+                  <Text id="helloUsername" fx:id="usernameTextFX" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1000.0" />
                </children>
                <padding>
                   <Insets left="20.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="281.0" layoutY="200.0" prefHeight="200.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
+            <VBox alignment="CENTER_LEFT" layoutX="281.0" layoutY="200.0" minHeight="200.0" minWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
                <padding>
                   <Insets left="20.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" text="Enter lobby" onAction="#goEnterLobbies"/>
-                  <Button mnemonicParsing="false" text="Reconnect to game"/>
-                  <Button mnemonicParsing="false" text="Profile settings" onAction="#goProfileSettings"/>
-                  <Button mnemonicParsing="false" text="Exit" onAction="#exit">
+                  <Button mnemonicParsing="false" onAction="#goEnterLobbies" styleClass="buttonSmall" text="Enter lobby" />
+                  <Button mnemonicParsing="false" styleClass="buttonSmall" text="Reconnect to game" />
+                  <Button mnemonicParsing="false" onAction="#goProfileSettings" styleClass="buttonSmall" text="Profile settings" />
+                  <Button mnemonicParsing="false" onAction="#exit" styleClass="buttonSmall" text="Exit">
                      <VBox.margin>
                         <Insets top="60.0" />
                      </VBox.margin>
@@ -108,30 +106,29 @@
          </children>
       </AnchorPane>
 
-      <AnchorPane fx:id="profileSettingsMenuFX" id="mainPane" prefHeight="1080.0" prefWidth="1920.0" managed="" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="profileSettingsMenuFX" managed="" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="profileSettingsVBox" alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="profileSettingsVBox" alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="errorProfileSettings" alignment="CENTER" text="" textAlignment="CENTER" />
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Logout" textAlignment="CENTER" onAction="#logout"/>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Delete account" textAlignment="CENTER" onAction="#notifyDeleteAccount"/>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Back" textAlignment="CENTER" onAction="#goBack">
+                  <Label fx:id="errorProfileSettings" alignment="CENTER" styleClass="labelError" text="" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#logout" styleClass="buttonSmall" text="Logout" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#notifyDeleteAccount" styleClass="buttonSmall" text="Delete account" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#goBack" styleClass="buttonSmall" text="Back" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Button>
                </children>
             </VBox>
-            <VBox fx:id="confirmDeleteVBox" alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="confirmDeleteVBox" alignment="CENTER" managed="false" spacing="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Text id="deleteWarning" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account ?" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets bottom="40.0" />
                      </VBox.margin>
                   </Text>
-                  <Button id="yesButton" mnemonicParsing="false" text="Yes" onAction="#confirmDeleteAccount"/>
-                  <Button mnemonicParsing="false" text="No" onAction="#rejectDeleteAccount"/>
+                  <Button id="deleteButton" mnemonicParsing="false" onAction="#confirmDeleteAccount" text="Yes" />
+                  <Button mnemonicParsing="false" onAction="#rejectDeleteAccount" styleClass="buttonSmall" text="No" />
                </children>
             </VBox>
          </children>

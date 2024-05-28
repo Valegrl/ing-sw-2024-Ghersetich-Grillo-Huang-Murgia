@@ -98,7 +98,7 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void rejectDeleteAccount(){
-        showResponseMessage("Your account was NOT deleted.", 1000);
+        //showResponseMessage("Your account was NOT deleted.", 1000);
         errorProfileSettings.setText("Your account was not deleted.");
         profileSettingsVBox.setManaged(true);
         profileSettingsVBox.setVisible(true);

@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="mainPane" fx:id="availableLobbiesMenuFX" maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/EnterLobbies.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.EnterLobbiesController">
+<BorderPane id="mainPane" fx:id="availableLobbiesMenuFX" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/EnterLobbies.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.EnterLobbiesController">
    <top>
-      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="1920.0" spacing="1500.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" minHeight="200.0" minWidth="1920.0" spacing="1500.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
             <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#refreshLobbies" text="Refresh" />
@@ -23,7 +23,7 @@
    </top>
 
    <center>
-      <TableView fx:id="lobbiesTable" prefHeight="770.0" prefWidth="1460.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="lobbiesTable" minHeight="770.0" minWidth="1460.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="lobbyName" prefWidth="1160.0" text="Lobby name" />
           <TableColumn fx:id="numPlayers" minWidth="0.0" prefWidth="375.0" text="Players online" />
@@ -39,11 +39,11 @@
    </center>
 
    <bottom>
-      <Label id="errorLobbies" fx:id="errorLobbies" alignment="CENTER" prefHeight="110.0" prefWidth="900.0" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+      <Label id="errorLobbies" fx:id="errorLobbies" alignment="CENTER" minHeight="110.0" minWidth="900.0" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
    </bottom>
 
    <right>
-      <VBox id="createLobbyVBox" alignment="CENTER" prefHeight="770.0" prefWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox id="createLobbyVBox" alignment="CENTER" maxWidth="400.0" minHeight="770.0" minWidth="400.0" spacing="20.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets left="20.0" right="30.0" />
          </BorderPane.margin>
@@ -58,7 +58,7 @@
                   <Insets bottom="50.0" top="50.0" />
                </VBox.margin>
             </TextField>
-            <Slider fx:id="requiredNumSlider" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="2.0" minorTickCount="0" prefHeight="70.0" prefWidth="360.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+            <Slider fx:id="requiredNumSlider" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="2.0" minHeight="70.0" minWidth="360.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Players number" textAlignment="CENTER" />
             <Button mnemonicParsing="false" onAction="#submitCreateLobby" text="Create" textAlignment="CENTER">
                <VBox.margin>

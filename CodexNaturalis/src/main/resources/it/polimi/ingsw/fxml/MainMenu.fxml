@@ -50,11 +50,11 @@
 </AnchorPane>
 -->
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
+<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Buttons.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
     <children>
-        <AnchorPane id="mainPane" fx:id="mainMenuFX" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="mainMenuFX" styleClass="mainPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER_LEFT" minHeight="216.0" minWidth="100.0" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER_LEFT" minHeight="216.0" minWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goChooseConnection" text="Play" />
                     <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goOptions" text="Options" />
                     <Button minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#goRules" text="Rules" />
@@ -67,9 +67,9 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane id="mainPane" fx:id="optionsMenuFX" managed="false" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Options.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="optionsMenuFX" managed="false" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen" />
                     <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
                     <padding>
@@ -79,9 +79,9 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane id="mainPane" fx:id="creditsMenuFX" managed="false" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/main/Credits.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="creditsMenuFX" managed="false" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="This game was made in special collaboration with Cranio Creations by:" textAlignment="CENTER" wrappingWidth="900.0" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" textAlignment="CENTER" />

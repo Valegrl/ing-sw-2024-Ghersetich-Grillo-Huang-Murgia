@@ -1,11 +1,14 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.main.MainClient;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -61,8 +64,8 @@ public class GUI extends Application implements View {
         stage.setResizable(true);
         stage.setFullScreen(true);
         stage.setScene(scene);
-        stage.setWidth(1920);
-        stage.setHeight(1080);
+        stage.setMinHeight(900);
+        stage.setMinWidth(1600);
 
         this.stage = stage;
 
@@ -150,7 +153,25 @@ public class GUI extends Application implements View {
     public void stopInputRead(boolean stopInputRead) {
     }
 
-    public void serverDisconnected(){}
+    public void serverDisconnected(){
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ServerDisconnectionMenu.fxml"));
+                Parent root = loader.load();
+                stage.getScene().setRoot(root);
+                FXMLController.run(this, stage);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @FXML
+    public void closeGui() {
+        Platform.exit();
+        System.exit(0);
+    }
 
     @Override
     public void clearInput() {

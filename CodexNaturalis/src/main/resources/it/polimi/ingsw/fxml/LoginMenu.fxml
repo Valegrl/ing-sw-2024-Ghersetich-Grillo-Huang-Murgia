@@ -56,10 +56,10 @@
 </AnchorPane>
 -->
 
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.LoginController">
+<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.LoginController">
    <children>
 
-      <AnchorPane id="mainPane" fx:id="loginMenuFX" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane id="mainPane" fx:id="loginMenuFX" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -70,29 +70,29 @@
          </children>
       </AnchorPane>
 
-      <AnchorPane id="mainPane" fx:id="loginSubmitMenuFX" prefHeight="1080.0" prefWidth="1920.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane id="mainPane" fx:id="loginSubmitMenuFX" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <TextField fx:id="loginUsernameField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Username" />
                   <PasswordField fx:id="loginPasswordField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Password" />
                   <Label fx:id="errorLogin" alignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Login" onAction="#submitLogin"/>
-                  <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
+                  <Button mnemonicParsing="false" onAction="#submitLogin" text="Login" />
+                  <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
                </children>
             </VBox>
          </children>
       </AnchorPane>
 
-      <AnchorPane id="mainPane" fx:id="registerSubmitMenuFX" prefHeight="1080.0" prefWidth="1920.0" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane id="mainPane" fx:id="registerSubmitMenuFX" managed="false" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <TextField fx:id="registerUsernameField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Username" />
                   <PasswordField fx:id="registerPasswordField" alignment="CENTER" maxHeight="100.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Password" />
                   <Label fx:id="errorRegistration" alignment="CENTER" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Register" onAction="#submitRegister" />
-                  <Button mnemonicParsing="false" text="Back" onAction="#goBack"/>
+                  <Button mnemonicParsing="false" onAction="#submitRegister" text="Register" />
+                  <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
                </children>
             </VBox>
          </children>
