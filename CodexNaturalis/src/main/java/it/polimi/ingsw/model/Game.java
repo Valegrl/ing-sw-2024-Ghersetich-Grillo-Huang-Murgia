@@ -278,7 +278,7 @@ public class Game {
             }
         }
 
-        if(notify)
+        if(notify && gameStatus!=GameStatus.ENDED)
             listeners.notifyAllListeners(new NewTurnEvent(turnPlayerIndex, gameStatus));
     }
 
