@@ -68,10 +68,10 @@ public class ChatState extends ViewState {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
-            case EventID.GET_CHAT_MESSAGES:
+            case GET_CHAT_MESSAGES:
                 view.print(message);
                 break;
-            case EventID.CHAT_GM, EventID.CHAT_PM:
+            case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
                     view.clearInput();
                     printMessage(message);
@@ -79,11 +79,11 @@ public class ChatState extends ViewState {
                     printMessage("Message not sent: " + message);
                 }
                 break;
-            case EventID.UPDATE_LOBBY_PLAYERS:
+            case UPDATE_LOBBY_PLAYERS:
                 printMessage(boldText("Lobby info: ") + message);
                 view.clearInput();
                 break;
-            case EventID.KICKED_PLAYER_FROM_LOBBY:
+            case KICKED_PLAYER_FROM_LOBBY:
                 inChat = false;
                 view.stopInputRead(true);
                 view.clearInput();
@@ -91,24 +91,33 @@ public class ChatState extends ViewState {
                 showResponseMessage(message, 2000);
                 transition(new MenuState(view));
                 return;
-            case EventID.UPDATE_GAME_PLAYERS:
+            case UPDATE_GAME_PLAYERS:
                 view.clearInput();
                 if (previousState.inLobby()) {
                     inChat = false;
                     view.stopInputRead(true);
                     clearLine(); // remove input box
                     transition(new GameSetupState(view));
-                } else if (previousState.inGame()) {
+                } else if (previousState.inGame()) { // Game started
                     printMessage(boldText("Game info: ") + message);
+                    view.clearInput();
                 } else {
                     throw new IllegalStateException("Unexpected previous state.");
                 }
                 break;
-            case EventID.UPDATE_LOCAL_MODEL:
-                inChat = false;
-                view.stopInputRead(true);
-                clearLine(); // remove input box
-                // TODO transition to game state
+            case CHOOSE_TOKEN_SETUP:
+                if (previousState.inGame()) {
+                    printMessage(boldText("Game info: ") + message);
+                    view.clearInput();
+                }
+                break;
+            case UPDATE_LOCAL_MODEL:
+                if (previousState.inGame()) {
+                    inChat = false;
+                    view.stopInputRead(true);
+                    clearLine(); // remove input box
+                    previousState.handleResponse(feedback, message, eventID); // make TokenSetupState handle the game transition
+                }
                 break;
             default:
                 break;

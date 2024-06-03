@@ -53,14 +53,8 @@ public class ViewPlayAreaTest {
     }
 
     @Test
-    void printPlayedCardsTest() {
+    void printOpponentPlayAreaTest() {
         ViewPlayArea viewPlayArea = new ViewPlayArea(playArea);
-        System.out.println(viewPlayArea.printPlayedCards());
-    }
-
-    @Test
-    void printHandTest() {
-        ViewPlayArea viewPlayArea = new ViewPlayArea(playArea);
-        System.out.println(viewPlayArea.printHand());
+        System.out.println(viewPlayArea.printPlayArea());
     }
 }

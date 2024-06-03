@@ -178,16 +178,20 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
      * Returns a String representation of the player's hand.
      * @return The string representation of the player's hand.
      */
-    public String printHand() {
+    private String printHand() {
+        int indent = 7;
         StringBuilder sb = new StringBuilder();
-        sb.append("Player's Hand: \n");
-        for (ImmPlayableCard card : this.hand) {
-               sb.append(card.printCard(0)).append("\n");
+        sb.append("  Hand: \n");
+        for (int i = 0; i < hand.size(); i++) {
+            sb.append("    ")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(hand.get(i).printCard(indent));
         }
         return sb.toString();
-        }
+    }
 
-    public String printPlayedCards() {
+    private String printPlayedCards() {
         StringBuilder sb = new StringBuilder();
         StringBuilder cardString = new StringBuilder();
         int currIndent = 0;
@@ -205,5 +209,9 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
             sb.append(cardString);
         }
         return sb.toString();
+    }
+
+    public String printPlayArea(){
+        return printPlayedCards() + "\n" + printHand();
     }
 }

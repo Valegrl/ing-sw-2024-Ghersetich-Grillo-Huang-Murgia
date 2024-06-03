@@ -108,14 +108,14 @@ class ImmGoldCardTest {
 
         String expectedOutput = "GoldCard: " + Item.itemToColor(Item.FUNGI, "GC03") + "\n" +
                 "  Points: 1\n" +
-                "  Required Items: \n" +
-                "    - #1 " + Item.itemToColor(Item.MANUSCRIPT) + " items\n" +
                 "  Corners: \n" +
                 "    TL: " + Item.itemToColor(Item.MANUSCRIPT) + "  TR: " + Item.itemToColor(Item.EMPTY) + "\n" +
                 "    BL: " + Item.itemToColor(Item.EMPTY) + "  BR: " + Item.itemToColor(Item.HIDDEN) + "\n" +
                 "  Constraint: \n" +
                 "    - #2 " + Item.itemToColor(Item.FUNGI) + " resources\n" +
-                "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n";
+                "    - #1 " + Item.itemToColor(Item.INSECT) + " resources\n" +
+                "  Required Items to score points: \n" +
+                "    - #1 " + Item.itemToColor(Item.MANUSCRIPT) + " items\n";
 
         assertEquals(expectedOutput, card.printCard(0));
         System.out.println(card.printCard(0));

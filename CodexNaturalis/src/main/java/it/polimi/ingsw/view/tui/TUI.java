@@ -167,8 +167,12 @@ public class TUI implements View {
 
     public void clearInput() {
         try {
-            while(in.ready())
+            in.mark(0);
+            while(in.ready()) {
                 in.read();
+                in.mark(0);
+            }
+            in.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

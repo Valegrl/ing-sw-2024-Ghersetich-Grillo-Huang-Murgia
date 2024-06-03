@@ -254,7 +254,7 @@ class ImmObjectiveCardTest {
 
         String expectedOutput = "ObjectiveCard: OC09\n" +
                 "  Points: 2\n" +
-                "  Required Items: \n" +
+                "  Required Items to score points: \n" +
                 "    - #3 " + Item.itemToColor(Item.FUNGI) + " items\n";
 
 
@@ -287,7 +287,7 @@ class ImmObjectiveCardTest {
 
         String expectedOutput = "ObjectiveCard: OC13\n" +
                 "  Points: 3\n" +
-                "  Required Items: \n" +
+                "  Required Items to score points: \n" +
                 "    - #1 " + Item.itemToColor(Item.INKWELL) + " items\n" +
                 "    - #1 " + Item.itemToColor(Item.MANUSCRIPT) + " items\n" +
                 "    - #1 " + Item.itemToColor(Item.QUILL) + " items\n";

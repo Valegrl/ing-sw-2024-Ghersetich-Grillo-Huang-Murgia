@@ -84,14 +84,14 @@ public final class ViewPlayArea implements Serializable {
      * Returns a string representation of the opponent's hand.
      * @return A string representation of the opponent's hand.
      */
-    public String printHand() {
+    private String printHand() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Player's Hand: \n");
+        sb.append("  Player's Hand: [ ");
         for (BackPlayableCard card : this.hand) {
-            Item item = card.getItem();
-            String cardType = card.getCardType().toString();
-            sb.append("  ").append(cardType).append(" - ").append(Item.itemToColor(item)).append("\n");
+            sb.append(card)
+                    .append(" ");
         }
+        sb.append("]\n");
         return sb.toString();
     }
 
@@ -99,7 +99,7 @@ public final class ViewPlayArea implements Serializable {
      * Returns a string representation of the opponent's play area.
      * @return A string representation of the opponent's play area.
      */
-    public String printPlayedCards() {
+    private String printPlayedCards() {
         StringBuilder sb = new StringBuilder();
         StringBuilder cardString = new StringBuilder();
         int currIndent = 0;
@@ -117,5 +117,9 @@ public final class ViewPlayArea implements Serializable {
             sb.append(cardString);
         }
         return sb.toString();
+    }
+
+    public String printPlayArea(){
+        return printPlayedCards() + "\n" + printHand();
     }
 }

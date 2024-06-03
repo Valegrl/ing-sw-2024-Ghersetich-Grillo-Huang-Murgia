@@ -50,16 +50,8 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
         sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
         sb.append(" ".repeat(indent));
         sb.append("  Points: ").append(this.getPoints()).append("\n");
-        if(!this.getRequiredItems().isEmpty()) {
-            sb.append(" ".repeat(indent));
-            sb.append("  Required Items: ");
-            for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
-                sb.append("\n");
-                sb.append(" ".repeat(indent));
-                sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items");
-            }
-            sb.append("\n");
-        } else if(this.getEvaluator() instanceof CornerEvaluator) {
+
+         if(this.getEvaluator() instanceof CornerEvaluator) {
             sb.append(" ".repeat(indent));
             sb.append("  ").append(this.getPoints()).append(" points for each overlapping corner of this card \n");
         }
@@ -82,6 +74,17 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
             sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" resources");
         }
         sb.append("\n");
+
+        if(!this.getRequiredItems().isEmpty()) {
+            sb.append(" ".repeat(indent));
+            sb.append("  Required Items to score points: ");
+            for (Map.Entry<Item, Integer> entry : this.getRequiredItems().entrySet()) {
+                sb.append("\n");
+                sb.append(" ".repeat(indent));
+                sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items");
+            }
+            sb.append("\n");
+        }
         return sb.toString();
     }
 

@@ -115,14 +115,14 @@ public final class ImmObjectiveCard extends ImmEvaluableCard implements CardToSt
             sb.append(Item.itemToColor(requiredPattern[2].value(), "     |---|")).append("\n");
         }
         if(this.getId().equals("OC09") || this.getId().equals("OC10") || this.getId().equals("OC11") || this.getId().equals("OC12") ){
-            sb.append("  Required Items: ").append("\n");
+            sb.append("  Required Items to score points: ").append("\n");
             for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
                 sb.append(" ".repeat(indent));
                 sb.append("    - #").append(entry.getValue()).append(" ").append(Item.itemToColor(entry.getKey())).append(" items").append("\n");
             }
         }
         if(this.getId().equals("OC13") || this.getId().equals("OC14") || this.getId().equals("OC15") || this.getId().equals("OC16") ){
-            sb.append("  Required Items: ").append("\n");
+            sb.append("  Required Items to score points: ").append("\n");
             List<Map.Entry<Item, Integer>> sortedItems = new ArrayList<>(requiredItems.entrySet());
             sortedItems.sort(Map.Entry.comparingByKey(Comparator.comparing(Enum::name)));
             for (Map.Entry<Item, Integer> entry : sortedItems) {
