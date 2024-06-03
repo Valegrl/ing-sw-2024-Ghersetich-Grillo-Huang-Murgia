@@ -2,6 +2,7 @@ package it.polimi.ingsw.viewModel.viewPlayer;
 
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.AnsiCodes;
 
 /**
  * Immutable representation of a {@link Player}.
@@ -20,6 +21,15 @@ public class ViewPlayer extends AbstractViewPlayer {
     public ViewPlayer(Player player) {
         super(player);
         this.playArea = new ViewPlayArea(player.getPlayArea());
+    }
+
+    /**
+     * Returns a string representation of the play area of the player.
+     * @return The string representation of the play area of the player.
+     */
+    @Override
+    public String playAreaToString() {
+        return AnsiCodes.BOLD + getUsername() + "'s " + playArea.printPlayArea();
     }
 
     /**

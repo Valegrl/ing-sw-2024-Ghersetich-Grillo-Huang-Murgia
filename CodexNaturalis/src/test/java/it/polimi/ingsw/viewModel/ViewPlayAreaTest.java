@@ -4,13 +4,10 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-
-import static junit.framework.Assert.assertEquals;
 
 public class ViewPlayAreaTest {
     private PlayArea playArea;

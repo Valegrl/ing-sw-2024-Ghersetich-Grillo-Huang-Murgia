@@ -1,10 +1,9 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
@@ -21,10 +20,8 @@ public class TokenSetupState extends ViewState {
 
     private boolean choseToken = false;
 
-    public TokenSetupState(View view, String tokensMessage, int numTokens) {
+    public TokenSetupState(View view) {
         super(view);
-        this.tokensMessage = tokensMessage;
-        this.numTokens = numTokens;
     }
 
     @Override
@@ -33,6 +30,9 @@ public class TokenSetupState extends ViewState {
         view.clearInput();
         clearConsole();
         view.stopInputRead(false);
+
+        tokensMessage = controller.availableTokensMessage();
+        numTokens = controller.getAvailableTokens().size();
 
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
@@ -90,9 +90,20 @@ public class TokenSetupState extends ViewState {
                 view.printMessage(message);
                 break;
             case UPDATE_LOCAL_MODEL:
-                // TODO transition to game state
                 clearConsole();
                 showResponseMessage(message, 1000);
+
+                if (controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                    if (controller.hasTurn()) {
+                        transition(new PlaceCardState(view));
+                    } else {
+                        transition(new WaitForTurnState(view));
+                    }
+                } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
+                    // TODO decide where to go
+                } else {
+                    throw new IllegalStateException("Unexpected game status.");
+                }
                 break;
             case QUIT_GAME:
                 if (feedback == Feedback.SUCCESS) {
@@ -132,19 +143,6 @@ public class TokenSetupState extends ViewState {
             return Token.fromString(matcher.group(1));
         } else {
             return null;
-        }
-    }
-
-    private void quitGame() {
-        view.printMessage("Are you sure you want to abandon the current game?:");
-        int choice = readChoiceFromInput(Arrays.asList("Yes", "No"));
-        if (choice == 1) {
-            Event event = new QuitGameEvent();
-            controller.newViewEvent(event);
-            waitForResponse();
-        } else {
-            showResponseMessage("You are still in the game.", 200);
-            run();
         }
     }
 

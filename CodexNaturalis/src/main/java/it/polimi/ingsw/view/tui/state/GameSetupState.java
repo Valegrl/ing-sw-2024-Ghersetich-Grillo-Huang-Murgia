@@ -39,8 +39,6 @@ public class GameSetupState extends ViewState {
             clearConsole();
             view.printMessage("Game setup phase.\n");
             view.print("Waiting for the game to assign you a setup. . .");
-            // FIXME when server starts game, I receive a non serializable error on PlayArea. Does the model send
-            //       the PlayArea and not the ViewPlayArea?
         }
     }
 
@@ -55,32 +53,28 @@ public class GameSetupState extends ViewState {
                 // See your assigned setup
                 clearConsole();
                 showResponseMessage(handMessage, 500);
-                view.printMessage("Press and enter any key to go back: ");
-                view.getInput();
+                waitInputToGoBack();
                 showSetupChoices();
                 break;
             case 3:
                 // See common objectives
                 clearConsole();
                 showResponseMessage(commObjectivesMessage, 500);
-                view.printMessage("Press and enter any key to go back: ");
-                view.getInput();
+                waitInputToGoBack();
                 showSetupChoices();
                 break;
             case 4:
                 // See visible decks
                 clearConsole();
                 showResponseMessage(decksMessage, 500);
-                view.printMessage("Press and enter any key to go back: ");
-                view.getInput();
+                waitInputToGoBack();
                 showSetupChoices();
                 break;
             case 5:
                 // See opponents' hands
                 clearConsole();
                 showResponseMessage(opponentsHandsMessage, 500);
-                view.printMessage("Press and enter any key to go back: ");
-                view.getInput();
+                waitInputToGoBack();
                 showSetupChoices();
                 break;
             case 6:
@@ -126,7 +120,7 @@ public class GameSetupState extends ViewState {
                 break;
             case CHOOSE_TOKEN_SETUP:
                 clearConsole();
-                transition(new TokenSetupState(view, controller.availableTokensMessage(), controller.getAvailableTokens().size()));
+                transition(new TokenSetupState(view));
                 break;
             case QUIT_GAME:
                 if (feedback == Feedback.SUCCESS) {
@@ -164,19 +158,6 @@ public class GameSetupState extends ViewState {
         controller.chosenSetup(chosenObjective, (chosenFace == 2)); // 1 is not flipped (false), 2 is flipped (true)
 
         waitForResponse();
-    }
-
-    private void quitGame() {
-        view.printMessage("Are you sure you want to abandon the current game?:");
-        int choice = readChoiceFromInput(Arrays.asList("Yes", "No"));
-        if (choice == 1) {
-            Event event = new QuitGameEvent();
-            controller.newViewEvent(event);
-            waitForResponse();
-        } else {
-            showResponseMessage("You are still in the game.", 200);
-            showSetupChoices();
-        }
     }
 
     @Override

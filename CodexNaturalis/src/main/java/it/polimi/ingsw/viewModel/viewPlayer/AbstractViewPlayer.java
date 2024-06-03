@@ -35,6 +35,8 @@ public abstract class AbstractViewPlayer implements Serializable {
         this.online = player.isOnline();
     }
 
+    abstract public String playAreaToString();
+
     /**
      * Retrieves the username of the player.
      * @return {@link AbstractViewPlayer#username}.

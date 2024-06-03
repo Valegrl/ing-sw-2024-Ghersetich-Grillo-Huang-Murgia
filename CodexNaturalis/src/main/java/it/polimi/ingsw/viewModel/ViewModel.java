@@ -125,6 +125,50 @@ public class ViewModel implements Serializable, CardConverter {
     }
 
     /**
+     * Converts the game's decks to a string representation.
+     * @return A string representation of the decks.
+     */
+    public String decksToString() {
+        int indent = 12;
+        return "Decks: \n" +
+                "  1- Gold deck:\n" +
+                "       Top card: " +
+                Item.itemToColor(topGoldDeck) +
+                "\n" +
+                "       Visible cards:\n" +
+                "         1- " +
+                visibleGoldCards[0].printCard(indent) +
+                "         2- " +
+                visibleGoldCards[1].printCard(indent) +
+                "  2- Resource deck:\n" +
+                "       Top card: " +
+                Item.itemToColor(topResourceDeck) +
+                "\n" +
+                "       Visible cards: \n" +
+                "         1- " +
+                visibleResourceCards[0].printCard(indent) +
+                "         2- " +
+                visibleResourceCards[1].printCard(indent);
+    }
+
+    /**
+     * Converts an opponent's play area to a string representation.
+     * @param index The index of the chosen opponent.
+     * @return A string representation of the opponent's play area.
+     */
+    public String opponentPlayAreaToString(int index) {
+        return opponents.get(index).playAreaToString();
+    }
+
+    /**
+     * Converts the self-player's play area to a string representation.
+     * @return A string representation of the self-player's play area.
+     */
+    public String selfPlayAreaToString() {
+        return selfPlayer.playAreaToString();
+    }
+
+    /**
      * Retrieves the game id.
      * @return {@link ViewModel#gameId}.
      */

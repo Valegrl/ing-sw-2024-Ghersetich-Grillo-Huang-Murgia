@@ -1,5 +1,6 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
+import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.player.PlayArea;
@@ -29,6 +30,15 @@ public class SelfViewPlayer extends AbstractViewPlayer {
     public SelfViewPlayer(Player player) {
         super(player);
         this.playArea = new SelfViewPlayArea(player.getPlayArea());
+    }
+
+    /**
+     * Returns a string representation of the self-play area of the player.
+     * @return The string representation of the self-play area of the player.
+     */
+    @Override
+    public String playAreaToString() {
+        return AnsiCodes.BOLD + getUsername() + "'s " + playArea.printPlayArea();
     }
 
     /**

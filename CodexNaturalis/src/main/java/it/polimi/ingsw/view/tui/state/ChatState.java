@@ -107,8 +107,8 @@ public class ChatState extends ViewState {
                 break;
             case CHOOSE_TOKEN_SETUP:
                 if (previousState.inGame()) {
-                    printMessage(boldText("Game info: ") + message);
                     view.clearInput();
+                    printMessage(boldText("Game info: ") + message);
                 }
                 break;
             case UPDATE_LOCAL_MODEL:
@@ -160,4 +160,5 @@ public class ChatState extends ViewState {
     public boolean inChat() {
         return inChat;
     }
+     // TODO remove inChat and use inGame or inLobby methods that checks the previous state method
 }

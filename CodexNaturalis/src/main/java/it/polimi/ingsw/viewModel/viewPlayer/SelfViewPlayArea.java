@@ -55,7 +55,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
                         Map.Entry::getKey,
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
-        this.uncoveredItems = Map.copyOf(playArea.getUncoveredItems());
+        this.uncoveredItems = new LinkedHashMap<>(playArea.getUncoveredItems());
         if (playArea.getSelectedCard().key() == null)
             this.selectedCard = new Pair<>(null, null);
         else
@@ -211,7 +211,20 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    private String printUncoveredItems() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Uncovered Items:\n");
+        for (Map.Entry<Item, Integer> entry : uncoveredItems.entrySet()) {
+            sb.append("    - ")
+                    .append(Item.itemToColor(entry.getKey()))
+                    .append(" x")
+                    .append(entry.getValue())
+                    .append("\n");
+        }
+        return sb.toString();
+    }
+
     public String printPlayArea(){
-        return printPlayedCards() + "\n" + printHand();
+        return printPlayedCards() + "\n" + printUncoveredItems() + "\n" + printHand()  + "\n";
     }
 }

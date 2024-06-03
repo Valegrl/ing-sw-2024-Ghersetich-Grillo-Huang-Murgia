@@ -1,8 +1,11 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.controller.ViewController;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.utils.AnsiCodes.*;
@@ -89,7 +92,25 @@ public abstract class ViewState {
         view.getState().run();
     }
 
-    public void clearConsole() {
+    protected void quitGame() {
+        view.printMessage("Are you sure you want to abandon the current game?:");
+        int choice = readChoiceFromInput(Arrays.asList("Yes", "No"));
+        if (choice == 1) {
+            Event event = new QuitGameEvent();
+            controller.newViewEvent(event);
+            waitForResponse();
+        } else {
+            showResponseMessage("You are still in the game.", 200);
+            run();
+        }
+    }
+
+    protected void waitInputToGoBack() {
+        view.printMessage("Press and enter any key to go back: ");
+        view.getInput();
+    }
+
+    protected void clearConsole() {
         try {
             if( System.getProperty("os.name").contains("Windows") )
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -98,11 +119,11 @@ public abstract class ViewState {
         } catch (Exception ignored) {}
     }
 
-    public void clearLine() {
+    protected void clearLine() {
         view.print(MOVE_CURSOR_START + CLEAR_LINE);
     }
 
-    public String boldText(String text) {
+    protected String boldText(String text) {
         return BOLD + text + RESET;
     }
 

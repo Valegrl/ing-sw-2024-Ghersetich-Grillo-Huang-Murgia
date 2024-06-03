@@ -27,6 +27,11 @@ public final class ViewPlayArea implements Serializable {
     private final ImmStartCard startCard;
 
     /**
+     * The map of uncovered items in the play area, each item is associated with its uncovered quantity.
+     */
+    private final Map<Item, Integer> uncoveredItems;
+
+    /**
      * The map of played cards in the play area, associated with their coordinates.
      */
     private final Map<Coordinate, ImmPlayableCard> playedCards;
@@ -46,6 +51,7 @@ public final class ViewPlayArea implements Serializable {
                         Map.Entry::getKey,
                         entry -> new ImmPlayableCard(entry.getValue())
                 ));
+        this.uncoveredItems = new LinkedHashMap<>(playArea.getUncoveredItems());
     }
 
     /**
@@ -119,7 +125,20 @@ public final class ViewPlayArea implements Serializable {
         return sb.toString();
     }
 
+    private String printUncoveredItems() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  Uncovered Items:");
+        for (Map.Entry<Item, Integer> entry : uncoveredItems.entrySet()) {
+            sb.append("\n")
+                    .append("    - ")
+                    .append(Item.itemToColor(entry.getKey()))
+                    .append(" x")
+                    .append(entry.getValue());
+        }
+        return sb.toString();
+    }
+
     public String printPlayArea(){
-        return printPlayedCards() + "\n" + printHand();
+        return printPlayedCards() + "\n" + printHand() + "\n" + printUncoveredItems() + "\n";
     }
 }

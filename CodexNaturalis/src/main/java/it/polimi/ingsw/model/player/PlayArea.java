@@ -55,7 +55,7 @@ public class PlayArea {
 
         this.playedCards = new HashMap<>();
 
-        this.uncoveredItems = new HashMap<>() {{
+        this.uncoveredItems = new LinkedHashMap<>() {{
             put(Item.PLANT, 0);
             put(Item.ANIMAL, 0);
             put(Item.FUNGI, 0);

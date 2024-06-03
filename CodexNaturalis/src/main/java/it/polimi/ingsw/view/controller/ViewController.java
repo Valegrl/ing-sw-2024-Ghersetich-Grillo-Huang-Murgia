@@ -14,6 +14,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEven
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.viewModel.ViewModel;
@@ -96,6 +97,9 @@ public class ViewController implements ViewEventReceiver {
      */
     private ViewStartSetup setup;
 
+    /**
+     * The list of available tokens for the player to choose from.
+     */
     private List<Token> availableTokens;
 
     /**
@@ -175,8 +179,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
+        availableTokens = event.getAvailableColors();
         if(view.inGame() || view.inChat()) {
-            availableTokens = event.getAvailableColors();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -276,7 +280,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(UpdateLocalModelEvent event) {
         model = event.getModel();
-        if (view.inGame()) {
+        if (view.inGame() || view.inChat()) {
             view.handleResponse(event.getID(), null, "Game started!");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -616,6 +620,10 @@ public class ViewController implements ViewEventReceiver {
         return lobbies;
     }
 
+    public ViewModel getModel() {
+        return model;
+    }
+
     public List<LobbyState> getOfflineGames() {
         return offlineGames;
     }
@@ -626,6 +634,10 @@ public class ViewController implements ViewEventReceiver {
 
     public Map<String, Boolean> getPlayersStatus() {
         return playersStatus;
+    }
+
+    public GameStatus getGameStatus() {
+        return model.getGameStatus();
     }
 
     public List<Token> getAvailableTokens() {
@@ -660,5 +672,42 @@ public class ViewController implements ViewEventReceiver {
             m.append("  ").append(i + 1).append("- ").append(availableTokens.get(i)).append("\n");
         }
         return m.toString();
+    }
+
+    public boolean hasTurn() {
+        return model.getTurnPlayerIndex() == model.getPlayerUsernames().indexOf(username);
+    }
+
+    public String playersListToString() {
+        StringBuilder m = new StringBuilder();
+        int lastPlayer = (model.getTurnPlayerIndex() - 1 + model.getPlayerUsernames().size()) % model.getPlayerUsernames().size();
+        for (int i = model.getTurnPlayerIndex(); i != lastPlayer; i = (i + 1) % model.getPlayerUsernames().size()) {
+            // TODO check if online?
+            if (i == model.getTurnPlayerIndex()) {
+                m.append(AnsiCodes.BOLD).append(model.getPlayerUsernames().get(i)).append(AnsiCodes.RESET).append(" -> ");
+            } else if (i == model.getPlayerUsernames().indexOf(username)) {
+                m.append(AnsiCodes.GOLD).append(model.getPlayerUsernames().get(i)).append(AnsiCodes.RESET)
+                        .append(" -> ");
+            } else {
+                m.append(model.getPlayerUsernames().get(i)).append(" -> ");
+            }
+        }
+        if (model.getPlayerUsernames().get(lastPlayer).equals(username))
+            m.append(AnsiCodes.GOLD).append(username).append(AnsiCodes.RESET);
+        else
+            m.append(model.getPlayerUsernames().get(lastPlayer));
+        return m.toString();
+    }
+
+    public String decksToString() {
+        return model.decksToString();
+    }
+
+    public String selfPlayAreaToString() {
+        return model.selfPlayAreaToString();
+    }
+
+    public String opponentPlayAreaToString(int index) {
+        return model.opponentPlayAreaToString(index);
     }
 }
