@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.tui.TUI;
@@ -26,7 +27,8 @@ public class ChooseConnectionState extends ViewState {
     public boolean handleInput(int input) {
         String ip;
         view.printMessage("Please provide the IP address or the URL of the server:");
-        ip = view.getInput();
+        ip = "127.0.0.1"; // FIXME for debug purposes forcing 127.0.0.1
+        // ip = view.getInput();
         switch (input) {
             case 1:
                 view.printMessage("Connecting with socket...");

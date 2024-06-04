@@ -3,10 +3,7 @@ package it.polimi.ingsw.viewModel.viewPlayer;
 import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.model.card.ObjectiveCard;
-import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Player;
-
-import java.io.Serializable;
 
 /**
  * Immutable representation of the self-{@link Player}.
@@ -30,6 +27,8 @@ public class SelfViewPlayer extends AbstractViewPlayer {
     public SelfViewPlayer(Player player) {
         super(player);
         this.playArea = new SelfViewPlayArea(player.getPlayArea());
+        ObjectiveCard secretObjective = player.getSecretObjective();
+        this.secretObjective = secretObjective == null ? null : new ImmObjectiveCard(secretObjective);
     }
 
     /**
@@ -61,8 +60,8 @@ public class SelfViewPlayer extends AbstractViewPlayer {
      * Sets the self-play area of the player.
      * @param playArea The play area to set.
      */
-    public void setPlayArea(PlayArea playArea) {
-        this.playArea = new SelfViewPlayArea(playArea);
+    public void setPlayArea(SelfViewPlayArea playArea) {
+        this.playArea = playArea;
     }
 
     /**

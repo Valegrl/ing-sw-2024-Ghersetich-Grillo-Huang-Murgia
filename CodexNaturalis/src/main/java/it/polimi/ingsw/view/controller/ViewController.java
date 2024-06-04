@@ -264,12 +264,24 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(OtherDrawCardEvent event) {
-
+        String player = event.getOtherDrawCardData().getOpponent();
+        model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
+        if (view.inGame() || view.inChat()) { // TODO handle in chat
+            view.handleResponse(event.getID(), null, event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(OtherPlaceCardEvent event) {
-
+        String player = event.getOtherPlaceCardData().getOpponent();
+        model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
+        if (view.inGame() || view.inChat()) { // TODO handle in chat
+            view.handleResponse(event.getID(), null, event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -357,7 +369,11 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(PlaceCardEvent event) {
-
+        if (view.inGame()) {
+            view.handleResponse(event.getID(), null, event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -703,11 +719,15 @@ public class ViewController implements ViewEventReceiver {
         return model.decksToString();
     }
 
+    public String objectiveCardsToString() {
+        return model.objectiveCardsToString();
+    }
+
     public String selfPlayAreaToString() {
         return model.selfPlayAreaToString();
     }
 
-    public String opponentPlayAreaToString(int index) {
-        return model.opponentPlayAreaToString(index);
+    public String opponentPlayAreaToString(String player) {
+        return model.opponentPlayAreaToString(player);
     }
 }

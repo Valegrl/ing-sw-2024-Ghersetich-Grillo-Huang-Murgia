@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.tui.state;
 
-import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
-import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -59,7 +57,24 @@ public class WaitForTurnState extends ViewState {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
+        switch (EventID.getByID(eventID)) {
+            case OTHER_PLACE_CARD, OTHER_DRAW_CARD:
+                showInfoMessage(message);
+                break;
+            case UPDATE_GAME_PLAYERS:
 
+                break;
+            case QUIT_GAME:
+                if (feedback == Feedback.SUCCESS) {
+
+                } else {
+                    view.printMessage(message);
+                    run();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void showVisibleDecks() {
@@ -76,15 +91,24 @@ public class WaitForTurnState extends ViewState {
         view.printMessage("Choose a player:");
         int choice = readChoiceFromInput(players);
         clearConsole();
-        view.printMessage(controller.opponentPlayAreaToString(choice - 1));
+        view.printMessage(controller.opponentPlayAreaToString(players.get(choice - 1)));
         waitInputToGoBack();
         run();
     }
 
     private void showObjectiveCards() {
         clearConsole();
-        // view.printMessage(controller.selfPlayer.objectiveCardsToString());
+        view.printMessage(controller.objectiveCardsToString());
         waitInputToGoBack();
+        run();
+    }
+
+    private void showInfoMessage(String message) {
+        clearConsole();
+        view.stopInputRead(true);
+        showResponseMessage(message, 1000);
+        view.clearInput();
+        view.stopInputRead(false);
         run();
     }
 

@@ -50,6 +50,9 @@ public class Controller {
      */
     private Controller() {
         gameControllers = new ArrayList<>();
+        // FIXME debug configuration
+        userAccounts.add(new Account("admin", "admin"));
+        userAccounts.add(new Account("user", "user"));
     }
 
     /**

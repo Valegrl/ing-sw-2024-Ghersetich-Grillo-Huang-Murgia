@@ -8,9 +8,9 @@ import it.polimi.ingsw.model.deck.factory.EvaluatorTypeAdapter;
 import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.CoordinateTypeAdapter;
 import it.polimi.ingsw.utils.LocalTimeTypeAdapter;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCardTypeAdapter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,7 +39,12 @@ public class RemoteServerSocket implements Server {
      */
     private final ObjectInputStream inputStream;
 
+    /**
+     * The client that this {@code RemoteServerSocket} is connected to.
+     */
     private final Client client;
+
+    private final Gson gson;
 
     /**
      * Creates a new {@code RemoteServerSocket} with the given IP address and port number.
@@ -61,6 +66,13 @@ public class RemoteServerSocket implements Server {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.gson = new GsonBuilder()
+                .enableComplexMapKeySerialization()
+                .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+                .registerTypeAdapter(Coordinate.class, new CoordinateTypeAdapter())
+                .registerTypeAdapter(Event.class, new EventTypeAdapter())
+                .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
+                .create();
     }
 
     /**
@@ -74,11 +86,6 @@ public class RemoteServerSocket implements Server {
     @Override
     public void direct(Event event, Client client) throws RemoteException {
         try {
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
-                    .registerTypeAdapter(Event.class, new EventTypeAdapter())
-                    .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
-                    .create();
             String jsonString = gson.toJson(event);
             outputStream.writeUTF(jsonString);
             outputStream.flush();
@@ -97,12 +104,6 @@ public class RemoteServerSocket implements Server {
         try {
             if (!socket.isClosed()) {
                 String jsonString = inputStream.readUTF();
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
-                        .registerTypeAdapter(Event.class, new EventTypeAdapter())
-                        .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
-                        .registerTypeAdapter(ImmPlayableCard.class, new ImmPlayableCardTypeAdapter())
-                        .create();
                 Event event = gson.fromJson(jsonString, Event.class);
                 client.report(event);
             }

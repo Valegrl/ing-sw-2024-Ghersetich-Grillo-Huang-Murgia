@@ -1,7 +1,6 @@
 package it.polimi.ingsw.viewModel.immutableCard;
 
 import com.google.gson.*;
-import it.polimi.ingsw.model.card.CardType;
 
 import java.lang.reflect.Type;
 

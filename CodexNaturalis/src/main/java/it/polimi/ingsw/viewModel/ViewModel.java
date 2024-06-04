@@ -47,9 +47,9 @@ public class ViewModel implements Serializable, CardConverter {
     private ImmPlayableCard[] visibleGoldCards;
 
     /**
-     * The list of opponents.
+     * The Map of opponents.
      */
-    private final List<ViewPlayer> opponents;
+    private final Map<String, ViewPlayer> opponents;
 
     /**
      * The self-player.
@@ -98,7 +98,7 @@ public class ViewModel implements Serializable, CardConverter {
         this.opponents = model.getPlayers().stream()
                 .filter(player -> !player.getUsername().equals(username))
                 .map(ViewPlayer::new)
-                .toList();
+                .collect(Collectors.toMap(ViewPlayer::getUsername, viewPlayer -> viewPlayer));
         this.selfPlayer = new SelfViewPlayer(model.getPlayerFromUsername(username));
         this.playerUsernames = model.getPlayerUsernames();
         this.turnPlayerIndex = model.getTurnPlayerIndex();
@@ -152,12 +152,34 @@ public class ViewModel implements Serializable, CardConverter {
     }
 
     /**
+     * Converts the objective cards (common and self-player secret objective) to a string representation.
+     * @return A string representation of the objective cards.
+     */
+    public String objectiveCardsToString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Common Objectives:\n");
+        for (int i = 0; i < commonObjectives.length; i++) {
+            sb.append("  ")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(commonObjectives[i].printCard(5))
+                    .append("\n");
+        }
+        sb.append("Private Objective:\n");
+        sb.append("  ")
+                .append("1) ")
+                .append(selfPlayer.getSecretObjective().printCard(5))
+                .append("\n");
+        return sb.toString();
+    }
+
+    /**
      * Converts an opponent's play area to a string representation.
-     * @param index The index of the chosen opponent.
+     * @param player The username of the chosen opponent.
      * @return A string representation of the opponent's play area.
      */
-    public String opponentPlayAreaToString(int index) {
-        return opponents.get(index).playAreaToString();
+    public String opponentPlayAreaToString(String player) {
+        return opponents.get(player).playAreaToString();
     }
 
     /**
@@ -209,11 +231,20 @@ public class ViewModel implements Serializable, CardConverter {
     }
 
     /**
-     * Retrieves the list of opponents.
+     * Retrieves the map of opponents.
      * @return {@link ViewModel#opponents}.
      */
-    public List<ViewPlayer> getOpponents() {
+    public Map<String, ViewPlayer> getOpponentsMap() {
         return opponents;
+    }
+
+    /**
+     * Retrieves an opponent.
+     * @param username The username of the opponent to be retrieved.
+     * @return The opponent with the given username.
+     */
+    public ViewPlayer getOpponent(String username) {
+        return opponents.get(username);
     }
 
     /**

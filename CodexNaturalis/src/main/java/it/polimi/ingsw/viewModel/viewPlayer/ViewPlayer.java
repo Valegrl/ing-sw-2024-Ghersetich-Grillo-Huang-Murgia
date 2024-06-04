@@ -44,7 +44,7 @@ public class ViewPlayer extends AbstractViewPlayer {
      * Sets the play area of the player.
      * @param playArea the play area to set
      */
-    public void setPlayArea(PlayArea playArea) {
-        this.playArea = new ViewPlayArea(playArea);
+    public void setPlayArea(ViewPlayArea playArea) {
+        this.playArea = playArea;
     }
 }

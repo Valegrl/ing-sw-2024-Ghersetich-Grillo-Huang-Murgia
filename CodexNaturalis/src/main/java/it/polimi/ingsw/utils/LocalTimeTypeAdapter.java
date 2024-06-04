@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalTimeTypeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
+    @Override
     public JsonElement serialize(LocalTime time, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(time.format(DateTimeFormatter.ofPattern("HH:mm")));
     }

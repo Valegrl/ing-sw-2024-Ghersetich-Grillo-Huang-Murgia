@@ -55,7 +55,7 @@ public class MenuState extends ViewState {
         switch (EventID.getByID(eventID)) {
             case EventID.CREATE_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
+                    showResponseMessage(message, 1000);
                     transition(new LobbyState(view));
                 } else {
                     showResponseMessage("Lobby creation failed: " + message, 2000);
@@ -73,7 +73,7 @@ public class MenuState extends ViewState {
                 break;
             case EventID.JOIN_LOBBY:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
+                    showResponseMessage(message, 1000);
                     transition(new LobbyState(view));
                 } else {
                     showResponseMessage("Failed to join lobby: " + message, 2000);

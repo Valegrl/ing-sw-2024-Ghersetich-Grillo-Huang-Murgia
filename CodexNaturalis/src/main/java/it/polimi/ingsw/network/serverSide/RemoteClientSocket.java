@@ -8,9 +8,9 @@ import it.polimi.ingsw.model.deck.factory.EvaluatorTypeAdapter;
 import it.polimi.ingsw.model.evaluator.Evaluator;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.CoordinateTypeAdapter;
 import it.polimi.ingsw.utils.LocalTimeTypeAdapter;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCardTypeAdapter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -43,6 +43,8 @@ public class RemoteClientSocket implements Client {
      */
     private final Socket socket;
 
+    private final Gson gson;
+
     /**
      * Creates a new {@code RemoteClientSocket} with the given {@code Socket} and {@code Server}.
      *
@@ -58,6 +60,13 @@ public class RemoteClientSocket implements Client {
         } catch (IOException e) {
             throw new RemoteException();
         }
+        this.gson = new GsonBuilder()
+                .enableComplexMapKeySerialization()
+                .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+                .registerTypeAdapter(Coordinate.class, new CoordinateTypeAdapter())
+                .registerTypeAdapter(Event.class, new EventTypeAdapter())
+                .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
+                .create();
     }
 
     /**
@@ -71,11 +80,6 @@ public class RemoteClientSocket implements Client {
     public void report(Event event) throws RemoteException {
         try {
             if (!socket.isClosed()) {
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
-                        .registerTypeAdapter(Event.class, new EventTypeAdapter())
-                        .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
-                        .create();
                 String jsonString = gson.toJson(event);
 
                 String id = event.getID();//FIXME just for testing
@@ -93,22 +97,13 @@ public class RemoteClientSocket implements Client {
     /**
      * Receives an event from the {@code RemoteServerSocket} through the {@code ObjectInputStream}.
      * The message is deserialized into an {@code Event} and forwarded to the {@code ServerManager}.
-     *
-     * @throws RemoteException if any I/O error occurs.
      */
     public void readStream(){
         try {
             String jsonString = inputStream.readUTF();
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
-                    .registerTypeAdapter(Event.class, new EventTypeAdapter())
-                    .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
-                    .registerTypeAdapter(ImmPlayableCard.class, new ImmPlayableCardTypeAdapter())
-                    .create();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
-
-            String id = event.getID();//FIXME just for testing
+            String id = event.getID(); // FIXME just for testing
             if (!(id.equals("PONG") || id.equals("PING")))
                 System.out.println(socket.getPort() + " IN: "+ id);
 
