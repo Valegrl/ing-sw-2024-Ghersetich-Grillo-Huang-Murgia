@@ -11,6 +11,8 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.CoordinateTypeAdapter;
 import it.polimi.ingsw.utils.LocalTimeTypeAdapter;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCardTypeAdapter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,6 +72,7 @@ public class RemoteServerSocket implements Server {
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
                 .registerTypeAdapter(Coordinate.class, new CoordinateTypeAdapter())
+                .registerTypeAdapter(ImmPlayableCard.class, new ImmPlayableCardTypeAdapter())
                 .registerTypeAdapter(Event.class, new EventTypeAdapter())
                 .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
                 .create();

@@ -21,6 +21,9 @@ import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
+import it.polimi.ingsw.viewModel.turnAction.draw.SelfDrawCardData;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 
 import java.rmi.RemoteException;
@@ -249,23 +252,45 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfDrawCardEvent event) {
-
+        model.getSelfPlayer().getPlayArea().setHand(event.getMyDrawCardData().getHand());
+        drawCardUpdateModel(event.getMyDrawCardData());
+        if (view.inGame()) {
+            view.handleResponse(event.getID(), null, event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(SelfPlaceCardEvent event) {
-
+        model.getSelfPlayer().setPlayArea(event.getMyPlaceCardData().getPlayArea());
+        if (view.inGame()) {
+            view.handleResponse(event.getID(), null, event.getMessage());
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(NewTurnEvent event) {
+        model.setTurnPlayerIndex(event.getTurnIndex());
+        model.setGameStatus(event.getGameStatus());
 
+        if (view.inGame() || view.inChat()) { // TODO handle in chat
+            String message;
+            if (hasTurn()) message = "It's your turn to place a card!";
+            else message = "New turn!";
+            view.handleResponse(event.getID(), null, message);
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
     public void evaluateEvent(OtherDrawCardEvent event) {
         String player = event.getOtherDrawCardData().getOpponent();
         model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
+        drawCardUpdateModel(event.getOtherDrawCardData());
         if (view.inGame() || view.inChat()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -354,13 +379,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(DrawCardEvent event) {
-        if(view.inGame()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
-                //TODO Update self playArea;
-            }
-            else{
-
-            }
+        if (view.inGame()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -370,7 +389,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(PlaceCardEvent event) {
         if (view.inGame()) {
-            view.handleResponse(event.getID(), null, event.getMessage());
+            view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -640,6 +659,18 @@ public class ViewController implements ViewEventReceiver {
         return model;
     }
 
+    public int getSelfHandSize() {
+        return model.getSelfPlayer().getPlayArea().getHand().size();
+    }
+
+    public ImmPlayableCard getSelfHandCard(int index) {
+        return model.getSelfPlayer().getPlayArea().getHand().get(index);
+    }
+
+    public String getAvailablePositions() {
+        return model.getSelfPlayer().getPlayArea().printAvailablePos();
+    }
+
     public List<LobbyState> getOfflineGames() {
         return offlineGames;
     }
@@ -729,5 +760,13 @@ public class ViewController implements ViewEventReceiver {
 
     public String opponentPlayAreaToString(String player) {
         return model.opponentPlayAreaToString(player);
+    }
+
+    private void drawCardUpdateModel(DrawCardData data) {
+        model.setGameStatus(data.getGameStatus());
+        model.setTopGoldDeck(data.getTopGoldDeck());
+        model.setTopResourceDeck(data.getTopResourceDeck());
+        model.setVisibleGoldCards(data.getVisibleGoldCards());
+        model.setVisibleResourceCards(data.getVisibleResourceCards());
     }
 }
