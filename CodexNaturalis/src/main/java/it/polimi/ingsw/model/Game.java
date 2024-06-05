@@ -150,8 +150,11 @@ public class Game {
 
         this.turnPlayerIndex = 0;
 
+        List<String> playerNames = new ArrayList<>(usernames);
+        Collections.shuffle(playerNames);
+
         this.players = new ArrayList<>();
-        for (String user : usernames)
+        for (String user : playerNames)
             this.players.add(new Player(user));
 
         this.scoreboard = new HashMap<>();
