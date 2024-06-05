@@ -42,6 +42,25 @@ public abstract class FXMLController {
      */
     public void transition(FXMLController nextController) {
         view.setFXMLController(nextController);
+
+        /*
+        if(view.getFXMLController() instanceof MainMenuController)
+            System.out.println("Main menu controller");
+        if(view.getFXMLController() instanceof ChooseConnectionController)
+            System.out.println("Choose connection menu controller");
+        if(view.getFXMLController() instanceof LoginController)
+            System.out.println("Login menu controller");
+        if(view.getFXMLController() instanceof MenuController)
+            System.out.println("Menu controller");
+        if(view.getFXMLController() instanceof EnterLobbiesController)
+            System.out.println("Enter lobbies controller");
+        if(view.getFXMLController() instanceof LobbyController)
+            System.out.println("Lobby menu controller");
+        if(view.getFXMLController() instanceof GameSetupController)
+            System.out.println("Game setup controller");
+         */
+
+
         this.controller = view.getController();
         nextController.run(view, stage);
     }

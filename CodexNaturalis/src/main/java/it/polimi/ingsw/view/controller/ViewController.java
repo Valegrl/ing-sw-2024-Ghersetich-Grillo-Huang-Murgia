@@ -823,4 +823,8 @@ public class ViewController implements ViewEventReceiver {
             return model.getSelfPlayer().getPlayArea().getAvailablePos().contains(c);
         }
     }
+
+    public ViewStartSetup getSetup(){
+        return this.setup;
+    }
 }

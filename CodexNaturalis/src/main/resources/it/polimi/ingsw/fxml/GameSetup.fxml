@@ -16,7 +16,7 @@
    <top>
       <AnchorPane minHeight="48.0" minWidth="1920.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lobbyName" alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" minHeight="40.0" minWidth="900.0" prefWidth="896.0" text="Lobby: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label id="lobbyLabel" fx:id="lobbyName" alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" minHeight="40.0" minWidth="900.0" prefWidth="896.0" text="Lobby: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <opaqueInsets>
                   <Insets left="20.0" />
                </opaqueInsets>
@@ -39,9 +39,9 @@
                         <Label minWidth="400.0" text="Hand:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <HBox alignment="CENTER_RIGHT" layoutX="825.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
+                              <ImageView fx:id="handCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                               <ImageView fx:id="handCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                               <ImageView fx:id="handCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="handCard3" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                            <padding>
                               <Insets right="40.0" />
@@ -63,8 +63,8 @@
                               <Insets right="40.0" />
                            </padding>
                            <children>
+                              <ImageView fx:id="commonObjectiveCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                               <ImageView fx:id="commonObjectiveCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="commonObjectiveCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
@@ -80,8 +80,8 @@
                               <Insets right="40.0" />
                            </padding>
                            <children>
+                              <ImageView fx:id="secretObjectiveCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                               <ImageView fx:id="secretObjectiveCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="secretObjectiveCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
@@ -122,7 +122,7 @@
                   <VBox id="vboxChat" alignment="CENTER" minHeight="600.0" spacing="20.0">
                      <children>
                         <Label text="Chat" />
-                        <TextArea fx:id="chatArea" editable="false" maxHeight="300.0" maxWidth="250.0" minHeight="300.0" />
+                        <TextArea fx:id="chatArea" editable="false" maxHeight="300.0" maxWidth="250.0" minHeight="300.0" wrapText="true" />
                         <TextField fx:id="chatInput" maxWidth="250.0" minHeight="40.0" />
                         <Button mnemonicParsing="false" text="Send" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -167,11 +167,11 @@
       </AnchorPane>
    </right>
    <bottom>
-      <AnchorPane maxHeight="100.0" minHeight="50.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="100.0" minHeight="60.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" minHeight="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox id="quitButton" alignment="CENTER" minHeight="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#quit" text="Quit" />
+                  <Button id="quitButton" minHeight="80.0" mnemonicParsing="false" onAction="#quit" prefWidth="100.0" text="Quit" />
                </children></HBox>
          </children>
       </AnchorPane>
@@ -184,17 +184,17 @@
                   <VBox id="vboxResource" alignment="TOP_CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label text="Resource cards" />
-                        <ImageView fx:id="resourceCardTop" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="resourceCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="resourceCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="resourceDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                   <VBox id="vboxGold" alignment="TOP_CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label text="Gold cards" />
-                        <ImageView fx:id="goldCardTop" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="goldCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="goldCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="goldDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                </children>
