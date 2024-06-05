@@ -594,9 +594,7 @@ public class Game {
             return false;
 
         player.setSecretObjective(objectiveCard);
-
-        if (flipStartCard)
-            player.getPlayArea().getStartCard().flipCard();
+        player.getPlayArea().flipStartCard(flipStartCard);
 
         return true;
     }
