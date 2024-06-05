@@ -6,6 +6,47 @@
     -fx-background-color: grey;
 }
 
+/*Could use the class for VBOX and HBOX but that means I can't do them in a modular way*/
+#vboxChat{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
+#vboxSetup{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
+#vboxResource{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
+#vboxGold{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
+#vboxMain{
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    /*  -fx-effect: dropshadow(gaussian, #0D0D0D, 10, 0.5, 0, 0);*/
+    -fx-border-width: 5;
+}
+
 .label{
     -fx-text-fill: #ffffff;
     -fx-font-family: "BebasNeuePro-Regular";

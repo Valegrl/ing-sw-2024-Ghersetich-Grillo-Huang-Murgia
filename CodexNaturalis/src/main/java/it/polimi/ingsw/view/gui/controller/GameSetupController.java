@@ -1,16 +1,30 @@
 package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
+import it.polimi.ingsw.utils.ChatMessage;
+import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class GameSetupController extends FXMLController {
+
+    @FXML
+    private Label lobbyName;
+
+    @FXML
+    private ImageView resourceCardTop;
 
     @FXML
     private ImageView resourceCard1;
@@ -18,8 +32,9 @@ public class GameSetupController extends FXMLController {
     @FXML
     private ImageView resourceCard2;
 
+
     @FXML
-    private ImageView resourceCardTop;
+    private ImageView goldCardTop;
 
     @FXML
     private ImageView goldCard1;
@@ -27,9 +42,8 @@ public class GameSetupController extends FXMLController {
     @FXML
     private ImageView goldCard2;
 
-    @FXML
-    private ImageView goldCardTop;
 
+    //Hand cards.
     @FXML
     private ImageView handCard1;
 
@@ -38,6 +52,7 @@ public class GameSetupController extends FXMLController {
 
     @FXML
     private ImageView handCard3;
+
 
     @FXML
     private ImageView commonObjectiveCard1;
@@ -57,6 +72,13 @@ public class GameSetupController extends FXMLController {
     @FXML
     private ImageView startCardBack;
 
+    //Chat option buttons.
+    @FXML
+    private TextArea chatArea;
+
+    @FXML
+    private TextField chatInput;
+
     @FXML
     private RadioButton generalRadioButton;
 
@@ -69,17 +91,18 @@ public class GameSetupController extends FXMLController {
     @FXML
     private RadioButton radioButton3;
 
+
     @FXML
     private Button yourSetupButton;
+
+    @FXML
+    private Button setupButton1;
 
     @FXML
     private Button setupButton2;
 
     @FXML
     private Button setupButton3;
-
-    @FXML
-    private Button setupButton4;
 
 
     public GameSetupController(){
@@ -91,6 +114,9 @@ public class GameSetupController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
+
+        setLobbyName(controller.getLobbyId());
+        chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
 
     }
 
@@ -111,5 +137,36 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * Method to set the name of the lobby so that the player can see the lobby's name.
+     *
+     * @param lobbyName the name of the lobby
+     */
+    public void setLobbyName(String lobbyName) {
+        this.lobbyName.setText("LOBBY: " + lobbyName);
+    }
 
+    /**
+     * This method is used to submit a private message if the selected radio button for chat is a specific user.
+     */
+    private void sendPrivateMessage(String username, String message){
+        if(controller.getPlayersStatus().containsKey(username)) {
+            controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
+        }
+        else{
+            System.out.println("Error: player not in match");
+        }
+    }
+
+    /**
+     * This method is used to submit a private message if the selected radio button for chat is general.
+     */
+    private void sendPublicMessage(String message){
+        controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
+    }
+
+    @FXML
+    public void quit(){
+
+    }
 }
