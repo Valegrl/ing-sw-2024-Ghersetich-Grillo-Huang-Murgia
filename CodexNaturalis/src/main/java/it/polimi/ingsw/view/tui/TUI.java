@@ -95,6 +95,7 @@ public class TUI implements View {
             if (!stopInputRead)
                 while(input.isEmpty() || input.equals("-1"))
                     input = in.readLine();
+            else return "$stop";
         } catch (InterruptedException e) {
             waitingForInput = false;
             return null;
@@ -106,6 +107,33 @@ public class TUI implements View {
             state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
             MainClient.restartTUI();
             return "$stop";
+        }
+        waitingForInput = false;
+        return input;
+    }
+
+    public String getIntFromInput() {
+        waitingForInput = true;
+        String input = "";
+        try {
+            while (!in.ready() && !stopInputRead) {
+                Thread.sleep(200);
+            }
+            if (!stopInputRead)
+                while(input.isEmpty())
+                    input = in.readLine();
+            else return "$stop";
+        } catch (InterruptedException e) {
+            waitingForInput = false;
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (stopInputRead && serverDisconnected) {
+            clearConsole();
+            state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
+            MainClient.restartTUI();
+            return null;
         }
         waitingForInput = false;
         return input;

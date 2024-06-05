@@ -32,11 +32,6 @@ public class DrawCardEvent extends FeedbackEvent {
     private CardType cardType;
 
     /**
-     * The message associated with the event.
-     */
-    private String message;
-
-    /**
      * Constructor for the client side (View). New DrawCardEvent with a card type and index.
      *
      * @param cardType The type of the card drawn.
@@ -56,7 +51,6 @@ public class DrawCardEvent extends FeedbackEvent {
      */
     public DrawCardEvent(Feedback feedback, String message) {
         super(id, feedback, message);
-        this.message = message;
         this.cardType = null;
     }
 
@@ -72,13 +66,6 @@ public class DrawCardEvent extends FeedbackEvent {
      */
     public CardType getCardType() {
         return cardType;
-    }
-
-    /**
-     * @return The message associated with the event.
-     */
-    public String getMessage() {
-        return message;
     }
 
     @Override

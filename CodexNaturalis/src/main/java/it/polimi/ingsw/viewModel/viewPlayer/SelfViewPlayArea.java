@@ -53,7 +53,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         this.playedCards = playArea.getPlayedCards().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
-                        entry -> new ImmPlayableCard(entry.getValue())
+                        entry -> this.convertToImmCardType(entry.getValue())
                 ));
         this.uncoveredItems = new LinkedHashMap<>(playArea.getUncoveredItems());
         if (playArea.getSelectedCard().key() == null)
@@ -111,10 +111,10 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
     }
 
     /**
-     * Returns a String representation of the available positions where the player can place a card.
-     * @return The string representation of the available positions.
+     * Returns the available positions where the player can place a card.
+     * @return The list of available positions.
      */
-    public String printAvailablePos(){
+    public List<Coordinate> getAvailablePos(){
         StringBuilder sb = new StringBuilder();
         sb.append("Player's available positions: \n");
 
@@ -156,18 +156,21 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         }
 
         okPos.removeAll(notOkPos);
+        return okPos.stream().toList();
+    }
 
-        List<Coordinate> availablePositions = new ArrayList<>(okPos);
+    public String printAvailablePos() {
+        List<Coordinate> availablePos = getAvailablePos();
+        StringBuilder sb = new StringBuilder("  ");
         int num = 0;
-        for(Coordinate i : availablePositions){
+        for(Coordinate i : availablePos){
             sb.append(i);
             num++;
 
             if(num == 4){
-                sb.append("\n");
+                sb.append("\n  ");
                 num = 0;
-            }
-            else{
+            } else {
                 sb.append(" - ");
             }
         }
@@ -204,7 +207,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
             ImmPlayableCard card = entry.getValue();
             cardString.append("  ").append(coordinate).append(" -> ");
             currIndent = cardString.length();
-            cardString.append(Item.itemToColor(card.getPermanentResource(), card.getId())).append("\n")
+            cardString.append(card).append("\n")
                     .append(card.printPlacedCard(currIndent));
             sb.append(cardString);
         }

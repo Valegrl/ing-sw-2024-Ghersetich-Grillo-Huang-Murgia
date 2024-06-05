@@ -23,6 +23,8 @@ public interface View {
 
     String getInput();
 
+    String getIntFromInput();
+
     ViewController getController();
 
     String getUsername();

@@ -33,7 +33,7 @@ class CardTypeTest {
 
     @Test
     void testTypeToColor() {
-        assertEquals(AnsiCodes.GOLD_BACKGROUND, CardType.GOLD.TypeToColor());
-        assertEquals("", CardType.RESOURCE.TypeToColor());
+        assertEquals(AnsiCodes.GOLD_BACKGROUND, CardType.GOLD.typeToColor());
+        assertEquals("", CardType.RESOURCE.typeToColor());
     }
 }

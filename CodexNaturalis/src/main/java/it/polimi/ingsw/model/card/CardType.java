@@ -37,7 +37,7 @@ public enum CardType implements Serializable {
      *
      * @return The color code associated to this CardType.
      */
-    public String TypeToColor() {
+    public String typeToColor() {
         if (this == GOLD) {
             return AnsiCodes.GOLD_BACKGROUND;
         } else {

@@ -50,6 +50,6 @@ public class BackPlayableCard implements Serializable {
 
     @Override
     public String toString() {
-        return cardType.TypeToColor() + Item.itemToColor(item) + AnsiCodes.RESET;
+        return cardType.typeToColor() + Item.itemToColor(item) + AnsiCodes.RESET;
     }
 }

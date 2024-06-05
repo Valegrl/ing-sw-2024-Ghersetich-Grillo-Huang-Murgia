@@ -51,29 +51,29 @@ public class GameSetupState extends ViewState {
                 // See your assigned setup
                 clearConsole();
                 showResponseMessage(handMessage, 500);
-                waitInputToGoBack();
-                showSetupChoices();
+                if(waitInputToGoBack())
+                    showSetupChoices();
                 break;
             case 3:
                 // See common objectives
                 clearConsole();
                 showResponseMessage(commObjectivesMessage, 500);
-                waitInputToGoBack();
-                showSetupChoices();
+                if(waitInputToGoBack())
+                    showSetupChoices();
                 break;
             case 4:
                 // See visible decks
                 clearConsole();
                 showResponseMessage(decksMessage, 500);
-                waitInputToGoBack();
-                showSetupChoices();
+                if(waitInputToGoBack())
+                    showSetupChoices();
                 break;
             case 5:
                 // See opponents' hands
                 clearConsole();
                 showResponseMessage(opponentsHandsMessage, 500);
-                waitInputToGoBack();
-                showSetupChoices();
+                if(waitInputToGoBack())
+                    showSetupChoices();
                 break;
             case 6:
                 inChat = true;

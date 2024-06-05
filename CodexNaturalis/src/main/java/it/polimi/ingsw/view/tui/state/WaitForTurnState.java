@@ -3,12 +3,10 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class WaitForTurnState extends ViewState {
+public class WaitForTurnState extends GameState {
     public WaitForTurnState(View view) {
         super(view);
     }
@@ -16,6 +14,7 @@ public class WaitForTurnState extends ViewState {
     @Override
     public void run() {
         clearConsole();
+        setCurrentPlayAreaUsername(controller.getUsername());
         view.printMessage("Player turns: " + controller.playersListToString());
         view.printMessage("Waiting for your turn. . .  \n");
 
@@ -58,15 +57,31 @@ public class WaitForTurnState extends ViewState {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
-            case OTHER_PLACE_CARD, OTHER_DRAW_CARD:
+            case OTHER_PLACE_CARD, UPDATE_GAME_PLAYERS:
                 showInfoMessage(message);
                 break;
-            case UPDATE_GAME_PLAYERS:
-
+            case OTHER_DRAW_CARD:
+                clearConsole();
+                view.stopInputRead(true);
+                view.printMessage(message);
+                view.clearInput();
+                view.stopInputRead(false);
+                break;
+            case NEW_TURN:
+                clearConsole();
+                view.stopInputRead(true);
+                showResponseMessage(message, 1000);
+                view.clearInput();
+                view.stopInputRead(false);
+                if (controller.hasTurn())
+                    transition(new PlaceCardState(view));
+                else
+                    run();
                 break;
             case QUIT_GAME:
                 if (feedback == Feedback.SUCCESS) {
-
+                    showResponseMessage(message, 1500);
+                    transition(new MenuState(view));
                 } else {
                     view.printMessage(message);
                     run();
@@ -75,41 +90,6 @@ public class WaitForTurnState extends ViewState {
             default:
                 break;
         }
-    }
-
-    private void showVisibleDecks() {
-        clearConsole();
-        view.printMessage(controller.decksToString());
-        waitInputToGoBack();
-        run();
-    }
-
-    private void showOtherPlayerPlayArea() {
-        clearConsole();
-        List<String> players = controller.getModel().getPlayerUsernames();
-        players.remove(controller.getUsername());
-        view.printMessage("Choose a player:");
-        int choice = readChoiceFromInput(players);
-        clearConsole();
-        view.printMessage(controller.opponentPlayAreaToString(players.get(choice - 1)));
-        waitInputToGoBack();
-        run();
-    }
-
-    private void showObjectiveCards() {
-        clearConsole();
-        view.printMessage(controller.objectiveCardsToString());
-        waitInputToGoBack();
-        run();
-    }
-
-    private void showInfoMessage(String message) {
-        clearConsole();
-        view.stopInputRead(true);
-        showResponseMessage(message, 1000);
-        view.clearInput();
-        view.stopInputRead(false);
-        run();
     }
 
     @Override

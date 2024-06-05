@@ -57,7 +57,7 @@ public abstract class ViewState {
         int input = -1;
         String inputString;
         while (true) {
-            inputString = view.getInput();
+            inputString = view.getIntFromInput();
             if (inputString.equals("$stop")) {
                 input = 0;
             } else if (!inputString.isEmpty()) {
@@ -105,9 +105,13 @@ public abstract class ViewState {
         }
     }
 
-    protected void waitInputToGoBack() {
+    /**
+     * @return true if the user wants to go back, false if the read has been interrupted
+     */
+    protected boolean waitInputToGoBack() {
         view.printMessage("Press and enter any key to go back: ");
-        view.getInput();
+        String in = view.getInput();
+        return !in.equals("$stop");
     }
 
     protected void clearConsole() {

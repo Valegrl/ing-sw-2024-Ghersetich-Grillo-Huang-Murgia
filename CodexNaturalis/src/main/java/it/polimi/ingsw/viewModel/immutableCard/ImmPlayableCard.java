@@ -114,4 +114,9 @@ public class ImmPlayableCard extends ImmEvaluableCard implements CardToString {
           .append("BL: ").append(Item.itemToColor(corners[CornerIndex.BL.getIndex()])).append("  BR: ").append(Item.itemToColor(corners[CornerIndex.BR.getIndex()])).append("\n");
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return getId();
+    }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.evaluator.CornerEvaluator;
+import it.polimi.ingsw.utils.AnsiCodes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     @Override
     public String printCard(int indent) {
         StringBuilder sb = new StringBuilder();
-        sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append("GoldCard: ").append(this).append("\n");
         sb.append(" ".repeat(indent));
         sb.append("  Points: ").append(this.getPoints()).append("\n");
 
@@ -91,9 +92,14 @@ public final class ImmGoldCard extends ImmPlayableCard implements CardToString {
     @Override
     public String printCardBack() {
         StringBuilder sb = new StringBuilder();
-        sb.append("GoldCard: ").append(Item.itemToColor(this.getPermanentResource(), this.getId())).append("\n");
+        sb.append("GoldCard: ").append(this).append("\n");
         sb.append("  Corners: \n");
         sb.append("    TL: empty").append("  TR: empty\n").append("    BL: empty").append("  BR: empty\n");
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return CardType.GOLD.typeToColor() + Item.itemToColor(getPermanentResource(), getId()) + AnsiCodes.RESET;
     }
 }

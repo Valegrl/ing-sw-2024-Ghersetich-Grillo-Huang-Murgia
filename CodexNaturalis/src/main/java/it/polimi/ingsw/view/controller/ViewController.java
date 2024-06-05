@@ -15,6 +15,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.viewModel.ViewModel;
@@ -23,8 +24,6 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
-import it.polimi.ingsw.viewModel.turnAction.draw.SelfDrawCardData;
-import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -109,6 +108,9 @@ public class ViewController implements ViewEventReceiver {
      * The {@link ViewModel} for the current game.
      */
     private ViewModel model;
+
+
+    private final Object modelLock = new Object();
 
     /**
      * The constructor for the ViewController class.
@@ -252,8 +254,10 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfDrawCardEvent event) {
-        model.getSelfPlayer().getPlayArea().setHand(event.getMyDrawCardData().getHand());
-        drawCardUpdateModel(event.getMyDrawCardData());
+        synchronized (modelLock) {
+            model.getSelfPlayer().getPlayArea().setHand(event.getMyDrawCardData().getHand());
+            drawCardUpdateModel(event.getMyDrawCardData());
+        }
         if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -263,7 +267,9 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfPlaceCardEvent event) {
-        model.getSelfPlayer().setPlayArea(event.getMyPlaceCardData().getPlayArea());
+        synchronized (modelLock) {
+            model.getSelfPlayer().setPlayArea(event.getMyPlaceCardData().getPlayArea());
+        }
         if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -273,13 +279,13 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(NewTurnEvent event) {
-        model.setTurnPlayerIndex(event.getTurnIndex());
-        model.setGameStatus(event.getGameStatus());
+        synchronized (modelLock) {
+            model.setTurnPlayerIndex(event.getTurnIndex());
+            model.setGameStatus(event.getGameStatus());
+        }
 
         if (view.inGame() || view.inChat()) { // TODO handle in chat
-            String message;
-            if (hasTurn()) message = "It's your turn to place a card!";
-            else message = "New turn!";
+            String message = "New turn!";
             view.handleResponse(event.getID(), null, message);
         } else {
             System.out.println("Game state: event in wrong state");
@@ -289,8 +295,10 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(OtherDrawCardEvent event) {
         String player = event.getOtherDrawCardData().getOpponent();
-        model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
-        drawCardUpdateModel(event.getOtherDrawCardData());
+        synchronized (modelLock) {
+            model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
+            drawCardUpdateModel(event.getOtherDrawCardData());
+        }
         if (view.inGame() || view.inChat()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -301,7 +309,9 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(OtherPlaceCardEvent event) {
         String player = event.getOtherPlaceCardData().getOpponent();
-        model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
+        synchronized (modelLock) {
+            model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
+        }
         if (view.inGame() || view.inChat()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -316,7 +326,9 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLocalModelEvent event) {
-        model = event.getModel();
+        synchronized (modelLock) {
+            model = event.getModel();
+        }
         if (view.inGame() || view.inChat()) {
             view.handleResponse(event.getID(), null, "Game started!");
         } else {
@@ -326,9 +338,12 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(AvailablePositionsEvent event) {
+        String avPosMessage;
+        synchronized (modelLock) {
+            avPosMessage = model.getSelfPlayer().getPlayArea().printAvailablePos();
+        }
         if(view.inGame()) {
-            SelfViewPlayArea selfVPA = model.getSelfPlayer().getPlayArea();
-            view.handleResponse(event.getID(), null, selfVPA.printAvailablePos());
+            view.handleResponse(event.getID(), null, avPosMessage);
         } else {
             System.out.println("Game state: event in the wrong state");
         }
@@ -634,13 +649,15 @@ public class ViewController implements ViewEventReceiver {
     }
 
     private void clearViewData() {
-        model = null;
-        playersStatus = null;
-        lobbyId = null;
-        setup = null;
-        availableTokens = null;
-        chatMessages.clear();
-        privateChatMessages.clear();
+        synchronized (modelLock) {
+            model = null;
+            playersStatus = null;
+            lobbyId = null;
+            setup = null;
+            availableTokens = null;
+            chatMessages.clear();
+            privateChatMessages.clear();
+        }
     }
 
     public String getUsername() {
@@ -656,19 +673,33 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public ViewModel getModel() {
-        return model;
+        return new ViewModel(model);
+    }
+
+    public List<String> getPlayerUsernames() {
+        synchronized (modelLock) {
+            return model.getPlayerUsernames();
+        }
     }
 
     public int getSelfHandSize() {
-        return model.getSelfPlayer().getPlayArea().getHand().size();
+        synchronized (modelLock) {
+            return model.getSelfPlayer().getPlayArea().getHand().size();
+        }
     }
 
     public ImmPlayableCard getSelfHandCard(int index) {
-        return model.getSelfPlayer().getPlayArea().getHand().get(index);
+        synchronized (modelLock) {
+            return model.getSelfPlayer().getPlayArea().getHand().get(index);
+        }
     }
 
-    public String getAvailablePositions() {
-        return model.getSelfPlayer().getPlayArea().printAvailablePos();
+    public List<String> getSelfHandCardIds() {
+        synchronized (modelLock) {
+            return model.getSelfPlayer().getPlayArea().getHand().stream()
+                    .map(c -> Item.itemToColor(c.getPermanentResource(), c.getId()))
+                    .toList();
+        }
     }
 
     public List<LobbyState> getOfflineGames() {
@@ -684,7 +715,9 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public GameStatus getGameStatus() {
-        return model.getGameStatus();
+        synchronized (modelLock) {
+            return model.getGameStatus();
+        }
     }
 
     public List<Token> getAvailableTokens() {
@@ -722,51 +755,72 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public boolean hasTurn() {
-        return model.getTurnPlayerIndex() == model.getPlayerUsernames().indexOf(username);
+        synchronized (modelLock) {
+            return model.getTurnPlayerIndex() == model.getPlayerUsernames().indexOf(username);
+        }
     }
 
     public String playersListToString() {
         StringBuilder m = new StringBuilder();
-        int lastPlayer = (model.getTurnPlayerIndex() - 1 + model.getPlayerUsernames().size()) % model.getPlayerUsernames().size();
-        for (int i = model.getTurnPlayerIndex(); i != lastPlayer; i = (i + 1) % model.getPlayerUsernames().size()) {
+        int turnPlayerIndex;
+        List<String> playerUsernames;
+        synchronized (modelLock) {
+            turnPlayerIndex = model.getTurnPlayerIndex();
+            playerUsernames = List.copyOf(model.getPlayerUsernames());
+        }
+
+        int lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
+        for (int i = turnPlayerIndex; i != lastPlayer; i = (i + 1) % playerUsernames.size()) {
             // TODO check if online?
-            if (i == model.getTurnPlayerIndex()) {
-                m.append(AnsiCodes.BOLD).append(model.getPlayerUsernames().get(i)).append(AnsiCodes.RESET).append(" -> ");
-            } else if (i == model.getPlayerUsernames().indexOf(username)) {
-                m.append(AnsiCodes.GOLD).append(model.getPlayerUsernames().get(i)).append(AnsiCodes.RESET)
+            if (i == turnPlayerIndex) {
+                m.append(AnsiCodes.BOLD).append(playerUsernames.get(i)).append(AnsiCodes.RESET).append(" -> ");
+            } else if (i == playerUsernames.indexOf(username)) {
+                m.append(AnsiCodes.GOLD).append(playerUsernames.get(i)).append(AnsiCodes.RESET)
                         .append(" -> ");
             } else {
-                m.append(model.getPlayerUsernames().get(i)).append(" -> ");
+                m.append(playerUsernames.get(i)).append(" -> ");
             }
         }
-        if (model.getPlayerUsernames().get(lastPlayer).equals(username))
+        if (playerUsernames.get(lastPlayer).equals(username))
             m.append(AnsiCodes.GOLD).append(username).append(AnsiCodes.RESET);
         else
-            m.append(model.getPlayerUsernames().get(lastPlayer));
+            m.append(playerUsernames.get(lastPlayer));
         return m.toString();
     }
 
     public String decksToString() {
-        return model.decksToString();
+        ViewModel vm = getModel();
+        return vm.decksToString();
     }
 
     public String objectiveCardsToString() {
-        return model.objectiveCardsToString();
+        ViewModel vm = getModel();
+        return vm.objectiveCardsToString();
     }
 
     public String selfPlayAreaToString() {
-        return model.selfPlayAreaToString();
+        ViewModel vm = getModel();
+        return vm.selfPlayAreaToString();
     }
 
     public String opponentPlayAreaToString(String player) {
-        return model.opponentPlayAreaToString(player);
+        ViewModel vm = getModel();
+        return vm.opponentPlayAreaToString(player);
     }
 
     private void drawCardUpdateModel(DrawCardData data) {
-        model.setGameStatus(data.getGameStatus());
-        model.setTopGoldDeck(data.getTopGoldDeck());
-        model.setTopResourceDeck(data.getTopResourceDeck());
-        model.setVisibleGoldCards(data.getVisibleGoldCards());
-        model.setVisibleResourceCards(data.getVisibleResourceCards());
+        synchronized (modelLock) {
+            model.setGameStatus(data.getGameStatus());
+            model.setTopGoldDeck(data.getTopGoldDeck());
+            model.setTopResourceDeck(data.getTopResourceDeck());
+            model.setVisibleGoldCards(data.getVisibleGoldCards());
+            model.setVisibleResourceCards(data.getVisibleResourceCards());
+        }
+    }
+
+    public boolean isAvailablePos(Coordinate c) {
+        synchronized (modelLock) {
+            return model.getSelfPlayer().getPlayArea().getAvailablePos().contains(c);
+        }
     }
 }

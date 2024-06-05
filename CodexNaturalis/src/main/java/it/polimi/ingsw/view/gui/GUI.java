@@ -202,6 +202,11 @@ public class GUI extends Application implements View {
     }
 
     @Override
+    public String getIntFromInput() {
+        return "";
+    }
+
+    @Override
     public String getUsername() {
         return this.username;
     }

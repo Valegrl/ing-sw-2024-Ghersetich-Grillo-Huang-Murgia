@@ -125,6 +125,28 @@ public class ViewModel implements Serializable, CardConverter {
     }
 
     /**
+     * Copy constructor for ViewModel.
+     * It initializes the ViewModel based on the given ViewModel.
+     *
+     * @param vm the ViewModel to be copied.
+     */
+    public ViewModel(ViewModel vm) {
+        this.gameId = vm.gameId;
+        this.opponents = vm.opponents;
+        this.selfPlayer = vm.selfPlayer;
+        this.playerUsernames = vm.playerUsernames;
+        this.turnPlayerIndex = vm.turnPlayerIndex;
+        this.scoreboard = vm.scoreboard;
+        this.commonObjectives = vm.commonObjectives;
+        this.gameStatus = vm.gameStatus;
+        this.detectedLC = vm.detectedLC;
+        this.visibleResourceCards = vm.visibleResourceCards;
+        this.visibleGoldCards = vm.visibleGoldCards;
+        this.topResourceDeck = vm.topResourceDeck;
+        this.topGoldDeck = vm.topGoldDeck;
+    }
+
+    /**
      * Converts the game's decks to a string representation.
      * @return A string representation of the decks.
      */

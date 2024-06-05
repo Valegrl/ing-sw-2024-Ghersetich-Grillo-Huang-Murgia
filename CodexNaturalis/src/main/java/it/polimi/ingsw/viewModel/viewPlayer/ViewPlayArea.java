@@ -1,6 +1,7 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
 import it.polimi.ingsw.utils.AnsiCodes;
+import it.polimi.ingsw.viewModel.CardConverter;
 import it.polimi.ingsw.viewModel.immutableCard.BackPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Immutable representation of an opponent-player's {@link PlayArea}.
  */
-public final class ViewPlayArea implements Serializable {
+public final class ViewPlayArea implements Serializable, CardConverter {
     /**
      * The list of immutable representations of cards in the opponent's hand.
      */
@@ -49,7 +50,7 @@ public final class ViewPlayArea implements Serializable {
         this.playedCards = playArea.getPlayedCards().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
-                        entry -> new ImmPlayableCard(entry.getValue())
+                        entry -> this.convertToImmCardType(entry.getValue())
                 ));
         this.uncoveredItems = new LinkedHashMap<>(playArea.getUncoveredItems());
     }
@@ -118,7 +119,7 @@ public final class ViewPlayArea implements Serializable {
             ImmPlayableCard card = entry.getValue();
             cardString.append("  ").append(coordinate).append(" -> ");
             currIndent = cardString.length();
-            cardString.append(Item.itemToColor(card.getPermanentResource(), card.getId())).append("\n")
+            cardString.append(card).append("\n")
                       .append(card.printPlacedCard(currIndent));
             sb.append(cardString);
         }
