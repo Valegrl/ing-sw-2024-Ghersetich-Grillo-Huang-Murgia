@@ -37,16 +37,37 @@ import java.util.List;
 
 
 //TODO USE TOGGLE BUTTONS FOR THE READY?
+
+/**
+ * This class is responsible for controlling the lobby in the GUI.
+ * It extends the FXMLController class and overrides some of its methods.
+ * It handles the lobby-related events and updates the lobby view accordingly.
+ */
 public class LobbyController extends FXMLController {
 
+    /**
+     * A list of StackPane objects representing the possible players in the lobby.
+     */
     private List<StackPane> playerStackPanes;
 
+    /**
+     * A list of Text objects representing the usernames of the players in the lobby.
+     */
     private List<Text> usernames;
 
+    /**
+     * A list of Button objects representing the buttons associated with each player in the lobby.
+     */
     private List<Button> playerButtons;
 
+    /**
+     * A list of RadioButton objects representing the radio buttons for chat options in the lobby.
+     */
     private List<RadioButton> radioButtons;
 
+    /**
+     * A list of Text objects representing the ready status of each player in the lobby.
+     */
     private List<Text> readyStatuses;
 
     @FXML
@@ -121,11 +142,20 @@ public class LobbyController extends FXMLController {
     @FXML
     private Button readyButton;
 
-
+    /**
+     * Default constructor for the LobbyController class.
+     */
     public LobbyController(){
         super();
     }
 
+    /**
+     * This method is called when the lobby view is run.
+     * It initializes the lobby view and sets up the necessary event handlers.
+     *
+     * @param view The view associated with this controller.
+     * @param stage The stage on which the lobby view is displayed.
+     */
     @Override
     public void run(View view, Stage stage){
         this.view = view;
@@ -156,7 +186,14 @@ public class LobbyController extends FXMLController {
         updateLobby();
     }
 
-
+    /**
+     * This method handles the response from the server.
+     * It updates the lobby view based on the feedback and event ID received.
+     *
+     * @param feedback The feedback received from the server.
+     * @param message The message received from the server.
+     * @param eventID The event ID of the event that triggered the response.
+     */
     @FXML
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -205,9 +242,7 @@ public class LobbyController extends FXMLController {
                 });
                 break;
             case EventID.GET_CHAT_MESSAGES:
-                Platform.runLater(() ->{
-                    chatArea.appendText(message);
-                });
+                    chatArea.appendText(message + "\n");
                 break;
             case EventID.CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
@@ -216,10 +251,35 @@ public class LobbyController extends FXMLController {
                     System.out.println("Message unable to send!");
                 }
                 break;
+
+            case EventID.UPDATE_GAME_PLAYERS:
+                Platform.runLater(() -> {
+                    try {
+
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                        Parent root = loader.load();
+                        GameSetupController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    }
+                    catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                });
+            default: break;
+
         }
         notifyResponse();;
     }
 
+    /**
+     * This method is invoked in response to any updates received from the server pertaining to the lobby.
+     * The updates may include events such as a player joining or leaving the lobby, a player being kicked from the lobby,
+     * or a change in the ready status of a player. The method is responsible for processing these updates and
+     * reflecting the changes in the lobby accordingly to the user's role.
+     */
     private void updateLobby(){
         if (controller.isLobbyLeader()) {
             lobbyLeaderUpdate();
@@ -229,6 +289,10 @@ public class LobbyController extends FXMLController {
         }
     }
 
+    /**
+     * This method is executed by the {@code updateLobby} method when the current user is identified as the lobby administrator.
+     * Being the lobby administrator, the user possesses the authority to kick other users from the lobby.
+     */
     private void lobbyLeaderUpdate(){
         int i = 0;
         DropShadow highlight = new DropShadow();
@@ -294,6 +358,10 @@ public class LobbyController extends FXMLController {
         updateChatOptions();
     }
 
+    /**
+     * This method is executed by the {@code updateLobby} method when the current user is identified as a lobby user.
+     * Unlike the lobby administrator, the user does not possess the authority to kick other users from the lobby.
+     */
     private void lobbyUserUpdate(){
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
@@ -353,6 +421,10 @@ public class LobbyController extends FXMLController {
         updateChatOptions();
     }
 
+    /**
+     * This method is executed by the {@code updateLobby} method. It updates the radio buttons for the chat.
+     * Hiding the options for users who are no longer in the lobby and showing the ones for user who just joined.
+     */
     private void updateChatOptions(){
         int i = 0;
         generalRadioButton.setSelected(true);
@@ -373,7 +445,7 @@ public class LobbyController extends FXMLController {
     }
 
     /**
-     * Method to set the name of the lobby
+     * Method to set the name of the lobby so that the player can see the lobby's name.
      *
      * @param lobbyName the name of the lobby
      */
@@ -382,12 +454,23 @@ public class LobbyController extends FXMLController {
     }
 
 
+    /**
+     * This method is used to quit the lobby.
+     * It sends a {@link QuitLobbyEvent} to the server and waits for a response.
+     */
     private void quitLobby() {
         Event event = new QuitLobbyEvent();
         controller.newViewEvent(event);
         waitForResponse();
     }
 
+    /**
+     * This method is used to kick a player from the lobby.
+     * It sends a {@link KickFromLobbyEvent} to the server and waits for a response.
+     * This method can only be used by lobby admins.
+     *
+     * @param userToKick The username of the player to be kicked.
+     */
     private void kickPlayer(String userToKick) {
         if (controller.getPlayersStatus().size() > 1) {
             Event event = new KickFromLobbyEvent(userToKick);
@@ -399,6 +482,10 @@ public class LobbyController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to submit a chat message.
+     * It sends a {@link ChatGMEvent} or {@link ChatPMEvent} to the server based on the selected radio button.
+     */
     @FXML
     public void submitMessage(){
         String message = chatInput.getText();
@@ -421,6 +508,9 @@ public class LobbyController extends FXMLController {
         chatInput.clear();
     }
 
+    /**
+     * This method is used to submit a private message if the selected radio button for chat is a specific user.
+     */
     private void sendPrivateMessage(String username, String message){
         if(controller.getPlayersStatus().containsKey(username)) {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
@@ -430,10 +520,17 @@ public class LobbyController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to submit a private message if the selected radio button for chat is general.
+     */
     private void sendPublicMessage(String message){
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
+    /**
+     * This method is used to toggle the ready status of the player.
+     * It sends a {@link PlayerReadyEvent} or {@link PlayerUnreadyEvent} to the server based on the current ready status.
+     */
     @FXML
     public void toggleReadyStatus(){
         Event event;
@@ -449,12 +546,19 @@ public class LobbyController extends FXMLController {
         waitForResponse();
     }
 
-
+    /**
+     * This method states that the player is in a lobby.
+     *
+     */
     @Override
     public boolean inLobby(){
         return true;
     }
 
+    /**
+     * This method states that the player is in a chat.
+     *
+     */
     @Override
     public boolean inChat(){
         return true;
