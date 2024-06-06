@@ -3,7 +3,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: contain;
-    -fx-background-color: grey;
+    -fx-background-color: rgba(211, 211, 211, 1);
 }
 
 /*Could use the class for VBOX and HBOX but that means I can't do them in a modular way*/
@@ -47,10 +47,29 @@
     -fx-border-width: 5;
 }
 
+#quitButton{
+    -fx-font-size: 50;
+}
+
+#readyButton{
+    -fx-font-size: 50;
+}
+
+#lobbyLabel{
+    -fx-font-size: 50;
+}
+
+#resourceCardsLabel{
+    -fx-font-size: 25;
+}
+#goldCardsLabel{
+    -fx-font-size: 25;
+}
+
 .label{
     -fx-text-fill: #ffffff;
     -fx-font-family: "BebasNeuePro-Regular";
-    -fx-font-size: 25;
+    -fx-font-size: 40;
     -fx-border-width: 0;
     -fx-padding: 0;
 }
@@ -63,19 +82,11 @@
 
 .button{
     -fx-text-fill: #ffffff;
-    -fx-font-size: 20;
+    -fx-font-size: 30;
     -fx-font-family: "Bebas Neue Regular";
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
-}
-
-#quitButton{
-    -fx-font-size: 50;
-}
-
-#lobbyLabel{
-    -fx-font-size: 50;
 }
 
 .button:hover{

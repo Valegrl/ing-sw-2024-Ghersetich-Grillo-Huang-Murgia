@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -215,6 +216,7 @@ public class LobbyController extends FXMLController {
                             Scene scene = stage.getScene();
                             scene.setRoot(root);
                             transition(nextController);
+
                         }
                         catch (IOException exception){
                             exception.printStackTrace();
@@ -253,25 +255,15 @@ public class LobbyController extends FXMLController {
                 break;
 
             case EventID.UPDATE_GAME_PLAYERS:
-                Platform.runLater(() -> {
-                    try {
+                System.out.println("Arrivata la notifica di update game players per il GameSetup");
+                GameSetupController nextController = new GameSetupController();
+                nextController.setupController(view, stage);
 
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
-                        Parent root = loader.load();
-                        GameSetupController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
-                    }
-                    catch (IOException exception){
-                        exception.printStackTrace();
-                    }
-                });
-            default: break;
+                view.setFXMLController(nextController);
+                break;
 
         }
-        notifyResponse();;
+        notifyResponse();
     }
 
     /**
@@ -562,6 +554,12 @@ public class LobbyController extends FXMLController {
     @Override
     public boolean inChat(){
         return true;
+    }
+
+    @Override
+    public boolean inGame(){
+        System.out.println("Using the LobbyController inGame");
+        return false;
     }
 }
 

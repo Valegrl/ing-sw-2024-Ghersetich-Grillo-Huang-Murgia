@@ -10,13 +10,23 @@ import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
+import it.polimi.ingsw.viewModel.immutableCard.ImmGoldCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameSetupController extends FXMLController {
 
@@ -104,6 +114,26 @@ public class GameSetupController extends FXMLController {
     @FXML
     private Button setupButton3;
 
+    private ViewStartSetup setup;
+
+    private final double desiredWidth = 180;
+
+    private final double desiredHeight = 120;
+
+    private ImmObjectiveCard objectiveChoice0;
+
+    private ImmObjectiveCard objectiveChoice1;
+
+    private ImmObjectiveCard objectiveChosen;
+
+    private boolean flipped;
+
+    private ImmStartCard startCard;
+
+    private List<Button> setupButtons;
+
+    private List<RadioButton> radioButtons;
+
 
     public GameSetupController(){
         super();
@@ -112,12 +142,37 @@ public class GameSetupController extends FXMLController {
     @Override
     public void run(View view, Stage stage) {
 
-        this.view = view;
-        this.stage = stage;
-        this.controller = view.getController();
+        if(setup != null){
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                loader.setController(this);
 
-        setLobbyName(controller.getLobbyId());
-        chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
+                Parent root = loader.load();
+                Scene scene = stage.getScene();
+                scene.setRoot(root);
+
+                setLobbyName(controller.getLobbyId());
+                chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
+
+                showResourceDeck();
+                showGoldDeck();
+                showMyHand();
+                showCommonObjectives();
+                showSecretObjectives();
+                showStartCard();
+
+                setupButtons = Arrays.asList(setupButton1, setupButton2, setupButton3);
+                radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
+                update();
+
+            }
+            catch(IOException exception){
+                exception.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("Something bad happened!");
+        }
 
     }
 
@@ -125,57 +180,226 @@ public class GameSetupController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch(EventID.getByID(eventID)){
             case CHOOSE_CARDS_SETUP:
-                double desiredWidth = 180;
-                double desiredHeight = 120;
-
-                ViewStartSetup setup = controller.getSetup();
-                Item itemResourceDeck = setup.getResourceDeck();
-                ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
-                ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
-                System.out.println("SEI fuori dallo switch");
-                switch(itemResourceDeck) {
-                    case FUNGI:
-                        Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", desiredHeight, desiredWidth, true, false);
-                        resourceDeck.setImage(FB);
-                        System.out.println("SEI nello switch");
-                        break;
-                    case ANIMAL:
-                        Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", desiredHeight, desiredWidth, true, false);
-                        resourceDeck.setImage(AB);
-                        System.out.println("SEI nello switch");
-                        break;
-                    case INSECT:
-                        Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", desiredHeight, desiredWidth, true, false);
-                        resourceDeck.setImage(IB);
-                        System.out.println("SEI nello switch");
-                        break;
-                    case PLANT:
-                        Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", desiredHeight, desiredWidth, true, false);
-                        resourceDeck.setImage(PB);
-                        System.out.println("SEI nello switch");
-                    break;
-                }
-
-
+                this.setup = controller.getSetup();
+                Platform.runLater(() -> run(view, stage));
                 break;
-            case UPDATE_GAME_PLAYERS:
-                break;
+
             case CHOSEN_CARDS_SETUP:
                 break;
             case CHOOSE_TOKEN_SETUP:
                 break;
             case QUIT_GAME:
                 break;
+
+            case CHAT_GM, CHAT_PM:
+                if (feedback.equals(Feedback.SUCCESS)) {
+                    chatArea.appendText(message + "\n");
+                } else {
+                    System.out.println("Message unable to send!");
+                }
+                break;
         }
+        notifyResponse();
+    }
+
+    private void showMyHand(){
+        List<ImageView> handCardImage = Arrays.asList(handCard0, handCard1, handCard2);
+        List<ImmPlayableCard> myHand = setup.getHand();
+        int i = 0;
+        for(ImmPlayableCard card : myHand){
+            if(card instanceof ImmGoldCard) {
+                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + card.getId() + ".png", desiredHeight, desiredWidth, true, false);
+                handCardImage.get(i).setImage(cardImage);
+            }
+            else{
+                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + card.getId() + ".png", desiredHeight, desiredWidth, true, false);
+                handCardImage.get(i).setImage(cardImage);
+            }
+            i++;
+        }
+    }
+
+    private void showGoldDeck(){
+        Item itemGoldDeck = setup.getGoldDeck();
+        ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
+        switch(itemGoldDeck) {
+            case FUNGI:
+                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", desiredHeight, desiredWidth, true, false);
+                goldDeck.setImage(FB);
+                break;
+            case ANIMAL:
+                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", desiredHeight, desiredWidth, true, false);
+                goldDeck.setImage(AB);
+                break;
+            case INSECT:
+                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", desiredHeight, desiredWidth, true, false);
+                goldDeck.setImage(IB);
+                break;
+            case PLANT:
+                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", desiredHeight, desiredWidth, true, false);
+                goldDeck.setImage(PB);
+                break;
+        }
+
+        ImmPlayableCard visibleGoldCard0 = visibleGoldCards[0];
+        ImmPlayableCard visibleGoldCard1 = visibleGoldCards[1];
+        Image visibleGoldCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard0.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image visibleGoldCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        this.visibleGoldCard0.setImage(visibleGoldCardImage0);
+        this.visibleGoldCard1.setImage(visibleGoldCardImage1);
+
+    }
+
+    private void showResourceDeck(){
+        Item itemResourceDeck = setup.getResourceDeck();
+        ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
+        switch(itemResourceDeck) {
+            case FUNGI:
+                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", desiredHeight, desiredWidth, true, false);
+                resourceDeck.setImage(FB);
+                break;
+            case ANIMAL:
+                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", desiredHeight, desiredWidth, true, false);
+                resourceDeck.setImage(AB);
+                break;
+            case INSECT:
+                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", desiredHeight, desiredWidth, true, false);
+                resourceDeck.setImage(IB);
+                break;
+            case PLANT:
+                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", desiredHeight, desiredWidth, true, false);
+                resourceDeck.setImage(PB);
+                break;
+        }
+
+        ImmPlayableCard visibleResourceCard0 = visibleResourceCards[0];
+        ImmPlayableCard visibleResourceCard1 = visibleResourceCards[1];
+        Image visibleResourceCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard0.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image visibleResourceCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        this.visibleResourceCard0.setImage(visibleResourceCardImage0);
+        this.visibleResourceCard1.setImage(visibleResourceCardImage1);
+
+    }
+
+    private void showCommonObjectives(){
+        ImmObjectiveCard[] commonObjectives = setup.getCommonObjectives();
+        ImmObjectiveCard commonObjective0 = commonObjectives[0];
+        ImmObjectiveCard commonObjective1 = commonObjectives[1];
+        Image commonObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective0.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image commonObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        this.commonObjectiveCard0.setImage(commonObjectiveImage0);
+        this.commonObjectiveCard1.setImage(commonObjectiveImage1);
+    }
+
+    private void showSecretObjectives(){
+        ImmObjectiveCard[] secretObjectives = setup.getSecretObjectiveCards();
+        objectiveChoice0 = secretObjectives[0];
+        objectiveChoice1 = secretObjectives[1];
+
+        Image secretObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice0.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image secretObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        this.secretObjectiveCard0.setImage(secretObjectiveImage0);
+        this.secretObjectiveCard1.setImage(secretObjectiveImage1);
+    }
+
+    private void showStartCard(){
+        startCard = setup.getStartCard();
+        System.out.println(startCard.getId());
+        Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        this.startCardFront.setImage(startCardFront);
+        this.startCardBack.setImage(startCardBack);
     }
 
     /**
      * Method to set the name of the lobby so that the player can see the lobby's name.
-     *
      * @param lobbyName the name of the lobby
      */
-    public void setLobbyName(String lobbyName) {
+    private void setLobbyName(String lobbyName) {
         this.lobbyName.setText("LOBBY: " + lobbyName);
+    }
+
+    public void setupController(View view, Stage stage){
+        this.view = view;
+        this.stage = stage;
+        this.controller = view.getController();
+    }
+
+    @FXML
+    public void setupReady(ImmObjectiveCard secretObjective, ImmStartCard startCard){
+
+    }
+
+    private void update(){
+        updatePlayers();
+        updateChatOptions();
+    }
+
+    private void updatePlayers(){
+        int i = 0;
+        for(String user : controller.getPlayersStatus().keySet()) {
+            if (!controller.getUsername().equals(user)) {
+                setupButtons.get(i).setVisible(true);
+                setupButtons.get(i).setText(user + "setup");
+                i++;
+            }
+        }
+        while(i < setupButtons.size()){
+            setupButtons.get(i).setVisible(false);
+            setupButtons.get(i).setText("");
+            i++;
+        }
+    }
+
+    private void updateChatOptions(){
+        int i = 0;
+        generalRadioButton.setSelected(true);
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                radioButtons.get(i).setVisible(true);
+                radioButtons.get(i).setText(user);
+                i++;
+            }
+        }
+        while(i < radioButtons.size()){
+            radioButtons.get(i).setVisible(false);
+            radioButtons.get(i).setText("");
+            i++;
+        }
+    }
+
+    @FXML
+    public void quit(){
+        //TODO return to enter lobbies...
+    }
+
+
+
+
+    /**
+     * This method is used to submit a chat message.
+     * It sends a {@link ChatGMEvent} or {@link ChatPMEvent} to the server based on the selected radio button.
+     */
+    @FXML
+    public void submitMessage(){
+        String message = chatInput.getText();
+
+        if(message.isEmpty()){
+
+        }
+        else {
+            if (generalRadioButton.isSelected()) {
+                sendPublicMessage(message);
+            } else {
+                for (RadioButton button : radioButtons) {
+                    if (button.isSelected()) {
+                        String username = button.getText();
+                        sendPrivateMessage(username, message);
+                    }
+                }
+            }
+        }
+        chatInput.clear();
     }
 
     /**
@@ -197,16 +421,8 @@ public class GameSetupController extends FXMLController {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
-    @FXML
-    public void quit(){
-        Platform.exit();
-        System.exit(0);
-    }
-
-    //TODO thread problem, viewcontroller sees lobbycontroller sometimes and gamesetupcontroller other times
     @Override
     public boolean inGame(){
-        System.out.println("Using the game setup in game!");
         return true;
     }
 
