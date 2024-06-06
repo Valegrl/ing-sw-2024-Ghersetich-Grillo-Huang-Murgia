@@ -22,8 +22,9 @@ public class PlaceCardState extends GameState {
     @Override
     public void run() {
         clearConsole();
+        view.stopInputRead(false);
         setCurrentPlayAreaUsername(controller.getUsername());
-        view.printMessage("It's your turn to place a card!\n" +
+        view.printMessage("It's your turn to " + boldText("place") + " a card!\n" +
                 "Next turns: " + controller.playersListToString() + "\n");
 
         view.printMessage(controller.selfPlayAreaToString());

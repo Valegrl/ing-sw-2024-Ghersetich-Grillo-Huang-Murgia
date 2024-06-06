@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -155,22 +156,34 @@ public class ViewModel implements Serializable, CardConverter {
         return "Decks: \n" +
                 "  1- Gold deck:\n" +
                 "       Top card: " +
-                Item.itemToColor(topGoldDeck) +
+                Optional.ofNullable(topGoldDeck)
+                        .map(Item::itemToColor)
+                        .orElse("empty deck") +
                 "\n" +
                 "       Visible cards:\n" +
                 "         1- " +
-                visibleGoldCards[0].printCard(indent) +
-                "         2- " +
-                visibleGoldCards[1].printCard(indent) +
-                "  2- Resource deck:\n" +
+                Optional.ofNullable(visibleGoldCards[0])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n         2- " +
+                Optional.ofNullable(visibleGoldCards[1])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n  2- Resource deck:\n" +
                 "       Top card: " +
-                Item.itemToColor(topResourceDeck) +
+                Optional.ofNullable(topResourceDeck)
+                        .map(Item::itemToColor)
+                        .orElse("empty deck") +
                 "\n" +
                 "       Visible cards: \n" +
                 "         1- " +
-                visibleResourceCards[0].printCard(indent) +
-                "         2- " +
-                visibleResourceCards[1].printCard(indent);
+                Optional.ofNullable(visibleResourceCards[0])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n         2- " +
+                Optional.ofNullable(visibleResourceCards[1])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty");
     }
 
     /**

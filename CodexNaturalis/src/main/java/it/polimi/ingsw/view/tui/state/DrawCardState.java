@@ -6,6 +6,9 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.view.View;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DrawCardState extends GameState {
     public DrawCardState(View view) {
         super(view);
@@ -14,19 +17,51 @@ public class DrawCardState extends GameState {
     @Override
     public void run() {
         clearConsole();
+        view.stopInputRead(false);
         setCurrentPlayAreaUsername(controller.getUsername());
-        view.printMessage("Draw a card!");
-        // FIXME place card DEBUG
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 1));
+
+        view.printMessage("It's your turn to " + boldText("draw") + " a card!\n" +
+                "Next turns: " + controller.playersListToString() + "\n");
+
+        view.printMessage(controller.selfPlayAreaToString());
+        view.printMessage(controller.decksToString());
+
+        view.printMessage("Choose an option:");
+        int choice = readChoiceFromInput(Arrays.asList(
+                "Draw a card"
+                , "See a specific placed card"
+                , "See objective cards"
+                , "See another player's play area"
+                , "Open chat"
+                , "Quit game"));
+        handleInput(choice);
     }
 
     @Override
     public boolean handleInput(int input) {
+        switch (input) {
+            case 1:
+                drawCard();
+                break;
+            case 2:
+                clearConsole();
+                seeDetailedCard();
+                break;
+            case 3:
+                showObjectiveCards();
+                break;
+            case 4:
+                showOtherPlayerPlayArea();
+                break;
+            case 5:
+                transition(new ChatState(view, this));
+                break;
+            case 6:
+                quitGame();
+                break;
+            default:
+                return false;
+        }
         return true;
     }
 
@@ -34,6 +69,11 @@ public class DrawCardState extends GameState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case DRAW_CARD:
+                showResponseMessage(message, 1000);
+                run();
+                break;
+            case SELF_DRAW_CARD:
+                clearConsole();
                 view.printMessage(message);
                 break;
             case UPDATE_GAME_PLAYERS:
@@ -44,12 +84,42 @@ public class DrawCardState extends GameState {
                 view.stopInputRead(true);
                 showResponseMessage(message, 1000);
                 view.clearInput();
-                view.stopInputRead(false);
                 transition(new WaitForTurnState(view));
                 break;
             default:
                 break;
         }
+    }
+
+    private void drawCard() {
+        view.printMessage("Choose the " + boldText("deck") + " you want to draw a card from: ");
+        int chosenDeckIndex = readChoiceFromInput(Arrays.asList("GOLD", "RESOURCE"));
+        CardType chosenDeck;
+        if (chosenDeckIndex == -1) {
+            run();
+            return;
+        } else if (chosenDeckIndex == 1) chosenDeck = CardType.GOLD;
+        else chosenDeck = CardType.RESOURCE;
+
+        view.printMessage("Choose the card you want to draw: ");
+        List<String> ids = controller.getDeckVisibleIds(chosenDeck);
+        ids.addFirst("Top of deck");
+        int chosenCard = readChoiceFromInput(ids);
+        if (chosenCard == -1) {
+            run();
+            return;
+        } else if (chosenCard == 1) {
+            chosenCard = 2;
+        } else {
+            ids.removeFirst(); // removing top of deck
+            chosenCard = controller.getVisibleDeckCardIndex(chosenDeck, ids.get(chosenCard - 2));
+        }
+        if (chosenCard == -1) {
+            view.printMessage("Visible card could not be found. Please try again");
+            drawCard();
+            return;
+        }
+        controller.newViewEvent(new DrawCardEvent(chosenDeck, chosenCard));
     }
 
     @Override

@@ -117,6 +117,7 @@ public enum Item implements Serializable {
             case Item.EMPTY -> (BEIGE + string + RESET);
 
             case Item.HIDDEN, Item.COVERED -> string;
+            case null -> string;
         };
     }
 
@@ -147,6 +148,7 @@ public enum Item implements Serializable {
 
             case Item.HIDDEN -> Item.HIDDEN.toString();
             case Item.COVERED -> Item.COVERED.toString();
+            case null -> "empty";
         };
     }
 

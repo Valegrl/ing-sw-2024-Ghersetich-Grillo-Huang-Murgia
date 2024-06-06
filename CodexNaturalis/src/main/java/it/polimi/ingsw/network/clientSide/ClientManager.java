@@ -235,7 +235,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                                 serverDisconnected();
                             }
                         };
-                        timer.schedule(task, 2000); // TODO config file?
+                        timer.schedule(task, 3000); // TODO config file?
                     }
 
                     // sending PingEvent
@@ -245,7 +245,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                     System.err.println("\nCannot send ping to server.");
                 }
                 try {
-                    Thread.sleep(2000 * 2);
+                    Thread.sleep(3000 * 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

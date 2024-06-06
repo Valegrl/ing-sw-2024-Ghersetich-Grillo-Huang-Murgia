@@ -90,7 +90,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                                     clientDisconnected(client);
                                 }
                             };
-                            clientTimers.get(client).schedule(task, 2000); // TODO config file?
+                            clientTimers.get(client).schedule(task, 3000); // TODO config file?
                         }
 
                         // sending PingEvent
@@ -102,7 +102,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     }
                 }
                 try {
-                    Thread.sleep(2000 * 2);
+                    Thread.sleep(3000 * 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

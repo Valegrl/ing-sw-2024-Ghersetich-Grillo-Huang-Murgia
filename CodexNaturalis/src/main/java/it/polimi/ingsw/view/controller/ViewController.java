@@ -15,6 +15,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetLobbyInfoEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
@@ -27,6 +28,7 @@ import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
 
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
@@ -699,6 +701,40 @@ public class ViewController implements ViewEventReceiver {
             return model.getSelfPlayer().getPlayArea().getHand().stream()
                     .map(c -> Item.itemToColor(c.getPermanentResource(), c.getId()))
                     .toList();
+        }
+    }
+
+    public List<String> getDeckVisibleIds(CardType cardType) {
+        synchronized (modelLock) {
+            if (cardType.equals(CardType.GOLD)) {
+                return new ArrayList<>(Arrays.stream(model.getVisibleGoldCards()).toList().stream()
+                        .filter(Objects::nonNull)
+                        .map(ImmPlayableCard::toString)
+                        .toList());
+            } else {
+                return new ArrayList<>(Arrays.stream(model.getVisibleResourceCards()).toList().stream()
+                        .filter(Objects::nonNull)
+                        .map(ImmPlayableCard::toString)
+                        .toList());
+            }
+        }
+    }
+
+    public int getVisibleDeckCardIndex(CardType cardType, String id) {
+        synchronized (modelLock) {
+            if (cardType.equals(CardType.GOLD)) {
+                ImmPlayableCard[] visibleGoldCards = model.getVisibleGoldCards();
+                return IntStream.range(0, visibleGoldCards.length)
+                        .filter(i -> id.equals(visibleGoldCards[i].toString()))
+                        .findFirst()
+                        .orElse(-1);
+            } else {
+                ImmPlayableCard[] visibleResourceCards = model.getVisibleResourceCards();
+                return IntStream.range(0, visibleResourceCards.length)
+                        .filter(i -> id.equals(visibleResourceCards[i].toString()))
+                        .findFirst()
+                        .orElse(-1);
+            }
         }
     }
 

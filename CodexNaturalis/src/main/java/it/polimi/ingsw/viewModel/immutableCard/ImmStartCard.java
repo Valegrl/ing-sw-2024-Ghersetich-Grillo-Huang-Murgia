@@ -157,7 +157,7 @@ public final class ImmStartCard extends ImmCard implements CardToString {
         }
         if (permanentResources != null) {
             sb.append(" ".repeat(indent))
-                    .append("Permanent Resources: "); // TODO add permanent resources
+                    .append("Permanent Resources: ");
             for (int i = 0; i < permanentResources.size() - 1; i++) {
                 sb.append(Item.itemToColor(permanentResources.get(i))).append(", ");
             }
