@@ -172,11 +172,6 @@ public class LobbyController extends FXMLController {
         setLobbyName(controller.getLobbyId());
         chatArea.appendText("Welcome to the lobby: " + controller.getLobbyId() + "\n");
 
-        /*
-        controller.newViewEvent(new GetChatMessagesEvent());
-        waitForResponse();
-         */
-
         chatInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -255,7 +250,6 @@ public class LobbyController extends FXMLController {
                 break;
 
             case EventID.UPDATE_GAME_PLAYERS:
-                System.out.println("Arrivata la notifica di update game players per il GameSetup");
                 GameSetupController nextController = new GameSetupController();
                 nextController.setupController(view, stage);
 
@@ -556,10 +550,5 @@ public class LobbyController extends FXMLController {
         return true;
     }
 
-    @Override
-    public boolean inGame(){
-        System.out.println("Using the LobbyController inGame");
-        return false;
-    }
 }
 

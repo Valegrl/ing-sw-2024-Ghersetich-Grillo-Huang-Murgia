@@ -6,13 +6,14 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.ToggleGroup?>
 <BorderPane id="mainPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <AnchorPane minHeight="80.0" minWidth="1920.0" BorderPane.alignment="CENTER">
@@ -40,9 +41,24 @@
                         <Label minWidth="400.0" text="Hand:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <HBox alignment="CENTER_RIGHT" layoutX="825.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <ImageView fx:id="handCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="handCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="handCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="handCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard0" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                 </children>
+                              </StackPane>
+                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="handCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard1" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                 </children>
+                              </StackPane>
+                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="handCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard2" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                 </children>
+                              </StackPane>
                            </children>
                            <padding>
                               <Insets right="40.0" />
@@ -76,7 +92,7 @@
                      </padding>
                      <children>
                         <Label minWidth="400.0" text="Secret objectives:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox alignment="CENTER_RIGHT" layoutX="907.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox fx:id="secretObjectiveHBox" alignment="CENTER_RIGHT" layoutX="907.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets right="40.0" />
                            </padding>
@@ -93,7 +109,7 @@
                      </padding>
                      <children>
                         <Label minWidth="400.0" text="Startcard's front and back:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox alignment="CENTER_RIGHT" layoutX="949.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox fx:id="startCardHBox" alignment="CENTER_RIGHT" layoutX="949.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets right="40.0" />
                            </padding>
@@ -131,17 +147,17 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding></TextArea>
                         <TextField fx:id="chatInput" maxWidth="250.0" minHeight="40.0" />
-                        <Button mnemonicParsing="false" text="Send" onAction="#submitMessage"/>
+                        <Button mnemonicParsing="false" onAction="#submitMessage" text="Send" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <VBox alignment="CENTER_LEFT" minWidth="150.0" spacing="10.0">
                                  <children>
-                                    <RadioButton fx:id="generalRadioButton" mnemonicParsing="false" text="General" >
+                                    <RadioButton fx:id="generalRadioButton" mnemonicParsing="false" text="General">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="chatRadioButtons" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="User1" visible="false" toggleGroup="$chatRadioButtons"/>
+                                    <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="User1" toggleGroup="$chatRadioButtons" visible="false" />
                                  </children>
                                  <padding>
                                     <Insets left="10.0" />
@@ -149,24 +165,27 @@
                               </VBox>
                               <VBox alignment="CENTER_RIGHT" minWidth="150.0" spacing="10.0">
                                  <children>
-                                    <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="User2" visible="false" toggleGroup="$chatRadioButtons"/>
-                                    <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="User3" visible="false" toggleGroup="$chatRadioButtons"/>
+                                    <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="User2" toggleGroup="$chatRadioButtons" visible="false" />
+                                    <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="User3" toggleGroup="$chatRadioButtons" visible="false" />
                                  </children>
                                  <padding>
                                     <Insets right="10.0" />
                                  </padding>
                               </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox id="vboxSetup" alignment="TOP_CENTER" minHeight="300.0" minWidth="300.0" spacing="20.0">
+                  <VBox id="vboxSetup" alignment="CENTER" minHeight="300.0" minWidth="300.0" spacing="20.0">
                      <children>
                         <Label text="Player setup:" />
-                        <Button fx:id="yourSetupButton" mnemonicParsing="false" styleClass="buttonSmallest" text="Your setup"/>
-                        <Button fx:id="setupButton1" mnemonicParsing="false" styleClass="buttonSmallest" text="User1" visible="false"/>
-                        <Button fx:id="setupButton2" mnemonicParsing="false" styleClass="buttonSmallest" text="User2" visible="false"/>
-                        <Button fx:id="setupButton3" mnemonicParsing="false" styleClass="buttonSmallest" text="User3" visible="false"/>
+                        <Button fx:id="yourSetupButton" mnemonicParsing="false" onAction="#showYourSetup" styleClass="buttonSmallest" text="Your setup" />
+                        <Button fx:id="setupButton1" mnemonicParsing="false" onAction="#showPlayerSetup1" styleClass="buttonSmallest" text="User1" visible="false" />
+                        <Button fx:id="setupButton2" mnemonicParsing="false" onAction="#showPlayerSetup2" styleClass="buttonSmallest" text="User2" visible="false" />
+                        <Button fx:id="setupButton3" mnemonicParsing="false" onAction="#showPlayerSetup3" styleClass="buttonSmallest" text="User3" visible="false" />
                      </children>
                   </VBox>
                </children>
@@ -182,8 +201,8 @@
          <children>
             <HBox id="quitButton" alignment="CENTER" minHeight="60.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button id="readyButton" mnemonicParsing="false" text="Ready" />
-                  <Button id="quitButton" minHeight="80.0" mnemonicParsing="false" onAction="#quit" prefWidth="100.0" text="Quit" />
+                  <Button id="quitButton" minHeight="80.0" mnemonicParsing="false" onAction="#quitGame" prefWidth="100.0" text="Quit" />
+                  <Button fx:id="readyButton" id="readyButton" mnemonicParsing="false" text="Ready" onAction="#readySetup"/>
                </children></HBox>
          </children>
       </AnchorPane>
@@ -193,7 +212,7 @@
          <children>
             <VBox alignment="CENTER" layoutX="50.0" layoutY="332.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox id="vboxResource" alignment="TOP_CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
+                  <VBox id="vboxResource" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label id="resourceCardsLabel" text="Resource cards" />
                         <ImageView fx:id="resourceDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
@@ -201,7 +220,7 @@
                         <ImageView fx:id="visibleResourceCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
-                  <VBox id="vboxGold" alignment="TOP_CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
+                  <VBox id="vboxGold" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label id="goldCardsLabel" text="Gold cards" />
                         <ImageView fx:id="goldDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
