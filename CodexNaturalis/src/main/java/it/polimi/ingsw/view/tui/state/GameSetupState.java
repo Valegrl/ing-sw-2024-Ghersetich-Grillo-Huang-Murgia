@@ -28,7 +28,6 @@ public class GameSetupState extends ViewState {
     @Override
     public void run() {
         if (inChat) {
-            view.stopInputRead(false);
             inChat = false;
             showSetupChoices();
         } else {
@@ -96,7 +95,6 @@ public class GameSetupState extends ViewState {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}
-                view.stopInputRead(false);
                 clearLine();
                 String[] m = message.split("%");
                 setupMessage = m[0];

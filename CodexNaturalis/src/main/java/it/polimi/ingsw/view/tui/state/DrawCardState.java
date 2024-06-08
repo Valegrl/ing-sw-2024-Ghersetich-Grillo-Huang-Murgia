@@ -19,7 +19,6 @@ public class DrawCardState extends GameState {
     @Override
     public void run() {
         clearConsole();
-        view.stopInputRead(false);
         setCurrentPlayAreaUsername(controller.getUsername());
 
         view.printMessage("It's your turn to " + boldText("draw") + " a card!\n" +
@@ -81,6 +80,12 @@ public class DrawCardState extends GameState {
             case UPDATE_GAME_PLAYERS:
                 view.printMessage(message);
                 break;
+            case SELF_TURN_TIMER_EXPIRED:
+                clearConsole();
+                view.stopInputRead(true);
+                showResponseMessage("Your draw card timer has expired. A card will be drawn randomly.", 1000);
+                view.clearInput();
+                break;
             case NEW_TURN:
                 clearConsole();
                 view.stopInputRead(true);
@@ -107,6 +112,7 @@ public class DrawCardState extends GameState {
             run();
             return;
         } else if (chosenDeckIndex == 1) chosenDeck = CardType.GOLD;
+        else if (chosenDeckIndex == 0) return;
         else chosenDeck = CardType.RESOURCE;
 
         view.printMessage("Choose the card you want to draw: ");
@@ -118,6 +124,8 @@ public class DrawCardState extends GameState {
             return;
         } else if (chosenCard == 1) {
             chosenCard = 2;
+        } else if (chosenCard == 0) {
+            return;
         } else {
             ids.removeFirst(); // removing top of deck
             chosenCard = controller.getVisibleDeckCardIndex(chosenDeck, ids.get(chosenCard - 2));

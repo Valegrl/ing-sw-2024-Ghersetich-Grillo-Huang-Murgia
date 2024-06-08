@@ -63,7 +63,6 @@ public abstract class GameState extends ViewState {
         view.stopInputRead(true);
         showResponseMessage(message, 1000);
         view.clearInput();
-        view.stopInputRead(false);
         run();
     }
 

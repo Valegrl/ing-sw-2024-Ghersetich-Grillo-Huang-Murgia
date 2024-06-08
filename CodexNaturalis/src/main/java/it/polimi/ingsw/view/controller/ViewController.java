@@ -224,7 +224,11 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfTurnTimerExpiredEvent event) {
-
+        if(view.inGame() || view.inChat()) { // TODO handle in chat
+            view.handleResponse(event.getID(), null, "The timer for your turn has expired.");
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -240,7 +244,6 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
         playersStatus = event.getPlayers();
-        System.out.println(playersStatus);
         if(view.inLobby()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else if (view.inGame() || view.inChat()) { // TODO check if previous state was in-game

@@ -29,7 +29,6 @@ public class TokenSetupState extends ViewState {
         view.stopInputRead(true);
         view.clearInput();
         clearConsole();
-        view.stopInputRead(false);
 
         tokensMessage = controller.availableTokensMessage();
         numTokens = controller.getAvailableTokens().size();

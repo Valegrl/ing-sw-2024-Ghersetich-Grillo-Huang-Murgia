@@ -87,6 +87,7 @@ public class TUI implements View {
     @Override
     public String getInput() {
         String input = "-1";
+        stopInputRead = false;
         waitingForInput = true;
         try {
             while (!in.ready() && !stopInputRead) {
@@ -114,10 +115,11 @@ public class TUI implements View {
 
     public String getIntFromInput() {
         waitingForInput = true;
+        stopInputRead = false;
         String input = "";
         try {
             while (!in.ready() && !stopInputRead) {
-                Thread.sleep(200);
+                Thread.sleep(100);
             }
             if (!stopInputRead)
                 while(input.isEmpty())

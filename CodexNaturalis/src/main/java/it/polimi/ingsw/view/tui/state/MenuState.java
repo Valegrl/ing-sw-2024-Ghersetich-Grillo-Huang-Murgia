@@ -16,8 +16,6 @@ public class MenuState extends ViewState {
 
     @Override
     public void run() {
-        view.stopInputRead(false);
-
         clearConsole();
         view.printMessage("Choose an option:");
         int choice = readChoiceFromInput(Arrays.asList(

@@ -24,7 +24,6 @@ public class PlaceCardState extends GameState {
     @Override
     public void run() {
         clearConsole();
-        view.stopInputRead(false);
         setCurrentPlayAreaUsername(controller.getUsername());
         view.printMessage("It's your turn to " + boldText("place") + " a card!\n" +
                 "Next turns: " + controller.playersListToString() + "\n");
@@ -93,6 +92,12 @@ public class PlaceCardState extends GameState {
             case UPDATE_GAME_PLAYERS:
                 view.printMessage(message);
                 break;
+            case SELF_TURN_TIMER_EXPIRED:
+                clearConsole();
+                view.stopInputRead(true);
+                showResponseMessage("Your place card timer has expired. Your turn has been skipped.", 1000);
+                view.clearInput();
+                break;
             case NEW_TURN:
                 clearConsole();
                 view.stopInputRead(true);
@@ -117,6 +122,8 @@ public class PlaceCardState extends GameState {
         if (chosenCardIndex == -1) {
             run();
             return;
+        } else if (chosenCardIndex == 0) {
+            return;
         }
 
         ImmPlayableCard chosenCard = controller.getSelfHandCard(chosenCardIndex - 1);
@@ -124,6 +131,8 @@ public class PlaceCardState extends GameState {
         int chosenFace = readChoiceFromInput(Arrays.asList("Front", "Back"));
         if (chosenFace == -1) {
             run();
+            return;
+        } else if (chosenFace == 0) {
             return;
         }
 
@@ -175,6 +184,9 @@ public class PlaceCardState extends GameState {
                 view.printMessage("Coordinate elements must be integers");
                 c = null;
             }
+        }
+        if (view.isInputReadStopped()) {
+            return null;
         }
         return c;
     }

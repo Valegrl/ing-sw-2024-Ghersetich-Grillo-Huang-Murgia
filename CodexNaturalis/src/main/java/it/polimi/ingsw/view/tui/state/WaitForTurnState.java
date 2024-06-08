@@ -14,7 +14,6 @@ public class WaitForTurnState extends GameState {
     @Override
     public void run() {
         clearConsole();
-        view.stopInputRead(false);
         setCurrentPlayAreaUsername(controller.getUsername());
         view.printMessage("Player turns: " + controller.playersListToString());
         view.printMessage("Waiting for your turn. . .  \n");
@@ -58,15 +57,19 @@ public class WaitForTurnState extends GameState {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
-            case OTHER_PLACE_CARD, UPDATE_GAME_PLAYERS:
+            case OTHER_PLACE_CARD:
                 showInfoMessage(message);
+                break;
+            case UPDATE_GAME_PLAYERS:
+                view.stopInputRead(true);
+                view.printMessage(message);
+                view.clearInput();
                 break;
             case OTHER_DRAW_CARD:
                 clearConsole();
                 view.stopInputRead(true);
                 view.printMessage(message);
                 view.clearInput();
-                view.stopInputRead(false);
                 break;
             case NEW_TURN:
                 clearConsole();

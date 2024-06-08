@@ -20,7 +20,6 @@ public class LobbyState extends ViewState {
 
     @Override
     public void run() {
-        view.stopInputRead(false);
         clearConsole();
 
         showLobbyInfo();
@@ -94,6 +93,7 @@ public class LobbyState extends ViewState {
                 transition(new MenuState(view));
                 break;
             case EventID.UPDATE_GAME_PLAYERS:
+                notifyResponse();
                 transition(new GameSetupState(view));
             default:
                 break;

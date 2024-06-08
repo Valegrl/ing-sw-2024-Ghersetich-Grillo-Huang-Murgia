@@ -12,7 +12,6 @@ public class WaitingReconnectState extends ViewState {
 
     @Override
     public void run() {
-        view.stopInputRead(false);
         clearConsole();
         String message = """
                 You are the only player remaining in the game.
