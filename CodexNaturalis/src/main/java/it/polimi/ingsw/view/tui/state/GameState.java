@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.tui.state;
 
+import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -113,6 +115,18 @@ public abstract class GameState extends ViewState {
             view.printMessage(card.printCard(0));
             seeDetailedCard();
         }
+    }
+
+    public void handleNewGameStatus(String message) {
+        controller.setPreviousGameStatus(new Pair<>(controller.getGameStatus(), this));
+        clearConsole();
+        view.stopInputRead(true);
+        showResponseMessage(message, 2000);
+        view.clearInput();
+        if(controller.getGameStatus().equals(GameStatus.WAITING))
+            transition(new WaitingReconnectState(view));
+        else
+            run();
     }
 
     protected void setCurrentPlayAreaUsername(String username) {

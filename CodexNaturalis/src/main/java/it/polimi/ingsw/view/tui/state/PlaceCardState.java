@@ -4,8 +4,10 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 
@@ -29,7 +31,7 @@ public class PlaceCardState extends GameState {
 
         view.printMessage(controller.selfPlayAreaToString());
 
-        view.printMessage("Choose an option:");
+        view.printMessage("It's your turn\n\nChoose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 "Place a card"
                 , "See a specific placed card"
@@ -76,7 +78,7 @@ public class PlaceCardState extends GameState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case PLACE_CARD:
-                view.printMessage(message);
+                showResponseMessage(message, 500);
                 placeCard();
                 break;
             case AVAILABLE_POSITIONS:
@@ -84,7 +86,9 @@ public class PlaceCardState extends GameState {
                 notifyResponse();
                 break;
             case SELF_PLACE_CARD:
-                transition(new DrawCardState(view));
+                view.printMessage(message);
+                if (!controller.isLastCircle())
+                    transition(new DrawCardState(view));
                 break;
             case UPDATE_GAME_PLAYERS:
                 view.printMessage(message);
@@ -94,8 +98,13 @@ public class PlaceCardState extends GameState {
                 view.stopInputRead(true);
                 showResponseMessage(message, 1000);
                 view.clearInput();
-                view.stopInputRead(false);
                 transition(new WaitForTurnState(view));
+                break;
+            case NEW_GAME_STATUS:
+                handleNewGameStatus(message);
+                break;
+            case QUIT_GAME:
+                handleQuitGame(feedback, message);
                 break;
             default:
                 break;
@@ -173,5 +182,10 @@ public class PlaceCardState extends GameState {
     @Override
     public boolean inGame() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PlaceCardState";
     }
 }

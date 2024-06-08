@@ -19,12 +19,17 @@ import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
+import it.polimi.ingsw.view.ViewState;
+import it.polimi.ingsw.view.tui.state.DrawCardState;
+import it.polimi.ingsw.view.tui.state.GameState;
+import it.polimi.ingsw.view.tui.state.PlaceCardState;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
+import org.mockito.internal.util.Platform;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -111,7 +116,15 @@ public class ViewController implements ViewEventReceiver {
      */
     private ViewModel model;
 
+    /**
+     * The previous game state, a Pair of a {@link GameStatus}
+     * and a boolean representing if the self-player had placed a card already or not.
+     */
+    private Pair<GameStatus, ViewState> previousGameStatus;
 
+    /**
+     * The lock used to synchronize the model.
+     */
     private final Object modelLock = new Object();
 
     /**
@@ -221,9 +234,25 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
-        if(view.inLobby() || view.inGame() || view.inChat()) {
-            playersStatus = event.getPlayers();
+        playersStatus = event.getPlayers();
+        System.out.println(playersStatus);
+        if(view.inLobby()) {
             view.handleResponse(event.getID(), null, event.getMessage());
+        } else if (view.inGame() || view.inChat()) { // TODO check if previous state was in-game
+            if (playersOnline() == 1) { // checking if the player is the only one remaining in the game
+                model.setGameStatus(GameStatus.WAITING);
+                view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, event.getMessage());
+                // note that previousGameStatus will be set from the current state using the setter method
+                // this is to make chat set the previousState to its previous state
+            } else if (model != null && model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() > 1) { // checking if the game needs to be running again
+                model.setGameStatus(previousGameStatus.key());
+                if (hasTurn()) {
+                    view.handleResponse(event.getID(), null, event.getMessage());
+                    view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, "The game will start from where it was interrupted.");
+                }
+            } else {
+                view.handleResponse(event.getID(), null, event.getMessage());
+            }
         } else {
             System.out.println("Event in the wrong state");
         }
@@ -349,31 +378,6 @@ public class ViewController implements ViewEventReceiver {
         } else {
             System.out.println("Game state: event in the wrong state");
         }
-    }
-
-    @Override
-    public void evaluateEvent(IsMyTurnEvent event) {
-        if(view.inGame()) {
-            StringBuilder message = new StringBuilder();
-            /*
-            if(model.getThisPlayerIndex() == model.getTurnPlayerIndex()){
-                message.append("It's your turn! \n");
-                view.handleResponse(event.getID(), null, message.toString());
-            }
-            else{
-                message.append("It's not your turn! \n");
-                view.handleResponse(event.getID(), null, message.toString());
-            }
-            */
-
-        } else {
-            System.out.println("Game state: event in the wrong state");
-        }
-    }
-
-    @Override
-    public void evaluateEvent(SeeOpponentPlayAreaEvent event) {
-
     }
 
     @Override
@@ -679,9 +683,11 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public List<String> getPlayerUsernames() {
+        List<String> usernames;
         synchronized (modelLock) {
-            return model.getPlayerUsernames();
+            usernames = new ArrayList<>(model.getPlayerUsernames());
         }
+        return usernames;
     }
 
     public int getSelfHandSize() {
@@ -691,9 +697,11 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public ImmPlayableCard getSelfHandCard(int index) {
+        ImmPlayableCard card;
         synchronized (modelLock) {
-            return model.getSelfPlayer().getPlayArea().getHand().get(index);
+            card = model.getSelfPlayer().getPlayArea().getHand().get(index);
         }
+        return card;
     }
 
     public List<String> getSelfHandCardIds() {
@@ -751,9 +759,11 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public GameStatus getGameStatus() {
+        GameStatus gameStatus;
         synchronized (modelLock) {
-            return model.getGameStatus();
+            gameStatus = model.getGameStatus();
         }
+        return gameStatus;
     }
 
     public List<Token> getAvailableTokens() {
@@ -796,6 +806,10 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    private int playersOnline() {
+        return playersStatus.entrySet().stream().filter(Map.Entry::getValue).toList().size();
+    }
+
     public String playersListToString() {
         StringBuilder m = new StringBuilder();
         int turnPlayerIndex;
@@ -807,7 +821,6 @@ public class ViewController implements ViewEventReceiver {
 
         int lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
         for (int i = turnPlayerIndex; i != lastPlayer; i = (i + 1) % playerUsernames.size()) {
-            // TODO check if online?
             if (i == turnPlayerIndex) {
                 m.append(AnsiCodes.BOLD).append(playerUsernames.get(i)).append(AnsiCodes.RESET).append(" -> ");
             } else if (i == playerUsernames.indexOf(username)) {
@@ -860,7 +873,21 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    public boolean isLastCircle() {
+        synchronized (modelLock) {
+            return model.getGameStatus().equals(GameStatus.LAST_CIRCLE);
+        }
+    }
+
     public ViewStartSetup getSetup(){
         return this.setup;
+    }
+
+    public ViewState getPreviousViewState() {
+        return previousGameStatus.value();
+    }
+
+    public void setPreviousGameStatus(Pair<GameStatus, ViewState> previousGameStatus) {
+        this.previousGameStatus = previousGameStatus;
     }
 }

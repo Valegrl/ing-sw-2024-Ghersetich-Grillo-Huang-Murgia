@@ -122,18 +122,6 @@ public interface ViewEventReceiver {
     void evaluateEvent(AvailablePositionsEvent event);
 
     /**
-     * Handles the event of checking if it's the player's turn.
-     * @param event The event to be handled.
-     */
-    void evaluateEvent(IsMyTurnEvent event);
-
-    /**
-     * Handles the event of seeing the opponent's play area.
-     * @param event The event to be handled.
-     */
-    void evaluateEvent(SeeOpponentPlayAreaEvent event);
-
-    /**
      * Handles the event used for the local player's cards-setup choice.
      * @param event The event to be handled.
      */

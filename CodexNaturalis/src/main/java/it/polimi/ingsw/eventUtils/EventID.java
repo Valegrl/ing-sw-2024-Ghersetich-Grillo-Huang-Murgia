@@ -6,8 +6,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.*;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.IsMyTurnEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.game.local.SeeOpponentPlayAreaEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.local.NewGameStatusEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.KickFromLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
@@ -101,14 +100,9 @@ public enum EventID {
     AVAILABLE_POSITIONS("AVAILABLE_POSITIONS", AvailablePositionsEvent.class),
 
     /**
-     * The {@link IsMyTurnEvent} ID.
+     * The {@link NewGameStatusEvent} ID.
      */
-    IS_MY_TURN("IS_MY_TURN", IsMyTurnEvent.class),
-
-    /**
-     * The {@link SeeOpponentPlayAreaEvent} ID.
-     */
-    SEE_OPPONENT_PLAY_AREA("SEE_OPPONENT_PLAY_AREA", SeeOpponentPlayAreaEvent.class),
+    NEW_GAME_STATUS("SEE_OPPONENT_PLAY_AREA", NewGameStatusEvent.class),
 
     /**
      * The {@link ChosenCardsSetupEvent} ID.
@@ -257,8 +251,7 @@ public enum EventID {
 
     static {
         localEvents.add(AVAILABLE_POSITIONS);
-        localEvents.add(IS_MY_TURN);
-        localEvents.add(SEE_OPPONENT_PLAY_AREA);
+        localEvents.add(NEW_GAME_STATUS);
         localEvents.add(GET_LOBBY_INFO);
         localEvents.add(GET_CHAT_MESSAGES);
     }

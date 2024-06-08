@@ -2,20 +2,15 @@ package it.polimi.ingsw.eventUtils.event.fromView.game.local;
 
 import it.polimi.ingsw.controller.VirtualView;
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
-public class SeeOpponentPlayAreaEvent extends FeedbackEvent {
+public class NewGameStatusEvent extends Event {
 
-    private final static String id = EventID.SEE_OPPONENT_PLAY_AREA.getID();
+    private final static String id = EventID.NEW_GAME_STATUS.getID();
 
-    public SeeOpponentPlayAreaEvent() {
+    public NewGameStatusEvent() {
         super(id);
-    }
-
-    public SeeOpponentPlayAreaEvent(Feedback feedback, String message) {
-        super(id, feedback, message);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class WaitForTurnState extends GameState {
 
         view.printMessage(controller.selfPlayAreaToString());
 
-        view.printMessage("Choose an option:");
+        view.printMessage("Waiting for your turn\n\nChoose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 "Open chat"
                 , "See visible decks"
@@ -78,14 +78,11 @@ public class WaitForTurnState extends GameState {
                 else
                     run();
                 break;
+            case NEW_GAME_STATUS:
+                handleNewGameStatus(message);
+                break;
             case QUIT_GAME:
-                if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 1500);
-                    transition(new MenuState(view));
-                } else {
-                    view.printMessage(message);
-                    run();
-                }
+                handleQuitGame(feedback, message);
                 break;
             default:
                 break;
@@ -95,5 +92,10 @@ public class WaitForTurnState extends GameState {
     @Override
     public boolean inGame() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "WaitForTurnState";
     }
 }

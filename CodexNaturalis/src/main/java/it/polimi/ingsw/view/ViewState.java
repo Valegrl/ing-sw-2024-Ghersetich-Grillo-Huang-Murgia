@@ -4,6 +4,7 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.controller.ViewController;
+import it.polimi.ingsw.view.tui.state.MenuState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,6 +102,16 @@ public abstract class ViewState {
             waitForResponse();
         } else {
             showResponseMessage("You are still in the game.", 200);
+            run();
+        }
+    }
+
+    public void handleQuitGame(Feedback feedback, String message) {
+        if (feedback == Feedback.SUCCESS) {
+            showResponseMessage(message, 1500);
+            transition(new MenuState(view));
+        } else {
+            showResponseMessage(message, 1000);
             run();
         }
     }

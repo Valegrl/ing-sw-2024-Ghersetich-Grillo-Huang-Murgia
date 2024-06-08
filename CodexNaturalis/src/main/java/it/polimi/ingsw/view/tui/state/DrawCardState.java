@@ -3,7 +3,9 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 
 import java.util.Arrays;
@@ -26,7 +28,7 @@ public class DrawCardState extends GameState {
         view.printMessage(controller.selfPlayAreaToString());
         view.printMessage(controller.decksToString());
 
-        view.printMessage("Choose an option:");
+        view.printMessage("It's your turn\n\nChoose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 "Draw a card"
                 , "See a specific placed card"
@@ -69,8 +71,8 @@ public class DrawCardState extends GameState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case DRAW_CARD:
-                showResponseMessage(message, 1000);
-                run();
+                showResponseMessage(message, 500);
+                drawCard();
                 break;
             case SELF_DRAW_CARD:
                 clearConsole();
@@ -85,6 +87,12 @@ public class DrawCardState extends GameState {
                 showResponseMessage(message, 1000);
                 view.clearInput();
                 transition(new WaitForTurnState(view));
+                break;
+            case NEW_GAME_STATUS:
+                handleNewGameStatus(message);
+                break;
+            case QUIT_GAME:
+                handleQuitGame(feedback, message);
                 break;
             default:
                 break;
@@ -125,5 +133,10 @@ public class DrawCardState extends GameState {
     @Override
     public boolean inGame() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "DrawCardState";
     }
 }
