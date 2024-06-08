@@ -146,7 +146,7 @@ public class PlaceCardState extends GameState {
         Coordinate c = null;
         String x, y;
         boolean okPos = true;
-        while (c == null || !okPos) {
+        while ((c == null || !okPos) && !view.isInputReadStopped()) {
             if (!okPos) view.printMessage("Coordinate not available. Please choose a different coordinate");
             okPos = true;
             c = null;

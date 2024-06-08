@@ -205,4 +205,8 @@ public class TUI implements View {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean isInputReadStopped() {
+        return stopInputRead;
+    }
 }

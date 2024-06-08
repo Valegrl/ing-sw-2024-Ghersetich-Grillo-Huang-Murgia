@@ -31,6 +31,8 @@ public interface View {
 
     ViewState getState();
 
+    boolean isInputReadStopped();
+
     void setState(ViewState state);
 
     void setUsername(String username);
