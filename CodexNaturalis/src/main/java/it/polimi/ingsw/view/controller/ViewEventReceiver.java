@@ -55,6 +55,12 @@ public interface ViewEventReceiver {
     void evaluateEvent(KickedPlayerFromLobbyEvent event);
 
     /**
+     * Handles the event when the timer for the local-player's turn expires.
+     * @param event The event to be handled.
+     */
+    void evaluateEvent(SelfTurnTimerExpiredEvent event);
+
+    /**
      * Handles the event of updating the lobby players.
      * @param event The event to be handled.
      */

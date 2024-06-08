@@ -223,6 +223,11 @@ public class ViewController implements ViewEventReceiver {
     }
 
     @Override
+    public void evaluateEvent(SelfTurnTimerExpiredEvent event) {
+
+    }
+
+    @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
         if(view.inLobby() || view.inChat()) {
             playersStatus = event.getPlayers();

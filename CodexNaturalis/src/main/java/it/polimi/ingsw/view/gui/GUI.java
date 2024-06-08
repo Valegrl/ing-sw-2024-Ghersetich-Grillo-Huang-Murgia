@@ -218,6 +218,11 @@ public class GUI extends Application implements View {
     }
 
     @Override
+    public boolean isInputReadStopped() {
+        return false;
+    }
+
+    @Override
     public void setState(ViewState state) {
         // this.state = state;
     }

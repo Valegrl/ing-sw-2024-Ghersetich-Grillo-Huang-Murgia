@@ -45,6 +45,11 @@ public enum EventID {
     KICKED_PLAYER_FROM_LOBBY("KICKED_PLAYER_FROM_LOBBY", KickedPlayerFromLobbyEvent.class),
 
     /**
+     * The {@link SelfTurnTimerExpiredEvent} ID.
+     */
+    SELF_TURN_TIMER_EXPIRED("SELF_TURN_TIMER_EXPIRED", SelfTurnTimerExpiredEvent.class),
+
+    /**
      * The {@link UpdateGamePlayersEvent} ID.
      */
     UPDATE_GAME_PLAYERS("UPDATE_GAME_PLAYERS", UpdateGamePlayersEvent.class),

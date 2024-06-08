@@ -799,7 +799,13 @@ public class GameController {
                         GameStatus gameStatus = game.getGameStatus();
                         if (gameStatus == GameStatus.RUNNING || gameStatus == GameStatus.LAST_CIRCLE) {
                             String current = game.getCurrentPlayerUsername();
-                            notifySpecificOnlineGamePlayer(current, "Your time is up!");
+                            for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                                String checkUsername = entry.getKey().getUsername();
+                                if (checkUsername.equals(current) && isPlayerOnline(current)) {
+                                    entry.getValue().update(new SelfTurnTimerExpiredEvent());
+                                    break;
+                                }
+                            }
                             notifyAllOnlineGamePlayersExcept(current, "The timer for player " + current + " has run out!");
                             if (gameStatus == GameStatus.RUNNING && startedMove)
                                 autoDrawCard(true);
