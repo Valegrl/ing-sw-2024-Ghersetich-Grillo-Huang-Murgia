@@ -17,6 +17,8 @@ import it.polimi.ingsw.view.tui.state.MenuState;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,12 +31,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is responsible for setting up the game. It handles the user interactions during the game setup phase.
+ * It extends the FXMLController class and overrides its methods to provide the specific functionality needed for the game setup.
+ */
 public class GameSetupController extends FXMLController {
 
     @FXML
@@ -169,70 +174,80 @@ public class GameSetupController extends FXMLController {
     private List<ImmPlayableCard> myHand;
 
 
-
+    /**
+     * Default constructor for the GameSetupController class.
+     */
     public GameSetupController(){
         super();
     }
 
+    /**
+     * This method is called when the controller is initialized. It sets up the view, stage and ViewController for the class.
+     * The initialization includes setting up the chat, the buttons for viewing other players' setup, the radio buttons in chat, one for each
+     * specific player in the game, the images for showing other player's back cards in the hand, the images for showing this player's hand,
+     * the cards in the resource deck and in the gold deck, the common objectives and the secret objectives.
+     * @param view The view associated with this controller.
+     * @param stage The stage that this controller controls.
+     */
     @Override
     public void run(View view, Stage stage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
-            loader.setController(this);
-            Parent root = loader.load();
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
+        this.view = view;
+        this.stage = stage;
+        this.controller = view.getController();
+        this.setup = controller.getSetup();
 
-            setLobbyName(controller.getLobbyId());
-            chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
-            setupButtons = Arrays.asList(setupButton1, setupButton2, setupButton3);
-            radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
-            opponentsHandCardImages = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
-            handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
-            myHand = setup.getHand();
+        setLobbyName(controller.getLobbyId());
+        setupButtons = Arrays.asList(setupButton1, setupButton2, setupButton3);
+        radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
+        opponentsHandCardImages = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
+        handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
 
+        myHand = setup.getHand();
 
-            showResourceDeck();
-            showGoldDeck();
-            showMyHand();
-            showCommonObjectives();
-            showSecretObjectives();
-            showStartCard();
-            update();
-        }
-        catch(IOException exception){
-            exception.printStackTrace();
-        }
+        showResourceDeck();
+        showGoldDeck();
+        showMyHand();
+        showCommonObjectives();
+        showSecretObjectives();
+        showStartCard();
+        update();
+        addHooverEffect();
+        addChoiceSelection();
 
         //To load the chat from the lobby
         controller.newViewEvent(new GetChatMessagesEvent());
         waitForResponse();
-
-        addHooverEffect();
-        addChoiceSelection();
-
-
+        chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
+        chatInput.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                submitMessage();
+            }
+        });
     }
 
+    /**
+     * This method processes server responses based on the event ID. The events encapsulate various stages of the game setup and progression.
+     * These stages include the following scenarios:
+     * - Player finalizing their game setup choices.
+     * - Receipt of a new chat message.
+     * - A player exiting the game.
+     * - Transition to the subsequent game phase, specifically the selection of colored tokens.
+     * @param feedback The feedback from the server.
+     * @param message The message from the server.
+     * @param eventID The event ID of the response.
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch(EventID.getByID(eventID)){
-            case CHOOSE_CARDS_SETUP:
-                this.setup = controller.getSetup();
-                if(setup != null) {
-                    Platform.runLater(() -> run(view, stage));
-                }
-                else{
-                    System.out.println("Error, setup not initialized !");
-                }
-                break;
-
             case GET_CHAT_MESSAGES:
-                Platform.runLater(() -> chatArea.appendText(message));
+                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
+                chatArea.appendText(getChatFormattedMessages + "\n");
                 break;
 
             case CHOSEN_CARDS_SETUP:
                 System.out.println("You have chosen your cards!");
+                readyButton.setVisible(false);
                 break;
             case UPDATE_GAME_PLAYERS:
                 Platform.runLater(this::update);
@@ -263,7 +278,8 @@ public class GameSetupController extends FXMLController {
 
             case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
-                    chatArea.appendText(message + "\n");
+                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
+                    chatArea.appendText(formattedMessage + "\n");
                 } else {
                     System.out.println("Message unable to send!");
                 }
@@ -272,6 +288,12 @@ public class GameSetupController extends FXMLController {
         notifyResponse();
     }
 
+    /**
+     * This method is responsible for handling the selection of cards during the game setup phase.
+     * It adds a mouse click event to each card. When a card is clicked, it is highlighted and set as the chosen card.
+     * It also handles when the player wants to play the start card flipped or not flipped by adding the same effect.
+     * The method uses a DropShadow effect to highlight the chosen card.
+     */
     private void addChoiceSelection(){
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
@@ -308,6 +330,13 @@ public class GameSetupController extends FXMLController {
         });
     }
 
+    /**
+     * This method adds a hover effect to the cards in the game setup phase.
+     * It creates a DropShadow effect and applies it to the cards when the mouse enters their area.
+     * When the mouse exits the area of a card, the effect is removed unless the cards are the chosen ones.
+     * For the cards in the player's hand, the method changes the image of the card to its back side when the mouse enters its area,
+     * and changes it back to the front side when the mouse exits its area.
+     */
     private void addHooverEffect(){
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
@@ -447,6 +476,12 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * This method is responsible for displaying the player's hand in the GUI.
+     * It iterates over the cards in the player's hand and creates an Image object for each card.
+     * The Image object is created based on the card's ID and type (gold or resource).
+     * The image is then set to the corresponding ImageView in the handCardImages list.
+     */
     private void showMyHand(){
         int i = 0;
         for(ImmPlayableCard card : myHand){
@@ -462,18 +497,14 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * This method is responsible for displaying the current player's setup in the GUI.
+     * It makes the secret objectives and start card visible and manages their visibility.
+     * It also iterates over the ImageView objects in the handCardImages list, making them visible and managed.
+     * Conversely, it makes the ImageView objects in the {@code opponentsHandCardImages} list invisible and unmanaged.
+     */
     @FXML
     public void showYourSetup(){
-        /*
-        secretObjectiveCard0.setManaged(true);
-        secretObjectiveCard0.setVisible(true);
-        secretObjectiveCard1.setManaged(true);
-        secretObjectiveCard1.setVisible(true);
-        startCardFront.setManaged(true);
-        startCardFront.setVisible(true);
-        startCardBack.setManaged(true);
-        startCardBack.setVisible(true);
-        */
         secretObjectiveHBox.setManaged(true);
         secretObjectiveHBox.setVisible(true);
         startCardHBox.setManaged(true);
@@ -489,6 +520,12 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * These methods are responsible for displaying the setup of the other players in the GUI.
+     * It makes the ImageView objects in the {@code handCardImages} list invisible and unmanaged.
+     * Conversely, it makes the ImageView objects in the {@code opponentsHandCardImages} list visible and managed.
+     * It then calls the showOthersHand method with the text of setupButton as the argument.
+     */
     @FXML
     public void showPlayerSetup1(){
         for(ImageView imageView : handCardImages){
@@ -526,17 +563,17 @@ public class GameSetupController extends FXMLController {
         showOthersHand(setupButton3.getText());
     }
 
+    /**
+     * This method is responsible for displaying the hand of other players in the GUI.
+     * It first hides the secret objectives and start card of the current player.
+     * Then, it iterates over the back cards of the other players' hands.
+     * If the username of the other player matches the provided user parameter, it displays their hand.
+     * For each card in the other player's hand, it creates an Image object based on the card's type (gold or resource) and item.
+     * The image is then set to the corresponding ImageView in the opponentsHandCardImages list.
+     *
+     * @param user The username of the player whose hand is to be displayed.
+     */
     private void showOthersHand(String user){
-        /*
-        secretObjectiveCard0.setManaged(false);
-        secretObjectiveCard0.setVisible(false);
-        secretObjectiveCard1.setManaged(false);
-        secretObjectiveCard1.setVisible(false);
-        startCardFront.setManaged(false);
-        startCardFront.setVisible(false);
-        startCardBack.setManaged(false);
-        startCardBack.setVisible(false);
-         */
 
         secretObjectiveHBox.setManaged(false);
         secretObjectiveHBox.setVisible(false);
@@ -592,9 +629,14 @@ public class GameSetupController extends FXMLController {
                 }
             }
         }
-
     }
 
+    /**
+     * This method is responsible for displaying the gold deck in the GUI.
+     * It first retrieves the item type of the gold deck and the visible gold cards from the setup.
+     * Then, it creates an Image object for the back of the gold deck based on the item type and sets it to the ImageView of the gold deck.
+     * It also creates Image objects for the front of the visible gold cards based on their IDs and sets them to the corresponding ImageViews.
+     */
     private void showGoldDeck(){
         Item itemGoldDeck = setup.getGoldDeck();
         ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
@@ -626,6 +668,12 @@ public class GameSetupController extends FXMLController {
 
     }
 
+    /**
+     * This method is responsible for displaying the resource deck in the GUI.
+     * It first retrieves the item type of the resource deck and the visible resource cards from the setup.
+     * Then, it creates an Image object for the back of the resource deck based on the item type and sets it to the ImageView of the resource deck.
+     * It also creates Image objects for the front of the visible resource cards based on their IDs and sets them to the corresponding ImageViews.
+     */
     private void showResourceDeck(){
         Item itemResourceDeck = setup.getResourceDeck();
         ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
@@ -657,6 +705,12 @@ public class GameSetupController extends FXMLController {
 
     }
 
+    /**
+     * This method is responsible for displaying the common objectives in the GUI.
+     * It first retrieves the common objectives from the game setup.
+     * Then, it creates an Image object for each common objective card based on the card's ID.
+     * The image is then set to the corresponding ImageView in the GUI.
+     */
     private void showCommonObjectives(){
         ImmObjectiveCard[] commonObjectives = setup.getCommonObjectives();
         ImmObjectiveCard commonObjective0 = commonObjectives[0];
@@ -667,6 +721,12 @@ public class GameSetupController extends FXMLController {
         this.commonObjectiveCard1.setImage(commonObjectiveImage1);
     }
 
+    /**
+     * This method is responsible for displaying the secret objectives in the GUI.
+     * It first retrieves the secret objectives from the game setup.
+     * Then, it creates an Image object for each secret objective card based on the card's ID.
+     * The image is then set to the corresponding ImageView in the GUI.
+     */
     private void showSecretObjectives(){
         ImmObjectiveCard[] secretObjectives = setup.getSecretObjectiveCards();
         objectiveChoice0 = secretObjectives[0];
@@ -678,6 +738,12 @@ public class GameSetupController extends FXMLController {
         this.secretObjectiveCard1.setImage(secretObjectiveImage1);
     }
 
+    /**
+     * This method is responsible for displaying the start card in the GUI.
+     * It first retrieves the start card from the game setup.
+     * Then, it creates two Image objects for the front and back of the start card based on the card's ID.
+     * The images are then set to the corresponding ImageViews in the GUI.
+     */
     private void showStartCard(){
         startCard = setup.getStartCard();
         System.out.println(startCard.getId());
@@ -695,12 +761,11 @@ public class GameSetupController extends FXMLController {
         this.lobbyName.setText("LOBBY: " + lobbyName);
     }
 
-    public void setupController(View view, Stage stage){
-        this.view = view;
-        this.stage = stage;
-        this.controller = view.getController();
-    }
-
+    /**
+     * This method is used to finalize the game setup choices.
+     * If the player has chosen an objective and decided whether to flip the start card, it sends the choices to the controller.
+     * If the player has not made their choices, it prints a message to the console.
+     */
     @FXML
     public void readySetup(){
         if(objectiveChosen != null && flippedChoice != null) {
@@ -710,18 +775,26 @@ public class GameSetupController extends FXMLController {
             if (objectiveChosen.equals(objectiveChoice1)) {
                 controller.chosenSetup(2, flippedChoice);
             }
-            readyButton.setVisible(false);
         }
         else{
             System.out.println("You didn't choose your setup!");
         }
     }
 
+    /**
+     * This method is used to update the game setup view when a player leaves the game setup phase.
+     * It updates the players'  buttons, chat options, and shows the current player's setup.
+     */
     private void update(){
         updatePlayers();
         updateChatOptions();
+        showYourSetup();
     }
 
+    /**
+     * This method is used to update the players' view in the game setup.
+     * It iterates over the players' status and updates the setup buttons accordingly.
+     */
     private void updatePlayers(){
         int i = 0;
         for(String user : controller.getPlayersStatus().keySet()) {
@@ -738,6 +811,10 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to update the chat options in the game setup view.
+     * It iterates over the players' status and updates the radio buttons accordingly.
+     */
     private void updateChatOptions(){
         int i = 0;
         generalRadioButton.setSelected(true);
@@ -755,6 +832,10 @@ public class GameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to quit the game.
+     * It sends a {@link QuitGameEvent} to the server and waits for a response.
+     */
     @FXML
     public void quitGame(){
         Event event = new QuitGameEvent();
@@ -808,11 +889,19 @@ public class GameSetupController extends FXMLController {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
+    /**
+     * This method is used to check if the player is in the game.
+     * It returns true as the player is in the game during the game setup phase.
+     */
     @Override
     public boolean inGame(){
         return true;
     }
 
+    /**
+     * This method is used to check if the player is in the chat.
+     * It returns true as the player is in the chat during the game setup phase.
+     */
     @Override
     public boolean inChat(){
         return true;

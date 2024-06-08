@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="mainPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane id="mainPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.GameSetupController">
    <top>
       <AnchorPane minHeight="80.0" minWidth="1920.0" BorderPane.alignment="CENTER">
          <children>

@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromModel.ChooseCardsSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -36,8 +35,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-
-//TODO USE TOGGLE BUTTONS FOR THE READY?
 
 /**
  * This class is responsible for controlling the lobby in the GUI.
@@ -185,6 +182,7 @@ public class LobbyController extends FXMLController {
     /**
      * This method handles the response from the server.
      * It updates the lobby view based on the feedback and event ID received.
+     * It also receives the messages player write in chat.
      *
      * @param feedback The feedback received from the server.
      * @param message The message received from the server.
@@ -239,21 +237,21 @@ public class LobbyController extends FXMLController {
                 });
                 break;
             case EventID.GET_CHAT_MESSAGES:
-                    chatArea.appendText(message + "\n");
+                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
+                    chatArea.appendText(getChatFormattedMessages + "\n");
                 break;
             case EventID.CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
-                    chatArea.appendText(message + "\n");
+                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
+                    chatArea.appendText(formattedMessage + "\n");
                 } else {
                     System.out.println("Message unable to send!");
                 }
                 break;
 
             case EventID.UPDATE_GAME_PLAYERS:
-                GameSetupController nextController = new GameSetupController();
-                nextController.setupController(view, stage);
-
-                view.setFXMLController(nextController);
+                BackgroundGameSetupController nextController = new BackgroundGameSetupController();
+                transition(nextController);
                 break;
 
         }
@@ -414,8 +412,6 @@ public class LobbyController extends FXMLController {
     private void updateChatOptions(){
         int i = 0;
         generalRadioButton.setSelected(true);
-        //TODO make it so the general button doesn't get selected everytime someone joins or leaves is more complex
-
         for(String user : controller.getPlayersStatus().keySet()){
             if(!controller.getUsername().equals(user)){
                 radioButtons.get(i).setVisible(true);
