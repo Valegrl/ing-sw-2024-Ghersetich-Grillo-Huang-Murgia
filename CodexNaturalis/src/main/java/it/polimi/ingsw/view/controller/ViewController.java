@@ -20,17 +20,14 @@ import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.view.ViewState;
-import it.polimi.ingsw.view.tui.state.DrawCardState;
-import it.polimi.ingsw.view.tui.state.GameState;
-import it.polimi.ingsw.view.tui.state.PlaceCardState;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
+import it.polimi.ingsw.viewModel.turnAction.place.PlaceCardData;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayer;
-import org.mockito.internal.util.Platform;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -309,6 +306,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(SelfPlaceCardEvent event) {
         synchronized (modelLock) {
+            placeCardUpdateModel(event.getMyPlaceCardData());
             model.getSelfPlayer().setPlayArea(event.getMyPlaceCardData().getPlayArea());
         }
         if (view.inGame()) {
@@ -351,6 +349,7 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(OtherPlaceCardEvent event) {
         String player = event.getOtherPlaceCardData().getOpponent();
         synchronized (modelLock) {
+            placeCardUpdateModel(event.getOtherPlaceCardData());
             model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
         }
         if (view.inGame() || view.inChat()) { // TODO handle in chat
@@ -878,6 +877,13 @@ public class ViewController implements ViewEventReceiver {
     public String opponentPlayAreaToString(String player) {
         ViewModel vm = getModel();
         return vm.opponentPlayAreaToString(player);
+    }
+
+    private void placeCardUpdateModel(PlaceCardData data) {
+        synchronized (modelLock) {
+            model.setGameStatus(data.getGameStatus());
+            model.setScoreboard(data.getScoreboard());
+        }
     }
 
     private void drawCardUpdateModel(DrawCardData data) {

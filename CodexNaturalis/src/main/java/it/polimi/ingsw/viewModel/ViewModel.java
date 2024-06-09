@@ -85,7 +85,7 @@ public class ViewModel implements Serializable, CardConverter {
     /**
      * The flag that indicates if the last circle status has been activated.
      */
-    private final boolean detectedLC;
+    private boolean detectedLC;
 
     /**
      * Constructor for ViewModel.
@@ -384,5 +384,14 @@ public class ViewModel implements Serializable, CardConverter {
      */
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public void setDetectedLC(boolean detectedLC) {
+        this.detectedLC = detectedLC;
+    }
+
+    public void setScoreboard(Map<String, Integer> scoreboard) {
+        this.scoreboard.clear();
+        this.scoreboard.putAll(scoreboard);
     }
 }
