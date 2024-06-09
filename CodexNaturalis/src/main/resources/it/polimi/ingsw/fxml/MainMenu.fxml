@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Region?>
 
 <!-- OLD CODE, REUSE IF SCREEN IS BROKEN
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080.0" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21"  AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
@@ -50,7 +51,7 @@
 </AnchorPane>
 -->
 
-<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Buttons.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
+<AnchorPane minHeight="720.0" minWidth="1280.0" stylesheets="@../css/Buttons.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
     <children>
         <AnchorPane fx:id="mainMenuFX" styleClass="mainPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -81,13 +82,15 @@
 
         <AnchorPane fx:id="creditsMenuFX" managed="false" styleClass="genericPane" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50">
                     <children>
                         <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="This game was made in special collaboration with Cranio Creations by:" textAlignment="CENTER" wrappingWidth="900.0" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" textAlignment="CENTER" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Valerio Grillo" textAlignment="CENTER" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jerry Huang" textAlignment="CENTER" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filippo Murgia" textAlignment="CENTER" />
+                        <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                        <Text styleClass="italic-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" textAlignment="CENTER" />
+                        <Text styleClass="italic-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Valerio Grillo" textAlignment="CENTER" />
+                        <Text styleClass="italic-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Jerry Huang" textAlignment="CENTER" />
+                        <Text styleClass="italic-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Filippo Murgia" textAlignment="CENTER" />
+                        <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thank you for playing!" textAlignment="CENTER" />
                         <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                             <VBox.margin>

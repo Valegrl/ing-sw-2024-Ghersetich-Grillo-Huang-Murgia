@@ -4,7 +4,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +22,18 @@ public class MainMenuController extends FXMLController {
     @FXML private AnchorPane optionsMenuFX;
 
     @FXML private AnchorPane creditsMenuFX;
+
+    @FXML
+    public void initialize() {
+        if (stage != null) {
+            mainMenuFX.prefWidthProperty().bind(stage.widthProperty());
+            mainMenuFX.prefHeightProperty().bind(stage.heightProperty());
+            optionsMenuFX.prefWidthProperty().bind(stage.widthProperty());
+            optionsMenuFX.prefHeightProperty().bind(stage.heightProperty());
+            creditsMenuFX.prefWidthProperty().bind(stage.widthProperty());
+            creditsMenuFX.prefHeightProperty().bind(stage.heightProperty());
+        }
+    }
 
     /**
      * Default constructor for MainMenuController.

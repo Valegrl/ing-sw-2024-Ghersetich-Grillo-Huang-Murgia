@@ -6,6 +6,10 @@ Text{
     -fx-padding: 0;
 }
 
+.italic-text {
+    -fx-font-style: italic;
+}
+
 .text-input{
     -fx-text-fill: #ffffff;
     -fx-background-color: rgba(20, 20, 20, 0.5);

@@ -1,8 +1,8 @@
 #mainAnchor {
     -fx-background-color: #f0f0f0;
-    -fx-background-image: url('/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDark.png');
+    -fx-background-image: url("/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDark.png");
     -fx-background-repeat: stretch;
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
 

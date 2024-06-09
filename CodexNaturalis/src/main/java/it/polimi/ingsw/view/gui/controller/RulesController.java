@@ -38,6 +38,12 @@ public class RulesController extends FXMLController{
 
     private final Image[] images = new Image[6];
 
+    @FXML
+    public void initialize() {
+        imageView.fitWidthProperty().bind(vBox.widthProperty());
+        imageView.fitHeightProperty().bind(vBox.heightProperty());
+    }
+
     public RulesController(){
         super();
         images[0] = new Image("/it/polimi/ingsw/images/rules/rules1.png");
