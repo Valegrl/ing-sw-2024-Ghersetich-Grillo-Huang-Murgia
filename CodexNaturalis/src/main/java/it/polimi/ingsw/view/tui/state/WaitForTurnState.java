@@ -61,7 +61,6 @@ public class WaitForTurnState extends GameState {
                 showInfoMessage(message);
                 break;
             case UPDATE_GAME_PLAYERS:
-                view.stopInputRead(true);
                 view.printMessage(message);
                 view.clearInput();
                 break;

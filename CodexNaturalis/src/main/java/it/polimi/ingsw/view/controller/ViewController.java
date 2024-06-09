@@ -29,6 +29,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
+import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayer;
 import org.mockito.internal.util.Platform;
 
 import java.rmi.RemoteException;
@@ -247,8 +248,9 @@ public class ViewController implements ViewEventReceiver {
         if(view.inLobby()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else if (view.inGame() || view.inChat()) { // TODO check if previous state was in-game
-            if (playersOnline() == 1) { // checking if the player is the only one remaining in the game
+            if (playersOnline() == 1 && playersStatus.size() > 1) { // checking if the game needs to be set on WAITING or ENDED
                 model.setGameStatus(GameStatus.WAITING);
+                view.stopInputRead(true);
                 view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, event.getMessage());
                 // note that previousGameStatus will be set from the current state using the setter method
                 // this is to make chat set the previousState to its previous state
@@ -829,19 +831,32 @@ public class ViewController implements ViewEventReceiver {
 
         int lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
         for (int i = turnPlayerIndex; i != lastPlayer; i = (i + 1) % playerUsernames.size()) {
-            if (i == turnPlayerIndex) {
-                m.append(AnsiCodes.BOLD).append(playerUsernames.get(i)).append(AnsiCodes.RESET).append(" -> ");
-            } else if (i == playerUsernames.indexOf(username)) {
-                m.append(AnsiCodes.GOLD).append(playerUsernames.get(i)).append(AnsiCodes.RESET)
+            String usr = playerUsernames.get(i);
+            if (i == playerUsernames.indexOf(username)) {
+                SelfViewPlayer p = model.getSelfPlayer();
+                m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(p.getToken().getColorCode())
+                        .append(usr)
+                        .append("(").append(getModel().getScoreboard().get(usr)).append("p)")
+                        .append(AnsiCodes.RESET)
                         .append(" -> ");
             } else {
-                m.append(playerUsernames.get(i)).append(" -> ");
+                m.append(model.getOpponent(usr).getToken().getColorCode())
+                        .append(usr)
+                        .append("(").append(getModel().getScoreboard().get(usr)).append("p)")
+                        .append(AnsiCodes.RESET)
+                        .append(" -> ");
             }
         }
         if (playerUsernames.get(lastPlayer).equals(username))
-            m.append(AnsiCodes.GOLD).append(username).append(AnsiCodes.RESET);
+            m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(model.getSelfPlayer().getToken().getColorCode())
+                    .append(username)
+                    .append("(").append(getModel().getScoreboard().get(username)).append("p)")
+                    .append(AnsiCodes.RESET);
         else
-            m.append(playerUsernames.get(lastPlayer));
+            m.append(model.getOpponent(playerUsernames.get(lastPlayer)).getToken().getColorCode())
+                    .append(playerUsernames.get(lastPlayer))
+                    .append("(").append(getModel().getScoreboard().get(playerUsernames.get(lastPlayer))).append("p)")
+                    .append(AnsiCodes.RESET);
         return m.toString();
     }
 

@@ -20,6 +20,8 @@ public class TokenSetupState extends ViewState {
 
     private boolean choseToken = false;
 
+    private boolean choosingToken = false;
+
     public TokenSetupState(View view) {
         super(view);
     }
@@ -68,11 +70,16 @@ public class TokenSetupState extends ViewState {
             case CHOOSE_TOKEN_SETUP:
                 view.clearInput();
                 if (!choseToken) clearLine();
-                view.printMessage(message);
+                showResponseMessage(message, 500);
+                if (choosingToken) {
+                    view.stopInputRead(true);
+                    showAvailableTokens();
+                }
                 break;
             case CHOSEN_TOKEN_SETUP:
                 if (feedback == Feedback.SUCCESS) {
                     choseToken = true;
+                    choosingToken = false;
                     notifyResponse();
                     clearConsole();
                     view.printMessage(message);
@@ -89,6 +96,7 @@ public class TokenSetupState extends ViewState {
                 view.printMessage(message);
                 break;
             case UPDATE_LOCAL_MODEL:
+                view.stopInputRead(true);
                 clearConsole();
                 showResponseMessage(message, 1000);
 
@@ -120,9 +128,17 @@ public class TokenSetupState extends ViewState {
     }
 
     private void showAvailableTokens() {
+        choosingToken = true;
         clearConsole();
         view.printMessage(tokensMessage);
         int choice = readIntFromInput(1, numTokens);
+        if (choice == -1) {
+            choosingToken = false;
+            run();
+            return;
+        } else if (choice == 0) {
+            return;
+        }
         Token chosenToken = extractTokenFromChoice(choice);
         if (chosenToken == null) {
             view.printMessage("Invalid token. Please try again.");
@@ -130,7 +146,6 @@ public class TokenSetupState extends ViewState {
             return;
         }
         controller.newViewEvent(new ChosenTokenSetupEvent(chosenToken));
-        waitForResponse();
     }
 
     private Token extractTokenFromChoice(int choice) {

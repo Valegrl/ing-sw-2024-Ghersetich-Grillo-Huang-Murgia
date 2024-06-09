@@ -93,8 +93,10 @@ public class LobbyState extends ViewState {
                 transition(new MenuState(view));
                 break;
             case EventID.UPDATE_GAME_PLAYERS:
+                view.stopInputRead(true);
                 notifyResponse();
                 transition(new GameSetupState(view));
+                break;
             default:
                 break;
         }

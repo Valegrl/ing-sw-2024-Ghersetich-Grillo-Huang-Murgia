@@ -83,7 +83,7 @@ public class DrawCardState extends GameState {
             case SELF_TURN_TIMER_EXPIRED:
                 clearConsole();
                 view.stopInputRead(true);
-                showResponseMessage("Your draw card timer has expired. A card will be drawn randomly.", 1000);
+                showResponseMessage("Your turn-timer has expired. A card will be drawn randomly.", 1000);
                 view.clearInput();
                 break;
             case NEW_TURN:

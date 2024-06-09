@@ -62,6 +62,14 @@ public enum Token implements Serializable {
         return color;
     }
 
+    /**
+     * Retrieves the color code associated with this Token.
+     * @return The color code.
+     */
+    public String getColorCode() {
+        return colorCode;
+    }
+
     @Override
     public String toString() {
         return colorCode + color + AnsiCodes.RESET;

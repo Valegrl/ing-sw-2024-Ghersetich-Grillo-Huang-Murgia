@@ -4,10 +4,8 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 
@@ -95,7 +93,7 @@ public class PlaceCardState extends GameState {
             case SELF_TURN_TIMER_EXPIRED:
                 clearConsole();
                 view.stopInputRead(true);
-                showResponseMessage("Your place card timer has expired. Your turn has been skipped.", 1000);
+                showResponseMessage("Your turn-timer has expired. Your turn has been skipped.", 1000);
                 view.clearInput();
                 break;
             case NEW_TURN:

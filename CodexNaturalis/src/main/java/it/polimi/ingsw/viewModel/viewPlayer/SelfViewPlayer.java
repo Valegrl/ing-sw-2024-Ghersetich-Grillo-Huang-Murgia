@@ -37,7 +37,7 @@ public class SelfViewPlayer extends AbstractViewPlayer {
      */
     @Override
     public String playAreaToString() {
-        return AnsiCodes.BOLD + getUsername() + "'s " + playArea.printPlayArea();
+        return AnsiCodes.BOLD + getToken().getColorCode() + getUsername() + AnsiCodes.RESET + "'s " + playArea.printPlayArea();
     }
 
     /**
