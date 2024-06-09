@@ -211,7 +211,7 @@ public class GameSetupController extends FXMLController {
         showSecretObjectives();
         showStartCard();
         update();
-        addHooverEffect();
+        addHoverEffect();
         addChoiceSelection();
 
         //To load the chat from the lobby
@@ -239,9 +239,9 @@ public class GameSetupController extends FXMLController {
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        switch(EventID.getByID(eventID)){
+        switch(EventID.getByID(eventID)) {
             case GET_CHAT_MESSAGES:
-                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
+                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
                 chatArea.appendText(getChatFormattedMessages + "\n");
                 break;
 
@@ -250,9 +250,33 @@ public class GameSetupController extends FXMLController {
                 readyButton.setVisible(false);
                 break;
             case UPDATE_GAME_PLAYERS:
-                Platform.runLater(this::update);
+                if (message.equals("The timer has run out! Your cards setup has been assigned automatically.")) {
+                    Platform.runLater(() -> {
+                        readyButton.setVisible(false);
+                        chatArea.appendText(message);
+                        //TODO set quit button invisible ?
+                        //TODO go to choose token setup ?
+                    });
+                } else {
+                    Platform.runLater(this::update);
+                }
                 break;
             case CHOOSE_TOKEN_SETUP:
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/TokenSetup.fxml"));
+                        Parent root = loader.load();
+                        TokenSetupController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    }
+                    catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                });
+
                 break;
             case QUIT_GAME:
                 if (feedback == Feedback.SUCCESS) {
@@ -337,7 +361,7 @@ public class GameSetupController extends FXMLController {
      * For the cards in the player's hand, the method changes the image of the card to its back side when the mouse enters its area,
      * and changes it back to the front side when the mouse exits its area.
      */
-    private void addHooverEffect(){
+    private void addHoverEffect(){
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
@@ -385,7 +409,7 @@ public class GameSetupController extends FXMLController {
 
         int i = 0;
         for(ImmPlayableCard card : myHand){
-            if(card.getType() ==  CardType.GOLD){
+            if(card.getType().equals(CardType.GOLD)){
                 ImageView currHandImage = handCardImages.get(i);
                 Image frontCardImage = handCardImages.get(i).getImage();
 

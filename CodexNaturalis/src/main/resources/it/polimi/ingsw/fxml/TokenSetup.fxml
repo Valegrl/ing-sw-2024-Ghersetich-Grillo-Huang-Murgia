@@ -16,11 +16,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/TokenSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.TokenSetupController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/TokenSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.TokenSetupController">
    <children>
       <HBox layoutX="60.0" layoutY="175.0" maxHeight="750.0" maxWidth="1800.0" minHeight="750.0" minWidth="1800.0" prefHeight="750.0" prefWidth="1800.0">
          <children>
-            <VBox fx:id="vBox1" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="1100.0">
+            <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="1100.0">
                <children>
                   <Label text="CHOOSE YOUR TOKEN" textFill="WHITE">
                      <font>
@@ -30,9 +30,17 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <HBox fx:id="hBox1" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="446.0" prefWidth="1200.0">
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="446.0" prefWidth="1200.0">
                      <children>
-                        <ImageView fx:id="imageView1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="red" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../images/icons/RedToken.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="60.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fx:id="blue" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@../images/icons/BlueToken.png" />
                            </image>
@@ -40,7 +48,7 @@
                               <Insets right="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="imageView2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="green" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@../images/icons/GreenToken.png" />
                            </image>
@@ -48,17 +56,9 @@
                               <Insets right="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="imageView3" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="yellow" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@../images/icons/YellowToken.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets right="60.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <ImageView fx:id="imageView4" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/RedToken.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -72,9 +72,9 @@
                   <Insets right="150.0" />
                </HBox.margin>
             </VBox>
-            <VBox id="vboxChat" fx:id="vboxChat" alignment="CENTER" maxHeight="700.0" maxWidth="450.0" minHeight="700.0" minWidth="450.0" prefHeight="700.0" prefWidth="450.0">
+            <VBox id="vboxChat" alignment="CENTER" maxHeight="700.0" maxWidth="450.0" minHeight="700.0" minWidth="450.0" prefHeight="700.0" prefWidth="450.0">
                <children>
-                  <Text id="chatTitle" fx:id="chatTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT" textAlignment="CENTER" wrappingWidth="350.0">
+                  <Text id="chatTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT" textAlignment="CENTER" wrappingWidth="350.0">
                      <font>
                         <Font size="19.0" />
                      </font>
@@ -111,7 +111,7 @@
                      </children>
                   </HBox>
                   <TextField fx:id="chatInput" prefHeight="100.0" prefWidth="460.0" />
-                  <Button fx:id="sendButton" mnemonicParsing="false" text="SEND" />
+                  <Button fx:id="sendButton" mnemonicParsing="false" text="SEND" onAction="#submitMessage"/>
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -122,7 +122,7 @@
             </VBox>
          </children>
       </HBox>
-      <Button fx:id="quitButton" layoutX="890.0" layoutY="1007.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="166.0" text="QUIT GAME">
+      <Button fx:id="quitButton" layoutX="890.0" layoutY="1007.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="166.0" text="QUIT GAME" onAction="#quitGame">
          <font>
             <Font size="11.0" />
          </font>

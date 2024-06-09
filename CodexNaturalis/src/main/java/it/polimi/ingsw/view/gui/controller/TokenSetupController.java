@@ -5,7 +5,11 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
+import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
@@ -14,6 +18,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,19 +34,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TokenSetupController extends FXMLController {
 
     @FXML
     private Label lobbyName;
-
-    private List<RadioButton> radioButtons;
-
-    @FXML
-    private Text chatTitle;
 
     @FXML
     private TextArea chatArea;
@@ -48,32 +51,9 @@ public class TokenSetupController extends FXMLController {
     @FXML
     private TextField chatInput;
 
-    @FXML
-    private ToggleGroup chatRadioButtons;
 
     @FXML
     private RadioButton generalRadioButton;
-
-    @FXML
-    private HBox hBox;
-
-    @FXML
-    private ImageView imageView1;
-
-    @FXML
-    private ImageView imageView2;
-
-    @FXML
-    private ImageView imageView3;
-
-    @FXML
-    private ImageView imageView4;
-
-    @FXML
-    private AnchorPane mainAnchor;
-
-    @FXML
-    private ProgressBar progressBar;
 
     @FXML
     private RadioButton radioButton1;
@@ -85,22 +65,32 @@ public class TokenSetupController extends FXMLController {
     private RadioButton radioButton3;
 
     @FXML
+    private ImageView red;
+
+    @FXML
+    private ImageView blue;
+
+    @FXML
+    private ImageView green;
+
+    @FXML
+    private ImageView yellow;
+
+    @FXML
+    private ProgressBar progressBar;
+
+    @FXML
     private Button quitButton;
 
     @FXML
     private Button sendButton;
 
-    @FXML
-    private VBox vboxChat;
 
-    @FXML
-    private VBox vBox1;
+    private List<RadioButton> radioButtons;
 
-    private String tokensMessage;
+    private List<ImageView> imageViewTokens;
 
-    private int numTokens;
-
-    private boolean choseToken = false;
+    private Map<String, ImageView> visibleTokens;
 
 
     public TokenSetupController(){
@@ -112,9 +102,30 @@ public class TokenSetupController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
-        //numTokens = controller.getAvailableTokens().size();
+
+        setLobbyName(controller.getLobbyId());
+        radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
+
+        visibleTokens = new LinkedHashMap<>() {{
+            put("red", red);
+            put("blue", blue);
+            put("green", green);
+            put("yellow", yellow);
+        }};
+
         startCountdown(30);
-        showAvailableTokens();
+        update();
+        addChoiceSelection();
+
+        controller.newViewEvent(new GetChatMessagesEvent());
+        waitForResponse();
+
+        chatInput.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                submitMessage();
+            }
+        });
 
     }
 
@@ -136,15 +147,14 @@ public class TokenSetupController extends FXMLController {
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        tokensMessage = controller.availableTokensMessage();
         //numTokens = controller.getAvailableTokens().size();
         switch (EventID.getByID(eventID)) {
             case CHOOSE_TOKEN_SETUP:
-                //TODO
-                break;
-
-            case CHOSEN_TOKEN_SETUP:
-                //TODO
+                if (feedback == Feedback.SUCCESS) {
+                    System.out.println(message);
+                } else {
+                    System.out.println(message);
+                }
                 break;
 
             case UPDATE_GAME_PLAYERS:
@@ -191,13 +201,11 @@ public class TokenSetupController extends FXMLController {
                     System.out.println("Something bad happened, you can't quit!");
                 }
                 break;
+
         }
+        notifyResponse();
     }
 
-
-    public void showAvailableTokens(){
-        //TODO
-    }
 
 
     /**
@@ -208,7 +216,47 @@ public class TokenSetupController extends FXMLController {
         this.lobbyName.setText("LOBBY: " + lobbyName);
     }
 
+    private void update(){
+        updateTokenOptions();
+        updateChatOptions();
+        //TODO use this method to update the tokens as well ?
+    }
 
+    private void addChoiceSelection(){
+        red.setOnMouseClicked(event -> {
+            controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED));
+            System.out.println("Chosen red token");
+        });
+
+        blue.setOnMouseClicked(event -> {
+            controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE));
+            System.out.println("Chosen blue token");
+        });
+
+        green.setOnMouseClicked(event -> {
+            controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN));
+            System.out.println("Chosen green token");
+        });
+
+        yellow.setOnMouseClicked(event -> {
+            controller.newViewEvent(new ChosenTokenSetupEvent(Token.YELLOW));
+            System.out.println("Chosen yellow token");
+        });
+    }
+
+
+    private void updateTokenOptions(){
+        for (ImageView imageView : visibleTokens.values()) {
+            imageView.setVisible(false);
+        }
+        for (Token token : controller.getAvailableTokens()) {
+            String color = token.getColor();
+            ImageView imageView = visibleTokens.get(color);
+            if (imageView != null) {
+                imageView.setVisible(true);
+            }
+        }
+    }
 
     /**
      * This method is used to update the chat options in the game setup view.
