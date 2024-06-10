@@ -242,21 +242,16 @@ public class GameSetupController extends FXMLController {
                 break;
 
             case CHOSEN_CARDS_SETUP:
-                System.out.println("You have chosen your cards!");
+                chatArea.appendText("\n" + message + "\n\n");
                 readyButton.setVisible(false);
                 break;
             case UPDATE_GAME_PLAYERS:
-                if (message.equals("The timer has run out! Your cards setup has been assigned automatically.")) {
-                    Platform.runLater(() -> {
-                        readyButton.setVisible(false);
-                        chatArea.appendText(message);
-                        //TODO set quit button invisible ?
-                        //TODO go to choose token setup ?
-                    });
-                } else {
-                    Platform.runLater(this::update);
-                }
+                Platform.runLater(() -> {
+                    chatArea.appendText("\n" + message + "\n\n");
+                    update();
+                });
                 break;
+
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
                     try {
