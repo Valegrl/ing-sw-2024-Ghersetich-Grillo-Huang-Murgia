@@ -15,6 +15,7 @@ import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,10 +27,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -67,6 +71,9 @@ public class LobbyController extends FXMLController {
      * A list of Text objects representing the ready status of each player in the lobby.
      */
     private List<Text> readyStatuses;
+
+    @FXML
+    public AnchorPane mainAnchor;
 
     @FXML
     private TextField chatInput;
@@ -140,11 +147,94 @@ public class LobbyController extends FXMLController {
     @FXML
     private Button readyButton;
 
+    @FXML
+    public VBox vBox;
+
+    @FXML
+    private VBox vBox0;
+
+    @FXML
+    private VBox vBox1;
+
+    @FXML
+    private VBox vBox2;
+
+    @FXML
+    private VBox vBox3;
+
+    @FXML
+    private VBox vboxChat;
+
+    @FXML
+    private ImageView imageView0;
+
+    @FXML
+    private ImageView imageView1;
+
+    @FXML
+    private ImageView imageView2;
+
+    @FXML
+    private ImageView imageView3;
+
     /**
      * Default constructor for the LobbyController class.
      */
     public LobbyController(){
         super();
+    }
+
+    @FXML
+    public void initialize() {
+        double maxPercentageVBox = 0.12;
+        double relativePercentage = 0.75;
+
+        List<ImageView> imageViews = Arrays.asList(imageView0, imageView1, imageView2, imageView3);
+        List<VBox> vBoxes = Arrays.asList(vBox0, vBox1, vBox2, vBox3);
+
+        for (int i = 0; i < imageViews.size(); i++) {
+            ImageView imageView = imageViews.get(i);
+            VBox vBox = vBoxes.get(i);
+
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                            vBox.getWidth() * relativePercentage, vBox.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                            vBox.getHeight() * relativePercentage, vBox.heightProperty()
+            ));
+        }
+
+        List<Text> usernames = Arrays.asList(username0, username1, username2, username3);
+
+        for (int i = 0; i < usernames.size(); i++) {
+            Text username = usernames.get(i);
+            VBox vBox = vBoxes.get(i);
+
+            username.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                            vBox.getWidth() * relativePercentage, vBox.widthProperty()
+            ));
+        }
+
+        double vboxChatPercentage = 0.3125;
+
+        vboxChat.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                        vBox.getWidth() * vboxChatPercentage, vBox.widthProperty()
+        ));
+
+        vboxChat.prefHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                        vBox.getHeight() * (1-vboxChatPercentage), vBox.heightProperty()
+        ));
+
+        for (VBox vBox : vBoxes) {
+            vBox.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                            mainAnchor.getWidth() * maxPercentageVBox, mainAnchor.widthProperty()
+            ));
+
+            vBox.prefHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                            mainAnchor.getHeight() * maxPercentageVBox, mainAnchor.heightProperty()
+            ));
+        }
     }
 
     /**
