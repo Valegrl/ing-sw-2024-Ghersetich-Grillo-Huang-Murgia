@@ -8,12 +8,15 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.tui.state.PlaceCardState;
+import it.polimi.ingsw.view.tui.state.WaitForTurnState;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -25,11 +28,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
@@ -88,9 +93,9 @@ public class TokenSetupController extends FXMLController {
 
     private List<RadioButton> radioButtons;
 
-    private List<ImageView> imageViewTokens;
-
     private Map<String, ImageView> visibleTokens;
+
+    boolean tokenChosen;
 
 
     public TokenSetupController(){
@@ -116,7 +121,7 @@ public class TokenSetupController extends FXMLController {
         startCountdown(30);
         update();
         addChoiceSelection();
-
+        addHoverEffect();
         controller.newViewEvent(new GetChatMessagesEvent());
         waitForResponse();
 
@@ -150,15 +155,31 @@ public class TokenSetupController extends FXMLController {
         //numTokens = controller.getAvailableTokens().size();
         switch (EventID.getByID(eventID)) {
             case CHOOSE_TOKEN_SETUP:
-                if (feedback == Feedback.SUCCESS) {
-                    System.out.println(message);
-                } else {
-                    System.out.println(message);
-                }
+                update();
                 break;
 
+            case CHOSEN_TOKEN_SETUP:
+                if(feedback == Feedback.SUCCESS){
+                    tokenChosen = true;
+                    for (ImageView imageView : visibleTokens.values()) {
+                        imageView.setVisible(false);
+                    }
+                }
+                else{
+                    update();
+                }
+                    break;
+
             case UPDATE_GAME_PLAYERS:
-                //TODO
+                if(message.equals("The timer has run out! Your token setup has been assigned automatically.")){
+                    tokenChosen = true;
+                    for (ImageView imageView : visibleTokens.values()) {
+                        imageView.setVisible(false);
+                    }
+                }
+                else {
+                    Platform.runLater(this::update);
+                }
                 break;
 
             case UPDATE_LOCAL_MODEL:
@@ -219,40 +240,56 @@ public class TokenSetupController extends FXMLController {
     private void update(){
         updateTokenOptions();
         updateChatOptions();
-        //TODO use this method to update the tokens as well ?
+    }
+
+    private void addHoverEffect(){
+        DropShadow highlight = new DropShadow();
+        highlight.setColor(Color.WHITE);
+        highlight.setRadius(10.0);
+        highlight.setOffsetX(0);
+        highlight.setOffsetY(0);
+        for(ImageView imageView : visibleTokens.values()){
+            imageView.setOnMouseEntered(event -> {
+                imageView.setEffect(highlight);
+            });
+
+            imageView.setOnMouseExited(event -> {
+                imageView.setEffect(null);
+            });
+        }
     }
 
     private void addChoiceSelection(){
         red.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED));
-            System.out.println("Chosen red token");
+            System.out.println(controller.getUsername() + " chosen red token");
         });
 
         blue.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE));
-            System.out.println("Chosen blue token");
+            System.out.println(controller.getUsername() + " chosen blue token");
         });
 
         green.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN));
-            System.out.println("Chosen green token");
+            System.out.println(controller.getUsername() + " chosen green token");
         });
 
         yellow.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.YELLOW));
-            System.out.println("Chosen yellow token");
+            System.out.println(controller.getUsername() + " chosen yellow token");
         });
     }
 
 
     private void updateTokenOptions(){
-        for (ImageView imageView : visibleTokens.values()) {
-            imageView.setVisible(false);
-        }
-        for (Token token : controller.getAvailableTokens()) {
-            String color = token.getColor();
-            ImageView imageView = visibleTokens.get(color);
-            if (imageView != null) {
+        if(!tokenChosen) {
+            for (ImageView imageView : visibleTokens.values()) {
+                imageView.setVisible(false);
+            }
+            for (Token token : controller.getAvailableTokens()) {
+                String color = token.getColor();
+                ImageView imageView = visibleTokens.get(color);
                 imageView.setVisible(true);
             }
         }
