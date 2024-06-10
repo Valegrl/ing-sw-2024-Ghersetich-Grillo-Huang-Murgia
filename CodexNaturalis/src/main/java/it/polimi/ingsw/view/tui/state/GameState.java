@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
@@ -33,10 +34,13 @@ public abstract class GameState extends ViewState {
 
     protected void showOtherPlayerPlayArea() {
         clearConsole();
-        List<String> players = new ArrayList<>(controller.getPlayerUsernames());
+        List<String> players = new ArrayList<>(controller.getInMatchPlayerUsernames());
         players.remove(controller.getUsername());
+        List<String> coloredPlayers = players.stream()
+                .map(username -> controller.getPlayerToken(username).getColorCode() + username + AnsiCodes.RESET)
+                        .toList();
         view.printMessage("Choose a player: ");
-        int choice = readChoiceFromInput(players);
+        int choice = readChoiceFromInput(coloredPlayers);
 
         if (choice == -1) {
             run();
@@ -116,16 +120,25 @@ public abstract class GameState extends ViewState {
         }
     }
 
-    public void handleNewGameStatus(String message) {
+    protected void handleNewGameStatus(String message) {
         controller.setPreviousGameStatus(new Pair<>(controller.getGameStatus(), this));
+        clearConsole();
+        view.stopInputRead(true);
+        view.clearInput();
+        if (controller.getGameStatus().equals(GameStatus.WAITING)) {
+            showResponseMessage(message, 1500);
+            transition(new WaitingReconnectState(view));
+        } else {
+            view.printMessage(message);
+        }
+    }
+
+    protected void handleGameEndedEvent(String message) {
         clearConsole();
         view.stopInputRead(true);
         showResponseMessage(message, 2000);
         view.clearInput();
-        if(controller.getGameStatus().equals(GameStatus.WAITING))
-            transition(new WaitingReconnectState(view));
-        else
-            run();
+        transition(new EndedGameState(view));
     }
 
     protected void setCurrentPlayAreaUsername(String username) {

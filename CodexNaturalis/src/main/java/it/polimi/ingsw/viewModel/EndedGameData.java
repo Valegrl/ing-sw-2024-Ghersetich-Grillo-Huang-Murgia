@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.card.GoldCard;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.ResourceCard;
 import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -131,6 +133,101 @@ public class EndedGameData implements Serializable, CardConverter {
         this.topResourceDeck = otherRC == null ? null : otherRC.getPermanentResource();
         GoldCard otherGC = model.seeGoldTopCard();
         this.topGoldDeck = otherGC == null ? null : otherGC.getPermanentResource();
+    }
+
+    /**
+     * Converts the game results to a string representation.
+     * @return A string representation of the game results.
+     */
+    public String resultsToString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Results:\n");
+        for (int i = 0; i < results.size(); i++) {
+            sb.append("  ")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(playerTokens.get(results.get(i)).getColorCode())
+                    .append(results.get(i))
+                    .append(AnsiCodes.RESET)
+                    .append(" - ")
+                    .append(scoreboard.get(results.get(i)))
+                    .append(" points\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Converts the given user's {@link SelfViewPlayArea} to a string representation.
+     *
+     * @param username The username of the user whose play area to convert to a string.
+     * @return A string representation of the given user's {@link SelfViewPlayArea}.
+     */
+    public String playAreaToString(String username) {
+        return playAreas.get(username).printEndedGamePlayArea() + objectiveCardsToString(username);
+    }
+
+    /**
+     * Converts the objective cards to a string representation.
+     *
+     * @param username The username of the user whose objective cards to convert to a string.
+     * @return A string representation of the objective cards.
+     */
+    private String objectiveCardsToString(String username) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Common Objectives:\n");
+        for (int i = 0; i < commonObjectives.length; i++) {
+            sb.append("  ")
+                    .append(i + 1)
+                    .append(") ")
+                    .append(commonObjectives[i].printCard(5))
+                    .append("\n");
+        }
+        sb.append("Private Objective:\n");
+        sb.append("  ")
+                .append("1) ")
+                .append(secretObjectives.get(username).printCard(5))
+                .append("\n");
+        return sb.toString();
+    }
+
+    /**
+     * Converts the visible decks to a string representation.
+     *
+     * @return A string representation of the visible decks.
+     */
+    public String decksToString() {
+        int indent = 12;
+        return "Decks: \n" +
+                "  1- Gold deck:\n" +
+                "       Top card: " +
+                Optional.ofNullable(topGoldDeck)
+                        .map(Item::itemToColor)
+                        .orElse("empty deck") +
+                "\n" +
+                "       Visible cards:\n" +
+                "         1- " +
+                Optional.ofNullable(visibleGoldCards[0])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n         2- " +
+                Optional.ofNullable(visibleGoldCards[1])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n  2- Resource deck:\n" +
+                "       Top card: " +
+                Optional.ofNullable(topResourceDeck)
+                        .map(Item::itemToColor)
+                        .orElse("empty deck") +
+                "\n" +
+                "       Visible cards: \n" +
+                "         1- " +
+                Optional.ofNullable(visibleResourceCards[0])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty") +
+                "\n         2- " +
+                Optional.ofNullable(visibleResourceCards[1])
+                        .map(card -> card.printCard(indent))
+                        .orElse("empty");
     }
 
     /**

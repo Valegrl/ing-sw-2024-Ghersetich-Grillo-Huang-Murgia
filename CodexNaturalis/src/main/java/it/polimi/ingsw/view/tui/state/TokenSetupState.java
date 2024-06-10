@@ -107,7 +107,7 @@ public class TokenSetupState extends ViewState {
                         transition(new WaitForTurnState(view));
                     }
                 } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
-                    // TODO decide where to go
+                    transition(new WaitingReconnectState(view));
                 } else {
                     throw new IllegalStateException("Unexpected game status.");
                 }

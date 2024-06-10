@@ -227,7 +227,11 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
-    public String printPlayArea(){
+    public String printPlayArea() {
         return printPlayedCards() + "\n" + printUncoveredItems() + "\n" + printHand()  + "\n";
+    }
+
+    public String printEndedGamePlayArea() {
+        return printPlayedCards() + "\n" + printUncoveredItems() + "\n";
     }
 }

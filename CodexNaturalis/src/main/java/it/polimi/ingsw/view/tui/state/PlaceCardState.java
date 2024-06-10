@@ -4,6 +4,7 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.View;
@@ -28,6 +29,8 @@ public class PlaceCardState extends GameState {
 
         view.printMessage(controller.selfPlayAreaToString());
 
+        if (controller.getGameStatus().equals(GameStatus.LAST_CIRCLE))
+            view.printMessage("This is the " + boldText("last circle") + " of the game. You can only place a card.");
         view.printMessage("It's your turn\n\nChoose an option:");
         int choice = readChoiceFromInput(Arrays.asList(
                 "Place a card"
@@ -105,6 +108,9 @@ public class PlaceCardState extends GameState {
                 break;
             case NEW_GAME_STATUS:
                 handleNewGameStatus(message);
+                break;
+            case ENDED_GAME:
+                handleGameEndedEvent(message);
                 break;
             case QUIT_GAME:
                 handleQuitGame(feedback, message);

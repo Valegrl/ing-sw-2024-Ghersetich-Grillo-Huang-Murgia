@@ -70,7 +70,7 @@ public class ViewModel implements Serializable, CardConverter {
     /**
      * The scoreboard.
      */
-    private final Map<String, Integer> scoreboard;
+    private Map<String, Integer> scoreboard;
 
     /**
      * The common objectives.
@@ -386,12 +386,19 @@ public class ViewModel implements Serializable, CardConverter {
         this.gameStatus = gameStatus;
     }
 
+    /**
+     * Sets the flag that indicates if the last circle status has been activated.
+     * @param detectedLC The flag to be set.
+     */
     public void setDetectedLC(boolean detectedLC) {
         this.detectedLC = detectedLC;
     }
 
+    /**
+     * Sets the game scoreboard.
+     * @param scoreboard The new scoreboard to be set.
+     */
     public void setScoreboard(Map<String, Integer> scoreboard) {
-        this.scoreboard.clear();
-        this.scoreboard.putAll(scoreboard);
+        this.scoreboard = scoreboard;
     }
 }

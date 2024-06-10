@@ -96,6 +96,9 @@ public class DrawCardState extends GameState {
             case NEW_GAME_STATUS:
                 handleNewGameStatus(message);
                 break;
+            case ENDED_GAME:
+                handleGameEndedEvent(message);
+                break;
             case QUIT_GAME:
                 handleQuitGame(feedback, message);
                 break;

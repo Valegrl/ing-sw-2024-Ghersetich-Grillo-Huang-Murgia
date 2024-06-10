@@ -20,6 +20,7 @@ import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.view.ViewState;
+import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.View;
@@ -119,6 +120,11 @@ public class ViewController implements ViewEventReceiver {
      * and a boolean representing if the self-player had placed a card already or not.
      */
     private Pair<GameStatus, ViewState> previousGameStatus;
+
+    /**
+     * The ended game data.
+     */
+    private EndedGameData endedGameData;
 
     /**
      * The lock used to synchronize the model.
@@ -292,12 +298,15 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfDrawCardEvent event) {
+        boolean oldDLC;
         synchronized (modelLock) {
+            oldDLC = model.isDetectedLC();
             model.getSelfPlayer().getPlayArea().setHand(event.getMyDrawCardData().getHand());
             drawCardUpdateModel(event.getMyDrawCardData());
         }
         if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
+            handleDetectedLastCircle(oldDLC);
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -305,12 +314,15 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfPlaceCardEvent event) {
+        boolean oldDLC;
         synchronized (modelLock) {
+            oldDLC = model.isDetectedLC();
             placeCardUpdateModel(event.getMyPlaceCardData());
             model.getSelfPlayer().setPlayArea(event.getMyPlaceCardData().getPlayArea());
         }
         if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
+            handleDetectedLastCircle(oldDLC);
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -334,12 +346,15 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(OtherDrawCardEvent event) {
         String player = event.getOtherDrawCardData().getOpponent();
+        boolean oldDLC;
         synchronized (modelLock) {
+            oldDLC = model.isDetectedLC();
             model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
             drawCardUpdateModel(event.getOtherDrawCardData());
         }
         if (view.inGame() || view.inChat()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
+            handleDetectedLastCircle(oldDLC);
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -348,12 +363,15 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(OtherPlaceCardEvent event) {
         String player = event.getOtherPlaceCardData().getOpponent();
+        boolean oldDLC;
         synchronized (modelLock) {
+            oldDLC = model.isDetectedLC();
             placeCardUpdateModel(event.getOtherPlaceCardData());
             model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
         }
         if (view.inGame() || view.inChat()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
+            handleDetectedLastCircle(oldDLC);
         } else {
             System.out.println("Game state: event in wrong state");
         }
@@ -361,7 +379,12 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(EndedGameEvent event) {
-
+        endedGameData = event.getEndedGameData();
+        if (view.inGame() || view.inChat()) { // TODO handle in chat
+            view.handleResponse(event.getID(), null, "Game ended!");
+        } else {
+            System.out.println("Game state: event in wrong state");
+        }
     }
 
     @Override
@@ -672,6 +695,7 @@ public class ViewController implements ViewEventReceiver {
             availableTokens = null;
             chatMessages.clear();
             privateChatMessages.clear();
+            previousGameStatus = null;
         }
     }
 
@@ -779,6 +803,10 @@ public class ViewController implements ViewEventReceiver {
         return availableTokens;
     }
 
+    public EndedGameData getEndedGameData() {
+        return endedGameData;
+    }
+
     public boolean isLobbyLeader(){
         return playersStatus.entrySet().iterator().next().getKey().equals(username);
     }
@@ -825,37 +853,45 @@ public class ViewController implements ViewEventReceiver {
         List<String> playerUsernames;
         synchronized (modelLock) {
             turnPlayerIndex = model.getTurnPlayerIndex();
-            playerUsernames = List.copyOf(model.getPlayerUsernames());
+            playerUsernames = getInMatchPlayerUsernames();
         }
 
-        int lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
+        int lastPlayer;
+        if (getGameStatus().equals(GameStatus.LAST_CIRCLE))
+            lastPlayer = playerUsernames.size() - 1;
+        else
+            lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
+
         for (int i = turnPlayerIndex; i != lastPlayer; i = (i + 1) % playerUsernames.size()) {
             String usr = playerUsernames.get(i);
             if (i == playerUsernames.indexOf(username)) {
                 SelfViewPlayer p = model.getSelfPlayer();
                 m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(p.getToken().getColorCode())
                         .append(usr)
-                        .append("(").append(getModel().getScoreboard().get(usr)).append("p)")
-                        .append(AnsiCodes.RESET)
-                        .append(" -> ");
+                        .append("(");
             } else {
                 m.append(model.getOpponent(usr).getToken().getColorCode())
                         .append(usr)
-                        .append("(").append(getModel().getScoreboard().get(usr)).append("p)")
-                        .append(AnsiCodes.RESET)
-                        .append(" -> ");
+                        .append("(");
             }
+            if (!playersStatus.get(usr))
+                m.append("DC ");
+            m.append(getModel().getScoreboard().get(usr)).append("p)")
+                    .append(AnsiCodes.RESET)
+                    .append(" -> ");
         }
         if (playerUsernames.get(lastPlayer).equals(username))
             m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(model.getSelfPlayer().getToken().getColorCode())
                     .append(username)
-                    .append("(").append(getModel().getScoreboard().get(username)).append("p)")
-                    .append(AnsiCodes.RESET);
+                    .append("(");
         else
             m.append(model.getOpponent(playerUsernames.get(lastPlayer)).getToken().getColorCode())
                     .append(playerUsernames.get(lastPlayer))
-                    .append("(").append(getModel().getScoreboard().get(playerUsernames.get(lastPlayer))).append("p)")
-                    .append(AnsiCodes.RESET);
+                    .append("(");
+        if (!playersStatus.get(playerUsernames.get(lastPlayer)))
+            m.append("DC ");
+        m.append(getModel().getScoreboard().get(playerUsernames.get(lastPlayer))).append("p)")
+                .append(AnsiCodes.RESET);
         return m.toString();
     }
 
@@ -883,6 +919,7 @@ public class ViewController implements ViewEventReceiver {
         synchronized (modelLock) {
             model.setGameStatus(data.getGameStatus());
             model.setScoreboard(data.getScoreboard());
+            model.setDetectedLC(data.isDetectedLastCircle());
         }
     }
 
@@ -893,6 +930,7 @@ public class ViewController implements ViewEventReceiver {
             model.setTopResourceDeck(data.getTopResourceDeck());
             model.setVisibleGoldCards(data.getVisibleGoldCards());
             model.setVisibleResourceCards(data.getVisibleResourceCards());
+            model.setDetectedLC(data.isDetectedLastCircle());
         }
     }
 
@@ -908,6 +946,18 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    private void handleDetectedLastCircle(boolean old) {
+        if (!old && model.isDetectedLC()) {
+            String p = getBlackTokenPlayer();
+            String token;
+            if (p.equals(username))
+                token = model.getSelfPlayer().getToken().getColorCode();
+            else
+                token = model.getOpponent(p).getToken().getColorCode();
+            view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, "Last circle will start with " + token + p + AnsiCodes.RESET + "'s turn!");
+        }
+    }
+
     public ViewStartSetup getSetup(){
         return this.setup;
     }
@@ -918,5 +968,34 @@ public class ViewController implements ViewEventReceiver {
 
     public void setPreviousGameStatus(Pair<GameStatus, ViewState> previousGameStatus) {
         this.previousGameStatus = previousGameStatus;
+    }
+
+    public List<String> getInMatchPlayerUsernames() {
+        List<String> usernames = getPlayerUsernames();
+        return usernames.stream()
+                .filter(player -> getPlayersStatus().containsKey(player))
+                .toList();
+    }
+
+    private String getBlackTokenPlayer() {
+        List<String> usernames = getPlayerUsernames();
+        return usernames.stream()
+                .filter(player -> getPlayersStatus().get(player))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void gameEnded() {
+        endedGameData = null;
+        clearViewData();
+    }
+
+    public Token getPlayerToken(String username) {
+        synchronized (modelLock) {
+            if (model.getSelfPlayer().getUsername().equals(username))
+                return model.getSelfPlayer().getToken();
+            else
+                return model.getOpponent(username).getToken();
+        }
     }
 }
