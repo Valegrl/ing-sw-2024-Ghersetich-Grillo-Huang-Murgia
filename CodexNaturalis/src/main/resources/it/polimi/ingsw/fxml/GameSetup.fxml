@@ -43,20 +43,20 @@
                            <children>
                               <StackPane prefHeight="150.0" prefWidth="200.0">
                                  <children>
-                                    <ImageView fx:id="handCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard0" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
                               <StackPane prefHeight="150.0" prefWidth="200.0">
                                  <children>
-                                    <ImageView fx:id="handCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard1" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard1" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
                               <StackPane prefHeight="150.0" prefWidth="200.0">
                                  <children>
-                                    <ImageView fx:id="handCard2" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard2" fitHeight="120.0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard2" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard2" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
                            </children>
@@ -80,8 +80,8 @@
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="commonObjectiveCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="commonObjectiveCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="commonObjectiveCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="commonObjectiveCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
@@ -97,8 +97,8 @@
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="secretObjectiveCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="secretObjectiveCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="secretObjectiveCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="secretObjectiveCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
@@ -114,8 +114,8 @@
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="startCardFront" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="startCardBack" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="startCardFront" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="startCardBack" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
@@ -221,17 +221,17 @@
                   <VBox id="vboxResource" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label id="resourceCardsLabel" text="Resource cards" />
-                        <ImageView fx:id="resourceDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleResourceCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleResourceCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="resourceDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                   <VBox id="vboxGold" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
                      <children>
                         <Label id="goldCardsLabel" text="Gold cards" />
-                        <ImageView fx:id="goldDeck" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleGoldCard0" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleGoldCard1" fitHeight="120.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="goldDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                </children>

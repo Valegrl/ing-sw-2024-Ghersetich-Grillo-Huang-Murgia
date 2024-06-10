@@ -149,10 +149,6 @@ public class GameSetupController extends FXMLController {
 
     private ViewStartSetup setup;
 
-    private final double desiredWidth = 180;
-
-    private final double desiredHeight = 120;
-
     private ImmObjectiveCard objectiveChoice0;
 
     private ImmObjectiveCard objectiveChoice1;
@@ -415,7 +411,7 @@ public class GameSetupController extends FXMLController {
 
                 switch(card.getPermanentResource()){
                     case FUNGI:
-                        Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", desiredHeight, desiredWidth, true, false);
+                        Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(FB);
                         });
@@ -424,7 +420,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case ANIMAL:
-                        Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", desiredHeight, desiredWidth, true, false);
+                        Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(AB);
                         });
@@ -433,7 +429,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case INSECT:
-                        Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", desiredHeight, desiredWidth, true, false);
+                        Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(IB);
                         });
@@ -442,7 +438,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case PLANT:
-                        Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", desiredHeight, desiredWidth, true, false);
+                        Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(PB);
                         });
@@ -459,7 +455,7 @@ public class GameSetupController extends FXMLController {
 
                 switch(card.getPermanentResource()){
                     case FUNGI:
-                        Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", desiredHeight, desiredWidth, true, false);
+                        Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(FB);
                         });
@@ -468,7 +464,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case ANIMAL:
-                        Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", desiredHeight, desiredWidth, true, false);
+                        Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(AB);
                         });
@@ -477,7 +473,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case INSECT:
-                        Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", desiredHeight, desiredWidth, true, false);
+                        Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(IB);
                         });
@@ -486,7 +482,7 @@ public class GameSetupController extends FXMLController {
                         });
                         break;
                     case PLANT:
-                        Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", desiredHeight, desiredWidth, true, false);
+                        Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
                         currHandImage.setOnMouseEntered(event -> {
                             currHandImage.setImage(PB);
                         });
@@ -510,11 +506,11 @@ public class GameSetupController extends FXMLController {
         int i = 0;
         for(ImmPlayableCard card : myHand){
             if(card.getType() == CardType.GOLD) {
-                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + card.getId() + ".png", desiredHeight, desiredWidth, true, false);
+                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + card.getId() + ".png");
                 handCardImages.get(i).setImage(cardImage);
             }
             else{
-                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + card.getId() + ".png", desiredHeight, desiredWidth, true, false);
+                Image cardImage = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + card.getId() + ".png");
                 handCardImages.get(i).setImage(cardImage);
             }
             i++;
@@ -612,19 +608,19 @@ public class GameSetupController extends FXMLController {
                     if(bpc.getCardType() == CardType.GOLD){
                         switch(bpc.getItem()) {
                             case FUNGI:
-                                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", desiredHeight, desiredWidth, true, false);
+                                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
                                 opponentsHandCardImages.get(i).setImage(FB);
                                 break;
                             case ANIMAL:
-                                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", desiredHeight, desiredWidth, true, false);
+                                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
                                 opponentsHandCardImages.get(i).setImage(AB);
                                 break;
                             case INSECT:
-                                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", desiredHeight, desiredWidth, true, false);
+                                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
                                 opponentsHandCardImages.get(i).setImage(IB);
                                 break;
                             case PLANT:
-                                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", desiredHeight, desiredWidth, true, false);
+                                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
                                 opponentsHandCardImages.get(i).setImage(PB);
                                 break;
                         }
@@ -632,19 +628,19 @@ public class GameSetupController extends FXMLController {
                     else{
                         switch(bpc.getItem()) {
                             case FUNGI:
-                                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", desiredHeight, desiredWidth, true, false);
+                                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
                                 opponentsHandCardImages.get(i).setImage(FB);
                                 break;
                             case ANIMAL:
-                                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", desiredHeight, desiredWidth, true, false);
+                                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
                                 opponentsHandCardImages.get(i).setImage(AB);
                                 break;
                             case INSECT:
-                                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", desiredHeight, desiredWidth, true, false);
+                                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
                                 opponentsHandCardImages.get(i).setImage(IB);
                                 break;
                             case PLANT:
-                                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", desiredHeight, desiredWidth, true, false);
+                                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
                                 opponentsHandCardImages.get(i).setImage(PB);
                                 break;
                         }
@@ -666,27 +662,27 @@ public class GameSetupController extends FXMLController {
         ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
         switch(itemGoldDeck) {
             case FUNGI:
-                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", desiredHeight, desiredWidth, true, false);
+                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
                 goldDeck.setImage(FB);
                 break;
             case ANIMAL:
-                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", desiredHeight, desiredWidth, true, false);
+                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
                 goldDeck.setImage(AB);
                 break;
             case INSECT:
-                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", desiredHeight, desiredWidth, true, false);
+                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
                 goldDeck.setImage(IB);
                 break;
             case PLANT:
-                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", desiredHeight, desiredWidth, true, false);
+                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
                 goldDeck.setImage(PB);
                 break;
         }
 
         ImmPlayableCard visibleGoldCard0 = visibleGoldCards[0];
         ImmPlayableCard visibleGoldCard1 = visibleGoldCards[1];
-        Image visibleGoldCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard0.getId() + ".png", desiredHeight, desiredWidth, true, false);
-        Image visibleGoldCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image visibleGoldCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard0.getId() + ".png");
+        Image visibleGoldCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + visibleGoldCard1.getId() + ".png");
         this.visibleGoldCard0.setImage(visibleGoldCardImage0);
         this.visibleGoldCard1.setImage(visibleGoldCardImage1);
 
@@ -703,27 +699,27 @@ public class GameSetupController extends FXMLController {
         ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
         switch(itemResourceDeck) {
             case FUNGI:
-                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", desiredHeight, desiredWidth, true, false);
+                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
                 resourceDeck.setImage(FB);
                 break;
             case ANIMAL:
-                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", desiredHeight, desiredWidth, true, false);
+                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
                 resourceDeck.setImage(AB);
                 break;
             case INSECT:
-                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", desiredHeight, desiredWidth, true, false);
+                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
                 resourceDeck.setImage(IB);
                 break;
             case PLANT:
-                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", desiredHeight, desiredWidth, true, false);
+                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
                 resourceDeck.setImage(PB);
                 break;
         }
 
         ImmPlayableCard visibleResourceCard0 = visibleResourceCards[0];
         ImmPlayableCard visibleResourceCard1 = visibleResourceCards[1];
-        Image visibleResourceCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard0.getId() + ".png", desiredHeight, desiredWidth, true, false);
-        Image visibleResourceCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image visibleResourceCardImage0 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard0.getId() + ".png");
+        Image visibleResourceCardImage1 = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + visibleResourceCard1.getId() + ".png");
         this.visibleResourceCard0.setImage(visibleResourceCardImage0);
         this.visibleResourceCard1.setImage(visibleResourceCardImage1);
 
@@ -739,8 +735,8 @@ public class GameSetupController extends FXMLController {
         ImmObjectiveCard[] commonObjectives = setup.getCommonObjectives();
         ImmObjectiveCard commonObjective0 = commonObjectives[0];
         ImmObjectiveCard commonObjective1 = commonObjectives[1];
-        Image commonObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective0.getId() + ".png", desiredHeight, desiredWidth, true, false);
-        Image commonObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image commonObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective0.getId() + ".png");
+        Image commonObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective1.getId() + ".png");
         this.commonObjectiveCard0.setImage(commonObjectiveImage0);
         this.commonObjectiveCard1.setImage(commonObjectiveImage1);
     }
@@ -756,8 +752,8 @@ public class GameSetupController extends FXMLController {
         objectiveChoice0 = secretObjectives[0];
         objectiveChoice1 = secretObjectives[1];
 
-        Image secretObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice0.getId() + ".png", desiredHeight, desiredWidth, true, false);
-        Image secretObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice1.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image secretObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice0.getId() + ".png");
+        Image secretObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice1.getId() + ".png");
         this.secretObjectiveCard0.setImage(secretObjectiveImage0);
         this.secretObjectiveCard1.setImage(secretObjectiveImage1);
     }
@@ -771,8 +767,8 @@ public class GameSetupController extends FXMLController {
     private void showStartCard(){
         startCard = setup.getStartCard();
         System.out.println(startCard.getId());
-        Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png", desiredHeight, desiredWidth, true, false);
-        Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png", desiredHeight, desiredWidth, true, false);
+        Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png");
+        Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png");
         this.startCardFront.setImage(startCardFront);
         this.startCardBack.setImage(startCardBack);
     }
