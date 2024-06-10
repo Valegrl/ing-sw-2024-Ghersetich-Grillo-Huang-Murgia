@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 import it.polimi.ingsw.viewModel.ViewModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class represents an event that is triggered when a user attempts to reconnect to a game.
  */
@@ -23,9 +26,20 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      */
     private final String gameID;
 
+    /**
+     * The ViewModel associated with the current game state.
+     */
     private final ViewModel viewModel;
 
+    /**
+     * The current status of the game.
+     */
     private final GameStatus gameStatus;
+
+    /**
+     * The map of online players in the game.
+     */
+    private final Map<String, Boolean> players;
 
     /**
      * Constructor for the client side (View).
@@ -38,14 +52,15 @@ public class ReconnectToGameEvent extends FeedbackEvent {
         this.gameID = gameID;
         this.gameStatus = null;
         this.viewModel = null;
+        this.players = null;
     }
 
     /**
      * Constructor for the server side (Controller).
      * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
-     * It also initializes the game ID with null.
      *
      * @param feedback The feedback for the event.
+     * @param gameID The ID of the game to reconnect to.
      * @param message The message for the event.
      */
     public ReconnectToGameEvent(Feedback feedback, String gameID, String message) {
@@ -53,21 +68,26 @@ public class ReconnectToGameEvent extends FeedbackEvent {
         this.gameID = gameID;
         this.gameStatus = null;
         this.viewModel = null;
+        this.players = null;
     }
 
     /**
      * Constructor for the server side (Controller).
      * It initializes the superclass with the unique identifier for this event type, feedback, and a message.
-     * It also initializes the game ID with null.
      *
      * @param feedback The feedback for the event.
+     * @param gameID The ID of the game to reconnect to.
+     * @param status The current status of the game.
+     * @param model The ViewModel associated with the current game state.
+     * @param pl The map of online players in the game.
      * @param message The message for the event.
      */
-    public ReconnectToGameEvent(Feedback feedback, String gameID, GameStatus status, ViewModel model, String message) {
+    public ReconnectToGameEvent(Feedback feedback, String gameID, GameStatus status, ViewModel model, Map<String, Boolean> pl, String message) {
         super(id, feedback, message);
         this.gameID = gameID;
         this.gameStatus = status;
         this.viewModel = model;
+        this.players = new HashMap<>(pl);
     }
 
     /**
@@ -77,10 +97,23 @@ public class ReconnectToGameEvent extends FeedbackEvent {
         return gameID;
     }
 
+    /**
+     * @return A copy of the map of online players in the game.
+     */
+    public Map<String, Boolean> getPlayers() {
+        return players;
+    }
+
+    /**
+     * @return The ViewModel of the current game state.
+     */
     public ViewModel getViewModel() {
         return viewModel;
     }
 
+    /**
+     * @return The current status of the game.
+     */
     public GameStatus getGameStatus() {
         return gameStatus;
     }

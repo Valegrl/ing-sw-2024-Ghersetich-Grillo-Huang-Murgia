@@ -10,12 +10,14 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerReadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.eventUtils.GameListener;
+import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
+import it.polimi.ingsw.viewModel.ViewModel;
 
 import java.util.*;
 import java.util.Timer;
@@ -700,8 +702,8 @@ public class GameController {
      * @param account The account of the player reconnecting, represented as a pair of strings (username, password).
      * @param gl The GameListener associated with the player reconnecting.
      */
-    protected synchronized void reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
-        if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted) {
+    protected synchronized boolean reconnectPlayer(VirtualView vv, Account account, GameListener gl) {
+        if (joinedPlayers.containsKey(account) && !virtualViewAccounts.containsValue(account) && gameStarted && game.getGameStatus() != GameStatus.ENDED) {
             String waitingPlayer;
             GameStatus preGS = game.getGameStatus();
             if (preGS == GameStatus.WAITING) {
@@ -718,14 +720,28 @@ public class GameController {
             String username = account.getUsername();
             notifyAllOnlineGamePlayersExcept(username,  "Player " + username + " has reconnected to the game!");
 
-            game.reconnectPlayer(account.getUsername(), gl);
-
+            ViewModel model = game.reconnectPlayer(account.getUsername(), gl);
             GameStatus newGS = game.getGameStatus();
+
+            String player = account.getUsername();
+            if (game.getGameStatus() != GameStatus.ENDED) {
+                for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
+                    String checkUsername = entry.getKey().getUsername();
+                    if (checkUsername.equals(player) && isPlayerOnline(player)) {
+                        entry.getValue().update(new ReconnectToGameEvent(Feedback.SUCCESS, id, newGS, model, getOnlinePlayers(),  id + " game joined!"));
+                        break;
+                    }
+                }
+            }
+
             if (preGS == GameStatus.WAITING && newGS != GameStatus.ENDED)
                 this.actionTimer = playerActionTimer();
             else if (newGS == GameStatus.ENDED)
                 deleteGame();
+
+            return true;
         }
+        else return false;
     }
 
     /**

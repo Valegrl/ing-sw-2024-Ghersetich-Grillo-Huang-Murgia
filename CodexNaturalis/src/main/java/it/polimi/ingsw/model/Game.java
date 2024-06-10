@@ -468,7 +468,7 @@ public class Game {
      * @throws PlayerNotFoundException If there is no player with the provided username.
      * @throws IllegalStateException If there are no online players when the method is called.
      */
-    public void reconnectPlayer(String user, GameListener gl) {
+    public ViewModel reconnectPlayer(String user, GameListener gl) {
         Player p = getPlayerFromUsername(user);
         if (p == null) throw new PlayerNotFoundException();
 
@@ -488,14 +488,10 @@ public class Game {
             }
         }
 
-        if (gameStatus != GameStatus.ENDED) {
-            ViewModel model;
-            if (gameStatus == GameStatus.SETUP)
-                model = null;
-            else
-                model = new ViewModel(this, user);
-            listeners.notifyListener(user, new ReconnectToGameEvent(Feedback.SUCCESS, id, gameStatus, model, id + " game joined!"));
-        }
+        ViewModel model = null;
+        if (gameStatus != GameStatus.SETUP && gameStatus != GameStatus.ENDED)
+            model = new ViewModel(this, user);
+        return model;
     }
 
     /**

@@ -263,8 +263,10 @@ public class Controller {
         }
 
         if (found != null){
-            found.reconnectPlayer(vv, account, gl);
-            return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID, "ok"), found);
+            if (found.reconnectPlayer(vv, account, gl))
+                return new Pair<>(new ReconnectToGameEvent(Feedback.SUCCESS, gameID, "ok"), found);
+            else
+                return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "The game has ended."), null);
         }
 
         return new Pair<>(new ReconnectToGameEvent(Feedback.FAILURE, gameID, "The game does not exist, or you do not have the permission to enter it."), null);
