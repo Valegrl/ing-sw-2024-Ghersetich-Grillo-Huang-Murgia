@@ -76,7 +76,7 @@
 </AnchorPane>
 -->
 
-<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Buttons.css, @../css/Labels.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
+<AnchorPane minHeight="720.0" minWidth="1280.0" stylesheets="@../css/Buttons.css, @../css/Labels.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MenuController">
    <children>
       <AnchorPane fx:id="menuFX" styleClass="genericPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
