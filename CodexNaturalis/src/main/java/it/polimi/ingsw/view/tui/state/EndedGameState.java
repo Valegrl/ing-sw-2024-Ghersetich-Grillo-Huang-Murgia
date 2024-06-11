@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EndedGameState extends GameState {
+
+    private boolean firstRun = true;
+
     public EndedGameState(View view) {
         super(view);
     }
@@ -18,7 +21,10 @@ public class EndedGameState extends GameState {
     public void run() {
         clearConsole();
 
-        showResponseMessage("Game ended. Here are the results:\n", 2000);
+        if (firstRun)
+            showResponseMessage("Game ended!\n\nHere are the results:\n", 2000);
+        else
+            view.printMessage("Game ended!\n\nHere are the results:\n");
 
         view.printMessage(controller.getEndedGameData().resultsToString());
 
@@ -32,6 +38,7 @@ public class EndedGameState extends GameState {
 
     @Override
     public boolean handleInput(int input) {
+        firstRun = false;
         switch (input) {
             case 1:
                 showSpecificPlayArea();
@@ -43,6 +50,7 @@ public class EndedGameState extends GameState {
                 break;
             case 3:
                 view.stopInputRead(true);
+                controller.gameEnded();
                 transition(new MenuState(view));
                 break;
             default:

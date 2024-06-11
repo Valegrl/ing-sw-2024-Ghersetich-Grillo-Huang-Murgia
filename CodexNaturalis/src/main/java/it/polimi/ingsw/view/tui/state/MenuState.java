@@ -4,6 +4,8 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -63,7 +65,8 @@ public class MenuState extends ViewState {
             case EventID.AVAILABLE_LOBBIES:
                 if (feedback == Feedback.SUCCESS) {
                     clearConsole();
-                    showResponseMessage(message, 0);
+                    if (!controller.getLobbies().isEmpty())
+                        view.printMessage(message);
                 } else {
                     showResponseMessage("Failed to get available lobbies from server: " + message, 2000);
                     run();
@@ -80,7 +83,9 @@ public class MenuState extends ViewState {
                 break;
             case EventID.GET_MY_OFFLINE_GAMES:
                 if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 800);
+                    clearConsole();
+                    if(!controller.getOfflineGames().isEmpty())
+                        view.printMessage(message);
                 } else {
                     showResponseMessage("Failed to get offline games: " + message, 2000);
                     run();
@@ -88,10 +93,12 @@ public class MenuState extends ViewState {
                 break;
             case EventID.RECONNECT_TO_GAME:
                 if (feedback == Feedback.SUCCESS) {
+                    view.stopInputRead(true);
+                    clearConsole();
                     showResponseMessage(message, 2000);
-                    // TODO Reconnect to game status
+                    transition(new ReconnectToGameState(view));
                 } else {
-                    showResponseMessage("Failed to reconnect to game: " + message, 2000);
+                    showResponseMessage("Failed to reconnect to game: " + message, 1500);
                     reconnect();
                 }
                 break;
@@ -172,8 +179,10 @@ public class MenuState extends ViewState {
 
         if(!controller.getOfflineGames().isEmpty())
             chooseReconnect();
-        else
+        else {
+            showResponseMessage("There's no games to reconnect to.", 1000);
             run();
+        }
     }
 
     private void chooseReconnect() {
@@ -183,9 +192,9 @@ public class MenuState extends ViewState {
             run();
             return;
         }
+
         Event event = new ReconnectToGameEvent(controller.getOfflineGames().get(choice - 1).getId());
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     private void profileSettings() {

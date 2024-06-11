@@ -111,6 +111,12 @@ public class ViewController implements ViewEventReceiver {
     private List<Token> availableTokens;
 
     /**
+     * The pair of booleans representing if the player is in the setup phase
+     * and if the player is specifically in the token setup phase.
+     */
+    private Pair<Boolean, Boolean> inSetup = new Pair<>(false, false);
+
+    /**
      * The {@link ViewModel} for the current game.
      */
     private ViewModel model;
@@ -161,7 +167,7 @@ public class ViewController implements ViewEventReceiver {
                     }
                     event = tasksQueue.poll();
                 }
-                event.receiveEvent(ViewController.this);
+                event.receiveEvent(this);
             }
         }).start();
     }
@@ -204,7 +210,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
         availableTokens = event.getAvailableColors();
-        if(view.inGame() || view.inChat()) {
+        if(view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -218,7 +224,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
-        if(view.inLobby() || view.inChat()) {
+        if(view.inLobby()) {
             clearViewData();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -228,7 +234,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfTurnTimerExpiredEvent event) {
-        if(view.inGame() || view.inChat()) { // TODO handle in chat
+        if(view.inGame()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, "The timer for your turn has expired.");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -237,7 +243,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
-        if(view.inLobby() || view.inChat()) {
+        if(view.inLobby()) {
             playersStatus = event.getPlayers();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -250,14 +256,14 @@ public class ViewController implements ViewEventReceiver {
         playersStatus = event.getPlayers();
         if(view.inLobby()) {
             view.handleResponse(event.getID(), null, event.getMessage());
-        } else if (view.inGame() || view.inChat()) { // TODO check if previous state was in-game
-            if (playersOnline() == 1 && playersStatus.size() > 1) { // checking if the game needs to be set on WAITING or ENDED
+        } else if (view.inGame()) { // TODO check if previous state was in-game
+            if (!inSetup.key() && !model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() == 1 && playersStatus.size() > 1) { // checking if the game needs to be set on WAITING or ENDED
                 model.setGameStatus(GameStatus.WAITING);
                 view.stopInputRead(true);
                 view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, event.getMessage());
                 // note that previousGameStatus will be set from the current state using the setter method
                 // this is to make chat set the previousState to its previous state
-            } else if (model != null && model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() > 1) { // checking if the game needs to be running again
+            } else if (!inSetup.key() && model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() > 1) { // checking if the game needs to be running again
                 model.setGameStatus(previousGameStatus.key());
                 if (hasTurn()) {
                     view.handleResponse(event.getID(), null, event.getMessage());
@@ -335,8 +341,11 @@ public class ViewController implements ViewEventReceiver {
             model.setGameStatus(event.getGameStatus());
         }
 
-        if (view.inGame() || view.inChat()) { // TODO handle in chat
+        if (view.inGame()) {
             String message = "New turn!";
+            if (view.inChat())
+                if (hasTurn()) message += " It's your turn!";
+                else message += " It's " + model.getPlayerUsernames().get(model.getTurnPlayerIndex()) + "'s turn!";
             view.handleResponse(event.getID(), null, message);
         } else {
             System.out.println("Game state: event in wrong state");
@@ -352,7 +361,7 @@ public class ViewController implements ViewEventReceiver {
             model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
             drawCardUpdateModel(event.getOtherDrawCardData());
         }
-        if (view.inGame() || view.inChat()) { // TODO handle in chat
+        if (view.inGame()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
             handleDetectedLastCircle(oldDLC);
         } else {
@@ -369,7 +378,7 @@ public class ViewController implements ViewEventReceiver {
             placeCardUpdateModel(event.getOtherPlaceCardData());
             model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
         }
-        if (view.inGame() || view.inChat()) { // TODO handle in chat
+        if (view.inGame()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, event.getMessage());
             handleDetectedLastCircle(oldDLC);
         } else {
@@ -380,7 +389,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(EndedGameEvent event) {
         endedGameData = event.getEndedGameData();
-        if (view.inGame() || view.inChat()) { // TODO handle in chat
+        if (view.inGame()) { // TODO handle in chat
             view.handleResponse(event.getID(), null, "Game ended!");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -389,10 +398,11 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLocalModelEvent event) {
+        inSetup = new Pair<>(false, false);
         synchronized (modelLock) {
             model = event.getModel();
         }
-        if (view.inGame() || view.inChat()) {
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, "Game started!");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -634,8 +644,10 @@ public class ViewController implements ViewEventReceiver {
     public void evaluateEvent(ReconnectToGameEvent event) {
         if(view.inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
-                this.lobbyId = event.getGameID();
-                //TODO this.model should get from the server their model of the DCed game
+                lobbyId = event.getGameID();
+                model = event.getViewModel();
+                playersStatus = event.getPlayers();
+                inSetup = new Pair<>(event.getGameStatus().equals(GameStatus.SETUP), event.isAutoSetup());
             }
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
@@ -693,6 +705,7 @@ public class ViewController implements ViewEventReceiver {
             lobbyId = null;
             setup = null;
             availableTokens = null;
+            inSetup = new Pair<>(false, false);
             chatMessages.clear();
             privateChatMessages.clear();
             previousGameStatus = null;
@@ -712,7 +725,7 @@ public class ViewController implements ViewEventReceiver {
     }
 
     public ViewModel getModel() {
-        return new ViewModel(model);
+        return model != null ? new ViewModel(model) : null;
     }
 
     public List<String> getPlayerUsernames() {
@@ -803,6 +816,18 @@ public class ViewController implements ViewEventReceiver {
         return availableTokens;
     }
 
+    public boolean isInSetup() {
+        return inSetup.key();
+    }
+
+    public boolean isInTokenSetup() {
+        return inSetup.value();
+    }
+
+    public void setInSetup(Pair<Boolean, Boolean> inSetup) {
+        this.inSetup = inSetup;
+    }
+
     public EndedGameData getEndedGameData() {
         return endedGameData;
     }
@@ -853,44 +878,49 @@ public class ViewController implements ViewEventReceiver {
         List<String> playerUsernames;
         synchronized (modelLock) {
             turnPlayerIndex = model.getTurnPlayerIndex();
-            playerUsernames = getInMatchPlayerUsernames();
+            playerUsernames = model.getPlayerUsernames();
         }
+        List<String> onlinePlayers = getInMatchPlayerUsernames();
 
-        int lastPlayer;
+        int lastPlayerIndex;
         if (getGameStatus().equals(GameStatus.LAST_CIRCLE))
-            lastPlayer = playerUsernames.size() - 1;
-        else
-            lastPlayer = ((turnPlayerIndex - 1) + playerUsernames.size()) % playerUsernames.size();
-
-        for (int i = turnPlayerIndex; i != lastPlayer; i = (i + 1) % playerUsernames.size()) {
-            String usr = playerUsernames.get(i);
-            if (i == playerUsernames.indexOf(username)) {
-                SelfViewPlayer p = model.getSelfPlayer();
-                m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(p.getToken().getColorCode())
-                        .append(usr)
-                        .append("(");
-            } else {
-                m.append(model.getOpponent(usr).getToken().getColorCode())
-                        .append(usr)
-                        .append("(");
-            }
-            if (!playersStatus.get(usr))
-                m.append("DC ");
-            m.append(getModel().getScoreboard().get(usr)).append("p)")
-                    .append(AnsiCodes.RESET)
-                    .append(" -> ");
+            lastPlayerIndex = playerUsernames.indexOf(onlinePlayers.getLast());
+        else {
+            int onlineTurnPlayerIndex = onlinePlayers.indexOf(playerUsernames.get(turnPlayerIndex));
+            String lastPlayer = onlinePlayers.get(((onlineTurnPlayerIndex - 1) + onlinePlayers.size()) % onlinePlayers.size());
+            lastPlayerIndex = playerUsernames.indexOf(lastPlayer);
         }
-        if (playerUsernames.get(lastPlayer).equals(username))
+        for (int i = turnPlayerIndex; i != lastPlayerIndex; i = (i + 1) % playerUsernames.size()) {
+            String usr = playerUsernames.get(i);
+            if(onlinePlayers.contains(usr)) {
+                if (i == playerUsernames.indexOf(username)) {
+                    SelfViewPlayer p = model.getSelfPlayer();
+                    m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(p.getToken().getColorCode())
+                            .append(usr)
+                            .append("(");
+                } else {
+                    m.append(model.getOpponent(usr).getToken().getColorCode())
+                            .append(usr)
+                            .append("(");
+                }
+                if (!playersStatus.get(usr))
+                    m.append("DC ");
+                m.append(getModel().getScoreboard().get(usr)).append("p)")
+                        .append(AnsiCodes.RESET)
+                        .append(" -> ");
+            }
+        }
+        if (playerUsernames.get(lastPlayerIndex).equals(username))
             m.append(AnsiCodes.UNDERLINE).append(AnsiCodes.BOLD).append(model.getSelfPlayer().getToken().getColorCode())
                     .append(username)
                     .append("(");
         else
-            m.append(model.getOpponent(playerUsernames.get(lastPlayer)).getToken().getColorCode())
-                    .append(playerUsernames.get(lastPlayer))
+            m.append(model.getOpponent(playerUsernames.get(lastPlayerIndex)).getToken().getColorCode())
+                    .append(playerUsernames.get(lastPlayerIndex))
                     .append("(");
-        if (!playersStatus.get(playerUsernames.get(lastPlayer)))
+        if (!playersStatus.get(playerUsernames.get(lastPlayerIndex)))
             m.append("DC ");
-        m.append(getModel().getScoreboard().get(playerUsernames.get(lastPlayer))).append("p)")
+        m.append(getModel().getScoreboard().get(playerUsernames.get(lastPlayerIndex))).append("p)")
                 .append(AnsiCodes.RESET);
         return m.toString();
     }

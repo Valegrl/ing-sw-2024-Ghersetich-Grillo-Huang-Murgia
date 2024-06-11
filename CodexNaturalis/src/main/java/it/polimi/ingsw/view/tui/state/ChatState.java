@@ -15,11 +15,9 @@ import java.util.Arrays;
 
 public class ChatState extends ViewState {
 
-    private final ViewState previousState;
+    private ViewState previousState;
 
     private boolean inChat = false;
-
-
 
     public ChatState(View view, ViewState previousState) {
         super(view);
@@ -56,6 +54,7 @@ public class ChatState extends ViewState {
         if (inChat) {
             inChat = false;
             view.clearInput();
+            view.stopInputRead(true);
             transition(previousState);
         }
     }
@@ -70,6 +69,7 @@ public class ChatState extends ViewState {
         switch (EventID.getByID(eventID)) {
             case GET_CHAT_MESSAGES:
                 view.print(message);
+                notifyResponse();
                 break;
             case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
@@ -99,6 +99,7 @@ public class ChatState extends ViewState {
                     clearLine(); // remove input box
                     transition(new GameSetupState(view));
                 } else if (previousState.inGame()) { // Game started
+                    clearLine();
                     printMessage(boldText("Game info: ") + message);
                     view.clearInput();
                 } else {
@@ -106,9 +107,17 @@ public class ChatState extends ViewState {
                 }
                 break;
             case CHOOSE_TOKEN_SETUP:
+                // TODO distinguish between token setup start and token updates
                 if (previousState.inGame()) {
-                    view.clearInput();
-                    printMessage(boldText("Game info: ") + message);
+                    if (controller.isInTokenSetup()) {
+                        view.clearInput();
+                        printMessage(boldText("Game info: ") + message);
+                    } else {
+                        inChat = false;
+                        view.stopInputRead(true);
+                        clearLine(); // remove input box
+                        previousState.handleResponse(feedback, message, eventID); // make GameSetupState handle the tokenSetup transition
+                    }
                 }
                 break;
             case UPDATE_LOCAL_MODEL:
@@ -118,12 +127,30 @@ public class ChatState extends ViewState {
                     clearLine(); // remove input box
                     previousState.handleResponse(feedback, message, eventID); // make TokenSetupState handle the game transition
                 }
+                return;
+            case OTHER_PLACE_CARD, OTHER_DRAW_CARD, SELF_TURN_TIMER_EXPIRED:
+                view.clearInput();
+                printMessage(boldText("Game info: ") + message);
                 break;
+            case NEW_TURN:
+                view.clearInput();
+                printMessage(boldText("Game info: ") + message);
+                if (controller.hasTurn()) {
+                    previousState = new PlaceCardState(view);
+                } else {
+                    previousState = new WaitForTurnState(view);
+                }
+                break;
+            case NEW_GAME_STATUS, ENDED_GAME:
+                inChat = false;
+                clearLine(); // remove input box
+                view.stopInputRead(true);
+                previousState.handleResponse(feedback, message, eventID); // make GameState handle the new game status
+                return;
             default:
                 break;
         }
         inputMessageBox();
-        notifyResponse();
     }
 
     // TODO add events for joined Lobby or left lobby / game
@@ -160,5 +187,12 @@ public class ChatState extends ViewState {
     public boolean inChat() {
         return inChat;
     }
-     // TODO remove inChat and use inGame or inLobby methods that checks the previous state method
+
+    public boolean inGame() {
+        return previousState.inGame();
+    }
+
+    public boolean inLobby() {
+        return previousState.inLobby();
+    }
 }

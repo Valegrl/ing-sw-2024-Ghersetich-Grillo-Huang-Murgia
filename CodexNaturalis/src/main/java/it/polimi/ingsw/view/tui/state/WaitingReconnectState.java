@@ -5,7 +5,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
-public class WaitingReconnectState extends ViewState {
+public class WaitingReconnectState extends GameState {
     public WaitingReconnectState(View view) {
         super(view);
     }
@@ -49,8 +49,20 @@ public class WaitingReconnectState extends ViewState {
                 showResponseMessage(message, 1000);
                 transition(controller.getPreviousViewState());
                 break;
+            case NEW_TURN:
+                view.stopInputRead(true);
+                view.clearInput();
+                showResponseMessage(message, 1000);
+                if (controller.hasTurn())
+                    transition(new PlaceCardState(view));
+                else
+                    transition(new WaitForTurnState(view));
+                break;
             case QUIT_GAME:
                 handleQuitGame(feedback, message);
+                break;
+            case ENDED_GAME:
+                handleGameEndedEvent(message);
                 break;
             default:
                 break;

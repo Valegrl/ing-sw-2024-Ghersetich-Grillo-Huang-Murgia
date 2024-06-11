@@ -5,6 +5,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -28,6 +29,7 @@ public class TokenSetupState extends ViewState {
 
     @Override
     public void run() {
+        controller.setInSetup(new Pair<>(true, true));
         view.stopInputRead(true);
         view.clearInput();
         clearConsole();
@@ -107,6 +109,11 @@ public class TokenSetupState extends ViewState {
                         transition(new WaitForTurnState(view));
                     }
                 } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
+                    if (controller.hasTurn()) {
+                        controller.setPreviousGameStatus(new Pair<>(GameStatus.RUNNING, new PlaceCardState(view)));
+                    } else {
+                        controller.setPreviousGameStatus(new Pair<>(GameStatus.RUNNING, new WaitForTurnState(view)));
+                    }
                     transition(new WaitingReconnectState(view));
                 } else {
                     throw new IllegalStateException("Unexpected game status.");

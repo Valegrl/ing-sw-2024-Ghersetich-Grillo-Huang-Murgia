@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -9,7 +10,7 @@ import java.util.Arrays;
 
 public class GameSetupState extends ViewState {
 
-    private boolean inChat = false;
+    private boolean notFirstStart = false;
 
     private String setupMessage;
 
@@ -27,10 +28,11 @@ public class GameSetupState extends ViewState {
 
     @Override
     public void run() {
-        if (inChat) {
-            inChat = false;
+        if (notFirstStart) {
             showSetupChoices();
         } else {
+            controller.setInSetup(new Pair<>(true, false));
+            notFirstStart = true;
             view.stopInputRead(true);
             view.clearInput();
             clearConsole();
@@ -75,7 +77,7 @@ public class GameSetupState extends ViewState {
                     showSetupChoices();
                 break;
             case 6:
-                inChat = true;
+                notFirstStart = true;
                 transition(new ChatState(view, this));
                 break;
             case 7:
@@ -128,6 +130,8 @@ public class GameSetupState extends ViewState {
                     showSetupChoices();
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -149,8 +153,18 @@ public class GameSetupState extends ViewState {
     private void chooseSetup() {
         view.printMessage("Choose the showing face of the start card: ");
         int chosenFace = readChoiceFromInput(Arrays.asList("Front", "Back"));
+        if (chosenFace == -1) {
+            run();
+            return;
+        }
+        if (chosenFace == 0) return;
         view.printMessage("Choose the secret objective card: ");
         int chosenObjective = readChoiceFromInput(Arrays.asList("Card 1", "Card 2"));
+        if (chosenObjective == -1) {
+            run();
+            return;
+        }
+        if (chosenObjective == 0) return;
         controller.chosenSetup(chosenObjective, (chosenFace == 2)); // 1 is not flipped (false), 2 is flipped (true)
 
         waitForResponse();
