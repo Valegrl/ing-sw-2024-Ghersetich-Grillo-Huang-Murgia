@@ -10,6 +10,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEven
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.ChatMessage;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
@@ -187,6 +188,7 @@ public class GameSetupController extends FXMLController {
      */
     @Override
     public void run(View view, Stage stage) {
+        controller.setInSetup(new Pair<>(true, false));
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();

@@ -10,6 +10,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
@@ -125,6 +126,7 @@ public class TokenSetupController extends FXMLController {
      */
     @Override
     public void run(View view, Stage stage){
+        controller.setInSetup(new Pair<>(true, true));
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
