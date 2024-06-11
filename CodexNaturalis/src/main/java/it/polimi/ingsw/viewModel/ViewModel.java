@@ -200,7 +200,7 @@ public class ViewModel implements Serializable, CardConverter {
                     .append(commonObjectives[i].printCard(5))
                     .append("\n");
         }
-        sb.append("Private Objective:\n");
+        sb.append("Secret Objective:\n");
         sb.append("  ")
                 .append("1) ")
                 .append(selfPlayer.getSecretObjective().printCard(5))

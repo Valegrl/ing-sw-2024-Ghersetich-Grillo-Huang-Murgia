@@ -37,9 +37,7 @@ import java.util.stream.IntStream;
 /**
  * The ViewController class is responsible for handling events from the view and forwarding them to the {@link ClientManager}.
  * It also receives events from the {@link ClientManager} and forwards them to the view to be processed.
- * The class contains a model of the game in the client's local.
- * The class contains a list of event IDs that should be ignored and not forwarded as they can be processed locally.
- * The ViewController class uses a queue for managing the events coming from the server and the ones generated locally {@code tasksQueue}.
+ * The class contains a {@link ViewModel} of the game in the client's local and some data useful for the view.
  */
 public class ViewController implements ViewEventReceiver {
 
@@ -74,12 +72,12 @@ public class ViewController implements ViewEventReceiver {
     private List<LobbyState> lobbies;
 
     /**
-     * The offline games.
+     * The available-to-reconnect offline games.
      */
     private List<LobbyState> offlineGames;
 
     /**
-     * The map of players and their ready status in the lobby.
+     * The map of players and their ready/online status in the lobby.
      */
     private Map<String, Boolean> playersStatus;
 
@@ -101,12 +99,12 @@ public class ViewController implements ViewEventReceiver {
     private final ChatMessagesList<PrivateChatMessage> privateChatMessages = new ChatMessagesList<>(50); // FIXME config
 
     /**
-     * The setup of the game.
+     * The {@link ViewStartSetup} of the game.
      */
     private ViewStartSetup setup;
 
     /**
-     * The list of available tokens for the player to choose from.
+     * The list of available {@link Token tokens} for the player to choose from.
      */
     private List<Token> availableTokens;
 
@@ -123,12 +121,12 @@ public class ViewController implements ViewEventReceiver {
 
     /**
      * The previous game state, a Pair of a {@link GameStatus}
-     * and a boolean representing if the self-player had placed a card already or not.
+     * and a boolean representing if the self-player had already placed a card or not.
      */
     private Pair<GameStatus, ViewState> previousGameStatus;
 
     /**
-     * The ended game data.
+     * The {@link EndedGameData} for the current game.
      */
     private EndedGameData endedGameData;
 
@@ -158,10 +156,9 @@ public class ViewController implements ViewEventReceiver {
                 Event event;
                 synchronized (tasksQueue) {
                     while(tasksQueue.isEmpty()) {
-                        try{
+                        try {
                             tasksQueue.wait();
-                        }
-                        catch (InterruptedException e) {
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
@@ -179,17 +176,15 @@ public class ViewController implements ViewEventReceiver {
      */
     public void newViewEvent(Event event) {
 
-        if(EventID.isLocal(event.getID())) {
+        if (EventID.isLocal(event.getID())) {
             synchronized (tasksQueue) {
                 tasksQueue.add(event);
                 tasksQueue.notifyAll();
             }
-        }
-        else{
+        } else {
             try {
                 clientManager.handleEvent(event);
-            }
-            catch(RemoteException e){
+            } catch(RemoteException e) {
                 e.printStackTrace();
             }
         }
@@ -210,7 +205,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(ChooseTokenSetupEvent event) {
         availableTokens = event.getAvailableColors();
-        if(view.inGame()) {
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -224,7 +219,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(KickedPlayerFromLobbyEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             clearViewData();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -234,7 +229,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(SelfTurnTimerExpiredEvent event) {
-        if(view.inGame()) { // TODO handle in chat
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, "The timer for your turn has expired.");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -243,7 +238,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(UpdateLobbyPlayersEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             playersStatus = event.getPlayers();
             view.handleResponse(event.getID(), null, event.getMessage());
         } else {
@@ -254,9 +249,9 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(UpdateGamePlayersEvent event) {
         playersStatus = event.getPlayers();
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             view.handleResponse(event.getID(), null, event.getMessage());
-        } else if (view.inGame()) { // TODO check if previous state was in-game
+        } else if (view.inGame()) {
             if (!inSetup.key() && !model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() == 1 && playersStatus.size() > 1) { // checking if the game needs to be set on WAITING or ENDED
                 model.setGameStatus(GameStatus.WAITING);
                 view.stopInputRead(true);
@@ -279,7 +274,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChooseCardsSetupEvent event) {
-        if(view.inGame()) {
+        if (view.inGame()) {
             setup = event.getViewSetup();
             String message = "Assigned setup:\n" + setup.getStartCard().printSetupStartCard() + "\n" +
                     setup.printSetupObjCards() +
@@ -361,7 +356,7 @@ public class ViewController implements ViewEventReceiver {
             model.getOpponent(player).getPlayArea().setHand(event.getOtherDrawCardData().getHand());
             drawCardUpdateModel(event.getOtherDrawCardData());
         }
-        if (view.inGame()) { // TODO handle in chat
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
             handleDetectedLastCircle(oldDLC);
         } else {
@@ -378,7 +373,7 @@ public class ViewController implements ViewEventReceiver {
             placeCardUpdateModel(event.getOtherPlaceCardData());
             model.getOpponent(player).setPlayArea(event.getOtherPlaceCardData().getOpponentPlayArea());
         }
-        if (view.inGame()) { // TODO handle in chat
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, event.getMessage());
             handleDetectedLastCircle(oldDLC);
         } else {
@@ -389,7 +384,7 @@ public class ViewController implements ViewEventReceiver {
     @Override
     public void evaluateEvent(EndedGameEvent event) {
         endedGameData = event.getEndedGameData();
-        if (view.inGame()) { // TODO handle in chat
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, "Game ended!");
         } else {
             System.out.println("Game state: event in wrong state");
@@ -415,7 +410,7 @@ public class ViewController implements ViewEventReceiver {
         synchronized (modelLock) {
             avPosMessage = model.getSelfPlayer().getPlayArea().printAvailablePos();
         }
-        if(view.inGame()) {
+        if (view.inGame()) {
             view.handleResponse(event.getID(), null, avPosMessage);
         } else {
             System.out.println("Game state: event in the wrong state");
@@ -424,7 +419,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChosenCardsSetupEvent event) {
-        if(view.inGame()) {
+        if (view.inGame()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -433,7 +428,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ChosenTokenSetupEvent event) {
-        if(view.inGame()) {
+        if (view.inGame()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Game state: event in wrong state");
@@ -472,7 +467,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(GetLobbyInfoEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             view.handleResponse(event.getID(), null, lobbyInfoMessage());
         } else {
             System.out.println("Lobby state: event in wrong state");
@@ -481,7 +476,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(GetChatMessagesEvent event) {
-        if(view.inChat()) {
+        if (view.inChat()) {
             ChatMessagesList<ChatMessage> messages = new ChatMessagesList<>(chatMessages.size() + privateChatMessages.size());
             messages.addAll(chatMessages);
             messages.addAll(privateChatMessages);
@@ -489,21 +484,18 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
-    //TODO (for all the evaluateEvent, do something with the immutable model when feedback is success ?
-    // (for all the evaluateEvent, check if incoming event is relevant to the player's phase (in-game, in-lobby, out-game, out-lobby)
-    // should i print for IllegalStateException?
     @Override
     public void evaluateEvent(KickFromLobbyEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
-        } else{
+        } else {
             System.out.println("Lobby state: event in wrong state");
         }
     }
 
     @Override
     public void evaluateEvent(PlayerReadyEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
                 getPlayersStatus().put(username, true);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
@@ -514,7 +506,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(PlayerUnreadyEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             if (event.getFeedback().equals(Feedback.SUCCESS))
                 getPlayersStatus().put(username, false);
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
@@ -525,7 +517,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(QuitLobbyEvent event) {
-        if(view.inLobby()) {
+        if (view.inLobby()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)){
                 clearViewData();
             }
@@ -542,10 +534,10 @@ public class ViewController implements ViewEventReceiver {
      */
     @Override
     public void evaluateEvent(AvailableLobbiesEvent event) {
-        if(view.inMenu()) {
+        if (view.inMenu()) {
             lobbies = event.getLobbies();
             StringBuilder message = new StringBuilder();
-            for(int i = 0; i < lobbies.size(); i++) {
+            for (int i = 0; i < lobbies.size(); i++) {
                 message.append("\u001B[1m").append(i + 1).append("- ").append("\u001B[0m").append(lobbies.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
@@ -556,8 +548,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(CreateLobbyEvent event) {
-        if(view.inMenu()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)){
+        if (view.inMenu()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)){
                 lobbyId = event.getLobbyID();
                 playersStatus = new LinkedHashMap<>();
                 playersStatus.put(username, false);
@@ -570,8 +562,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(DeleteAccountEvent event) {
-        if(view.inMenu()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+        if (view.inMenu()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.username = null;
                 clearViewData();
             }
@@ -583,10 +575,10 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(GetMyOfflineGamesEvent event) {
-        if(view.inMenu()) {
+        if (view.inMenu()) {
             offlineGames = event.getGames();
             StringBuilder message = new StringBuilder(event.getMessage() + "\n");
-            for(int i = 0; i < offlineGames.size(); i++) {
+            for (int i = 0; i < offlineGames.size(); i++) {
                 message.append("  ").append(AnsiCodes.BOLD).append(i + 1).append("- ").append(AnsiCodes.RESET).append(offlineGames.get(i)).append("\n");
             }
             view.handleResponse(event.getID(), event.getFeedback(), message.toString());
@@ -597,8 +589,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(JoinLobbyEvent event) {
-        if(view.inMenu()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+        if (view.inMenu()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
                 this.lobbyId = event.getLobbyID();
                 this.playersStatus = event.getReadyStatusPlayers();
             }
@@ -608,14 +600,9 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
-    /**
-     * The method checks if the client's view is in the menu state.
-     * The ViewController gets the client's username and calls a method for setting it on the {@link View}.
-     * @param event The event to be handled.
-     */
     @Override
     public void evaluateEvent(LoginEvent event) {
-        if(view.inMenu()) {
+        if (view.inMenu()) {
             if(event.getFeedback().equals(Feedback.SUCCESS)) {
                 String username = event.getUsername();
                 this.username = username;
@@ -629,8 +616,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(LogoutEvent event) {
-        if(view.inMenu()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+        if (view.inMenu()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
                 username = null;
                 clearViewData();
             }
@@ -642,8 +629,8 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(ReconnectToGameEvent event) {
-        if(view.inMenu()) {
-            if(event.getFeedback().equals(Feedback.SUCCESS)) {
+        if (view.inMenu()) {
+            if (event.getFeedback().equals(Feedback.SUCCESS)) {
                 lobbyId = event.getGameID();
                 model = event.getViewModel();
                 playersStatus = event.getPlayers();
@@ -657,7 +644,7 @@ public class ViewController implements ViewEventReceiver {
 
     @Override
     public void evaluateEvent(RegisterEvent event) {
-        if(view.inMenu()) {
+        if (view.inMenu()) {
             view.handleResponse(event.getID(), event.getFeedback(), event.getMessage());
         } else {
             System.out.println("Menu state: event in wrong state");
@@ -698,6 +685,11 @@ public class ViewController implements ViewEventReceiver {
         view.serverDisconnected();
     }
 
+
+    /**
+     * Clears the view data, including model, players' status, lobby ID, setup, available tokens, chat messages,
+     * private chat messages, and previous game status.
+     */
     private void clearViewData() {
         synchronized (modelLock) {
             model = null;
@@ -712,22 +704,47 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    /**
+     * Retrieves the username of the player.
+     *
+     * @return {@link ViewController#username}.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Retrieves the lobby ID of the player.
+     *
+     * @return {@link ViewController#lobbyId}.
+     */
     public String getLobbyId() {
         return lobbyId;
     }
 
+    /**
+     * Retrieves the lobbies available to the player.
+     *
+     * @return {@link ViewController#lobbies}.
+     */
     public List<LobbyState> getLobbies() {
         return lobbies;
     }
 
+    /**
+     * Retrieves a copy of the game's model.
+     *
+     * @return {@link ViewController#model}.
+     */
     public ViewModel getModel() {
         return model != null ? new ViewModel(model) : null;
     }
 
+    /**
+     * Retrieves a copy of the list of player usernames from the model.
+     *
+     * @return The list of player usernames.
+     */
     public List<String> getPlayerUsernames() {
         List<String> usernames;
         synchronized (modelLock) {
@@ -736,12 +753,11 @@ public class ViewController implements ViewEventReceiver {
         return usernames;
     }
 
-    public int getSelfHandSize() {
-        synchronized (modelLock) {
-            return model.getSelfPlayer().getPlayArea().getHand().size();
-        }
-    }
-
+    /**
+     * Retrieves the {@link SelfViewPlayer self player}'s card from the given index of its hand.
+     * @param index The index of the card in the hand.
+     * @return The card at the given index of the hand.
+     */
     public ImmPlayableCard getSelfHandCard(int index) {
         ImmPlayableCard card;
         synchronized (modelLock) {
@@ -750,6 +766,10 @@ public class ViewController implements ViewEventReceiver {
         return card;
     }
 
+    /**
+     * Retrieves the {@link SelfViewPlayer self player}'s hand cards' ids.
+     * @return The list of ids of the cards in the hand.
+     */
     public List<String> getSelfHandCardIds() {
         synchronized (modelLock) {
             return model.getSelfPlayer().getPlayArea().getHand().stream()
@@ -758,6 +778,11 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    /**
+     * Retrieves the given deck's visible cards' colored ids.
+     * @param cardType The type of deck to retrieve the visible cards from.
+     * @return The list of colored ids of the visible cards in the deck.
+     */
     public List<String> getDeckVisibleIds(CardType cardType) {
         synchronized (modelLock) {
             if (cardType.equals(CardType.GOLD)) {
@@ -774,36 +799,58 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
-    public int getVisibleDeckCardIndex(CardType cardType, String id) {
+    /**
+     * Retrieves the index of the chosen deck's visible card with the given colored id.
+     * @param cardType The type of deck to retrieve the visible card from.
+     * @param idToString The colored id of the card to find.
+     * @return The index of the visible card in the deck.
+     */
+    public int getVisibleDeckCardIndex(CardType cardType, String idToString) {
         synchronized (modelLock) {
             if (cardType.equals(CardType.GOLD)) {
                 ImmPlayableCard[] visibleGoldCards = model.getVisibleGoldCards();
                 return IntStream.range(0, visibleGoldCards.length)
-                        .filter(i -> id.equals(visibleGoldCards[i].toString()))
+                        .filter(i -> idToString.equals(visibleGoldCards[i].toString()))
                         .findFirst()
                         .orElse(-1);
             } else {
                 ImmPlayableCard[] visibleResourceCards = model.getVisibleResourceCards();
                 return IntStream.range(0, visibleResourceCards.length)
-                        .filter(i -> id.equals(visibleResourceCards[i].toString()))
+                        .filter(i -> idToString.equals(visibleResourceCards[i].toString()))
                         .findFirst()
                         .orElse(-1);
             }
         }
     }
 
+    /**
+     * Retrieves the offline games available to the player.
+     * @return {@link ViewController#offlineGames}.
+     */
     public List<LobbyState> getOfflineGames() {
         return offlineGames;
     }
 
+    /**
+     * Retrieves the lobby leader of the player's lobby and its status.
+     * @return The lobby leader's username and ready status.
+     */
     public Map.Entry<String, Boolean> getLobbyLeader() {
         return playersStatus.entrySet().iterator().next();
     }
 
+    /**
+     * Retrieves the players' status in the lobby.
+     * @return {@link ViewController#playersStatus}.
+     */
     public Map<String, Boolean> getPlayersStatus() {
         return playersStatus;
     }
 
+    /**
+     * Retrieves the game status of the player's game.
+     * @return The game status.
+     */
     public GameStatus getGameStatus() {
         GameStatus gameStatus;
         synchronized (modelLock) {
@@ -812,30 +859,58 @@ public class ViewController implements ViewEventReceiver {
         return gameStatus;
     }
 
+    /**
+     * Retrieves the available tokens for the player to choose from.
+     * @return {@link ViewController#availableTokens}.
+     */
     public List<Token> getAvailableTokens() {
         return availableTokens;
     }
 
+    /**
+     * Whether the player is in the setup phase or not.
+     * @return {@link ViewController#inSetup}.
+     */
     public boolean isInSetup() {
         return inSetup.key();
     }
 
+    /**
+     * Whether the player is in the token setup phase or not.
+     * @return {@link ViewController#inSetup}.
+     */
     public boolean isInTokenSetup() {
         return inSetup.value();
     }
 
+    /**
+     * Sets the inSetup pair.
+     * @param inSetup The pair of booleans representing if the player is in the setup phase.
+     */
     public void setInSetup(Pair<Boolean, Boolean> inSetup) {
         this.inSetup = inSetup;
     }
 
+    /**
+     * Retrieves the {@link EndedGameData} for the current game.
+     * @return {@link ViewController#endedGameData}.
+     */
     public EndedGameData getEndedGameData() {
         return endedGameData;
     }
 
+    /**
+     * Whether the player is the lobby leader or not.
+     * @return True if the player is the lobby leader, false otherwise.
+     */
     public boolean isLobbyLeader(){
         return playersStatus.entrySet().iterator().next().getKey().equals(username);
     }
 
+    /**
+     * A string representation of the lobby's information.
+     * @return The lobby's information in a String format.
+     */
     private String lobbyInfoMessage() {
         StringBuilder m = new StringBuilder();
         m.append("Lobby '").append(lobbyId).append("':\n");
@@ -846,6 +921,11 @@ public class ViewController implements ViewEventReceiver {
         return m.toString();
     }
 
+    /**
+     * A function for view to choose their cards setup and communicate it to the server.
+     * @param chosenObj The chosen objective card.
+     * @param showingFace Whether the start card will be placed face up or face down.
+     */
     public void chosenSetup(int chosenObj, boolean showingFace) {
         assert chosenObj < 3 && chosenObj > 0;
         String chosenObjective = setup.getSecretObjectiveCards()[chosenObj - 1].getId();
@@ -853,6 +933,10 @@ public class ViewController implements ViewEventReceiver {
         newViewEvent(chosenCardsSetupEvent);
     }
 
+    /**
+     * A string representation of the AvailableTokensMessage.
+     * @return The AvailableTokensMessage in a String format.
+     */
     public String availableTokensMessage() {
         StringBuilder m = new StringBuilder();
         m.append("Choose your colored token from the following available ones:\n");
@@ -862,16 +946,29 @@ public class ViewController implements ViewEventReceiver {
         return m.toString();
     }
 
+    /**
+     * Whether the player has the turn or not.
+     * @return True if the player has the turn, false otherwise.
+     */
     public boolean hasTurn() {
         synchronized (modelLock) {
             return model.getTurnPlayerIndex() == model.getPlayerUsernames().indexOf(username);
         }
     }
 
+    /**
+     * Calculates the number of online players in the current game.
+     * @return The number of players online in the game.
+     */
     private int playersOnline() {
         return playersStatus.entrySet().stream().filter(Map.Entry::getValue).toList().size();
     }
 
+    /**
+     * A string representation of the players' list.
+     * Used to represent the next turns in the game.
+     * @return The players' list in a String format.
+     */
     public String playersListToString() {
         StringBuilder m = new StringBuilder();
         int turnPlayerIndex;
@@ -925,26 +1022,46 @@ public class ViewController implements ViewEventReceiver {
         return m.toString();
     }
 
+    /**
+     * A string representation of the game's decks.
+     * @return The game's decks in a String format.
+     */
     public String decksToString() {
         ViewModel vm = getModel();
         return vm.decksToString();
     }
 
+    /**
+     * A string representation of the player's common and secret objective cards.
+     * @return The game's objective cards in a String format.
+     */
     public String objectiveCardsToString() {
         ViewModel vm = getModel();
         return vm.objectiveCardsToString();
     }
 
+    /**
+     * A string representation of the self-player's {@link it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea SelfViewPlayArea}.
+     * @return The player's play area in a String format.
+     */
     public String selfPlayAreaToString() {
         ViewModel vm = getModel();
         return vm.selfPlayAreaToString();
     }
 
+    /**
+     * A string representation of the given opponent's {@link it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea ViewPlayArea}.
+     * @return The opponent's play area in a String format.
+     */
     public String opponentPlayAreaToString(String player) {
         ViewModel vm = getModel();
         return vm.opponentPlayAreaToString(player);
     }
 
+    /**
+     * Updates the model with the given {@link PlaceCardData}.
+     * @param data The data to update the model with.
+     */
     private void placeCardUpdateModel(PlaceCardData data) {
         synchronized (modelLock) {
             model.setGameStatus(data.getGameStatus());
@@ -953,6 +1070,10 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    /**
+     * Updates the model with the given {@link DrawCardData}.
+     * @param data The data to update the model with.
+     */
     private void drawCardUpdateModel(DrawCardData data) {
         synchronized (modelLock) {
             model.setGameStatus(data.getGameStatus());
@@ -964,18 +1085,31 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    /**
+     * Checks if the given {@link Coordinate} is available for placement or not.
+     * @param c The coordinate to check.
+     * @return True if the coordinate is available, false otherwise.
+     */
     public boolean isAvailablePos(Coordinate c) {
         synchronized (modelLock) {
             return model.getSelfPlayer().getPlayArea().getAvailablePos().contains(c);
         }
     }
 
+    /**
+     * Whether the game is in the last circle phase or not.
+     * @return True if the game is in the last circle phase, false otherwise.
+     */
     public boolean isLastCircle() {
         synchronized (modelLock) {
             return model.getGameStatus().equals(GameStatus.LAST_CIRCLE);
         }
     }
 
+    /**
+     * Handles the detected last circle event.
+     * @param old Whether the last circle was detected before or not.
+     */
     private void handleDetectedLastCircle(boolean old) {
         if (!old && model.isDetectedLC()) {
             String p = getBlackTokenPlayer();
@@ -988,18 +1122,35 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
+    /**
+     * Retrieves the {@link ViewStartSetup} for the current game.
+     * @return The game's start setup.
+     */
     public ViewStartSetup getSetup(){
         return this.setup;
     }
 
+    /**
+     * Retrieves the previous {@link ViewState} for the current game.
+     * @return The game's previous view state.
+     */
     public ViewState getPreviousViewState() {
         return previousGameStatus.value();
     }
 
+    /**
+     * Sets the previous game status pair.
+     * @param previousGameStatus The game status pair to set.
+     */
     public void setPreviousGameStatus(Pair<GameStatus, ViewState> previousGameStatus) {
         this.previousGameStatus = previousGameStatus;
     }
 
+    /**
+     * Retrieves the usernames of the players in the current match.
+     * Excludes players that abandoned the game voluntarily.
+     * @return The list of player usernames in the match.
+     */
     public List<String> getInMatchPlayerUsernames() {
         List<String> usernames = getPlayerUsernames();
         return usernames.stream()
@@ -1007,6 +1158,10 @@ public class ViewController implements ViewEventReceiver {
                 .toList();
     }
 
+    /**
+     * Retrieves the username of the player with the black token.
+     * @return The username of the player with the black token.
+     */
     private String getBlackTokenPlayer() {
         List<String> usernames = getPlayerUsernames();
         return usernames.stream()
@@ -1015,11 +1170,19 @@ public class ViewController implements ViewEventReceiver {
                 .orElse(null);
     }
 
+    /**
+     * A function for view to communicate that the game has ended and the player went back to the main menu.
+     */
     public void gameEnded() {
         endedGameData = null;
         clearViewData();
     }
 
+    /**
+     * Retrieves the {@link Token} of the player with the given username.
+     * @param username The username of the player to retrieve the token of.
+     * @return The player's token.
+     */
     public Token getPlayerToken(String username) {
         synchronized (modelLock) {
             if (model.getSelfPlayer().getUsername().equals(username))
