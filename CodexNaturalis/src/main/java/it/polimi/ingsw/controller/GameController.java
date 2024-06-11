@@ -725,7 +725,7 @@ public class GameController {
 
             String player = account.getUsername();
             if (game.getGameStatus() != GameStatus.ENDED) {
-                boolean tokenSetup = game.getGameStatus() == GameStatus.SETUP && setupCardsTimer != null && setupTokenTimer == null;
+                boolean tokenSetup = game.getGameStatus() == GameStatus.SETUP && setupTokenTimer != null;
                 for (Map.Entry<Account, GameListener> entry : joinedPlayers.entrySet()) {
                     String checkUsername = entry.getKey().getUsername();
                     if (checkUsername.equals(player) && isPlayerOnline(player)) {

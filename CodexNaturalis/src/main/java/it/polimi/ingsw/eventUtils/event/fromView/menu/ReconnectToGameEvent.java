@@ -42,7 +42,7 @@ public class ReconnectToGameEvent extends FeedbackEvent {
     private final Map<String, Boolean> players;
 
     /**
-     * This is true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started.
+     * True if and only if the game status is {@link GameStatus#SETUP} and the token setup has started, false otherwise.
      */
     private final boolean autoSetup;
 
@@ -85,7 +85,7 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      * @param feedback The feedback for the event.
      * @param gameID The ID of the game to reconnect to.
      * @param status The current status of the game.
-     * @param autoSetup This is true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started.
+     * @param autoSetup true if and only if the game status is {@link GameStatus#SETUP} and the token setup has started, false otherwise.
      * @param model The ViewModel associated with the current game state.
      * @param pl The map of online players in the game.
      * @param message The message for the event.
@@ -128,7 +128,7 @@ public class ReconnectToGameEvent extends FeedbackEvent {
     }
 
     /**
-     * @return true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started, false otherwise.
+     * @return true if and only if the game status is {@link GameStatus#SETUP} and the token setup has started, false otherwise.
      */
     public boolean isAutoSetup() {
         return autoSetup;
