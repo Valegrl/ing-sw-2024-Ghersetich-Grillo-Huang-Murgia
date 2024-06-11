@@ -42,6 +42,11 @@ public class ReconnectToGameEvent extends FeedbackEvent {
     private final Map<String, Boolean> players;
 
     /**
+     * This is true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started.
+     */
+    private final boolean autoSetup;
+
+    /**
      * Constructor for the client side (View).
      * It initializes the superclass with the unique identifier for this event type and initializes the game ID.
      *
@@ -53,6 +58,7 @@ public class ReconnectToGameEvent extends FeedbackEvent {
         this.gameStatus = null;
         this.viewModel = null;
         this.players = null;
+        this.autoSetup = false;
     }
 
     /**
@@ -69,6 +75,7 @@ public class ReconnectToGameEvent extends FeedbackEvent {
         this.gameStatus = null;
         this.viewModel = null;
         this.players = null;
+        this.autoSetup = false;
     }
 
     /**
@@ -78,16 +85,18 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      * @param feedback The feedback for the event.
      * @param gameID The ID of the game to reconnect to.
      * @param status The current status of the game.
+     * @param autoSetup This is true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started.
      * @param model The ViewModel associated with the current game state.
      * @param pl The map of online players in the game.
      * @param message The message for the event.
      */
-    public ReconnectToGameEvent(Feedback feedback, String gameID, GameStatus status, ViewModel model, Map<String, Boolean> pl, String message) {
+    public ReconnectToGameEvent(Feedback feedback, String gameID, GameStatus status, boolean autoSetup, ViewModel model, Map<String, Boolean> pl, String message) {
         super(id, feedback, message);
         this.gameID = gameID;
         this.gameStatus = status;
         this.viewModel = model;
         this.players = new HashMap<>(pl);
+        this.autoSetup = autoSetup;
     }
 
     /**
@@ -116,6 +125,13 @@ public class ReconnectToGameEvent extends FeedbackEvent {
      */
     public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    /**
+     * @return true if the game status is {@link GameStatus#SETUP} and the token setup has not yet started, false otherwise.
+     */
+    public boolean isAutoSetup() {
+        return autoSetup;
     }
 
     @Override
