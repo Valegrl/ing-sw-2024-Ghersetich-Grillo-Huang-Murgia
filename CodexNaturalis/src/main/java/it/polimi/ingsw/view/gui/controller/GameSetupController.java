@@ -18,6 +18,7 @@ import it.polimi.ingsw.view.tui.state.MenuState;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,8 +29,10 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,6 +45,30 @@ import java.util.Map;
  * It extends the FXMLController class and overrides its methods to provide the specific functionality needed for the game setup.
  */
 public class GameSetupController extends FXMLController {
+
+    @FXML
+    public BorderPane mainAnchor;
+
+    @FXML
+    public Text text0;
+
+    @FXML
+    public Text text1;
+
+    @FXML
+    public Text text2;
+
+    @FXML
+    public Text text3;
+
+    @FXML
+    public Text text4;
+
+    @FXML
+    public VBox vboxChat;
+
+    @FXML
+    public VBox deckBox;
 
     @FXML
     private Label lobbyName;
@@ -176,6 +203,58 @@ public class GameSetupController extends FXMLController {
      */
     public GameSetupController(){
         super();
+    }
+
+    public void initialize(){
+        double relativePercentage = 0.12;
+        double relativePercentage1 = 0.10;
+        double relativePercentageChoose = 0.50;
+        double relativePercentageText = 0.20;
+
+        List<ImageView> imageViews = Arrays.asList(handCard0, handCard1, handCard2,
+                                                   opponentHandCard0, opponentHandCard1, opponentHandCard2,
+                                                   commonObjectiveCard0, commonObjectiveCard1,
+                                                   secretObjectiveCard0, secretObjectiveCard1,
+                                                   startCardFront, startCardBack);
+
+        for (ImageView imageView : imageViews) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    mainAnchor.getWidth() * relativePercentage, mainAnchor.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    mainAnchor.getHeight() * relativePercentage, mainAnchor.heightProperty()
+            ));
+        }
+
+        List<ImageView> imageViews1 = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
+                goldDeck, visibleGoldCard0, visibleGoldCard1);
+
+        for (ImageView imageView : imageViews1) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    mainAnchor.getWidth() * relativePercentage1, mainAnchor.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    mainAnchor.getHeight() * relativePercentage1, mainAnchor.heightProperty()
+            ));
+        }
+
+        text0.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                mainAnchor.getWidth() * relativePercentageChoose, mainAnchor.widthProperty()
+        ));
+        List<Text> textArray = Arrays.asList(text1, text2, text3, text4);
+        for (Text t : textArray) {
+            t.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    mainAnchor.getWidth() * relativePercentageText, mainAnchor.widthProperty()
+            ));
+        }
+
+        double vboxChatPercentage = 0.25;
+        vboxChat.minHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                mainAnchor.getHeight() * vboxChatPercentage, mainAnchor.heightProperty()
+        ));
+
     }
 
     /**
@@ -775,7 +854,7 @@ public class GameSetupController extends FXMLController {
      * @param lobbyName the name of the lobby
      */
     private void setLobbyName(String lobbyName) {
-        this.lobbyName.setText("LOBBY: " + lobbyName);
+        this.lobbyName.setText("GAME: " + lobbyName);
     }
 
     /**

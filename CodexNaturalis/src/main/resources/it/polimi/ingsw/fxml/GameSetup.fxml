@@ -13,12 +13,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane id="mainPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.GameSetupController">
+<?import javafx.scene.layout.FlowPane?>
+<BorderPane id="mainPane" fx:id="mainAnchor" minHeight="720.0" minWidth="1280.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.GameSetupController">
    <top>
-      <AnchorPane minHeight="80.0" minWidth="1920.0" BorderPane.alignment="CENTER">
+      <AnchorPane minHeight="50.0" BorderPane.alignment="CENTER">
          <children>
-            <Label id="lobbyLabel" fx:id="lobbyName" alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" minHeight="40.0" minWidth="900.0" prefWidth="896.0" text="Lobby: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label id="lobbyLabel" fx:id="lobbyName" alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" minHeight="40.0" text="Game: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <opaqueInsets>
                   <Insets left="20.0" />
                </opaqueInsets>
@@ -31,32 +34,30 @@
          <children>
             <VBox id="vboxMain" alignment="CENTER" layoutX="634.0" layoutY="284.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label text="Choose a side to play the start card and one secret objective card.">
-                     <VBox.margin>
-                        <Insets bottom="50.0" />
-                     </VBox.margin>
-                  </Label>
-                  <AnchorPane minHeight="150.0">
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Text fx:id="text0" text="Choose a side to play the start card and one secret objective card."/>
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <AnchorPane>
                      <children>
-                        <Label minWidth="400.0" text="Hand:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox alignment="CENTER_RIGHT" layoutX="825.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="text1" text="Hand:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <HBox alignment="CENTER_RIGHT" layoutX="825.0" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                              <StackPane>
                                  <children>
-                                    <ImageView fx:id="handCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard0" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
-                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                              <StackPane>
                                  <children>
-                                    <ImageView fx:id="handCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard1" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard1" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard1" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
-                              <StackPane prefHeight="150.0" prefWidth="200.0">
+                              <StackPane>
                                  <children>
-                                    <ImageView fx:id="handCard2" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="opponentHandCard2" fitWidth="180.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard2" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="opponentHandCard2" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                                  </children>
                               </StackPane>
                            </children>
@@ -69,61 +70,62 @@
                         <Insets left="40.0" />
                      </padding>
                   </AnchorPane>
-                  <AnchorPane minHeight="150.0">
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
                      </padding>
                      <children>
-                        <Label minWidth="400.0" text="Common objectives:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox alignment="CENTER_RIGHT" layoutX="877.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="text2" text="Common objectives:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <HBox alignment="CENTER_RIGHT" layoutX="877.0" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="commonObjectiveCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="commonObjectiveCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="commonObjectiveCard0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="commonObjectiveCard1" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane minHeight="150.0">
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
                      </padding>
                      <children>
-                        <Label minWidth="400.0" text="Secret objectives:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox fx:id="secretObjectiveHBox" alignment="CENTER_RIGHT" layoutX="907.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="text3" text="Secret objectives:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <HBox fx:id="secretObjectiveHBox" alignment="CENTER_RIGHT" layoutX="907.0" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="secretObjectiveCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="secretObjectiveCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="secretObjectiveCard0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="secretObjectiveCard1" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane minHeight="150.0">
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
                      </padding>
                      <children>
-                        <Label minWidth="400.0" text="Startcard's front and back:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <HBox fx:id="startCardHBox" alignment="CENTER_RIGHT" layoutX="949.0" layoutY="25.0" minWidth="700.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="text4" text="Startcard's front and back:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <HBox fx:id="startCardHBox" alignment="CENTER_RIGHT" layoutX="949.0" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets right="40.0" />
                            </padding>
                            <children>
-                              <ImageView fx:id="startCardFront" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="startCardBack" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="startCardFront" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="startCardBack" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
                   </AnchorPane>
+                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
             </VBox>
          </children>
          <padding>
@@ -136,17 +138,17 @@
          <children>
             <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox id="vboxChat" alignment="CENTER" minHeight="600.0" spacing="20.0">
+                  <VBox fx:id="vboxChat" alignment="CENTER" spacing="20.0">
                      <children>
                         <Label text="Chat">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin></Label>
-                        <TextArea fx:id="chatArea" editable="false" maxHeight="300.0" maxWidth="280.0" minHeight="300.0" wrapText="true">
+                        <TextArea fx:id="chatArea" editable="false" maxWidth="280.0" wrapText="true">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding></TextArea>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefWidth="200.0">
                            <children>
                               <VBox alignment="CENTER_LEFT" minWidth="150.0" spacing="10.0">
                                  <children>
@@ -185,7 +187,7 @@
                            </VBox.margin></Button>
                      </children>
                   </VBox>
-                  <VBox id="vboxSetup" alignment="CENTER" minHeight="300.0" minWidth="300.0" spacing="20.0">
+                  <VBox id="vboxSetup" alignment="CENTER" minHeight="250.0" minWidth="300.0" spacing="20.0">
                      <children>
                         <Label text="Player setup:" />
                         <Button fx:id="yourSetupButton" mnemonicParsing="false" onAction="#showYourSetup" styleClass="buttonSmallest" text="Your setup" />
@@ -214,24 +216,26 @@
       </AnchorPane>
    </bottom>
    <left>
-      <AnchorPane minHeight="750.0" minWidth="240.0" BorderPane.alignment="CENTER">
+      <AnchorPane minWidth="240.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" layoutX="50.0" layoutY="332.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="deckBox" alignment="CENTER" layoutX="50.0" layoutY="332.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox id="vboxResource" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
+                  <VBox id="vboxResource" alignment="CENTER" spacing="10.0">
                      <children>
                         <Label id="resourceCardsLabel" text="Resource cards" />
-                        <ImageView fx:id="resourceDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleResourceCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleResourceCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="resourceDeck" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleResourceCard1" pickOnBounds="true" preserveRatio="true" />
+                        <Region minHeight="2" />
                      </children>
                   </VBox>
-                  <VBox id="vboxGold" alignment="CENTER" maxWidth="350.0" minHeight="450.0" spacing="10.0">
+                  <VBox id="vboxGold" alignment="CENTER" spacing="10.0">
                      <children>
                         <Label id="goldCardsLabel" text="Gold cards" />
-                        <ImageView fx:id="goldDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleGoldCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="visibleGoldCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="goldDeck" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="visibleGoldCard1" pickOnBounds="true" preserveRatio="true" />
+                        <Region minHeight="2" />
                      </children>
                   </VBox>
                </children>

@@ -251,7 +251,7 @@ public class TokenSetupController extends FXMLController {
      * @param lobbyName the name of the lobby
      */
     private void setLobbyName(String lobbyName) {
-        this.lobbyName.setText("LOBBY: " + lobbyName);
+        this.lobbyName.setText("GAME: " + lobbyName);
     }
 
     /**
