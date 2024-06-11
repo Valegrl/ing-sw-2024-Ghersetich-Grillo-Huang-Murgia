@@ -188,11 +188,11 @@ public class GameSetupController extends FXMLController {
      */
     @Override
     public void run(View view, Stage stage) {
-        controller.setInSetup(new Pair<>(true, false));
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
         this.setup = controller.getSetup();
+        controller.setInSetup(new Pair<>(true, false));
 
         setLobbyName(controller.getLobbyId());
         setupButtons = Arrays.asList(setupButton1, setupButton2, setupButton3);
