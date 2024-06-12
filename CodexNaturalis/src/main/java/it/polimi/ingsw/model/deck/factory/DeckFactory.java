@@ -8,9 +8,7 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.evaluator.Evaluator;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,35 +25,27 @@ public class DeckFactory {
     }};
 
     public <T extends Card> Deck<T> createDeck(Class<T> cls) {
-        URL resource;
-        URI jsonURI;
+        InputStream resource;
 
         String JSON_FILE_NAME = classToFile.get(cls);
         if (JSON_FILE_NAME == null) {
             throw new IllegalArgumentException("Class " + cls + " not supported");
         }
 
-        resource = getClass().getClassLoader().getResource(JSON_FILE_NAME);
+        resource = getClass().getClassLoader().getResourceAsStream(JSON_FILE_NAME);
         if (resource == null) {
             throw new IllegalArgumentException("Resource for " + cls + " not found");
         }
 
-        try {
-            jsonURI = resource.toURI();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<T> cards = readCardsFromJson(jsonURI, TypeToken.getParameterized(List.class, cls).getType());
+        List<T> cards = readCardsFromJson(resource, TypeToken.getParameterized(List.class, cls).getType());
         assert cards != null;
         Collections.shuffle(cards);
 
         return new Deck<>(cards);
     }
 
-    private <T extends Card> List<T> readCardsFromJson(URI jsonURI, Type cardListType) {
-        File file = new File(jsonURI);
-        try (FileReader reader = new FileReader(file)) {
+    private <T extends Card> List<T> readCardsFromJson(InputStream resource, Type cardListType) {
+        try (Reader reader = new InputStreamReader(resource)) {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Evaluator.class, new EvaluatorTypeAdapter())
                     .create();
