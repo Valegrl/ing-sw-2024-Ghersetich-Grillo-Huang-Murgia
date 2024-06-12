@@ -57,11 +57,7 @@ public class RemoteServerSocket implements Server {
      */
     public RemoteServerSocket(String ipAddress, int portNumber) throws IOException {
         this.client = ClientManager.getInstance();
-        try {
-            this.socket = new Socket(ipAddress,portNumber);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.socket = new Socket(ipAddress,portNumber);
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -113,19 +109,6 @@ public class RemoteServerSocket implements Server {
         } catch (IOException e) {
             if (!socket.isConnected())
                 System.err.println("I/O error: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Closes the {@link  Socket} and the {@code ObjectInputStream} and {@code ObjectOutputStream}.
-     */
-    protected void closeSocket() {
-        try {
-            inputStream.close();
-            outputStream.close();
-            socket.close();
-        } catch (IOException e) {
-            System.err.println("Cannot close socket to client " + e.getMessage());
         }
     }
 

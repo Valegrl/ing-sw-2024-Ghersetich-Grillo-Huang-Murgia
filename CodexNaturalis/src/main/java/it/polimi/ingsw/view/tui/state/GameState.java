@@ -90,7 +90,11 @@ public abstract class GameState extends ViewState {
             return;
         }
 
-        // TODO check card ID validity through a regEx
+        if (!id.matches("[RGOS]C\\d\\d")) {
+            showResponseMessage("Invalid card id.", 500);
+            seeDetailedCard();
+            return;
+        }
 
         ViewController controller = view.getController();
         ViewModel vm = controller.getModel();

@@ -91,15 +91,15 @@ public class ChooseConnectionController extends FXMLController {
         String IpSocket = ipSocketField.getText();
         System.out.println(IpSocket);
 
-        if(IpSocket.isEmpty()){
+        if (!ClientManager.validateAddress(IpSocket)) {
+            errorSocket.setText("Invalid IP address. Please provide a valid one:");
+        } else if(IpSocket.isEmpty()){
             errorSocket.setText("Socket address can't be left empty!");
-        }
-        else{
+        } else {
             ipSocketField.clear();
             errorSocket.setText("");
             try {
                 ClientManager.getInstance().initSocket(IpSocket, 1098);
-                /*Unhandled RemoteServer Exception if server is off ?*/
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
                 Parent root = loader.load();
                 LoginController nextController = loader.getController();
@@ -108,7 +108,7 @@ public class ChooseConnectionController extends FXMLController {
                 scene.setRoot(root);
                 transition(nextController);
 
-            } catch (RuntimeException | IOException exception ) {
+            } catch (IOException exception) {
                 errorSocket.setText("Cannot connect with Socket. Make sure the IP provided is valid and try again later...");
             }
         }
@@ -124,10 +124,11 @@ public class ChooseConnectionController extends FXMLController {
         String IpRmi = ipRmiField.getText();
         System.out.println(IpRmi);
 
-        if(IpRmi.isEmpty()){
+        if (!ClientManager.validateAddress(IpRmi)) {
+            errorRmi.setText("Invalid IP address. Please provide a valid one:");
+        } else if (IpRmi.isEmpty()) {
             errorRmi.setText("RMI address can't be left empty!");
-        }
-        else{
+        } else {
             ipRmiField.clear();
             errorRmi.setText("");
             try {
@@ -141,7 +142,7 @@ public class ChooseConnectionController extends FXMLController {
                 scene.setRoot(root);
                 transition(nextController);
 
-            } catch (RuntimeException | IOException exception) {
+            } catch (IOException exception) {
                 errorRmi.setText("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
             }
         }
@@ -162,8 +163,7 @@ public class ChooseConnectionController extends FXMLController {
             scene.setRoot(root);
 
             transition(nextController);
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
@@ -173,7 +173,6 @@ public class ChooseConnectionController extends FXMLController {
      */
     @FXML
     public void goBackConnection(){
-
         chooseConnectionMenuFX.setVisible(true);
         chooseConnectionMenuFX.setManaged(true);
         socketMenuFX.setVisible(false);
@@ -198,7 +197,6 @@ public class ChooseConnectionController extends FXMLController {
      */
     @FXML
     public void setRmi(){
-
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
         rmiMenuFX.setVisible(true);

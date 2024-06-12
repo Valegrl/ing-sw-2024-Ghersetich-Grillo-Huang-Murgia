@@ -92,14 +92,10 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * @param portNumber The port number of the server.
      * @throws RemoteException If a communication-related exception occurs.
      */
-    public void initSocket(String ipAddress, int portNumber) throws RemoteException {
-        try {
-            server = new RemoteServerSocket(ipAddress, portNumber);
-            connectionOpen = true;
-            startPing();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void initSocket(String ipAddress, int portNumber) throws IOException {
+        server = new RemoteServerSocket(ipAddress, portNumber);
+        connectionOpen = true;
+        startPing();
         new Thread(() -> {
             RemoteServerSocket serverSocket = (RemoteServerSocket) server;
             while(!serverSocket.getSocket().isClosed()) {
@@ -276,6 +272,11 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         } catch (RemoteException ignored){} // ignored because rmi will always throw an exception when the server is offline
         viewController.externalEvent(new ServerDisconnectedEvent());
         instance = null;
+    }
+
+    public static boolean validateAddress(String ip) {
+        String pattern = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
+        return ip.matches(pattern);
     }
 
 }

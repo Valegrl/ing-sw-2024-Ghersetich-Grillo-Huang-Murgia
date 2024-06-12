@@ -152,8 +152,6 @@ public class ChatState extends ViewState {
         inputMessageBox();
     }
 
-    // TODO add events for joined Lobby or left lobby / game
-
     private void sendPrivateMessage(String message) {
         String[] split = message.split(" ");
         if (split.length < 3) {
