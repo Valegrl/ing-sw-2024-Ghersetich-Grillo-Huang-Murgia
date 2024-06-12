@@ -172,7 +172,17 @@ public class TokenSetupController extends FXMLController {
         timeline.playFromStart();
     }
 
-
+    /**
+     * This method handles the response from the server based on the event ID and feedback received.
+     * It updates the user interface and game state accordingly, it handles most importantly the following events:
+     * ChooseTokenSetupEvent is used to let the users in game that someone has chosen their token.
+     * ChosenTokenSetupEvent is used to let the user know their token was chosen successfully.
+     * UpdateGamePlayersEvent is used to let the users know the status regarding the game, such as a user quitting or being disconnected.
+     * UpdateLocalModel is used to update the token setup and move to the next screen which is the in game screen.
+     * @param feedback The feedback received from the server. It can be SUCCESS or FAILURE.
+     * @param message The message received from the server. It can be an informational message or an error message.
+     * @param eventID The ID of the event that triggered the response. It is used to determine the appropriate action to take.
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         //numTokens = controller.getAvailableTokens().size();
@@ -191,6 +201,7 @@ public class TokenSetupController extends FXMLController {
                     for (ImageView imageView : visibleTokens.values()) {
                         imageView.setVisible(false);
                     }
+                    quitButton.setVisible(false);
                 }
                 chatArea.appendText("\n" + message + "\n\n");
                     break;
@@ -203,9 +214,21 @@ public class TokenSetupController extends FXMLController {
                 break;
 
             case UPDATE_LOCAL_MODEL:
-                //TODO
-                break;
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGame.fxml"));
+                        Parent root = loader.load();
+                        InGameController nextController = loader.getController();
 
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    }
+                    catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                });
+                break;
 
             case GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");

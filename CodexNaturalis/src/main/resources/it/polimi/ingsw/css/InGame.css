@@ -1,4 +1,4 @@
-#lobbyName {
+#gameName {
     -fx-text-fill: #f1d546;
     -fx-font-size: 25px;
     -fx-font-family: "Bebas Neue Regular";
@@ -48,20 +48,6 @@
 }
 
 
-#resourceDeck{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0.35, 2, 9);
-}
-
-
-#resource1{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
-
-
-#resource2{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
-
 
 #goldAnchor {
     -fx-border-color: #342b05;
@@ -84,21 +70,6 @@
     -fx-font-size: 17px;
     -fx-font-family: "Bebas Neue Regular";
     -fx-font-weight: bold;
-}
-
-
-#goldDeck{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0.35, 2, 9);
-}
-
-
-#gold1{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
-
-
-#gold2{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
 }
 
 
@@ -125,28 +96,6 @@
     -fx-font-weight: bold;
 }
 
-
-#hand1{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
-
-
-
-
-
-
-#hand2{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
-
-
-
-
-
-
-#hand3{
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
-}
 
 
 #commonAnchor {

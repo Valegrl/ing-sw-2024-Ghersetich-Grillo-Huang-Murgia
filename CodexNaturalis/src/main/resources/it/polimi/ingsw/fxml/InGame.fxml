@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
@@ -19,61 +16,63 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/InGame.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.InGameController">
+<AnchorPane id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/InGame.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.InGameController">
    <children>
-      <BorderPane fx:id="borderPane" prefHeight="1080.0" prefWidth="1920.0">
+      <AnchorPane fx:id="scoreBoard" />
+
+      <BorderPane id="borderPane" fx:id="borderPane" prefHeight="1080.0" prefWidth="1920.0">
          <left>
-            <AnchorPane fx:id="leftAnchor" prefHeight="750.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <AnchorPane id="leftAnchor" prefHeight="750.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="resourceAnchor" layoutX="5.0" layoutY="32.0" prefHeight="376.0" prefWidth="192.0">
+                  <AnchorPane id="resourceAnchor" layoutX="5.0" layoutY="32.0" prefHeight="376.0" prefWidth="192.0">
                      <children>
-                        <VBox fx:id="vBoxResource" layoutX="20.0" layoutY="150.0">
+                        <VBox id="vBoxResource" layoutX="20.0" layoutY="150.0">
                            <children>
-                              <ImageView fx:id="resource1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="visibleResourceCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <ImageView fx:id="resource2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="visibleResourceCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </VBox>
-                        <ImageView fx:id="resourceDeck" fitHeight="100.0" fitWidth="150.0" layoutX="20.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label fx:id="resourceLabel" layoutX="16.0" layoutY="-11.0" text="RESOURCE CARDS" />
+                        <ImageView id="resourceDeck" fx:id="resourceDeck" fitHeight="100.0" fitWidth="150.0" layoutX="20.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label id="resourceLabel" layoutX="16.0" layoutY="-11.0" text="RESOURCE CARDS" AnchorPane.leftAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="goldAnchor" layoutX="5.0" layoutY="440.0" prefHeight="376.0" prefWidth="192.0">
+                  <AnchorPane id="goldAnchor" layoutX="5.0" layoutY="440.0" prefHeight="376.0" prefWidth="192.0">
                      <children>
                         <ImageView fx:id="goldDeck" fitHeight="100.0" fitWidth="150.0" layoutX="20.0" layoutY="35.501953125" pickOnBounds="true" preserveRatio="true" />
-                        <VBox fx:id="vBoxGold" layoutX="20.0" layoutY="150.501953125">
+                        <VBox id="vBoxGold" layoutX="20.0" layoutY="150.501953125">
                            <children>
-                              <ImageView fx:id="gold1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="visibleGoldCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <ImageView fx:id="gold2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="visibleGoldCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </VBox>
-                        <Label fx:id="goldLabel" layoutX="36.0" layoutY="-11.0" text="GOLD CARDS" />
+                        <Label id="goldLabel" layoutX="36.0" layoutY="-11.0" text="GOLD CARDS" AnchorPane.leftAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
          </left>
          <top>
-            <AnchorPane fx:id="upperAnchor" prefHeight="48.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+            <AnchorPane id="upperAnchor" prefHeight="48.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="lobbyName" layoutX="60.0" layoutY="11.0" text="LOBBY:  ">
+                  <Label id="gameName" fx:id="gameName" layoutX="60.0" layoutY="11.0" text="LOBBY:  ">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Label>
-                  <Label fx:id="aboveText" layoutX="769.0" layoutY="14.0" prefHeight="26.0" prefWidth="210.0">
+                  <Label id="aboveLabel" fx:id="aboveLabel" layoutX="769.0" layoutY="14.0" prefHeight="26.0" prefWidth="210.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -83,70 +82,69 @@
                         <Image url="@../images/icons/insect.png" />
                      </image>
                   </ImageView>
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
          </top>
          <right>
-            <AnchorPane fx:id="rightAnchor" prefHeight="813.0" prefWidth="270.0" BorderPane.alignment="CENTER">
+            <AnchorPane id="rightAnchor" prefHeight="813.0" prefWidth="270.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="chatText" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" />
-                  <TextField fx:id="chatMessage" layoutX="19.0" layoutY="237.0" prefHeight="25.0" prefWidth="187.0" />
-                  <Text fx:id="chatTitle" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT">
+                  <TextArea id="chatArea" fx:id="chatArea" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
+                  <TextField id="chatInput" fx:id="chatInput" layoutX="19.0" layoutY="237.0" prefHeight="25.0" prefWidth="234.0" />
+                  <Text id="chatTitle" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Text>
-                  <ListView fx:id="listView" layoutX="19.0" layoutY="415.0" prefHeight="397.0" prefWidth="232.0" />
+                  <TextArea id="updatesArea" fx:id="updatesArea" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <ComboBox fx:id="chatChoice" layoutX="101.0" layoutY="11.0" prefWidth="150.0" />
                   <ComboBox fx:id="playAreaChoice" layoutX="18.0" layoutY="348.0" prefHeight="25.0" prefWidth="235.0" />
                   <Separator layoutX="4.0" layoutY="395.0" prefHeight="23.0" prefWidth="262.0" />
                   <Separator layoutX="7.0" layoutY="306.0" prefHeight="0.0" prefWidth="262.0" />
                   <Label layoutX="75.0" layoutY="321.0" text="SHOWING PLAY AREA" />
-                  <Button fx:id="sendButton" layoutX="208.0" layoutY="237.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="SEND">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Button>
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
          </right>
          <bottom>
-            <AnchorPane fx:id="lowerAnchor" prefHeight="200.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+            <AnchorPane id="lowerAnchor" prefHeight="200.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="handAnchor" layoutX="200.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0">
+                  <AnchorPane id="handAnchor" layoutX="200.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0">
                      <children>
-                        <Label fx:id="handLabel" layoutX="220.0" layoutY="-13.0" text="MY HAND" />
-                        <HBox fx:id="hBoxHand" layoutX="25.0" layoutY="35.0">
+                        <Label id="handLabel" layoutX="220.0" layoutY="-13.0" text="MY HAND" />
+                        <HBox id="myHand" layoutX="25.0" layoutY="35.0" AnchorPane.bottomAnchor="25.0">
                            <children>
-                              <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="commonAnchor" layoutX="740.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="360.0" style="-fx-background-color: #c8b052;">
+                  <AnchorPane id="commonAnchor" layoutX="740.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="360.0" style="-fx-background-color: #c8b052;">
                      <children>
-                        <Label fx:id="commonLabel" layoutX="80.0" layoutY="-11.0" text="COMMON OBJECTIVES" />
-                        <ImageView fx:id="common1" fitHeight="100.0" fitWidth="150.0" layoutX="25.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="common2" fitHeight="100.0" fitWidth="150.0" layoutX="185.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label id="commonLabel" layoutX="80.0" layoutY="-11.0" text="COMMON OBJECTIVES" />
+                        <HBox AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="22.0">
+                           <ImageView fx:id="commonObjectiveCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                           <ImageView fx:id="commonObjectiveCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="secretAnchor" layoutX="1120.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: c8b052;">
+                  <AnchorPane id="secretAnchor" layoutX="1120.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: c8b052;">
                      <children>
-                        <Label fx:id="secretLabel" layoutX="16.0" layoutY="-11.0" text="SECRET OBJECTIVE" />
-                        <ImageView fx:id="secret" fitHeight="100.0" fitWidth="150.0" layoutX="25.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label id="secretLabel" layoutX="16.0" layoutY="-11.0" text="SECRET OBJECTIVE" />
+                        <ImageView fx:id="secretObjectiveCard" fitHeight="100.0" fitWidth="150.0" layoutX="25.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="1363.0" layoutY="21.0" maxHeight="-Infinity" prefHeight="160.0" prefWidth="549.0" style="-fx-background-color: c8b052;">
                      <children>
-                        <VBox fx:id="vBox" prefHeight="151.0" prefWidth="549.0">
+                        <VBox id="vBox" prefHeight="151.0" prefWidth="549.0">
                            <children>
                               <AnchorPane fx:id="uncovered1" prefHeight="38.0" prefWidth="546.0">
                                  <opaqueInsets>
@@ -157,7 +155,7 @@
                                  </VBox.margin>
                                  <children>
                                     <Text fx:id="uncoveredUsername1" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER1" wrappingWidth="192.7313232421875" />
-                                    <Pane fx:id="paneAnimal1" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneAnimal1" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="animalOcc1" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -167,7 +165,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneFungi1" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneFungi1" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="fungiOcc1" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -177,7 +175,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInsect1" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInsect1" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="insectOcc1" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -187,7 +185,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePlant1" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePlant1" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="plantOcc1" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -197,7 +195,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInkwell1" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInkwell1" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="inkwellOcc1" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -207,7 +205,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneManuscript1" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneManuscript1" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="manuscriptOcc1" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -217,7 +215,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneQuill1" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneQuill1" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="quillOcc1" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -227,9 +225,9 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePoints1" layoutX="140.0" layoutY="5.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePoints1" layoutX="140.0" layoutY="5.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
-                                          <Label fx:id="animalOcc11" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
+                                          <Label fx:id="playerPoints1" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
@@ -245,7 +243,7 @@
                                  </opaqueInsets>
                                  <children>
                                     <Text fx:id="uncoveredUsername2" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER2" wrappingWidth="192.7313232421875" />
-                                    <Pane fx:id="paneAnimal2" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneAnimal2" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="animalOcc2" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -255,7 +253,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneFungi2" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneFungi2" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="fungiOcc2" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -265,7 +263,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInsect2" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInsect2" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="insectOcc2" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -275,7 +273,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePlant2" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePlant2" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="plantOcc2" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -285,7 +283,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInkwell2" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInkwell2" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="inkwellOcc2" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -295,7 +293,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneManuscript2" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneManuscript2" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="manuscriptOcc2" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -305,7 +303,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneQuill2" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneQuill2" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="quillOcc2" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -315,9 +313,9 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePoints2" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePoints2" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
-                                          <Label fx:id="animalOcc111" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
+                                          <Label fx:id="playerPoints2" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
@@ -336,7 +334,7 @@
                                  </opaqueInsets>
                                  <children>
                                     <Text fx:id="uncoveredUsername3" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER3" wrappingWidth="192.7313232421875" />
-                                    <Pane fx:id="paneAnimal3" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneAnimal3" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="animalOcc3" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -346,7 +344,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneFungi3" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneFungi3" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="fungiOcc3" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -356,7 +354,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInsect3" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInsect3" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="insectOcc3" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -366,7 +364,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePlant3" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePlant3" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="plantOcc3" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -376,7 +374,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInkwell3" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInkwell3" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="inkwellOcc3" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -386,7 +384,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneManuscript3" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneManuscript3" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="manuscriptOcc3" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -396,7 +394,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneQuill3" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneQuill3" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="quillOcc3" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -406,9 +404,9 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePoints3" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePoints3" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
-                                          <Label fx:id="animalOcc112" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
+                                          <Label fx:id="playerPoints3" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
@@ -427,7 +425,7 @@
                                  </opaqueInsets>
                                  <children>
                                     <Text fx:id="uncoveredUsername4" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER4" wrappingWidth="192.7313232421875" />
-                                    <Pane fx:id="paneAnimal4" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneAnimal4" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="animalOcc4" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -437,7 +435,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneFungi4" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneFungi4" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="fungiOcc4" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -447,7 +445,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInsect4" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInsect4" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="insectOcc4" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -457,7 +455,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePlant4" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePlant4" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="plantOcc4" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -467,7 +465,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneInkwell4" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneInkwell4" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="inkwellOcc4" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
@@ -477,7 +475,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneManuscript4" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneManuscript4" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="manuscriptOcc4" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -487,7 +485,7 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneQuill4" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="paneQuill4" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
                                           <Label fx:id="quillOcc4" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
@@ -497,9 +495,9 @@
                                           </ImageView>
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="panePoints4" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
+                                    <Pane id="panePoints4" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
                                        <children>
-                                          <Label fx:id="animalOcc113" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
+                                          <Label fx:id="playerPoints4" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
@@ -530,98 +528,23 @@
             </AnchorPane>
          </bottom>
          <center>
-            <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <ScrollPane id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <content>
-                  <AnchorPane prefHeight="8000.0" prefWidth="8000.0">
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <GridPane gridLinesVisible="true" layoutX="1.0" layoutY="1.0" prefHeight="805.0" prefWidth="1424.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                         </GridPane>
                      </children>
-                  </AnchorPane>
+                  </StackPane>
                </content>
             </ScrollPane>
          </center>
