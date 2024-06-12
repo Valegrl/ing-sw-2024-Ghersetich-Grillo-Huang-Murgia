@@ -184,7 +184,7 @@ public class LobbyController extends FXMLController {
         super();
     }
 
-    @FXML
+
     public void initialize() {
         double maxPercentageVBox = 0.12;
         double relativePercentage = 0.75;
@@ -216,7 +216,7 @@ public class LobbyController extends FXMLController {
             ));
         }
 
-        double vboxChatPercentage = 0.3125;
+        double vboxChatPercentage = 0.32;
 
         vboxChat.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
                         vBox.getWidth() * vboxChatPercentage, vBox.widthProperty()

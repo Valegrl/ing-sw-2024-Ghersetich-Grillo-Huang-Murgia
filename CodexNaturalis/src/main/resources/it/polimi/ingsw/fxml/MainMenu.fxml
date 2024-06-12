@@ -7,49 +7,6 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.Region?>
 
-<!-- OLD CODE, REUSE IF SCREEN IS BROKEN
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" maxHeight="1080.0" maxWidth="1920.0" xmlns="http://javafx.com/javafx/21"  AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-            AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
-
-    <AnchorPane fx:id="mainMenuFX" id="mainPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/main/Main.css" prefWidth="1920.0" prefHeight="1080.0" minHeight="1080.0" minWidth="1920.0">
-        <VBox id="mainVbox" alignment="CENTER_LEFT" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0">
-            <Button mnemonicParsing="false" onAction="#goChooseConnection" text="Play"/>
-            <Button mnemonicParsing="false" onAction="#goOptions" text="Options"/>
-            <Button mnemonicParsing="false" onAction="#goRules" text="Rules"/>
-            <Button mnemonicParsing="false" onAction="#goCredits" text="Credits"/>
-            <Button mnemonicParsing="false" onAction="#exit" text="Exit"/>
-        </VBox>
-    </AnchorPane>
-
-    <AnchorPane fx:id="optionsMenuFX" id="mainPane" stylesheets="@../../css/main/Options.css" managed="false" visible="false" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" prefWidth="1920.0" prefHeight="1080.0">
-    <VBox id="optionsVbox" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" alignment="CENTER_LEFT">
-        <Button mnemonicParsing="false" onAction="#setFullscreen" text="Fullscreen"/>
-        <Button mnemonicParsing="false" onAction="#goBack" text="Back"/>
-    </VBox>
-    </AnchorPane>
-
-    <AnchorPane fx:id="creditsMenuFX"  id="mainPane" stylesheets="@../../css/main/Credits.css" managed="false" visible="false" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
-        <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
-            <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="This game was made in special collaboration with Cranio Creations by:" textAlignment="CENTER" wrappingWidth="900.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pietro Ghersetich" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Valerio Grillo" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Jerry Huang" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filippo Murgia" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thank you for playing!" />
-            <VBox alignment="CENTER">
-                <Button mnemonicParsing="false" onAction="#goBack" text="Back">
-                    <VBox.margin>
-                        <Insets top="40.0" />
-                    </VBox.margin>
-                </Button>
-            </VBox>
-        </VBox>
-    </AnchorPane>
-</AnchorPane>
--->
 
 <AnchorPane minHeight="720.0" minWidth="1280.0" stylesheets="@../css/Buttons.css, @../css/Texts.css, @../css/Panes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.MainMenuController">
     <children>

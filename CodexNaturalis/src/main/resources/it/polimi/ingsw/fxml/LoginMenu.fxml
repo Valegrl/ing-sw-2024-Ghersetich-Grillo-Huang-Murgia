@@ -8,55 +8,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<!--<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.LoginController">
 
-   <children>
-
-      <AnchorPane fx:id="loginMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-                  stylesheets="@../../css/login/Login.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-         <HBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20.0">
-            <children>
-               <Button alignment="CENTER" onAction="#goLogin" mnemonicParsing="false" text="Login">
-                  <HBox.margin>
-                     <Insets right="30.0" />
-                  </HBox.margin>
-               </Button>
-               <Button alignment="CENTER" onAction="#goRegister" mnemonicParsing="false" text="Register">
-                  <HBox.margin>
-                     <Insets left="30.0" />
-                  </HBox.margin>
-               </Button>
-            </children>
-         </HBox>
-      </AnchorPane>
-
-      <AnchorPane fx:id="loginSubmitMenuFX" id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" visible="false" managed="false"
-                  stylesheets="@../../css/login/Login.css" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-         <VBox  alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20">
-            <TextField fx:id="loginUsernameField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Username"/>
-            <PasswordField fx:id="loginPasswordField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Password" />
-            <Label fx:id="errorLogin" text="" />
-            <Button mnemonicParsing="false" onAction="#submitLogin" text="Login" />
-            <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
-         </VBox>
-      </AnchorPane>
-
-      <AnchorPane fx:id="registerSubmitMenuFX"  id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" visible="false" managed="false"
-                  AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" stylesheets="@../../css/login/Login.css">
-         <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="20" >
-            <TextField fx:id="registerUsernameField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Username" />
-            <PasswordField fx:id="registerPasswordField" alignment="CENTER" maxHeight="110.0" maxWidth="400.0" prefHeight="50.0" prefWidth="400.0" promptText="Password"/>
-            <Label fx:id="errorRegistration" text="" />
-            <Button mnemonicParsing="false" onAction="#submitRegister" text="Register" />
-            <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
-         </VBox>
-      </AnchorPane>
-
-   </children>
-</AnchorPane>
--->
-
-<AnchorPane minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.LoginController">
+<AnchorPane minHeight="720.0" minWidth="1280.0" stylesheets="@../css/Login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.LoginController">
    <children>
 
       <AnchorPane id="mainPane" fx:id="loginMenuFX" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

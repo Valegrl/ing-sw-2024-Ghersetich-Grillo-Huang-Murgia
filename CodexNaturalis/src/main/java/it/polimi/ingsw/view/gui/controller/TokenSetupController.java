@@ -126,10 +126,10 @@ public class TokenSetupController extends FXMLController {
      */
     @Override
     public void run(View view, Stage stage){
-        controller.setInSetup(new Pair<>(true, true));
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
+        controller.setInSetup(new Pair<>(true, true));
 
         setLobbyName(controller.getLobbyId());
         radioButtons = Arrays.asList(radioButton1, radioButton2, radioButton3);
@@ -251,7 +251,7 @@ public class TokenSetupController extends FXMLController {
      * @param lobbyName the name of the lobby
      */
     private void setLobbyName(String lobbyName) {
-        this.lobbyName.setText("LOBBY: " + lobbyName);
+        this.lobbyName.setText("GAME: " + lobbyName);
     }
 
     /**

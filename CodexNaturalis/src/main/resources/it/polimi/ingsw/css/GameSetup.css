@@ -66,6 +66,22 @@
     -fx-font-size: 25;
 }
 
+#text0{
+    -fx-fill: #ffffff;
+    -fx-font-size: 40;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#text1, #text2, #text3, #text4{
+    -fx-fill: #ffffff;
+    -fx-font-size: 30;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
 .label{
     -fx-text-fill: #ffffff;
     -fx-font-family: "BebasNeuePro-Regular";
@@ -82,7 +98,7 @@
 
 .button{
     -fx-text-fill: #ffffff;
-    -fx-font-size: 30;
+    -fx-font-size: 20;
     -fx-font-family: "Bebas Neue Regular";
     -fx-background-color: transparent;
     -fx-border-width: 0;
