@@ -41,6 +41,7 @@ public class WaitingReconnectState extends GameState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case UPDATE_GAME_PLAYERS:
+                view.clearInput();
                 view.printMessage(message + "\n");
                 break;
             case NEW_GAME_STATUS:

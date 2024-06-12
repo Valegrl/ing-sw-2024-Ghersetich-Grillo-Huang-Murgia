@@ -78,6 +78,7 @@ public class DrawCardState extends GameState {
                 view.printMessage(message);
                 break;
             case UPDATE_GAME_PLAYERS:
+                view.clearInput();
                 view.printMessage(message);
                 break;
             case SELF_TURN_TIMER_EXPIRED:

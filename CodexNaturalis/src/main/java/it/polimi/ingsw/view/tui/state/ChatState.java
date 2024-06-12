@@ -107,7 +107,6 @@ public class ChatState extends ViewState {
                 }
                 break;
             case CHOOSE_TOKEN_SETUP:
-                // TODO distinguish between token setup start and token updates
                 if (previousState.inGame()) {
                     if (controller.isInTokenSetup()) {
                         view.clearInput();

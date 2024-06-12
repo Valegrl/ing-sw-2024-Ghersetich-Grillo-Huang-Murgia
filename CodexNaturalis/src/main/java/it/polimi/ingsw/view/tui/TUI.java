@@ -96,7 +96,6 @@ public class TUI implements View {
             if (!stopInputRead)
                 while(input.isEmpty() || input.equals("-1"))
                     input = in.readLine();
-            else return "$stop";
         } catch (InterruptedException e) {
             waitingForInput = false;
             return null;
@@ -107,6 +106,15 @@ public class TUI implements View {
             clearConsole();
             state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
             MainClient.restartTUI();
+            return "$stop";
+        }
+        if (stopInputRead) {
+            waitingForInput = false;
+            if (serverDisconnected) {
+                clearConsole();
+                state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
+                MainClient.restartTUI();
+            }
             return "$stop";
         }
         waitingForInput = false;
@@ -124,18 +132,20 @@ public class TUI implements View {
             if (!stopInputRead)
                 while(input.isEmpty())
                     input = in.readLine();
-            else return "$stop";
         } catch (InterruptedException e) {
             waitingForInput = false;
             return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (stopInputRead && serverDisconnected) {
-            clearConsole();
-            state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
-            MainClient.restartTUI();
-            return null;
+        if (stopInputRead) {
+            waitingForInput = false;
+            if (serverDisconnected) {
+                clearConsole();
+                state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
+                MainClient.restartTUI();
+            }
+            return "$stop";
         }
         waitingForInput = false;
         return input;
@@ -197,11 +207,7 @@ public class TUI implements View {
 
     public void clearInput() {
         try {
-            in.mark(0);
-            while(in.ready()) {
-                in.read();
-                in.mark(0);
-            }
+            in.mark(100);
             in.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);

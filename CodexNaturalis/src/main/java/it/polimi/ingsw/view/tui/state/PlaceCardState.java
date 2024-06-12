@@ -91,6 +91,7 @@ public class PlaceCardState extends GameState {
                     transition(new DrawCardState(view));
                 break;
             case UPDATE_GAME_PLAYERS:
+                view.clearInput();
                 view.printMessage(message);
                 break;
             case SELF_TURN_TIMER_EXPIRED:

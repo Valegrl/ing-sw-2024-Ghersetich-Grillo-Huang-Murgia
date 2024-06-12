@@ -82,17 +82,22 @@ public class LobbyState extends ViewState {
                 break;
             case EventID.UPDATE_LOBBY_PLAYERS:
                 view.stopInputRead(true);
+                clearLine();
+                view.clearInput();
                 clearConsole();
                 showResponseMessage(message, 1000);
-                view.clearInput();
                 run();
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:
+                view.clearInput();
+                clearLine();
                 view.stopInputRead(true);
                 showResponseMessage(message, 2000);
                 transition(new MenuState(view));
                 break;
             case EventID.UPDATE_GAME_PLAYERS:
+                view.clearInput();
+                clearLine();
                 view.stopInputRead(true);
                 notifyResponse();
                 transition(new GameSetupState(view));

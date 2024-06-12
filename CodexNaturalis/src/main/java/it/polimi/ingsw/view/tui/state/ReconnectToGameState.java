@@ -64,8 +64,8 @@ public class ReconnectToGameState extends ViewState {
                 view.printMessage(message);
                 break;
             case CHOOSE_TOKEN_SETUP:
+                view.clearInput();
                 if (controller.isInTokenSetup()) {
-                    view.clearInput();
                     view.printMessage(message);
                 } else {
                     view.stopInputRead(true);
@@ -83,6 +83,7 @@ public class ReconnectToGameState extends ViewState {
                 }
                 break;
             case UPDATE_LOCAL_MODEL:
+                view.clearInput();
                 view.stopInputRead(true);
                 clearConsole();
                 showResponseMessage(message, 1000);

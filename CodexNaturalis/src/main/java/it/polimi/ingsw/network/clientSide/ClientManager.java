@@ -11,7 +11,6 @@ import it.polimi.ingsw.view.controller.ViewController;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -45,6 +44,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      * The queue of events to be sent to the server.
      */
     private final Queue<Event> requestsQueue = new LinkedList<>();
+
 
     private Thread requestsThread;
 

@@ -58,13 +58,13 @@ public class WaitForTurnState extends GameState {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case OTHER_PLACE_CARD:
+                view.clearInput();
                 if (!controller.isLastCircle())
                     showInfoMessage(message);
                 else {
                     clearConsole();
                     view.stopInputRead(true);
                     view.printMessage(message);
-                    view.clearInput();
                 }
                 break;
             case UPDATE_GAME_PLAYERS:

@@ -59,7 +59,9 @@ public abstract class ViewState {
         String inputString;
         while (true) {
             inputString = view.getIntFromInput();
-            if (inputString.equals("$stop")) {
+            if (inputString == null) {
+                return 0;
+            } else if (inputString.equals("$stop")) {
                 input = 0;
             } else if (!inputString.isEmpty()) {
                 try {
