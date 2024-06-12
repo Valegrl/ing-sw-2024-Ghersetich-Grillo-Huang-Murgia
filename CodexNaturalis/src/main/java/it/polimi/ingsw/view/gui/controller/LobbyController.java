@@ -383,7 +383,7 @@ public class LobbyController extends FXMLController {
                     readyStatuses.get(i).setText("Ready");
                 }
                 else{
-                    readyStatuses.get(i).setText("Unready");
+                    readyStatuses.get(i).setText("Not ready");
                 }
 
                 playerStackPanes.get(i).setVisible(true);
@@ -404,7 +404,7 @@ public class LobbyController extends FXMLController {
                     readyStatuses.get(i).setText("Ready");
                 }
                 else{
-                    readyStatuses.get(i).setText("Unready");
+                    readyStatuses.get(i).setText("Not ready");
                 }
 
 
@@ -452,7 +452,7 @@ public class LobbyController extends FXMLController {
                     readyStatuses.get(i).setText("Ready");
                 }
                 else{
-                    readyStatuses.get(i).setText("Unready");
+                    readyStatuses.get(i).setText("Not ready");
                 }
 
 
@@ -474,7 +474,7 @@ public class LobbyController extends FXMLController {
                     readyStatuses.get(i).setText("Ready");
                 }
                 else{
-                    readyStatuses.get(i).setText("Unready");
+                    readyStatuses.get(i).setText("Not ready");
                 }
 
                 playerStackPanes.get(i).setVisible(true);

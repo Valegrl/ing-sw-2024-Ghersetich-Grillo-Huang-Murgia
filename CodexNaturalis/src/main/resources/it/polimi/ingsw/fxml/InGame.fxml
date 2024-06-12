@@ -146,7 +146,7 @@
                      <children>
                         <VBox id="vBox" prefHeight="151.0" prefWidth="549.0">
                            <children>
-                              <AnchorPane fx:id="uncovered1" prefHeight="38.0" prefWidth="546.0">
+                              <AnchorPane fx:id="uncovered1" prefHeight="38.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -237,7 +237,7 @@
                                     </Pane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="uncovered2" prefHeight="38.0" prefWidth="546.0">
+                              <AnchorPane fx:id="uncovered2" prefHeight="38.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -328,7 +328,7 @@
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <AnchorPane fx:id="uncovered3" prefHeight="40.0" prefWidth="546.0">
+                              <AnchorPane fx:id="uncovered3" prefHeight="40.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -419,7 +419,7 @@
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <AnchorPane fx:id="uncovered4" prefHeight="40.0" prefWidth="546.0">
+                              <AnchorPane fx:id="uncovered4" prefHeight="40.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>

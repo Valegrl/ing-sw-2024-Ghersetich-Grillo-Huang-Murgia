@@ -8,12 +8,16 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.tui.state.PlaceCardState;
+import it.polimi.ingsw.view.tui.state.WaitForTurnState;
+import it.polimi.ingsw.view.tui.state.WaitingReconnectState;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -207,10 +211,16 @@ public class TokenSetupController extends FXMLController {
                     break;
 
             case UPDATE_GAME_PLAYERS:
-                Platform.runLater(() ->{
-                    chatArea.appendText("\n" + message + "\n\n");
-                    update();
-                });
+                if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                    Platform.runLater(() -> {
+                        chatArea.appendText("\n" + message + "\n\n");
+                        update();
+                    });
+                } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
+                    //TODO implement
+                } else {
+                    throw new IllegalStateException("Unexpected game status.");
+                }
                 break;
 
             case UPDATE_LOCAL_MODEL:
