@@ -978,6 +978,15 @@ public class ViewController implements ViewEventReceiver {
     }
 
     /**
+     * Whether the player with the given username is online on the current game, or not.
+     * @param playerName The player's username.
+     * @return true if the player with the given username is online in the game, false if not.
+     */
+    public boolean isOnline(String playerName) {
+        return playersStatus.getOrDefault(playerName, false);
+    }
+
+    /**
      * A string representation of the players' list.
      * Used to represent the next turns in the game.
      * @return The players' list in a String format.
