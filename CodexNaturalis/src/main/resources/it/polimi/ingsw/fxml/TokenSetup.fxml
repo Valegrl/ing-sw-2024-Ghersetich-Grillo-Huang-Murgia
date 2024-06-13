@@ -22,7 +22,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="1100.0">
                <children>
-                  <Label text="CHOOSE YOUR TOKEN" textFill="WHITE">
+                  <Label text="CHOOSE YOUR TOKEN" textFill="WHITE" fx:id="chooseLabel">
                      <font>
                         <Font size="36.0" />
                      </font>

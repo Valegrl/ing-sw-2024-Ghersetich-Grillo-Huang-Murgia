@@ -23,7 +23,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -261,6 +260,9 @@ public class InGameController extends FXMLController {
     boolean hasTurn;
 
 
+    private List<ImageView> visibleGoldCards;
+
+    private List<ImageView> visibleResourceCards;
 
     private List<Label> playerPoints;
 
@@ -296,6 +298,8 @@ public class InGameController extends FXMLController {
         handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
         uncoveredList = Arrays.asList(uncovered1, uncovered2, uncovered3, uncovered4);
         uncoveredUsernames = Arrays.asList(uncoveredUsername1, uncoveredUsername2, uncoveredUsername3, uncoveredUsername4);
+        visibleGoldCards = Arrays.asList(visibleGoldCard0, visibleGoldCard1);
+        visibleResourceCards = Arrays.asList(visibleResourceCard0, visibleResourceCard1);
 
         playerPoints = Arrays.asList(playerPoints1, playerPoints2, playerPoints3, playerPoints4);
         animalOccurrences = Arrays.asList(animalOcc1, animalOcc2, animalOcc3, animalOcc4);
@@ -342,11 +346,9 @@ public class InGameController extends FXMLController {
         }
     }
 
-
     private void setGameName() {
-        this.gameName.setText(controller.getLobbyId());
+        this.gameName.setText("GAME:" + controller.getLobbyId());
     }
-
 
     private void checkTurn(){
         if(controller.hasTurn()){
@@ -360,56 +362,18 @@ public class InGameController extends FXMLController {
     private void updateDecks(){
         ImmPlayableCard[] visibleGoldCards = viewModel.getVisibleGoldCards();
         ImmPlayableCard[] visibleResourceCards = viewModel.getVisibleResourceCards();
-        goldCard0 = visibleGoldCards[0];
-        goldCard1 = visibleGoldCards[1];
-        resourceCard0 = visibleResourceCards[0];
-        resourceCard1 = visibleResourceCards[1];
 
-        visibleGoldCard0.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + goldCard0.getId() + ".png"));
-        visibleGoldCard1.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + goldCard1.getId() + ".png"));
-        visibleResourceCard0.setImage(new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + resourceCard0.getId() + ".png"));
-        visibleResourceCard1.setImage(new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + resourceCard1.getId() + ".png"));
-
-        Item itemGoldDeck = viewModel.getTopGoldDeck();
-        switch(itemGoldDeck) {
-            case FUNGI:
-                Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
-                goldDeck.setImage(FB);
-                break;
-            case ANIMAL:
-                Image AB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
-                goldDeck.setImage(AB);
-                break;
-            case INSECT:
-                Image IB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
-                goldDeck.setImage(IB);
-                break;
-            case PLANT:
-                Image PB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
-                goldDeck.setImage(PB);
-                break;
+        for(int i = 0; i < 2; i++){
+            this.visibleGoldCards.get(i).setImage(controller.getFrontCardImage(visibleGoldCards[i].getId(), CardType.GOLD));
+            this.visibleResourceCards.get(i).setImage(controller.getFrontCardImage(visibleResourceCards[i].getId(), CardType.RESOURCE));
         }
+        Item itemGoldDeck = viewModel.getTopGoldDeck();
+        Image backGoldCardImage = controller.getBackCardImage(itemGoldDeck, CardType.GOLD);
+        goldDeck.setImage(backGoldCardImage);
 
         Item itemResourceDeck = viewModel.getTopResourceDeck();
-        switch(itemResourceDeck) {
-            case FUNGI:
-                Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
-                resourceDeck.setImage(FB);
-                break;
-            case ANIMAL:
-                Image AB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
-                resourceDeck.setImage(AB);
-                break;
-            case INSECT:
-                Image IB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
-                resourceDeck.setImage(IB);
-                break;
-            case PLANT:
-                Image PB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
-                resourceDeck.setImage(PB);
-                break;
-        }
-
+        Image backResourceCardImage = controller.getBackCardImage(itemResourceDeck, CardType.RESOURCE);
+        resourceDeck.setImage(backResourceCardImage);
     }
 
     private void updateHand(){
@@ -417,12 +381,7 @@ public class InGameController extends FXMLController {
         myHand = viewModel.getSelfPlayer().getPlayArea().getHand();
         for(ImmPlayableCard card : myHand){
             ImageView currImageView = handCardImages.get(i);
-            if(card.getType().equals(CardType.GOLD)){
-                currImageView.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + card.getId() + ".png"));
-            }
-            else{
-                currImageView.setImage(new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + card.getId() + ".png"));
-            }
+            currImageView.setImage(controller.getFrontCardImage(card.getId(), card.getType()));
             i++;
         }
     }
@@ -430,15 +389,12 @@ public class InGameController extends FXMLController {
     private void updatePoints(){
         int i = 0;
         int currPoints;
-        String curr;
 
         Map<Item, Integer> currUncoveredItems;
         Map<String, Integer> scoreboard = viewModel.getScoreboard();
-
         for(AnchorPane pane : uncoveredList){
             pane.setVisible(false);
         }
-
         for(String user : controller.getInMatchPlayerUsernames()){
             uncoveredList.get(i).setVisible(true);
             if(controller.isOnline(user)) {
@@ -457,40 +413,31 @@ public class InGameController extends FXMLController {
             else {
                 currUncoveredItems = viewModel.getOpponent(user).getPlayArea().getUncoveredItems();
             }
-
             for(Item item : currUncoveredItems.keySet()){
                 switch(item){
                     case FUNGI:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        fungiOccurrences.get(i).setText(curr);
+                        fungiOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case ANIMAL:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        animalOccurrences.get(i).setText(curr);
+                        animalOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case PLANT:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        plantOccurrences.get(i).setText(curr);
+                        plantOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case INSECT:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        insectOccurrences.get(i).setText(curr);
+                        insectOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case INKWELL:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        inkwellOccurrences.get(i).setText(curr);
+                        inkwellOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case QUILL:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        quillOccurrences.get(i).setText(curr);
+                        quillOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                     case MANUSCRIPT:
-                        curr = String.valueOf(currUncoveredItems.get(item));
-                        manuscriptOccurrences.get(i).setText(curr);
+                        manuscriptOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
                         break;
                 }
             }
-
             i++;
         }
     }
@@ -531,6 +478,7 @@ public class InGameController extends FXMLController {
             opponentGridPane.setManaged(false);
             secretObjectiveAnchor.setVisible(true);
             handLabel.setText("MY HAND");
+
             List<ImageView> handCards = Arrays.asList(handCard0, handCard1, handCard2);
             for(ImageView handCard : handCards){
                 handCard.setVisible(true);
@@ -552,6 +500,7 @@ public class InGameController extends FXMLController {
 
             String username = playAreaChoice.substring(10);
             handLabel.setText(username + " hand");
+
             List<ImageView> handCards = Arrays.asList(handCard0, handCard1, handCard2);
             for(ImageView handCard : handCards){
                 handCard.setVisible(false);
@@ -560,43 +509,10 @@ public class InGameController extends FXMLController {
             List<ImageView> opponentHandCards = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
             List<BackPlayableCard> backHand = viewModel.getOpponent(username).getPlayArea().getHand();
             int i = 0;
-
             for(ImageView handCard : opponentHandCards){
                 handCard.setVisible(true);
                 handCard.setManaged(true);
-                Item item = backHand.get(i).getItem();
-                if(backHand.get(i).getCardType() == CardType.GOLD){
-                    switch (item){
-                        case FUNGI:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png"));
-                            break;
-                        case ANIMAL:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png"));
-                            break;
-                        case PLANT:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png"));
-                            break;
-                        case INSECT:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png"));
-                            break;
-                    }
-                }
-                else{
-                    switch (item){
-                        case FUNGI:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png"));
-                            break;
-                        case ANIMAL:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png"));
-                            break;
-                        case PLANT:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png"));
-                            break;
-                        case INSECT:
-                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png"));
-                            break;
-                    }
-                }
+                handCard.setImage(controller.getBackCardImage(backHand.get(i).getItem(), backHand.get(i).getCardType()));
                 i++;
             }
             //TODO show the opponent's play area
@@ -609,7 +525,6 @@ public class InGameController extends FXMLController {
         ImmObjectiveCard objectiveCard1 = objectiveCards[1];
         commonObjectiveCard0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png"));
         commonObjectiveCard1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png"));
-
     }
 
     private void showSecretObjective(){

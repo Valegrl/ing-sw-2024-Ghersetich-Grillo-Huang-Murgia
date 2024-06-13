@@ -97,6 +97,9 @@ public class TokenSetupController extends FXMLController {
     @FXML
     private Button sendButton;
 
+    @FXML
+    private Label chooseLabel;
+
 
     private List<RadioButton> radioButtons;
 
@@ -158,7 +161,6 @@ public class TokenSetupController extends FXMLController {
                 submitMessage();
             }
         });
-
     }
 
     /**
@@ -167,11 +169,8 @@ public class TokenSetupController extends FXMLController {
      */
     public void startCountdown(int seconds) {
         progressBar.setProgress(1.0);
-
         Timeline timeline = new Timeline();
-
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(seconds), new KeyValue(progressBar.progressProperty(), 0));
-
         timeline.getKeyFrames().add(keyFrame);
         timeline.playFromStart();
     }
@@ -196,7 +195,6 @@ public class TokenSetupController extends FXMLController {
                     chatArea.appendText("\n" + message + "\n\n");
                     update();
                 });
-
                 break;
 
             case CHOSEN_TOKEN_SETUP:
@@ -206,6 +204,7 @@ public class TokenSetupController extends FXMLController {
                         imageView.setVisible(false);
                     }
                     quitButton.setVisible(false);
+                    Platform.runLater(() -> chooseLabel.setText("TOKEN CHOSEN"));
                 }
                 chatArea.appendText("\n" + message + "\n\n");
                     break;
@@ -218,7 +217,6 @@ public class TokenSetupController extends FXMLController {
                         e.printStackTrace();
                     }
                 }
-
                 if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
                     Platform.runLater(() -> {
                         chatArea.appendText("\n" + message + "\n\n");
@@ -339,15 +337,12 @@ public class TokenSetupController extends FXMLController {
         red.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED));
         });
-
         blue.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE));
         });
-
         green.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN));
         });
-
         yellow.setOnMouseClicked(event -> {
             controller.newViewEvent(new ChosenTokenSetupEvent(Token.YELLOW));
         });
@@ -417,7 +412,7 @@ public class TokenSetupController extends FXMLController {
         String message = chatInput.getText();
 
         if(message.isEmpty()){
-
+            return;
         }
         else {
             if (generalRadioButton.isSelected()) {

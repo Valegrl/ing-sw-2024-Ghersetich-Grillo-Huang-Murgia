@@ -191,9 +191,9 @@
                      <children>
                         <Label text="Player setup:" />
                         <Button fx:id="yourSetupButton" mnemonicParsing="false" onAction="#showYourSetup" styleClass="buttonSmallest" text="Your setup" />
-                        <Button fx:id="setupButton1" mnemonicParsing="false" onAction="#showPlayerSetup1" styleClass="buttonSmallest" text="User1" visible="false" />
-                        <Button fx:id="setupButton2" mnemonicParsing="false" onAction="#showPlayerSetup2" styleClass="buttonSmallest" text="User2" visible="false" />
-                        <Button fx:id="setupButton3" mnemonicParsing="false" onAction="#showPlayerSetup3" styleClass="buttonSmallest" text="User3" visible="false" />
+                        <Button fx:id="setupButton1" mnemonicParsing="false" onAction="#showPlayerSetup" styleClass="buttonSmallest" text="User1" visible="false" />
+                        <Button fx:id="setupButton2" mnemonicParsing="false" onAction="#showPlayerSetup" styleClass="buttonSmallest" text="User2" visible="false" />
+                        <Button fx:id="setupButton3" mnemonicParsing="false" onAction="#showPlayerSetup" styleClass="buttonSmallest" text="User3" visible="false" />
                      </children>
                   </VBox>
                </children>
