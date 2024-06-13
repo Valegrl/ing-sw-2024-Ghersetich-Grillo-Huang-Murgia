@@ -88,6 +88,14 @@ public final class ViewPlayArea implements Serializable, CardConverter {
     }
 
     /**
+     * Retrieves the map of uncovered items in the play area, each associated with its quantity.
+     * @return {@link ViewPlayArea#uncoveredItems}.
+     */
+    public Map<Item, Integer> getUncoveredItems() {
+        return uncoveredItems;
+    }
+
+    /**
      * Returns a string representation of the opponent's hand.
      * @return A string representation of the opponent's hand.
      */

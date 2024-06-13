@@ -28,7 +28,9 @@ import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
 import it.polimi.ingsw.viewModel.turnAction.place.PlaceCardData;
+import it.polimi.ingsw.viewModel.viewPlayer.AbstractViewPlayer;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayer;
+import it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -889,6 +891,17 @@ public class ViewController implements ViewEventReceiver {
      */
     public void setInSetup(Pair<Boolean, Boolean> inSetup) {
         this.inSetup = inSetup;
+    }
+
+    /**
+     * Retrieves the map of uncovered items for the player with the given username.
+     * @param player The player's username to retrieve uncoveredItems from.
+     * @return The map of uncovered items for the given player.
+     */
+    public Map<Item, Integer> getPlayerUncoveredItems(String player) {
+        return player.equals(username) ?
+                getModel().getSelfPlayer().getPlayArea().getUncoveredItems() :
+                getModel().getOpponent(player).getPlayArea().getUncoveredItems();
     }
 
     /**
