@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.controller;
 
 
+import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -32,6 +33,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 public class InGameController extends FXMLController {
@@ -166,7 +168,7 @@ public class InGameController extends FXMLController {
 
 
     @FXML
-    private ComboBox<String> chatChoice;
+    private ComboBox<String> chatSelection;
 
     @FXML
     private TextField chatInput;
@@ -227,7 +229,8 @@ public class InGameController extends FXMLController {
     private Label aboveLabel;
 
     @FXML
-    private ComboBox<?> playAreaChoice;
+    private ComboBox<String> playAreaSelection;
+
 
 
     private List<ImmPlayableCard> myHand;
@@ -240,16 +243,34 @@ public class InGameController extends FXMLController {
 
     private ImmPlayableCard resourceCard1;
 
-    private ViewModel model;
-
+    private ViewModel viewModel;
 
     boolean hasTurn;
 
-    private List<ImageView> handCardImages;
+
+
+    private List<Label> playerPoints;
+
+    private List<Label> animalOccurrences;
+
+    private List<Label> fungiOccurrences;
+
+    private List<Label> plantOccurrences;
+
+    private List<Label> insectOccurrences;
+
+    private List<Label> manuscriptOccurrences;
+
+    private List<Label> inkwellOccurrences;
+
+    private List<Label> quillOccurrences;
 
     private List<AnchorPane> uncoveredList;
 
     private List<Text> uncoveredUsernames;
+
+    private List<ImageView> handCardImages;
+
 
 
     @Override
@@ -257,17 +278,31 @@ public class InGameController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
-        this.model = controller.getModel();
+        this.viewModel = controller.getModel();
 
         handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
         uncoveredList = Arrays.asList(uncovered1, uncovered2, uncovered3, uncovered4);
         uncoveredUsernames = Arrays.asList(uncoveredUsername1, uncoveredUsername2, uncoveredUsername3, uncoveredUsername4);
-        
+
+        playerPoints = Arrays.asList(playerPoints1, playerPoints2, playerPoints3, playerPoints4);
+        animalOccurrences = Arrays.asList(animalOcc1, animalOcc2, animalOcc3, animalOcc4);
+        fungiOccurrences = Arrays.asList(fungiOcc1, fungiOcc2, fungiOcc3, fungiOcc4);
+        plantOccurrences = Arrays.asList(plantOcc1, plantOcc2, plantOcc3, plantOcc4);
+        insectOccurrences = Arrays.asList(insectOcc1, insectOcc2, insectOcc3, insectOcc4);
+        inkwellOccurrences = Arrays.asList(inkwellOcc1, inkwellOcc2, inkwellOcc3, inkwellOcc4);
+        quillOccurrences = Arrays.asList(quillOcc1, quillOcc2, quillOcc3, quillOcc4);
+        manuscriptOccurrences = Arrays.asList(manuscriptOcc1, manuscriptOcc2, manuscriptOcc3, manuscriptOcc4);
+
         setGameName();
         updateDecks();
         updateHand();
+        updatePoints();
+        updateChatOptions();
+        updateVisiblePlayAreas();
+
         showCommonObjectives();
-        showSecretObjectives();
+        showSecretObjective();
+        showPlayArea();
 
         chatInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -279,6 +314,16 @@ public class InGameController extends FXMLController {
     }
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
+        switch(EventID.getByID(eventID)){
+            case EventID.CHAT_GM, CHAT_PM:
+                if (feedback.equals(Feedback.SUCCESS)) {
+                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
+                    chatArea.appendText(formattedMessage + "\n");
+                } else {
+                    System.out.println("Message unable to send!");
+                }
+                break;
+        }
     }
 
 
@@ -298,8 +343,8 @@ public class InGameController extends FXMLController {
     }
 
     private void updateDecks(){
-        ImmPlayableCard[] visibleGoldCards = model.getVisibleGoldCards();
-        ImmPlayableCard[] visibleResourceCards = model.getVisibleResourceCards();
+        ImmPlayableCard[] visibleGoldCards = viewModel.getVisibleGoldCards();
+        ImmPlayableCard[] visibleResourceCards = viewModel.getVisibleResourceCards();
         goldCard0 = visibleGoldCards[0];
         goldCard1 = visibleGoldCards[1];
         resourceCard0 = visibleResourceCards[0];
@@ -310,7 +355,7 @@ public class InGameController extends FXMLController {
         visibleResourceCard0.setImage(new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + resourceCard0.getId() + ".png"));
         visibleResourceCard1.setImage(new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + resourceCard1.getId() + ".png"));
 
-        Item itemGoldDeck = model.getTopGoldDeck();
+        Item itemGoldDeck = viewModel.getTopGoldDeck();
         switch(itemGoldDeck) {
             case FUNGI:
                 Image FB = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
@@ -330,7 +375,7 @@ public class InGameController extends FXMLController {
                 break;
         }
 
-        Item itemResourceDeck = model.getTopResourceDeck();
+        Item itemResourceDeck = viewModel.getTopResourceDeck();
         switch(itemResourceDeck) {
             case FUNGI:
                 Image FB = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
@@ -354,7 +399,7 @@ public class InGameController extends FXMLController {
 
     private void updateHand(){
         int i = 0;
-        myHand = model.getSelfPlayer().getPlayArea().getHand();
+        myHand = viewModel.getSelfPlayer().getPlayArea().getHand();
         for(ImmPlayableCard card : myHand){
             ImageView currImageView = handCardImages.get(i);
             if(card.getType().equals(CardType.GOLD)){
@@ -367,8 +412,113 @@ public class InGameController extends FXMLController {
         }
     }
 
+    private void updatePoints(){
+        int i = 0;
+        int currPoints;
+        String curr;
+
+        Map<Item, Integer> currUncoveredItems;
+        Map<String, Integer> scoreboard = viewModel.getScoreboard();
+
+        for(AnchorPane pane : uncoveredList){
+            pane.setVisible(false);
+        }
+
+        for(String user : controller.getInMatchPlayerUsernames()){
+            uncoveredList.get(i).setVisible(true);
+            if(controller.isOnline(user)) {
+                uncoveredUsernames.get(i).setText(user);
+            }
+            else{
+                uncoveredUsernames.get(i).setText(user + " (offline)");
+            }
+
+            currPoints = scoreboard.get(user);
+            playerPoints.get(i).setText(String.valueOf(currPoints));
+
+            if(user.equals(controller.getUsername())){
+                currUncoveredItems = viewModel.getSelfPlayer().getPlayArea().getUncoveredItems();
+            }
+            else {
+                currUncoveredItems = viewModel.getOpponent(user).getPlayArea().getUncoveredItems();
+            }
+
+            for(Item item : currUncoveredItems.keySet()){
+                switch(item){
+                    case FUNGI:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        fungiOccurrences.get(i).setText(curr);
+                        break;
+                    case ANIMAL:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        animalOccurrences.get(i).setText(curr);
+                        break;
+                    case PLANT:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        plantOccurrences.get(i).setText(curr);
+                        break;
+                    case INSECT:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        insectOccurrences.get(i).setText(curr);
+                        break;
+                    case INKWELL:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        inkwellOccurrences.get(i).setText(curr);
+                        break;
+                    case QUILL:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        quillOccurrences.get(i).setText(curr);
+                        break;
+                    case MANUSCRIPT:
+                        curr = String.valueOf(currUncoveredItems.get(item));
+                        manuscriptOccurrences.get(i).setText(curr);
+                        break;
+                }
+            }
+
+            i++;
+        }
+    }
+
+    private void updateChatOptions(){
+        chatSelection.getItems().clear();
+
+        chatSelection.getItems().add("General");
+        chatSelection.getSelectionModel().select("General");
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                chatSelection.getItems().add("User: " + user);
+            }
+        }
+    }
+
+    private void updateVisiblePlayAreas(){
+        playAreaSelection.getItems().clear();
+
+        playAreaSelection.getItems().add("Your play-board");
+        playAreaSelection.getSelectionModel().select("Your play-board");
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                playAreaSelection.getItems().add("Opponent: " + user);
+            }
+        }
+    }
+
+    @FXML
+    public void showPlayArea() {
+        String playAreaChoice = playAreaSelection.getValue();
+        if(playAreaChoice.equals("Your play-board")){
+            //TODO show your play area
+        }
+        else{
+            //TODO show the opponent's play area
+        }
+    }
+
     private void showCommonObjectives(){
-        ImmObjectiveCard[] objectiveCards = model.getCommonObjectives();
+        ImmObjectiveCard[] objectiveCards = viewModel.getCommonObjectives();
         ImmObjectiveCard objectiveCard0 = objectiveCards[0];
         ImmObjectiveCard objectiveCard1 = objectiveCards[1];
         commonObjectiveCard0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png"));
@@ -376,11 +526,10 @@ public class InGameController extends FXMLController {
 
     }
 
-    private void showSecretObjectives(){
-        ImmObjectiveCard secretObjCard = model.getSelfPlayer().getSecretObjective();
+    private void showSecretObjective(){
+        ImmObjectiveCard secretObjCard = viewModel.getSelfPlayer().getSecretObjective();
         secretObjectiveCard.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png"));
     }
-
 
     /**
      * This method is used to submit a chat message.
@@ -389,7 +538,18 @@ public class InGameController extends FXMLController {
     @FXML
     public void submitMessage(){
         String message = chatInput.getText();
+        String chatChoice = chatSelection.getValue();
 
+        if(message.isEmpty()){
+            return;
+        }
+
+        if(chatChoice.equals("General")) {
+            sendPublicMessage(message);
+        } else {
+            String username = chatChoice.substring(6);
+            sendPrivateMessage(username, message);
+        }
         chatInput.clear();
     }
 

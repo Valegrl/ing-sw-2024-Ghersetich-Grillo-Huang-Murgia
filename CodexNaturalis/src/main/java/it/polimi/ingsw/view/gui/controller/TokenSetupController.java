@@ -211,6 +211,14 @@ public class TokenSetupController extends FXMLController {
                     break;
 
             case UPDATE_GAME_PLAYERS:
+                while (controller.getModel() == null) {
+                    try {
+                        Thread.sleep(1000); // wait 1 second
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
                     Platform.runLater(() -> {
                         chatArea.appendText("\n" + message + "\n\n");

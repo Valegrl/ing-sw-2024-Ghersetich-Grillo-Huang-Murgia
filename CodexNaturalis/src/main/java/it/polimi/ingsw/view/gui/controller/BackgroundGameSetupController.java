@@ -57,6 +57,23 @@ public class BackgroundGameSetupController extends FXMLController {
                 //TODO go back to ENTER LOBBIES MENU or close the game?
             }
         }
+        else if(EventID.getByID(eventID) == EventID.RECONNECT_TO_GAME){
+            if(controller.getSetup() != null) {
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                        Parent root = loader.load();
+                        GameSetupController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                });
+            }
+        }
     }
 
     @Override

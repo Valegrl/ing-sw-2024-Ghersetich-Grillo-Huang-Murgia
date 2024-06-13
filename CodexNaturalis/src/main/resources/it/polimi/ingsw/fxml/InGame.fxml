@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -67,7 +68,7 @@
          <top>
             <AnchorPane id="upperAnchor" prefHeight="48.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label id="gameName" fx:id="gameName" layoutX="60.0" layoutY="11.0" text="LOBBY:  ">
+                  <Label id="gameName" fx:id="gameName" layoutX="60.0" layoutY="11.0" text="GAME:">
                      <font>
                         <Font size="19.0" />
                      </font>
@@ -88,7 +89,7 @@
          <right>
             <AnchorPane id="rightAnchor" prefHeight="813.0" prefWidth="270.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea id="chatArea" fx:id="chatArea" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
+                  <TextArea id="chatArea" fx:id="chatArea" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" wrapText="true" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <TextField id="chatInput" fx:id="chatInput" layoutX="19.0" layoutY="237.0" prefHeight="25.0" prefWidth="234.0" />
                   <Text id="chatTitle" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT">
                      <font>
@@ -96,9 +97,10 @@
                      </font>
                   </Text>
                   <TextArea id="updatesArea" fx:id="updatesArea" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
-                  <ComboBox fx:id="chatChoice" layoutX="101.0" layoutY="11.0" prefWidth="150.0" />
-                  <ComboBox fx:id="playAreaChoice" layoutX="18.0" layoutY="348.0" prefHeight="25.0" prefWidth="235.0" />
-                  <Separator layoutX="4.0" layoutY="395.0" prefHeight="23.0" prefWidth="262.0" />
+                  <ComboBox fx:id="chatSelection" layoutX="101.0" layoutY="11.0" prefWidth="150.0" />
+                  <ComboBox fx:id="playAreaSelection" layoutX="18.0" layoutY="348.0" prefHeight="25.0" prefWidth="235.0" />
+                  <Button layoutX="107.0" layoutY="384.0" mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
+                  <Separator layoutX="7.0" layoutY="407.0" prefHeight="23.0" prefWidth="262.0" />
                   <Separator layoutX="7.0" layoutY="306.0" prefHeight="0.0" prefWidth="262.0" />
                   <Label layoutX="75.0" layoutY="321.0" text="SHOWING PLAY AREA" />
                </children>
@@ -130,9 +132,15 @@
                   <AnchorPane id="commonAnchor" layoutX="740.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="360.0" style="-fx-background-color: #c8b052;">
                      <children>
                         <Label id="commonLabel" layoutX="80.0" layoutY="-11.0" text="COMMON OBJECTIVES" />
-                        <HBox AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="22.0">
-                           <ImageView fx:id="commonObjectiveCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                           <ImageView fx:id="commonObjectiveCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <HBox alignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                           <ImageView fx:id="commonObjectiveCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <HBox.margin>
+                                 <Insets right="5.0" />
+                              </HBox.margin></ImageView>
+                           <ImageView fx:id="commonObjectiveCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <HBox.margin>
+                                 <Insets left="5.0" />
+                              </HBox.margin></ImageView>
                         </HBox>
                      </children>
                   </AnchorPane>

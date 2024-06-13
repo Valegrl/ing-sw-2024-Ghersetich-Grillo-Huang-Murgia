@@ -14,7 +14,6 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.tui.state.MenuState;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
@@ -31,7 +30,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
