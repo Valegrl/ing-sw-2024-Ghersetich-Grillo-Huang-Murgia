@@ -12,21 +12,14 @@ import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewModel;
-import it.polimi.ingsw.viewModel.immutableCard.ImmGoldCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
-import it.polimi.ingsw.viewModel.immutableCard.ImmResourceCard;
+import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -44,6 +37,12 @@ public class InGameController extends FXMLController {
 
     @FXML
     private  BorderPane borderPane;
+
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    private GridPane opponentGridPane;
 
     @FXML
     private AnchorPane uncovered1;
@@ -190,6 +189,9 @@ public class InGameController extends FXMLController {
     @FXML
     private ImageView secretObjectiveCard;
 
+    @FXML
+    private AnchorPane secretObjectiveAnchor;
+
 
     @FXML
     private ImageView visibleGoldCard0;
@@ -210,6 +212,8 @@ public class InGameController extends FXMLController {
     private ImageView resourceDeck;
 
 
+    @FXML
+    private Label handLabel;
 
     @FXML
     private ImageView handCard0;
@@ -219,6 +223,15 @@ public class InGameController extends FXMLController {
 
     @FXML
     private ImageView handCard2;
+
+    @FXML
+    private ImageView opponentHandCard0;
+
+    @FXML
+    private ImageView opponentHandCard1;
+
+    @FXML
+    private ImageView opponentHandCard2;
 
 
 
@@ -315,6 +328,9 @@ public class InGameController extends FXMLController {
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch(EventID.getByID(eventID)){
+            case EventID.UPDATE_LOCAL_MODEL:
+
+                break;
             case EventID.CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
@@ -325,7 +341,6 @@ public class InGameController extends FXMLController {
                 break;
         }
     }
-
 
 
     private void setGameName() {
@@ -496,8 +511,8 @@ public class InGameController extends FXMLController {
     private void updateVisiblePlayAreas(){
         playAreaSelection.getItems().clear();
 
-        playAreaSelection.getItems().add("Your play-board");
-        playAreaSelection.getSelectionModel().select("Your play-board");
+        playAreaSelection.getItems().add("Your board");
+        playAreaSelection.getSelectionModel().select("Your board");
 
         for(String user : controller.getPlayersStatus().keySet()){
             if(!controller.getUsername().equals(user)){
@@ -509,10 +524,81 @@ public class InGameController extends FXMLController {
     @FXML
     public void showPlayArea() {
         String playAreaChoice = playAreaSelection.getValue();
-        if(playAreaChoice.equals("Your play-board")){
-            //TODO show your play area
+        if(playAreaChoice.equals("Your board")){
+            gridPane.setManaged(true);
+            gridPane.setVisible(true);
+            opponentGridPane.setVisible(false);
+            opponentGridPane.setManaged(false);
+            secretObjectiveAnchor.setVisible(true);
+            handLabel.setText("MY HAND");
+            List<ImageView> handCards = Arrays.asList(handCard0, handCard1, handCard2);
+            for(ImageView handCard : handCards){
+                handCard.setVisible(true);
+                handCard.setManaged(true);
+            }
+            List<ImageView> opponentHandCards = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
+            for(ImageView handCard : opponentHandCards){
+                handCard.setVisible(false);
+                handCard.setManaged(false);
+            }
+            //TODO show the played cards of this player
         }
         else{
+            gridPane.setManaged(false);
+            gridPane.setVisible(false);
+            opponentGridPane.setVisible(true);
+            opponentGridPane.setManaged(true);
+            secretObjectiveAnchor.setVisible(false);
+
+            String username = playAreaChoice.substring(10);
+            handLabel.setText(username + " hand");
+            List<ImageView> handCards = Arrays.asList(handCard0, handCard1, handCard2);
+            for(ImageView handCard : handCards){
+                handCard.setVisible(false);
+                handCard.setManaged(false);
+            }
+            List<ImageView> opponentHandCards = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
+            List<BackPlayableCard> backHand = viewModel.getOpponent(username).getPlayArea().getHand();
+            int i = 0;
+
+            for(ImageView handCard : opponentHandCards){
+                handCard.setVisible(true);
+                handCard.setManaged(true);
+                Item item = backHand.get(i).getItem();
+                if(backHand.get(i).getCardType() == CardType.GOLD){
+                    switch (item){
+                        case FUNGI:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png"));
+                            break;
+                        case ANIMAL:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png"));
+                            break;
+                        case PLANT:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png"));
+                            break;
+                        case INSECT:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png"));
+                            break;
+                    }
+                }
+                else{
+                    switch (item){
+                        case FUNGI:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png"));
+                            break;
+                        case ANIMAL:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png"));
+                            break;
+                        case PLANT:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png"));
+                            break;
+                        case INSECT:
+                            handCard.setImage(new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png"));
+                            break;
+                    }
+                }
+                i++;
+            }
             //TODO show the opponent's play area
         }
     }

@@ -111,20 +111,31 @@
                <children>
                   <AnchorPane id="handAnchor" layoutX="200.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0">
                      <children>
-                        <Label id="handLabel" layoutX="220.0" layoutY="-13.0" text="MY HAND" />
+                        <Label id="handLabel" fx:id="handLabel" layoutX="220.0" layoutY="-13.0" text="MY HAND" />
                         <HBox id="myHand" layoutX="25.0" layoutY="35.0" AnchorPane.bottomAnchor="25.0">
                            <children>
-                              <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="opponentHandCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <ImageView fx:id="opponentHandCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false"/>
+                              <ImageView fx:id="opponentHandCard2" fitHeight="100" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false"/>
                            </children>
                         </HBox>
                      </children>
@@ -144,7 +155,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane id="secretAnchor" layoutX="1120.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: c8b052;">
+                  <AnchorPane id="secretAnchor" fx:id="secretObjectiveAnchor" layoutX="1120.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: c8b052;">
                      <children>
                         <Label id="secretLabel" layoutX="16.0" layoutY="-11.0" text="SECRET OBJECTIVE" />
                         <ImageView fx:id="secretObjectiveCard" fitHeight="100.0" fitWidth="150.0" layoutX="25.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
@@ -540,7 +551,18 @@
                <content>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <GridPane>
+                        <GridPane fx:id="opponentGridPane" managed="false" visible="false">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <GridPane fx:id="gridPane" managed="false" visible="false">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
