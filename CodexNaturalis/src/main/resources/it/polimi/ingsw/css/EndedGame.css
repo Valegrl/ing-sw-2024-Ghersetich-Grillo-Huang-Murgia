@@ -1,0 +1,104 @@
+#gameName {
+    -fx-text-fill: #f1d546;
+    -fx-font-size: 25px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+}
+
+#gameEndedLabel{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 25px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 3, 0, 0, 0);
+
+}
+
+#congratulationsLabel{
+    -fx-text-fill: #342b05;
+    -fx-font-size: 25px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+
+}
+
+#leaderboardAnchor1 {
+    -fx-border-color: #342b05;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+    -fx-background-color: rgba(222, 181, 76, 0.99);
+    -fx-background-radius: 20px;
+}
+
+#leaderboardAnchor2 {
+    -fx-border-color: #342b05;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+    -fx-background-color: rgba(147, 143, 130, 0.75);
+    -fx-background-radius: 20px;
+}
+
+#leaderboardAnchor3 {
+    -fx-border-color: #342b05;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+    -fx-background-color: rgba(229, 144, 48, 0.75);
+    -fx-background-radius: 20px;
+}
+
+#leaderboardAnchor4 {
+    -fx-border-color: #342b05;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+    -fx-background-color: #f6f4f0;
+    -fx-background-radius: 20px;
+}
+
+
+#leaderboardVbox{
+    -fx-border-color: #342b05;
+    -fx-border-radius: 40px;
+    -fx-background-radius: 40px;
+    -fx-border-width: 4px;
+    -fx-background-color: rgba(200, 176, 82, 0.3);
+}
+
+#leaderboardLabel{
+    -fx-border-color: #342b05;
+    -fx-text-fill: #625722;
+    -fx-font-size: 35px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-radius: 40px;
+    -fx-border-radius: 40px;
+    -fx-border-width: 5px;
+    -fx-background-color: #faeed3;
+
+}
+
+#gameEndedLabel{
+    -fx-font-size: 35px;
+    -fx-font-family: "Bebas Neue Regular";
+}
+
+#upperAnchor{
+    -fx-background-color: rgb(54, 45, 16);
+}
+
+#lowerAnchor{
+    -fx-background-color: #ded7bb;
+}
+
+#leftAnchor{
+    -fx-background-color: #ded7bb;
+}
+
+#quitButton, #newgameButton {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
