@@ -1215,59 +1215,5 @@ public class ViewController implements ViewEventReceiver {
         }
     }
 
-    /**
-     * This method is used to get the back image of a card based on the item and card type.
-     * It constructs the path of the image file based on the item and card type and creates an Image object.
-     *
-     * @param item The item of the card (FUNGI, ANIMAL, INSECT, PLANT).
-     * @param type The type of the card (GOLD or RESOURCE).
-     * @return An Image object representing the back of the card.
-     */
-    public Image getBackCardImage(Item item, CardType type){
-        Image image = null;
-        if(type == CardType.GOLD){
-            switch (item){
-                case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
-                    break;
-                case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
-                    break;
-                case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
-                    break;
-                case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
-                    break;
-            }
-        }
-        else{
-            switch (item){
-                case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
-                    break;
-                case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
-                    break;
-                case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
-                    break;
-                case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
-                    break;
-            }
-        }
-        return image;
-    }
 
-    public Image getFrontCardImage(String ID, CardType type){
-        Image image = null;
-        if(type == CardType.GOLD){
-            image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png");
-        }
-        else{
-            image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png");
-        }
-        return image;
-    }
 }

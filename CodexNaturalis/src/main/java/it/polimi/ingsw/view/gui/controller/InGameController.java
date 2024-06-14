@@ -364,15 +364,15 @@ public class InGameController extends FXMLController {
         ImmPlayableCard[] visibleResourceCards = viewModel.getVisibleResourceCards();
 
         for(int i = 0; i < 2; i++){
-            this.visibleGoldCards.get(i).setImage(controller.getFrontCardImage(visibleGoldCards[i].getId(), CardType.GOLD));
-            this.visibleResourceCards.get(i).setImage(controller.getFrontCardImage(visibleResourceCards[i].getId(), CardType.RESOURCE));
+            this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), CardType.GOLD));
+            this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), CardType.RESOURCE));
         }
         Item itemGoldDeck = viewModel.getTopGoldDeck();
-        Image backGoldCardImage = controller.getBackCardImage(itemGoldDeck, CardType.GOLD);
+        Image backGoldCardImage = getBackCardImage(itemGoldDeck, CardType.GOLD);
         goldDeck.setImage(backGoldCardImage);
 
         Item itemResourceDeck = viewModel.getTopResourceDeck();
-        Image backResourceCardImage = controller.getBackCardImage(itemResourceDeck, CardType.RESOURCE);
+        Image backResourceCardImage = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
         resourceDeck.setImage(backResourceCardImage);
     }
 
@@ -381,7 +381,7 @@ public class InGameController extends FXMLController {
         myHand = viewModel.getSelfPlayer().getPlayArea().getHand();
         for(ImmPlayableCard card : myHand){
             ImageView currImageView = handCardImages.get(i);
-            currImageView.setImage(controller.getFrontCardImage(card.getId(), card.getType()));
+            currImageView.setImage(getFrontCardImage(card.getId(), card.getType()));
             i++;
         }
     }
@@ -512,7 +512,7 @@ public class InGameController extends FXMLController {
             for(ImageView handCard : opponentHandCards){
                 handCard.setVisible(true);
                 handCard.setManaged(true);
-                handCard.setImage(controller.getBackCardImage(backHand.get(i).getItem(), backHand.get(i).getCardType()));
+                handCard.setImage(getBackCardImage(backHand.get(i).getItem(), backHand.get(i).getCardType()));
                 i++;
             }
             //TODO show the opponent's play area

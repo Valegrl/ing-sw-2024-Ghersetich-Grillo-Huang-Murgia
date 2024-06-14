@@ -466,7 +466,7 @@ public class GameSetupController extends FXMLController {
 
         int i = 0;
         for(ImmPlayableCard card : myHand){
-            Image backCardImage = controller.getBackCardImage(card.getPermanentResource(), card.getType());
+            Image backCardImage = getBackCardImage(card.getPermanentResource(), card.getType());
             Image frontCardImage = handCardImages.get(i).getImage();
             ImageView currHandImage = handCardImages.get(i);
             currHandImage.setOnMouseEntered(event ->
@@ -486,7 +486,7 @@ public class GameSetupController extends FXMLController {
     private void showMyHand(){
         int i = 0;
         for(ImmPlayableCard card : myHand){
-            handCardImages.get(i).setImage(controller.getFrontCardImage(card.getId(), card.getType()));
+            handCardImages.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
             i++;
         }
     }
@@ -556,7 +556,7 @@ public class GameSetupController extends FXMLController {
             if(username.equals(user)){
                 int i = 0;
                 for(BackPlayableCard bpc : opponentsBackHandCards.get(user)){
-                    Image backCardImage = controller.getBackCardImage(bpc.getItem(), bpc.getCardType());
+                    Image backCardImage = getBackCardImage(bpc.getItem(), bpc.getCardType());
                     opponentsHandCardImages.get(i).setImage(backCardImage);
                     i++;
                 }
@@ -573,11 +573,11 @@ public class GameSetupController extends FXMLController {
     private void showGoldDeck(){
         Item itemGoldDeck = setup.getGoldDeck();
         ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
-        Image image = controller.getBackCardImage(itemGoldDeck, CardType.GOLD);
+        Image image = getBackCardImage(itemGoldDeck, CardType.GOLD);
         goldDeck.setImage(image);
 
-        this.visibleGoldCard0.setImage(controller.getFrontCardImage(visibleGoldCards[0].getId(), CardType.GOLD));
-        this.visibleGoldCard1.setImage(controller.getFrontCardImage(visibleGoldCards[1].getId(), CardType.GOLD));
+        this.visibleGoldCard0.setImage(getFrontCardImage(visibleGoldCards[0].getId(), CardType.GOLD));
+        this.visibleGoldCard1.setImage(getFrontCardImage(visibleGoldCards[1].getId(), CardType.GOLD));
     }
 
     /**
@@ -589,11 +589,11 @@ public class GameSetupController extends FXMLController {
     private void showResourceDeck(){
         Item itemResourceDeck = setup.getResourceDeck();
         ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
-        Image image = controller.getBackCardImage(itemResourceDeck, CardType.RESOURCE);
+        Image image = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
         resourceDeck.setImage(image);
 
-        this.visibleResourceCard0.setImage(controller.getFrontCardImage(visibleResourceCards[0].getId(), CardType.RESOURCE));
-        this.visibleResourceCard1.setImage(controller.getFrontCardImage(visibleResourceCards[1].getId(), CardType.RESOURCE));
+        this.visibleResourceCard0.setImage(getFrontCardImage(visibleResourceCards[0].getId(), CardType.RESOURCE));
+        this.visibleResourceCard1.setImage(getFrontCardImage(visibleResourceCards[1].getId(), CardType.RESOURCE));
     }
 
     /**
