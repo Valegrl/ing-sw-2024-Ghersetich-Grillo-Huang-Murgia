@@ -23,57 +23,45 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/InGame.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.InGameController">
-   <children>
       <AnchorPane fx:id="scoreBoard" />
 
       <BorderPane id="borderPane" fx:id="borderPane" prefHeight="1080.0" prefWidth="1920.0">
          <left>
             <AnchorPane id="leftAnchor" prefHeight="750.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
                   <AnchorPane id="resourceAnchor" layoutX="5.0" layoutY="32.0" prefHeight="376.0" prefWidth="192.0">
-                     <children>
                         <VBox id="vBoxResource" layoutX="20.0" layoutY="150.0">
-                           <children>
                               <ImageView fx:id="visibleResourceCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </ImageView>
                               <ImageView fx:id="visibleResourceCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                           </children>
                         </VBox>
                         <ImageView id="resourceDeck" fx:id="resourceDeck" fitHeight="100.0" fitWidth="150.0" layoutX="20.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
                         <Label id="resourceLabel" layoutX="16.0" layoutY="-11.0" text="RESOURCE CARDS" AnchorPane.leftAnchor="0.0" />
-                     </children>
                   </AnchorPane>
                   <AnchorPane id="goldAnchor" layoutX="5.0" layoutY="440.0" prefHeight="376.0" prefWidth="192.0">
-                     <children>
                         <ImageView fx:id="goldDeck" fitHeight="100.0" fitWidth="150.0" layoutX="20.0" layoutY="35.501953125" pickOnBounds="true" preserveRatio="true" />
                         <VBox id="vBoxGold" layoutX="20.0" layoutY="150.501953125">
-                           <children>
                               <ImageView fx:id="visibleGoldCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </ImageView>
                               <ImageView fx:id="visibleGoldCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                           </children>
                         </VBox>
                         <Label id="goldLabel" layoutX="36.0" layoutY="-11.0" text="GOLD CARDS" AnchorPane.leftAnchor="0.0" />
-                     </children>
                   </AnchorPane>
-               </children>
             </AnchorPane>
          </left>
          <top>
             <AnchorPane id="upperAnchor" prefHeight="48.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
-               <children>
                   <Label id="gameName" fx:id="gameName" layoutX="60.0" layoutY="11.0" text="GAME:">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Label>
-                  <Label id="aboveLabel" fx:id="aboveLabel" layoutX="769.0" layoutY="14.0" prefHeight="26.0" prefWidth="210.0">
+                  <Label id="aboveLabel" fx:id="aboveLabel" layoutX="569.0" layoutY="14.0" prefHeight="29.0" prefWidth="665.0">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -83,12 +71,10 @@
                         <Image url="@../images/icons/insect.png" />
                      </image>
                   </ImageView>
-               </children>
             </AnchorPane>
          </top>
          <right>
             <AnchorPane id="rightAnchor" prefHeight="813.0" prefWidth="270.0" BorderPane.alignment="CENTER">
-               <children>
                   <TextArea id="chatArea" fx:id="chatArea" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" wrapText="true" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <TextField id="chatInput" fx:id="chatInput" layoutX="19.0" layoutY="237.0" prefHeight="25.0" prefWidth="234.0" />
                   <Text id="chatTitle" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT">
@@ -96,52 +82,46 @@
                         <Font size="15.0" />
                      </font>
                   </Text>
-                  <TextArea id="updatesArea" fx:id="updatesArea" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
+                  <TextArea fx:id="gameUpdatesArea" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <ComboBox fx:id="chatSelection" layoutX="101.0" layoutY="11.0" prefWidth="150.0" />
                   <ComboBox fx:id="playAreaSelection" layoutX="18.0" layoutY="348.0" prefHeight="25.0" prefWidth="235.0" />
                   <Button layoutX="107.0" layoutY="384.0" mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
                   <Separator layoutX="7.0" layoutY="407.0" prefHeight="23.0" prefWidth="262.0" />
                   <Separator layoutX="7.0" layoutY="306.0" prefHeight="0.0" prefWidth="262.0" />
                   <Label layoutX="75.0" layoutY="321.0" text="SHOWING PLAY AREA" />
-               </children>
             </AnchorPane>
          </right>
          <bottom>
             <AnchorPane id="lowerAnchor" prefHeight="200.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
-               <children>
                   <AnchorPane id="handAnchor" layoutX="200.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="520.0">
-                     <children>
                         <Label id="handLabel" fx:id="handLabel" layoutX="220.0" layoutY="-13.0" text="MY HAND" />
                         <HBox id="myHand" layoutX="25.0" layoutY="35.0" AnchorPane.bottomAnchor="25.0">
-                           <children>
-                              <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                              <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="opponentHandCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                              <ImageView fx:id="opponentHandCard0" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                              <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="opponentHandCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false">
+                              <ImageView fx:id="opponentHandCard1" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false"/>
-                              <ImageView fx:id="opponentHandCard2" fitHeight="100" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" managed="false"/>
-                           </children>
+                              <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <ImageView fx:id="opponentHandCard2" fitHeight="100" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
                         </HBox>
-                     </children>
+                        <Button fx:id="flipButton" layoutX="241.0" layoutY="135.0" mnemonicParsing="false" onAction="#setPlayFlipped" text="Flip" />
                   </AnchorPane>
                   <AnchorPane id="commonAnchor" layoutX="740.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="360.0" style="-fx-background-color: #c8b052;">
-                     <children>
                         <Label id="commonLabel" layoutX="80.0" layoutY="-11.0" text="COMMON OBJECTIVES" />
                         <HBox alignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                            <ImageView fx:id="commonObjectiveCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
@@ -153,18 +133,13 @@
                                  <Insets left="5.0" />
                               </HBox.margin></ImageView>
                         </HBox>
-                     </children>
                   </AnchorPane>
                   <AnchorPane id="secretAnchor" fx:id="secretObjectiveAnchor" layoutX="1120.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: c8b052;">
-                     <children>
                         <Label id="secretLabel" layoutX="16.0" layoutY="-11.0" text="SECRET OBJECTIVE" />
                         <ImageView fx:id="secretObjectiveCard" fitHeight="100.0" fitWidth="150.0" layoutX="25.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
                   </AnchorPane>
                   <AnchorPane layoutX="1363.0" layoutY="21.0" maxHeight="-Infinity" prefHeight="160.0" prefWidth="549.0" style="-fx-background-color: c8b052;">
-                     <children>
                         <VBox id="vBox" prefHeight="151.0" prefWidth="549.0">
-                           <children>
                               <AnchorPane fx:id="uncovered1" prefHeight="38.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
@@ -172,177 +147,141 @@
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
-                                 <children>
                                     <Text fx:id="uncoveredUsername1" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER1" wrappingWidth="192.7313232421875" />
                                     <Pane id="paneAnimal1" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="animalOcc1" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneFungi1" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="fungiOcc1" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/fungi.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInsect1" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="insectOcc1" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/insect.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePlant1" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="plantOcc1" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/plant.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInkwell1" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="inkwellOcc1" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/inkwell.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneManuscript1" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="manuscriptOcc1" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/manuscript.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneQuill1" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="quillOcc1" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/quill.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePoints1" layoutX="140.0" layoutY="5.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="playerPoints1" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
-                                 </children>
                               </AnchorPane>
                               <AnchorPane fx:id="uncovered2" prefHeight="38.0" prefWidth="546.0" visible="false">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
-                                 <children>
                                     <Text fx:id="uncoveredUsername2" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER2" wrappingWidth="192.7313232421875" />
                                     <Pane id="paneAnimal2" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="animalOcc2" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneFungi2" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="fungiOcc2" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/fungi.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInsect2" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="insectOcc2" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/insect.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePlant2" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="plantOcc2" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/plant.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInkwell2" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="inkwellOcc2" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/inkwell.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneManuscript2" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="manuscriptOcc2" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/manuscript.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneQuill2" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="quillOcc2" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/quill.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePoints2" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="playerPoints2" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
-                                 </children>
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
@@ -351,89 +290,71 @@
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
-                                 <children>
                                     <Text fx:id="uncoveredUsername3" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER3" wrappingWidth="192.7313232421875" />
                                     <Pane id="paneAnimal3" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="animalOcc3" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneFungi3" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="fungiOcc3" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/fungi.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInsect3" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="insectOcc3" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/insect.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePlant3" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="plantOcc3" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/plant.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInkwell3" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="inkwellOcc3" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/inkwell.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneManuscript3" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="manuscriptOcc3" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/manuscript.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneQuill3" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="quillOcc3" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/quill.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePoints3" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="playerPoints3" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
-                                 </children>
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
@@ -442,96 +363,76 @@
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
-                                 <children>
                                     <Text fx:id="uncoveredUsername4" layoutX="13.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER4" wrappingWidth="192.7313232421875" />
                                     <Pane id="paneAnimal4" layoutX="215.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="animalOcc4" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneFungi4" layoutX="262.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="fungiOcc4" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/fungi.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInsect4" layoutX="307.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="insectOcc4" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/insect.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePlant4" layoutX="352.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="plantOcc4" layoutX="26.0" layoutY="4.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/plant.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneInkwell4" layoutX="397.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="inkwellOcc4" layoutX="26.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/inkwell.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneManuscript4" layoutX="445.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="manuscriptOcc4" layoutX="28.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="3.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/manuscript.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="paneQuill4" layoutX="493.0" layoutY="4.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="quillOcc4" layoutX="24.0" layoutY="5.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/quill.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
                                     <Pane id="panePoints4" layoutX="140.0" layoutY="3.0" prefHeight="27.0" prefWidth="39.0">
-                                       <children>
                                           <Label fx:id="playerPoints4" layoutX="26.0" layoutY="6.0" prefHeight="17.0" prefWidth="9.0" text="0" />
                                           <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="4.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/animal.png" />
                                              </image>
                                           </ImageView>
-                                       </children>
                                     </Pane>
-                                 </children>
                                  <VBox.margin>
                                     <Insets bottom="12.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                           </children>
                         </VBox>
-                     </children>
                   </AnchorPane>
                   <Label layoutX="29.0" layoutY="62.0" prefHeight="17.0" prefWidth="149.0" text="TIME LEFT: ">
                      <font>
@@ -543,41 +444,69 @@
                         <Font size="37.0" />
                      </font>
                   </Label>
-               </children>
             </AnchorPane>
          </bottom>
          <center>
-            <ScrollPane id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane>
+            <ScrollPane id="scrollPane" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
-                  <StackPane prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                        <GridPane fx:id="opponentGridPane" managed="false" visible="false">
+                  <StackPane maxHeight="Infinity" maxWidth="Infinity">
+                        <GridPane fx:id="opponentGridPane" alignment="CENTER" gridLinesVisible="true" managed="false" visible="false">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" maxWidth="115.0" minWidth="115.0" />
                            </columnConstraints>
                            <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints fillHeight="false" maxHeight="60.0" minHeight="60.0" valignment="CENTER" vgrow="NEVER" />
                            </rowConstraints>
                         </GridPane>
-                        <GridPane fx:id="gridPane" managed="false" visible="false">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+
+                        <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true">
+                           <columnConstraints>
+                              <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" maxWidth="150.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints fillHeight="false" maxHeight="100.0" valignment="CENTER" vgrow="NEVER" />
+                           </rowConstraints>
+
+                            <!--
+                            <StackPane maxHeight="60.0" maxWidth="115.0" minHeight="60" minWidth="115.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/cards/playable/Available.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+
+                            <StackPane maxHeight="60.0" maxWidth="115.0" minHeight="60" minWidth="115.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/cards/playable/resource/front/RC01.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+
+                              <StackPane maxHeight="60.0" maxWidth="115.0" minHeight="60" minWidth="115.0">
+                                    <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/cards/playable/resource/front/RC04.png" />
+                                       </image>
+                                    </ImageView>
+                              </StackPane>
+
+                           <StackPane maxHeight="60.0" maxWidth="115.0" minHeight="60" minWidth="115.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/cards/playable/resource/front/RC01.png" />
+                                 </image>
+                              </ImageView>
+                           </StackPane>
+                            -->
+
                         </GridPane>
-                     </children>
                   </StackPane>
                </content>
             </ScrollPane>
+            </StackPane>
          </center>
       </BorderPane>
-   </children>
 </AnchorPane>

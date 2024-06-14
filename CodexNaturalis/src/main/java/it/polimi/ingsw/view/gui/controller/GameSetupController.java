@@ -393,28 +393,28 @@ public class GameSetupController extends FXMLController {
             secretObjectiveCard0.setEffect(highlight);
             secretObjectiveCard1.setEffect(null);
             objectiveChosen = objectiveChoice0;
-            System.out.println("Chosen objective card objective card " + objectiveChosen.getId());
+            //System.out.println("Chosen objective card " + objectiveChosen.getId());
         });
 
         secretObjectiveCard1.setOnMouseClicked(event -> {
             secretObjectiveCard1.setEffect(highlight);
             secretObjectiveCard0.setEffect(null);
             objectiveChosen = objectiveChoice1;
-            System.out.println("Chosen objective card objective card " + objectiveChosen.getId());
+            //System.out.println("Chosen objective card " + objectiveChosen.getId());
         });
 
         startCardFront.setOnMouseClicked(event -> {
             startCardFront.setEffect(highlight);
             startCardBack.setEffect(null);
             flippedChoice = false;
-            System.out.println("Chosen start card on front");
+            //System.out.println("Chosen start card on front");
         });
 
         startCardBack.setOnMouseClicked(event -> {
             startCardBack.setEffect(highlight);
             startCardFront.setEffect(null);
             flippedChoice = true;
-            System.out.println("Chosen start card on back");
+            //System.out.println("Chosen start card on back");
         });
     }
 

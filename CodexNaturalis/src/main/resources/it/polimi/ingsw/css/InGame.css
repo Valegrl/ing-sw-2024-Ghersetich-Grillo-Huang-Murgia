@@ -33,6 +33,13 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.2, 2, 2);
 }
 
+#aboveLabel{
+    -fx-text-fill: #f1d546;
+    -fx-font-size: 25px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+}
 
 #resourceLabel {
     -fx-border-color: #342b05;

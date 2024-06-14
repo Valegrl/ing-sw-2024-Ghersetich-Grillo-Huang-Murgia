@@ -188,7 +188,6 @@ public class TokenSetupController extends FXMLController {
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        //numTokens = controller.getAvailableTokens().size();
         switch (EventID.getByID(eventID)) {
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
@@ -210,40 +209,26 @@ public class TokenSetupController extends FXMLController {
                     break;
 
             case UPDATE_GAME_PLAYERS:
-                while (controller.getModel() == null) {
-                    try {
-                        Thread.sleep(1000); // wait 1 second
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
-                    Platform.runLater(() -> {
-                        chatArea.appendText("\n" + message + "\n\n");
-                        update();
-                    });
-                } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
-                    //TODO implement
-                } else {
-                    throw new IllegalStateException("Unexpected game status.");
-                }
                 break;
 
             case UPDATE_LOCAL_MODEL:
-                Platform.runLater(() -> {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGame.fxml"));
-                        Parent root = loader.load();
-                        InGameController nextController = loader.getController();
+                if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGame.fxml"));
+                            Parent root = loader.load();
+                            InGameController nextController = loader.getController();
 
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
-                    }
-                    catch (IOException exception){
-                        exception.printStackTrace();
-                    }
-                });
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+                    });
+                } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
+                    //TODO
+                }
                 break;
 
             case GET_CHAT_MESSAGES:
