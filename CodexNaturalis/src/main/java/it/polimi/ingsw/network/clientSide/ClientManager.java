@@ -18,10 +18,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 /**
- *ClientManager is a singleton class that manages the requests from the view and the responses from the server on the client side.
- * It implements the Client interface and extends UnicastRemoteObject for remote method invocation (RMI).
- * It has a queue of events to be sent to the server (requestsQueue) and a queue of responses received from the server (responsesQueue).
- * It contains a listener which handles the event from the queue.
+ * ClientManager is a singleton class that manages the requests from the view and the responses from the server on the client side.
+ * Implements {@link Client} interface for RMI compatibility.
  */
 public class ClientManager extends UnicastRemoteObject implements Client {
 
@@ -45,15 +43,20 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     private final Queue<Event> requestsQueue = new LinkedList<>();
 
-
-    private Thread requestsThread;
+    /**
+     * The thread that manages the requests queue.
+     */
+    private final Thread requestsThread;
 
     /**
      * The queue of responses received from the server.
      */
     private final Queue<Event> responsesQueue = new LinkedList<>();
 
-    private Thread responsesThread;
+    /**
+     * The thread that manages the responses queue.
+     */
+    private final Thread responsesThread;
 
     /**
      * The timer used to manage the connection with the server.
@@ -65,6 +68,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     private boolean connectionOpen;
 
+    /**
+     * The lock used to synchronize the timers.
+     */
     private final Object timerLock = new Object();
 
     /**
@@ -218,6 +224,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         this.viewController = vc;
     }
 
+    /**
+     * Function that starts the ping mechanism.
+     */
     private void startPing() {
         new Thread(() -> {
             while (connectionOpen) {
@@ -235,7 +244,6 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                     }
 
                     // sending PingEvent
-                    // System.out.println("Sending ping to server.");
                     server.direct(new PingEvent(), this);
                 } catch (RemoteException e) {
                     System.err.println("\nCannot send ping to server.");
@@ -249,8 +257,10 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         }).start();
     }
 
+    /**
+     * Function that sends a PongEvent to the server to communicate its presence for server's ping mechanism.
+     */
     private void sendPong() {
-        // System.out.println("Client received ping, sending pong...");
         try {
             server.direct(new PongEvent(), ClientManager.this);
         } catch (RemoteException e) {
@@ -258,6 +268,9 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         }
     }
 
+    /**
+     * Function that manages the disconnection from the server.
+     */
     private void serverDisconnected() {
         requestsThread.interrupt();
         responsesThread.interrupt();
@@ -274,6 +287,12 @@ public class ClientManager extends UnicastRemoteObject implements Client {
         instance = null;
     }
 
+    /**
+     * Static function that validates an IP address.
+     *
+     * @param ip The IP address to be validated.
+     * @return True if the IP address is valid, false otherwise.
+     */
     public static boolean validateAddress(String ip) {
         String pattern = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
         return ip.matches(pattern);

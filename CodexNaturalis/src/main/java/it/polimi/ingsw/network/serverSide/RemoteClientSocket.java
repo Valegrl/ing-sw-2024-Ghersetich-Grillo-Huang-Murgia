@@ -45,6 +45,9 @@ public class RemoteClientSocket implements Client {
      */
     private final Socket socket;
 
+    /**
+     * The {@code Gson} object used to serialize and deserialize {@link  Event Events}.
+     */
     private final Gson gson;
 
     /**

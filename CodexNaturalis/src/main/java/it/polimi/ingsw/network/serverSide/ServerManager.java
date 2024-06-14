@@ -16,21 +16,41 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/*Singleton*/
+/**
+ * Class used to manage the received events server-side, implements {@link Server} interface for RMI compatibility.
+ * It is a singleton class that forwards {@link Event Events} to the {@link VirtualView} of the client.
+ */
 public class ServerManager extends UnicastRemoteObject implements Server {
-
-    // TODO uncomment getUserName() methods when implemented in VirtualView
-
+    /**
+     * The singleton instance of the class.
+     */
     private static ServerManager instance;
 
+    /**
+     * The queue used to store the received {@link Event Events}.
+     */
     private final Queue<Pair<Event, Client>> requestsQueue = new LinkedList<>();
 
+    /**
+     * The map used to store the {@link VirtualView VirtualViews} of the clients.
+     */
     private final Map<Client, VirtualView> virtualViews;
 
+    /**
+     * The {@link ExecutorService} used to manage the {@link Event Events}.
+     */
     private final ExecutorService executor;
 
+    /**
+     * The map used to store the ping mechanism {@link Timer} for each client.
+     */
     private final Map<Client, Timer> clientTimers = new HashMap<>();
 
+    /**
+     * Returns the singleton instance of the class.
+     * @return The singleton instance of the class.
+     * @throws RemoteException If any I/O error occurs.
+     */
     public synchronized static ServerManager getInstance() throws RemoteException {
         if( instance == null ) {
             instance = new ServerManager();
@@ -38,6 +58,10 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         return instance;
     }
 
+    /**
+     * Creates a new {@code ServerManager}.
+     * @throws RemoteException If any I/O error occurs.
+     */
     private ServerManager() throws RemoteException {
         this.virtualViews = new HashMap<>();
         this.executor = Executors.newCachedThreadPool();
@@ -56,7 +80,6 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     requestPair = requestsQueue.poll();
                 }
                 if (requestPair.key().getID().equals(EventID.PONG.getID())) {
-                    //System.out.println("Server received pong from client '" + virtualViews.get(requestPair.value()).getUsername() + "'.");
                     synchronized (clientTimers) {
                         clientTimers.get(requestPair.value()).cancel();
                     }
@@ -69,24 +92,18 @@ public class ServerManager extends UnicastRemoteObject implements Server {
 
         new Thread(() -> {
             List<Client> clients;
-            VirtualView clientView;
 
             while (true) {
                 synchronized (clientTimers) {
                     clients = new ArrayList<>(clientTimers.keySet());
                 }
                 for (Client client: clients) {
-                    synchronized (virtualViews) {
-                        clientView = virtualViews.get(client);
-                    }
                     try {
                         synchronized (clientTimers) {
                             clientTimers.replace(client, new Timer());
-                            VirtualView finalClientView = clientView;
                             TimerTask task = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    //System.out.println("No response from client: '" + finalClientView.getUsername() + "'.");
                                     clientDisconnected(client);
                                 }
                             };
@@ -94,12 +111,9 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                         }
 
                         // sending PingEvent
-                        //System.out.println("Sending ping to '" + clientView.getUsername() + "' client.");
                         client.report(new PingEvent());
 
-                    } catch (RemoteException e) {
-                        //System.err.println("Cannot send ping to client '" + clientView.getUsername() + "'.");
-                    }
+                    } catch (RemoteException ignored) {}
                 }
                 try {
                     Thread.sleep(3000 * 2);
@@ -118,6 +132,11 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         }
     }
 
+    /**
+     * Manages the received {@link Event}.
+     * @param event The {@link Event} to manage.
+     * @param client The {@link Client} that sent the {@link Event}.
+     */
     private void manage(Event event, Client client) {
         synchronized (virtualViews) {
            VirtualView virtualView = virtualViews.get(client);
@@ -142,6 +161,10 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         clientTimers.put(client, new Timer());
     }
 
+    /**
+     * Sends a {@link PongEvent} to the client.
+     * @param client The client to send the {@link PongEvent} to.
+     */
     private void sendPong(Client client) {
         System.out.println("Server received ping, sending pong...");
         try {
@@ -151,6 +174,10 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         }
     }
 
+    /**
+     * Handles the disconnection of a client.
+     * @param client The client that disconnected.
+     */
     private void clientDisconnected(Client client) {
         Event disconnectedEvent = new ClientDisconnectedEvent();
         disconnectedEvent.receiveEvent(virtualViews.get(client));
@@ -162,6 +189,10 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         leave(client);
     }
 
+    /**
+     * Removes the client from the server.
+     * @param client The client to remove.
+     */
     private void leave(Client client) {
         synchronized (virtualViews) {
             virtualViews.remove(client);
@@ -169,6 +200,10 @@ public class ServerManager extends UnicastRemoteObject implements Server {
         }
     }
 
+    /**
+     * Retrieves the {@link ExecutorService} used to manage the {@link Event Events}.
+     * @return The {@link ExecutorService} used to manage the {@link Event Events}.
+     */
     public ExecutorService getExecutor() {
         return executor;
     }

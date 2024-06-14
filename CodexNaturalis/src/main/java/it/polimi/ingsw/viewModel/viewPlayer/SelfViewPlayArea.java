@@ -12,7 +12,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+/**
+ * Immutable representation of the self-player's play area.
+ */
 public final class SelfViewPlayArea implements Serializable, CardConverter {
     /**
      * The player's hand.
@@ -38,7 +40,6 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
      * The selected card in the play area and its coordinate.
      */
     private final Pair<Coordinate, ImmEvaluableCard> selectedCard; //TODO card converter (similar to ImmPlayableCard)
-
 
     /**
      * Constructs an immutable representation of the given {@link PlayArea}.
@@ -159,6 +160,10 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return okPos.stream().toList();
     }
 
+    /**
+     * Returns a String representation of the available positions where the player can place a card.
+     * @return The string representation of the available positions.
+     */
     public String printAvailablePos() {
         List<Coordinate> availablePos = getAvailablePos();
         StringBuilder sb = new StringBuilder("  ");
@@ -194,6 +199,10 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a String representation of the played cards in the play area.
+     * @return The string representation of the played cards.
+     */
     private String printPlayedCards() {
         StringBuilder sb = new StringBuilder();
         StringBuilder cardString = new StringBuilder();
@@ -214,6 +223,10 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a String representation of the uncovered items in the play area.
+     * @return The string representation of the uncovered items.
+     */
     private String printUncoveredItems() {
         StringBuilder sb = new StringBuilder();
         sb.append("  Uncovered Items:\n");
@@ -227,10 +240,18 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a String representation of the player's play area.
+     * @return The string representation of the player's play area.
+     */
     public String printPlayArea() {
         return printPlayedCards() + "\n" + printUncoveredItems() + "\n" + printHand()  + "\n";
     }
 
+    /**
+     * Returns a String representation of the player's play area at the end of the game.
+     * @return The string representation of the player's play area at the end of the game.
+     */
     public String printEndedGamePlayArea() {
         return printPlayedCards() + "\n" + printUncoveredItems() + "\n";
     }

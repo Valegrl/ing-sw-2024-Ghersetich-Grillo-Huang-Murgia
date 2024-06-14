@@ -25,14 +25,13 @@ public class ChooseConnectionState extends ViewState {
     @Override
     public boolean handleInput(int input) {
         String ip = "127.0.0.1";
-        boolean valid = false;
+        boolean validIp = false;
 
         view.printMessage("Please provide the IP address or the URL of the server:");
-        // ip = "127.0.0.1"; // FIXME for debug purposes forcing 127.0.0.1
-        while (!valid) {
+        while (!validIp) {
             ip = view.getInput();
             if (ClientManager.validateAddress(ip)) {
-                valid = true;
+                validIp = true;
             } else {
                 view.printMessage("Invalid IP address. Please provide a valid one:");
             }

@@ -10,7 +10,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-/*start server*/
+/**
+ * Class used to start the server.
+ */
 public class MainServer {
     public static void main(String[] args) {
         MainServer server = new MainServer();
@@ -41,6 +43,11 @@ public class MainServer {
         rmiThread.start();
     }
 
+    /**
+     * Starts a socket server on the given port.
+     * @param port The port number used to establish a connection.
+     * @throws RemoteException If any I/O error occurs.
+     */
     private void startSocket(int port) throws RemoteException {
         ServerSocket serverSocket = null;
         try {
@@ -70,10 +77,14 @@ public class MainServer {
         }
     }
 
+    /**
+     * Starts an RMI server on the given port.
+     * @param port The port number used to establish a connection.
+     * @throws RemoteException If any I/O error occurs.
+     */
     private void startRMI(int port) throws RemoteException {
         System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
         Registry registry = LocateRegistry.createRegistry(port);
         registry.rebind("CodexNaturalisServer51", ServerManager.getInstance()); // TODO config?
     }
-
 }

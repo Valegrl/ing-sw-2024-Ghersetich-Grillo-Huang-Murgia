@@ -134,6 +134,10 @@ public class ViewStartSetup implements Serializable, CardConverter {
                 secretObjectiveCards[1].printCard(indent);
     }
 
+    /**
+     * Returns a string representation of the player's setup hand.
+     * @return A string representation of the player's setup hand.
+     */
     public String printSetupHand() {
         int indent = 5;
         StringBuilder sb = new StringBuilder();
@@ -147,6 +151,10 @@ public class ViewStartSetup implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the player's setup common objectives.
+     * @return A string representation of the player's setup common objectives.
+     */
     public String printSetupCommonObjectives() {
         int indent = 5;
         StringBuilder sb = new StringBuilder();
@@ -160,6 +168,10 @@ public class ViewStartSetup implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the decks in the setup phase.
+     * @return A string representation of the decks.
+     */
     public String printSetupDecks() {
         int indent = 12;
         return "Decks: \n" +
@@ -183,6 +195,10 @@ public class ViewStartSetup implements Serializable, CardConverter {
                 visibleResourceCards[1].printCard(indent);
     }
 
+    /**
+     * Returns a string representation of the opponents' back-hand cards.
+     * @return A string representation of the opponents' back-hand cards.
+     */
     public String printSetupOpponentsHands() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<BackPlayableCard>> entry : opponentsBackHandCards.entrySet()) {

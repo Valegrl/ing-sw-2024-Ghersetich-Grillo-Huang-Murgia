@@ -4,11 +4,21 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
-/*start client*/
+/**
+ * Class used to start the client.
+ */
 public class MainClient {
 
+    /**
+     * The {@link View} used to display the game.
+     */
     private static View view;
 
+    /**
+     * Creates a new {@link MainClient} with the given {@link View}.
+     *
+     * @param view The {@link View} used to display the game.
+     */
     public MainClient(View view) {
         MainClient.view = view;
     }
@@ -19,6 +29,9 @@ public class MainClient {
         view.run();
     }
 
+    /**
+     * Restarts the TUI.
+     */
     public static void restartTUI() {
         view = new TUI();
         view.run();

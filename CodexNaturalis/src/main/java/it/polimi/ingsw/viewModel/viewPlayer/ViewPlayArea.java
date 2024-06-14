@@ -134,6 +134,10 @@ public final class ViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the uncovered items in the play area.
+     * @return A string representation of the uncovered items in the play area.
+     */
     private String printUncoveredItems() {
         StringBuilder sb = new StringBuilder();
         sb.append("  Uncovered Items:");
@@ -147,6 +151,10 @@ public final class ViewPlayArea implements Serializable, CardConverter {
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of the opponent's play area.
+     * @return A string representation of the opponent's play area.
+     */
     public String printPlayArea(){
         return printPlayedCards() + "\n" + printHand() + "\n" + printUncoveredItems() + "\n";
     }

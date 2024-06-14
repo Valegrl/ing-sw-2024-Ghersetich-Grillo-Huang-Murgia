@@ -102,12 +102,6 @@ public class TUI implements View {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (stopInputRead && serverDisconnected) {
-            clearConsole();
-            state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
-            MainClient.restartTUI();
-            return "$stop";
-        }
         if (stopInputRead) {
             waitingForInput = false;
             if (serverDisconnected) {
