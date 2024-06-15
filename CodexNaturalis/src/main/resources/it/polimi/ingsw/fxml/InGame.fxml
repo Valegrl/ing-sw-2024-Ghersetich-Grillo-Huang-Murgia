@@ -75,14 +75,14 @@
          </top>
          <right>
             <AnchorPane id="rightAnchor" prefHeight="813.0" prefWidth="270.0" BorderPane.alignment="CENTER">
-                  <TextArea id="chatArea" fx:id="chatArea" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" wrapText="true" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
+                  <TextArea id="chatArea" fx:id="chatArea" editable="false" layoutX="19.0" layoutY="43.0" prefHeight="180.0" prefWidth="234.0" wrapText="true" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <TextField id="chatInput" fx:id="chatInput" layoutX="19.0" layoutY="237.0" prefHeight="25.0" prefWidth="234.0" />
                   <Text id="chatTitle" layoutX="19.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHAT">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="gameUpdatesArea" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
+                  <TextArea fx:id="gameUpdatesArea" editable="false" layoutX="18.0" layoutY="436.0" prefHeight="377.0" prefWidth="233.0" wrapText="true" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="17.0" />
                   <ComboBox fx:id="chatSelection" layoutX="101.0" layoutY="11.0" prefWidth="150.0" />
                   <ComboBox fx:id="playAreaSelection" layoutX="18.0" layoutY="348.0" prefHeight="25.0" prefWidth="235.0" />
                   <Button layoutX="107.0" layoutY="384.0" mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
