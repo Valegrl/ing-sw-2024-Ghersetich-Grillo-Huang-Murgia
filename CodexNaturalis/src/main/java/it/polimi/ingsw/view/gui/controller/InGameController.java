@@ -621,8 +621,6 @@ public class InGameController extends FXMLController {
     @FXML
     public void showPlayArea() {
         String playAreaChoice = playAreaSelection.getValue();
-        List<ImageView> handCards = Arrays.asList(handCard0, handCard1, handCard2);
-        List<ImageView> opponentHandCards = Arrays.asList(opponentHandCard0, opponentHandCard1, opponentHandCard2);
 
         if(playAreaChoice.equals("Your board")){
             secretObjectiveAnchor.setVisible(true);
@@ -692,64 +690,58 @@ public class InGameController extends FXMLController {
         }
 
         //Add available slots
-        for(int j = 0; j <= gridHeight; j++) {
-            for (int k = 0; k <= gridLength; k++) {
-                int currX = k + minX - 1;
-                int currY = maxY - j + 1;
+        for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getAvailablePos()){
+            int k = coordinate.getX() - minX + 1;
+            int j = maxY - coordinate.getY() + 1;
 
-                if(viewModel.getSelfPlayer().getPlayArea().getAvailablePos().contains(new Coordinate(currX, currY))){
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png");
-                StackPane availableStackPane = stackPaneBuilder(image);
-                Node nodeToRemove = null;
-                    for (Node node : gridPane.getChildren()) {
-                        if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                            nodeToRemove = node;
-                            break;
-                        }
-                    }
-                    gridPane.getChildren().remove(nodeToRemove);
-                    gridPane.add(availableStackPane, k, j);
-
-                    //For drag and drop of the card
-                    if(controller.hasTurn() && !hasToDraw) {
-                        availableStackPane.setOnDragOver(event -> {
-                            if (event.getGestureSource() != availableStackPane && event.getDragboard().hasImage()) {
-                                event.acceptTransferModes(TransferMode.MOVE);
-                            }
-                            event.consume();
-                        });
-                        int finalK = k;
-                        int finalJ = j;
-
-                        availableStackPane.setOnDragDropped(event -> {
-                            Dragboard db = event.getDragboard();
-                            boolean success = false;
-                            if (db.hasImage() && db.hasString()) {
-                                StackPane stackPaneDropped;
-                                stackPaneDropped = stackPaneBuilder(db.getImage());
-                                Node nodeToRemoveDB = null;
-                                for (Node node : gridPane.getChildren()) {
-                                    if (GridPane.getColumnIndex(node) == finalK && GridPane.getRowIndex(node) == finalJ) {
-                                        nodeToRemoveDB = node;
-                                    }
-                                }
-                                gridPane.getChildren().remove(nodeToRemoveDB);
-                                gridPane.add(stackPaneDropped, finalK, finalJ);
-                                success = true;
-
-                                Coordinate coordinate = new Coordinate(currX, currY);
-                                controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
-                                System.out.println("Waiting for server response on card " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
-                                waitForResponse();
-                                //return;
-                            }
-                            event.setDropCompleted(success);
-                            event.consume();
-                        });
-                    }
+            Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png");
+            StackPane availableStackPane = stackPaneBuilder(image);
+            Node nodeToRemove = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
+                    nodeToRemove = node;
+                    break;
                 }
             }
+            gridPane.getChildren().remove(nodeToRemove);
+            gridPane.add(availableStackPane, k, j);
+
+            //For drag and drop of the card
+            if(controller.hasTurn() && !hasToDraw) {
+                availableStackPane.setOnDragOver(event -> {
+                    if (event.getGestureSource() != availableStackPane && event.getDragboard().hasImage()) {
+                        event.acceptTransferModes(TransferMode.MOVE);
+                    }
+                    event.consume();
+                });
+                availableStackPane.setOnDragDropped(event -> {
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+                    if (db.hasImage() && db.hasString()) {
+                        StackPane stackPaneDropped;
+                        stackPaneDropped = stackPaneBuilder(db.getImage());
+                        Node nodeToRemoveDB = null;
+                        for (Node node : gridPane.getChildren()) {
+                            if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
+                                nodeToRemoveDB = node;
+                                break;
+                            }
+                        }
+                        gridPane.getChildren().remove(nodeToRemoveDB);
+                        gridPane.add(stackPaneDropped, k, j);
+                        success = true;
+
+                        controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
+                        System.out.println("Waiting for server response on card " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
+                        waitForResponse();
+                        //return;
+                    }
+                    event.setDropCompleted(success);
+                    event.consume();
+                });
+            }
         }
+
         //Add start card
         ImmStartCard immStartCard = viewModel.getSelfPlayer().getPlayArea().getStartCard();
         StackPane startStackPane;
@@ -764,41 +756,38 @@ public class InGameController extends FXMLController {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == -minX + 1 && GridPane.getRowIndex(node) == maxY + 1) {
                 startNodeToRemove = node;
+                break;
             }
         }
         gridPane.getChildren().remove(startNodeToRemove);
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
 
         //Adds the played cards in the grid
-        for(int j = 0; j <= gridHeight; j++) {
-            for (int k = 0; k <= gridLength; k++) {
-                for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getPlayedCards().keySet()){
-                    int currX = coordinate.getX();
-                    int currY = coordinate.getY();
-                    if(currX - minX + 1 == k && maxY - currY + 1 == j){
-                        System.out.println("Showing the played card " + viewModel.getSelfPlayer().getPlayArea().getPlayedCards().get(coordinate).getId() + " at " + currX + " " + currY);
-                        ImmPlayableCard immPlayableCard = viewModel.getSelfPlayer().getPlayArea().getPlayedCards().get(coordinate);
-                        StackPane playedStackPane;
-                        if (!immPlayableCard.isFlipped()) {
-                            image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
-                        } else {
-                            image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
-                        }
-                        playedStackPane = stackPaneBuilder(image);
+        for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getPlayedCards().keySet()) {
+            int k = coordinate.getX() - minX + 1;
+            int j = maxY - coordinate.getY() + 1;
 
-                        Node nodeToRemove = null;
-                        for (Node node : gridPane.getChildren()) {
-                            if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                                nodeToRemove = node;
-                            }
-                        }
-                        gridPane.getChildren().remove(nodeToRemove);
-                        gridPane.add(playedStackPane, k, j);
-                    }
+            ImmPlayableCard immPlayableCard = viewModel.getSelfPlayer().getPlayArea().getPlayedCards().get(coordinate);
+            StackPane playedStackPane;
+            if (!immPlayableCard.isFlipped()) {
+                image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
+            } else {
+                image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
+            }
+            playedStackPane = stackPaneBuilder(image);
+
+            Node nodeToRemove = null;
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
+                    nodeToRemove = node;
+                    break;
                 }
             }
+            gridPane.getChildren().remove(nodeToRemove);
+            gridPane.add(playedStackPane, k, j);
         }
     }
+
     private void showOpponentGridPane(String opponent){
         gridPane.setManaged(false);
         gridPane.setVisible(false);
@@ -859,33 +848,29 @@ public class InGameController extends FXMLController {
         opponentGridPane.getChildren().remove(startNodeToRemove);
         opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
 
-        //Adds the played cards in the grid
-        for(int j = 0; j <= gridHeight; j++) {
-            for (int k = 0; k <= gridLength; k++) {
-                for(Coordinate coordinate : viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().keySet()){
-                    int currX = coordinate.getX();
-                    int currY = coordinate.getY();
-                    if(currX - minX + 1 == k && maxY - currY + 1 == j){
-                        System.out.println("Showing the opponent played card " + viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().get(coordinate).getId() + " at " + currX + " " + currY);
-                        ImmPlayableCard immPlayableCard = viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().get(coordinate);
-                        StackPane playedStackPane;
-                        if (!immPlayableCard.isFlipped()) {
-                            image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
-                        } else {
-                            image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
-                        }
-                        playedStackPane = stackPaneBuilder(image);
-                        Node nodeToRemove = null;
-                        for (Node node : opponentGridPane.getChildren()) {
-                            if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                                nodeToRemove = node;
-                            }
-                        }
-                        opponentGridPane.getChildren().remove(nodeToRemove);
-                        opponentGridPane.add(playedStackPane, k, j);
-                    }
+        //Adds the opponent played cards in the grid
+        for(Coordinate coordinate : viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().keySet()) {
+            int k = coordinate.getX() - minX + 1;
+            int j = maxY - coordinate.getY() + 1;
+
+            ImmPlayableCard immPlayableCard = viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().get(coordinate);
+            StackPane playedStackPane;
+            if (!immPlayableCard.isFlipped()) {
+                image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
+            } else {
+                image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
+            }
+            playedStackPane = stackPaneBuilder(image);
+
+            Node nodeToRemove = null;
+            for (Node node : opponentGridPane.getChildren()) {
+                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
+                    nodeToRemove = node;
+                    break;
                 }
             }
+            opponentGridPane.getChildren().remove(nodeToRemove);
+            opponentGridPane.add(playedStackPane, k, j);
         }
     }
 
