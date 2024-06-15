@@ -2,10 +2,13 @@ package it.polimi.ingsw.view.gui.controller;
 
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.fromModel.OtherDrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.*;
@@ -29,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -253,20 +257,9 @@ public class InGameController extends FXMLController {
 
 
 
-    private List<ImmPlayableCard> myHand;
+    private Map<Coordinate, Node> emptyPanesMap;
 
     private ImmPlayableCard selectedPlayableCard;
-
-    //Visible cards from the decks;
-    private ImmPlayableCard goldCard0;
-
-    private ImmPlayableCard goldCard1;
-
-    private ImmPlayableCard resourceCard0;
-
-    private ImmPlayableCard resourceCard1;
-
-    private ViewModel viewModel;
 
     private boolean playFlipped;
 
@@ -308,8 +301,8 @@ public class InGameController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
-        this.viewModel = controller.getModel();
         this.hasToDraw = false;
+        emptyPanesMap = new HashMap<>();
 
         handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
         opponentCardImages = Arrays.asList(opponentHandCard0, opponentHandCard1,opponentHandCard2);
@@ -336,6 +329,7 @@ public class InGameController extends FXMLController {
 
         showCommonObjectives();
         showSecretObjective();
+
         showPlayArea();
 
         chatInput.setOnAction(new EventHandler<ActionEvent>() {
@@ -350,20 +344,57 @@ public class InGameController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch(EventID.getByID(eventID)){
             case SELF_PLACE_CARD:
-                hasToDraw = true;
                 Platform.runLater(() -> {
+                    hasToDraw = true;
                     updateAboveLabel();
-                    gameUpdatesArea.appendText(message +"\n");
                     showPlayArea();
+                    //Update decks needed for adding listeners for choosing the card to draw
+                    updateDecks();
+                    updatePoints();
+                    gameUpdatesArea.appendText(message +"\n");
                 });
                 break;
             case PLACE_CARD:
-                gameUpdatesArea.appendText(message + "\n");
-                Platform.runLater(this::showPlayArea);
+                if(feedback == Feedback.FAILURE) {
+                    Platform.runLater(() -> {
+                        showPlayArea();
+                        gameUpdatesArea.appendText(message + "\n");
+                    });
+                }
                 break;
             case OTHER_PLACE_CARD:
-                gameUpdatesArea.appendText(message + "\n");
-                Platform.runLater(this::showPlayArea);
+                Platform.runLater(() ->{
+                    //showPlayArea();
+                    updatePoints();
+                    gameUpdatesArea.appendText(message + "\n");
+                });
+                break;
+            case SELF_DRAW_CARD:
+                Platform.runLater(() -> {
+                    hasToDraw = false;
+                    updateDecks();
+                    updateHand();
+                    gameUpdatesArea.appendText(message + "\n");
+                });
+                break;
+            case OTHER_DRAW_CARD:
+                Platform.runLater(() -> {
+                    //showPlayArea();
+                    updateDecks();
+                    gameUpdatesArea.appendText(message + "\n");
+                });
+                break;
+            case NEW_TURN:
+                Platform.runLater(() -> {
+                    hasToDraw = false;
+                    updateAboveLabel();
+                    showPlayArea();
+                    //updateDecks();
+                    //updatePoints();
+                    gameUpdatesArea.appendText(message + "\n");
+                });
+                break;
+            case ENDED_GAME:
                 break;
             case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
@@ -377,25 +408,6 @@ public class InGameController extends FXMLController {
         notifyResponse();
     }
 
-    private void updateAboveLabel(){
-        if(controller.hasTurn() && !hasToDraw){
-            aboveLabel.setText("It's your turn, play a card");
-        }
-        else if(controller.hasTurn() && hasToDraw){
-            aboveLabel.setText("Now draw a card to your hand");
-        }
-        else{
-            aboveLabel.setText("Waiting for your turn");
-        }
-    }
-
-    /**
-     * This method sets the game name label with the lobby ID from the controller.
-     */
-    private void setGameName() {
-        this.gameName.setText("GAME:" + controller.getLobbyId());
-    }
-
     /**
      * This method flips the playFlipped variable and updates the hand.
      */
@@ -406,18 +418,18 @@ public class InGameController extends FXMLController {
     }
 
     /**
-     * This method sets up drag and drop functionality for each card ImageView in the player's hand.
+     * This method sets up drag and drop functionality for each card ImageView in the player's hand and each card in the Decks.
      * When a card is dragged, it sets the selectedPlayableCard to the current card,
      * creates a new Dragboard and ClipboardContent, and adds the card's image and ID to the ClipboardContent.
      * The Dragboard then consumes the drag event.
      */
-    private void addChoiceSelection(){
+    private void addHandChoiceSelection(){
         int i = 0;
         // Setups drag and select for each card ImageView in the hand
         for(ImageView cardImageView : handCardImages) {
-            if(i < myHand.size()) {
-                ImmPlayableCard currCard = myHand.get(i);
-                //Drag and drop
+            if(i < controller.getModel().getSelfPlayer().getPlayArea().getHand().size()) {
+                ImmPlayableCard currCard = controller.getModel().getSelfPlayer().getPlayArea().getHand().get(i);
+                //Drag and drop (start drag)
                 cardImageView.setOnDragDetected(event -> {
                     selectedPlayableCard = currCard;
                     Dragboard db = cardImageView.startDragAndDrop(TransferMode.MOVE);
@@ -428,7 +440,53 @@ public class InGameController extends FXMLController {
                     event.consume();
                 });
             }
+            else{
+                cardImageView.setOnDragDetected(event -> {});
+            }
             i++;
+        }
+    }
+
+    private void addDeckChoiceSelection(){
+        if(controller.hasTurn() && hasToDraw && controller.getGameStatus().equals(GameStatus.RUNNING)) {
+            if (controller.getModel().getTopResourceDeck() != null) {
+                resourceDeck.setOnMouseClicked(event -> {
+                    controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
+                    waitForResponse();
+                });
+            }
+            if (controller.getModel().getTopGoldDeck() != null) {
+                goldDeck.setOnMouseClicked(event -> {
+                    controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
+                    waitForResponse();
+                });
+            }
+
+            int i = 0;
+            for (ImageView cardImageView : visibleGoldCards) {
+                if (i < controller.getModel().getVisibleGoldCards().length) {
+                    ImmPlayableCard currCard = controller.getModel().getVisibleGoldCards()[i];
+                    int selectI = i;
+                    cardImageView.setOnMouseClicked(event ->{
+                        controller.newViewEvent(new DrawCardEvent(currCard.getType(), selectI));
+                        waitForResponse();
+                    });
+                }
+                i++;
+            }
+
+            i = 0;
+            for (ImageView cardImageView : visibleResourceCards) {
+                if (i < controller.getModel().getVisibleResourceCards().length) {
+                    ImmPlayableCard currCard = controller.getModel().getVisibleResourceCards()[i];
+                    int selectI = i;
+                    cardImageView.setOnMouseClicked(event ->{
+                        controller.newViewEvent(new DrawCardEvent(currCard.getType(), selectI));
+                        waitForResponse();
+                    });
+                }
+                i++;
+            }
         }
     }
 
@@ -437,20 +495,47 @@ public class InGameController extends FXMLController {
      * It sets the images of the visible cards and the top cards of the decks.
      */
     private void updateDecks(){
-        ImmPlayableCard[] visibleGoldCards = viewModel.getVisibleGoldCards();
-        ImmPlayableCard[] visibleResourceCards = viewModel.getVisibleResourceCards();
-
-        for(int i = 0; i < 2; i++){
-            this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), CardType.GOLD));
-            this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), CardType.RESOURCE));
+        ImmPlayableCard[] visibleGoldCards = controller.getModel().getVisibleGoldCards();
+        ImmPlayableCard[] visibleResourceCards = controller.getModel().getVisibleResourceCards();
+        int i;
+        for(i = 0; i < visibleGoldCards.length; i++){
+            //Updating the ImageViews of the gold deck
+            this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
         }
-        Item itemGoldDeck = viewModel.getTopGoldDeck();
-        Image backGoldCardImage = getBackCardImage(itemGoldDeck, CardType.GOLD);
-        goldDeck.setImage(backGoldCardImage);
+        while(i < 2){
+            this.visibleGoldCards.get(i).setImage(null);
+            this.visibleGoldCards.get(i).setVisible(false);
+        }
 
-        Item itemResourceDeck = viewModel.getTopResourceDeck();
-        Image backResourceCardImage = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
-        resourceDeck.setImage(backResourceCardImage);
+        for(i = 0; i < visibleResourceCards.length; i++){
+            //Updating the ImageViews of the resource deck
+            this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
+        }
+        while(i < 2){
+            this.visibleResourceCards.get(i).setImage(null);
+            this.visibleResourceCards.get(i).setVisible(false);
+        }
+
+        Item itemGoldDeck = controller.getModel().getTopGoldDeck();
+        if(itemGoldDeck != null) {
+            Image backGoldCardImage = getBackCardImage(itemGoldDeck, CardType.GOLD);
+            goldDeck.setImage(backGoldCardImage);
+        }
+        else{
+            goldDeck.setImage(null);
+            goldDeck.setVisible(false);
+        }
+
+        Item itemResourceDeck = controller.getModel().getTopResourceDeck();
+        if(itemResourceDeck != null) {
+            Image backResourceCardImage = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
+            resourceDeck.setImage(backResourceCardImage);
+        }
+        else{
+            resourceDeck.setImage(null);
+            goldDeck.setVisible(false);
+        }
+        addDeckChoiceSelection();
     }
 
     /**
@@ -467,25 +552,23 @@ public class InGameController extends FXMLController {
             handCard.setVisible(false);
             handCard.setManaged(false);
         }
-        myHand = viewModel.getSelfPlayer().getPlayArea().getHand();
+
         int i = 0;
-        for(ImmPlayableCard card : myHand){
+        for(ImmPlayableCard card : controller.getModel().getSelfPlayer().getPlayArea().getHand()){
             ImageView currImageView = handCardImages.get(i);
-                if (!playFlipped) {
-                    currImageView.setImage(getFrontCardImage(card.getId(), card.getType()));
-                }
-                else {
-                    currImageView.setImage(getBackCardImage(card.getPermanentResource(), card.getType()));
-                }
-                i++;
+            if (!playFlipped) {
+                currImageView.setImage(getFrontCardImage(card.getId(), card.getType()));
+            }
+            else {
+                currImageView.setImage(getBackCardImage(card.getPermanentResource(), card.getType()));
+            }
+            i++;
         }
         while(i < handCardImages.size()){
             handCardImages.get(i).setImage(null);
-            handCardImages.get(i).setVisible(false);
-            handCardImages.get(i).setManaged(false);
             i++;
         }
-        addChoiceSelection();
+        addHandChoiceSelection();
     }
 
     private void updateOpponentHand(String opponent){
@@ -497,7 +580,7 @@ public class InGameController extends FXMLController {
             handCard.setVisible(true);
             handCard.setManaged(true);
         }
-        List<BackPlayableCard> backHand = viewModel.getOpponent(opponent).getPlayArea().getHand();
+        List<BackPlayableCard> backHand = controller.getModel().getOpponent(opponent).getPlayArea().getHand();
         int i = 0;
         for(BackPlayableCard card : backHand){
             ImageView currImageView = opponentCardImages.get(i);
@@ -506,108 +589,7 @@ public class InGameController extends FXMLController {
         }
         while(i < opponentCardImages.size()){
             opponentCardImages.get(i).setImage(null);
-            opponentCardImages.get(i).setVisible(false);
-            opponentCardImages.get(i).setManaged(false);
             i++;
-        }
-    }
-
-    /**
-     * This method updates the points by getting the scoreboard from the viewModel.
-     * It sets the points and the occurrences of the items for each player.
-     */
-    private void updatePoints(){
-        int i = 0;
-        int currPoints;
-
-        Map<Item, Integer> currUncoveredItems;
-        Map<String, Integer> scoreboard = viewModel.getScoreboard();
-        //Hides everything so it can show the new scoreboard
-        for(AnchorPane pane : uncoveredList){
-            pane.setVisible(false);
-        }
-        //Cycles through the users in game, even the ones who got disconnected
-        for(String user : controller.getInMatchPlayerUsernames()){
-            uncoveredList.get(i).setVisible(true);
-            //Disconnected users have an offline tag
-            if(controller.isOnline(user)) {
-                uncoveredUsernames.get(i).setText(user);
-            }
-            else{
-                uncoveredUsernames.get(i).setText(user + " (offline)");
-            }
-
-            //Takes the points of the current player, since the index i hasn't changed, it refers to the current player
-            currPoints = scoreboard.get(user);
-            playerPoints.get(i).setText(String.valueOf(currPoints));
-
-            //Checks whether the current user is this user and then currUncoveredItems gets the right map accordingly
-            if(user.equals(controller.getUsername())){
-                currUncoveredItems = viewModel.getSelfPlayer().getPlayArea().getUncoveredItems();
-            }
-            else {
-                currUncoveredItems = viewModel.getOpponent(user).getPlayArea().getUncoveredItems();
-            }
-
-            //Using the lists of occurrences, updates current player items' number
-            for(Item item : currUncoveredItems.keySet()){
-                switch(item){
-                    case FUNGI:
-                        fungiOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case ANIMAL:
-                        animalOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case PLANT:
-                        plantOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case INSECT:
-                        insectOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case INKWELL:
-                        inkwellOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case QUILL:
-                        quillOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                    case MANUSCRIPT:
-                        manuscriptOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
-                        break;
-                }
-            }
-            i++;
-        }
-    }
-
-    /**
-     * This method updates the chat options by adding the general chat and the private chats with the other players.
-     */
-    private void updateChatOptions(){
-        chatSelection.getItems().clear();
-
-        chatSelection.getItems().add("General");
-        chatSelection.getSelectionModel().select("General");
-
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(!controller.getUsername().equals(user)){
-                chatSelection.getItems().add("User: " + user);
-            }
-        }
-    }
-
-    /**
-     * This method updates the visible play areas by adding the current player's board and the opponents' boards.
-     */
-    private void updateVisiblePlayAreasOptions(){
-        playAreaSelection.getItems().clear();
-
-        playAreaSelection.getItems().add("Your board");
-        playAreaSelection.getSelectionModel().select("Your board");
-
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(!controller.getUsername().equals(user)){
-                playAreaSelection.getItems().add("Opponent: " + user);
-            }
         }
     }
 
@@ -660,8 +642,9 @@ public class InGameController extends FXMLController {
         maxY = 0;
         minY = 0;
         gridPane.getChildren().clear();
+        emptyPanesMap.clear();
 
-        for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getPlayedCards().keySet()){
+        for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().keySet()){
             int currX = coordinate.getX();
             int currY = coordinate.getY();
             if(currX > maxX){
@@ -686,16 +669,19 @@ public class InGameController extends FXMLController {
                 Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
+                emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
             }
         }
 
+
         //Add available slots
-        for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getAvailablePos()){
+        for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getAvailablePos()){
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 
             Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png");
             StackPane availableStackPane = stackPaneBuilder(image);
+            /*
             Node nodeToRemove = null;
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
@@ -703,6 +689,10 @@ public class InGameController extends FXMLController {
                     break;
                 }
             }
+            gridPane.getChildren().remove(nodeToRemove);
+            gridPane.add(availableStackPane, k, j);
+             */
+            Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             gridPane.getChildren().remove(nodeToRemove);
             gridPane.add(availableStackPane, k, j);
 
@@ -717,20 +707,8 @@ public class InGameController extends FXMLController {
                 availableStackPane.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
                     boolean success = false;
-                    if (db.hasImage() && db.hasString()) {
-                        StackPane stackPaneDropped;
-                        stackPaneDropped = stackPaneBuilder(db.getImage());
-                        Node nodeToRemoveDB = null;
-                        for (Node node : gridPane.getChildren()) {
-                            if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                                nodeToRemoveDB = node;
-                                break;
-                            }
-                        }
-                        gridPane.getChildren().remove(nodeToRemoveDB);
-                        gridPane.add(stackPaneDropped, k, j);
+                    if (db.hasImage() && db.hasString()){
                         success = true;
-
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         System.out.println("Waiting for server response on card " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
                         waitForResponse();
@@ -743,7 +721,7 @@ public class InGameController extends FXMLController {
         }
 
         //Add start card
-        ImmStartCard immStartCard = viewModel.getSelfPlayer().getPlayArea().getStartCard();
+        ImmStartCard immStartCard = controller.getModel().getSelfPlayer().getPlayArea().getStartCard();
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
@@ -752,6 +730,7 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
         }
         startStackPane = stackPaneBuilder(image);
+        /*
         Node startNodeToRemove = null;
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == -minX + 1 && GridPane.getRowIndex(node) == maxY + 1) {
@@ -761,13 +740,17 @@ public class InGameController extends FXMLController {
         }
         gridPane.getChildren().remove(startNodeToRemove);
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
+         */
+        Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
+        gridPane.getChildren().remove(startNodeToRemove);
+        gridPane.add(startStackPane, -minX + 1, maxY + 1);
 
         //Adds the played cards in the grid
-        for(Coordinate coordinate : viewModel.getSelfPlayer().getPlayArea().getPlayedCards().keySet()) {
+        for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().keySet()) {
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 
-            ImmPlayableCard immPlayableCard = viewModel.getSelfPlayer().getPlayArea().getPlayedCards().get(coordinate);
+            ImmPlayableCard immPlayableCard = controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().get(coordinate);
             StackPane playedStackPane;
             if (!immPlayableCard.isFlipped()) {
                 image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
@@ -775,7 +758,7 @@ public class InGameController extends FXMLController {
                 image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
             }
             playedStackPane = stackPaneBuilder(image);
-
+            /*
             Node nodeToRemove = null;
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
@@ -783,6 +766,10 @@ public class InGameController extends FXMLController {
                     break;
                 }
             }
+            gridPane.getChildren().remove(nodeToRemove);
+            gridPane.add(playedStackPane, k, j);
+             */
+            Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             gridPane.getChildren().remove(nodeToRemove);
             gridPane.add(playedStackPane, k, j);
         }
@@ -800,8 +787,9 @@ public class InGameController extends FXMLController {
         maxY = 0;
         minY = 0;
         opponentGridPane.getChildren().clear();
+        emptyPanesMap.clear();
 
-        for(Coordinate coordinate : viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().keySet()){
+        for(Coordinate coordinate : controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().keySet()){
             int currX = coordinate.getX();
             int currY = coordinate.getY();
             if(currX > maxX){
@@ -826,11 +814,12 @@ public class InGameController extends FXMLController {
                 Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 opponentGridPane.add(emptyStackPane, k, j);
+                emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
             }
         }
 
         //Add start card
-        ImmStartCard immStartCard = viewModel.getOpponent(opponent).getPlayArea().getStartCard();
+        ImmStartCard immStartCard = controller.getModel().getOpponent(opponent).getPlayArea().getStartCard();
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
@@ -839,6 +828,7 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
         }
         startStackPane = stackPaneBuilder(image);
+        /*
         Node startNodeToRemove = null;
         for (Node node : opponentGridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == -minX + 1 && GridPane.getRowIndex(node) == maxY + 1) {
@@ -847,13 +837,17 @@ public class InGameController extends FXMLController {
         }
         opponentGridPane.getChildren().remove(startNodeToRemove);
         opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
+         */
+        Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
+        opponentGridPane.getChildren().remove(startNodeToRemove);
+        opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
 
         //Adds the opponent played cards in the grid
-        for(Coordinate coordinate : viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().keySet()) {
+        for(Coordinate coordinate : controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().keySet()) {
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 
-            ImmPlayableCard immPlayableCard = viewModel.getOpponent(opponent).getPlayArea().getPlayedCards().get(coordinate);
+            ImmPlayableCard immPlayableCard = controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().get(coordinate);
             StackPane playedStackPane;
             if (!immPlayableCard.isFlipped()) {
                 image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
@@ -861,7 +855,7 @@ public class InGameController extends FXMLController {
                 image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
             }
             playedStackPane = stackPaneBuilder(image);
-
+            /*
             Node nodeToRemove = null;
             for (Node node : opponentGridPane.getChildren()) {
                 if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
@@ -871,6 +865,129 @@ public class InGameController extends FXMLController {
             }
             opponentGridPane.getChildren().remove(nodeToRemove);
             opponentGridPane.add(playedStackPane, k, j);
+             */
+            Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
+            opponentGridPane.getChildren().remove(nodeToRemove);
+            opponentGridPane.add(playedStackPane, k, j);
+        }
+    }
+
+
+    private void updateAboveLabel(){
+        if(controller.hasTurn() && !hasToDraw){
+            aboveLabel.setText("It's your turn, play a card");
+        }
+        else if(controller.hasTurn() && hasToDraw){
+            aboveLabel.setText("Now draw a card to your hand");
+        }
+        else{
+            aboveLabel.setText("Waiting for your turn");
+        }
+    }
+
+    /**
+     * This method sets the game name label with the lobby ID from the controller.
+     */
+    private void setGameName() {
+        this.gameName.setText("GAME:" + controller.getLobbyId());
+    }
+
+    /**
+     * This method updates the chat options by adding the general chat and the private chats with the other players.
+     */
+    private void updateChatOptions(){
+        chatSelection.getItems().clear();
+
+        chatSelection.getItems().add("General");
+        chatSelection.getSelectionModel().select("General");
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                chatSelection.getItems().add("User: " + user);
+            }
+        }
+    }
+
+    /**
+     * This method updates the visible play areas by adding the current player's board and the opponents' boards.
+     */
+    private void updateVisiblePlayAreasOptions(){
+        playAreaSelection.getItems().clear();
+
+        playAreaSelection.getItems().add("Your board");
+        playAreaSelection.getSelectionModel().select("Your board");
+
+        for(String user : controller.getPlayersStatus().keySet()){
+            if(!controller.getUsername().equals(user)){
+                playAreaSelection.getItems().add("Opponent: " + user);
+            }
+        }
+    }
+
+    /**
+     * This method updates the points by getting the scoreboard from the viewModel.
+     * It sets the points and the occurrences of the items for each player.
+     */
+    private void updatePoints(){
+        int i = 0;
+        int currPoints;
+
+        Map<Item, Integer> currUncoveredItems;
+        Map<String, Integer> scoreboard = controller.getModel().getScoreboard();
+        //Hides everything so it can show the new scoreboard
+        for(AnchorPane pane : uncoveredList){
+            pane.setVisible(false);
+        }
+        //Cycles through the users in game, even the ones who got disconnected
+        for(String user : controller.getInMatchPlayerUsernames()){
+            uncoveredList.get(i).setVisible(true);
+            //Disconnected users have an offline tag
+            if(controller.isOnline(user)) {
+                uncoveredUsernames.get(i).setText(user);
+            }
+            else{
+                uncoveredUsernames.get(i).setText(user + " (offline)");
+            }
+
+            //Takes the points of the current user
+            currPoints = scoreboard.get(user);
+            playerPoints.get(i).setText(String.valueOf(currPoints));
+
+            //Checks whether the current user is this user and then currUncoveredItems gets the right map accordingly
+            if(user.equals(controller.getUsername())){
+                currUncoveredItems = controller.getModel().getSelfPlayer().getPlayArea().getUncoveredItems();
+            }
+            else {
+                currUncoveredItems = controller.getModel().getOpponent(user).getPlayArea().getUncoveredItems();
+            }
+
+            //Using the lists of occurrences, updates current player items' number
+            for(Item item : currUncoveredItems.keySet()){
+                switch(item){
+                    case FUNGI:
+                        fungiOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case ANIMAL:
+                        animalOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case PLANT:
+                        plantOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case INSECT:
+                        insectOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case INKWELL:
+                        inkwellOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case QUILL:
+                        quillOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                    case MANUSCRIPT:
+                        manuscriptOccurrences.get(i).setText(String.valueOf(currUncoveredItems.get(item)));
+                        break;
+                }
+            }
+            i++;
         }
     }
 
@@ -879,7 +996,7 @@ public class InGameController extends FXMLController {
      * It gets the common objectives from the viewModel and sets the images of the commonObjectiveCard0 and commonObjectiveCard1.
      */
     private void showCommonObjectives(){
-        ImmObjectiveCard[] objectiveCards = viewModel.getCommonObjectives();
+        ImmObjectiveCard[] objectiveCards = controller.getModel().getCommonObjectives();
         ImmObjectiveCard objectiveCard0 = objectiveCards[0];
         ImmObjectiveCard objectiveCard1 = objectiveCards[1];
         commonObjectiveCard0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png"));
@@ -891,7 +1008,7 @@ public class InGameController extends FXMLController {
      * It gets the secret objective from the viewModel and sets the image of the secretObjectiveCard.
      */
     private void showSecretObjective(){
-        ImmObjectiveCard secretObjCard = viewModel.getSelfPlayer().getSecretObjective();
+        ImmObjectiveCard secretObjCard = controller.getModel().getSelfPlayer().getSecretObjective();
         secretObjectiveCard.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png"));
     }
 
