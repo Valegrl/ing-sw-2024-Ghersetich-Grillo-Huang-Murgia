@@ -74,7 +74,7 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" maxHeight="200.0" minHeight="200.0" minWidth="1870.0" spacing="20.0" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="110.0">
+            <VBox alignment="CENTER" minHeight="200.0" minWidth="110.0">
                <children>
                   <Button id="quitButton" mnemonicParsing="false" onAction="#quit" text="Quit" />
                </children>
@@ -468,7 +468,7 @@
             </Label>
             <ComboBox fx:id="playAreaSelection" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" />
             <Button mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
-            <VBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308">
+            <VBox alignment="BOTTOM_CENTER">
                <children>
                   <TextArea fx:id="gameUpdatesArea" editable="false" minHeight="350.0" minWidth="250.0" wrapText="true">
                      <VBox.margin>

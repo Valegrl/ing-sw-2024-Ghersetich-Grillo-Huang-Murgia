@@ -423,7 +423,7 @@ public class InGameController extends FXMLController {
             case ENDED_GAME:
                 Platform.runLater(() ->{
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EndedGame.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EndedGamev2.fxml"));
                         Parent root = loader.load();
                         EndedGameController nextController = loader.getController();
 
@@ -632,7 +632,6 @@ public class InGameController extends FXMLController {
      * It sets the images of the hand cards based on the playFlipped variable.
      */
     private void updateHand(){
-        int i = 0;
         //The fxml has 6 imageView, 3 for the current player's hand and 3 for the opponents
         for(ImageView handCard : opponentCardImages){
             handCard.setVisible(false);
@@ -640,6 +639,7 @@ public class InGameController extends FXMLController {
         }
 
         //Updates the imageView of this user based on the hand from the viewModel
+        int i = 0;
         for(ImmPlayableCard card : controller.getModel().getSelfPlayer().getPlayArea().getHand()){
             ImageView currImageView = handCardImages.get(i);
             currImageView.setManaged(true);
@@ -1127,59 +1127,6 @@ public class InGameController extends FXMLController {
      */
     private void sendPublicMessage(String message){
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
-    }
-
-    /**
-     * This method creates a StackPane with an ImageView as its child.
-     * The ImageView is set with the provided Image.
-     * The StackPane is set with a fixed width of 113 and a fixed height of 60.
-     * The ImageView is set with a fit height of 100 and a fit width of 150, and its pickOnBounds and preserveRatio properties are set to true.
-     * The ImageView is then added to the StackPane's children.
-     *
-     * @param image The Image to be set on the ImageView.
-     * @return The created StackPane with the ImageView as its child.
-     */
-    private StackPane stackPaneBuilder(Image image){
-        //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
-
-        StackPane stackPane = new StackPane();
-        stackPane.setMaxWidth(113);
-        stackPane.setMinWidth(113);
-        stackPane.setMaxHeight(60);
-        stackPane.setMinHeight(60);
-
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(150);
-        imageView.setImage(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-
-        stackPane.getChildren().add(imageView);
-
-        return stackPane;
-    }
-
-    /**
-     * This method returns an Image object based on the provided Token.
-     * It uses a switch statement to determine which image to return based on the Token.
-     * If the Token is RED, it returns the image for the red token.
-     * If the Token is BLUE, it returns the image for the blue token.
-     * If the Token is GREEN, it returns the image for the green token.
-     * If the Token is YELLOW, it returns the image for the yellow token.
-     * If the Token is not one of the above, it returns null.
-     *
-     * @param token The Token to determine which image to return.
-     * @return The Image object for the provided Token, or null if the Token is not one of the specified cases.
-     */
-    private Image getTokenImage(Token token){
-        return switch (token) {
-            case RED -> new Image("/it/polimi/ingsw/images/icons/RedToken.png");
-            case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png");
-            case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png");
-            case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png");
-            default -> null;
-        };
     }
 
     /**

@@ -1,35 +1,304 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-
-<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane stylesheets="@../css/EndedGamev2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.EndedGameController">
    <children>
-      <BorderPane minHeight="1080.0" minWidth="1920.0">
+      <BorderPane id="borderPane" minHeight="1080.0" minWidth="1920.0">
          <top>
-            <HBox alignment="CENTER_LEFT" minHeight="100.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
                <children>
-                  <HBox alignment="CENTER_LEFT" minHeight="100.0" minWidth="500.0">
+                  <HBox alignment="CENTER_LEFT" minHeight="50.0" minWidth="500.0">
                      <children>
-                        <Label text="Game" />
+                        <Label id="gameName" fx:id="gameName" text="Game" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
-                  <HBox alignment="CENTER" minWidth="500.0">
+                  <HBox alignment="CENTER" maxWidth="1000.0" minHeight="50.0" minWidth="1000.0">
                      <children>
-                        <Label text="Result" />
+                        <Label text="Game ended. Here are the results:" />
                      </children>
                   </HBox>
                </children>
             </HBox>
          </top>
+         <left>
+            <VBox alignment="CENTER" maxWidth="400.0" minWidth="400.0" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <VBox alignment="CENTER" minHeight="400.0" spacing="10.0">
+                     <children>
+                        <Label text="Leaderboard" />
+                        <VBox alignment="CENTER" minHeight="300.0" spacing="10.0">
+                           <children>
+                              <HBox fx:id="player1" alignment="CENTER_RIGHT" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
+                                       <children>
+                                          <Text fx:id="username1" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <ImageView fx:id="token1" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets right="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER" minWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/goldMedal.png" />
+                                             </image></ImageView>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="90.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/pointsIcon.png" />
+                                             </image></ImageView>
+                                          <Text fx:id="points1" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                       </children>
+                                    </HBox>
+                                 </children></HBox>
+                              <HBox fx:id="player2" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="210.0" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
+                                       <children>
+                                          <Text fx:id="username2" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <ImageView fx:id="token2" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets right="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER" minWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/silverMedal.png" />
+                                             </image></ImageView>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="90.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/pointsIcon.png" />
+                                             </image></ImageView>
+                                          <Text fx:id="points2" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="player3" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="155.0" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
+                                       <children>
+                                          <Text fx:id="username3" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <ImageView fx:id="token3" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets right="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER" minWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/bronzeMedal.png" />
+                                             </image></ImageView>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="90.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/pointsIcon.png" />
+                                             </image></ImageView>
+                                          <Text fx:id="points3" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="player4" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="100.0" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
+                                       <children>
+                                          <Text fx:id="username4" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <ImageView fx:id="token4" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets right="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER" minWidth="200.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="90.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons/pointsIcon.png" />
+                                             </image></ImageView>
+                                          <Text fx:id="points4" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER" minHeight="400.0" spacing="20.0">
+                     <children>
+                        <VBox alignment="CENTER" minWidth="150.0" spacing="10.0">
+                           <children>
+                              <Label text="Resource cards" />
+                              <ImageView fx:id="topResourceCard" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <ImageView fx:id="visibleResourceCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <ImageView fx:id="visibleResourceCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" minWidth="150.0" spacing="10.0">
+                           <children>
+                              <Label text="Gold cards" />
+                              <ImageView fx:id="topGoldCard" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <ImageView fx:id="visibleGoldCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <ImageView fx:id="visibleGoldCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children></VBox>
+         </left>
+         <bottom>
+            <HBox alignment="CENTER_LEFT" maxHeight="150.0" minHeight="150.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" minWidth="400.0">
+                     <children>
+                        <Button id="quitButton" mnemonicParsing="false" onAction="#goMainMenu" text="Quit" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" maxWidth="1000.0" minWidth="1000.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Hand" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                    <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" layoutX="160.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="275.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Common objectives" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <ImageView fx:id="commonObjective0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="commonObjective1" fitHeight="100.0" fitWidth="150.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="590.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Label text="Secret objective" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <ImageView fx:id="secretObjective" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <right>
+            <VBox alignment="CENTER" maxWidth="270.0" minWidth="270.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" spacing="10.0">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <Label text=" SHOWING PLAY AREA">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ComboBox fx:id="playAreaSelection" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" />
+                  <Button mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
+         </right>
+         <center>
+            <StackPane>
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+                     <content>
+                        <StackPane maxHeight="Infinity" maxWidth="Infinity">
+                           <children>
+                              <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true">
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" maxWidth="115.0" minWidth="115.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints fillHeight="false" maxHeight="60.0" minHeight="60.0" valignment="CENTER" vgrow="NEVER" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </StackPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </StackPane>
+         </center>
       </BorderPane>
    </children>
 </StackPane>

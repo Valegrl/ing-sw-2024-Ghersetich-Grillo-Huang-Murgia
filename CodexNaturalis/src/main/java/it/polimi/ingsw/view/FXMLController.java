@@ -3,8 +3,11 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.view.controller.ViewController;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -171,6 +174,59 @@ public abstract class FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png");
         }
         return image;
+    }
+
+    /**
+     * This method returns an Image object based on the provided Token.
+     * It uses a switch statement to determine which image to return based on the Token.
+     * If the Token is RED, it returns the image for the red token.
+     * If the Token is BLUE, it returns the image for the blue token.
+     * If the Token is GREEN, it returns the image for the green token.
+     * If the Token is YELLOW, it returns the image for the yellow token.
+     * If the Token is not one of the above, it returns null.
+     *
+     * @param token The Token to determine which image to return.
+     * @return The Image object for the provided Token, or null if the Token is not one of the specified cases.
+     */
+    public Image getTokenImage(Token token){
+        return switch (token) {
+            case RED -> new Image("/it/polimi/ingsw/images/icons/RedToken.png");
+            case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png");
+            case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png");
+            case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png");
+            default -> null;
+        };
+    }
+
+    /**
+     * This method creates a StackPane with an ImageView as its child.
+     * The ImageView is set with the provided Image.
+     * The StackPane is set with a fixed width of 113 and a fixed height of 60.
+     * The ImageView is set with a fit height of 100 and a fit width of 150, and its pickOnBounds and preserveRatio properties are set to true.
+     * The ImageView is then added to the StackPane's children.
+     *
+     * @param image The Image to be set on the ImageView.
+     * @return The created StackPane with the ImageView as its child.
+     */
+    public StackPane stackPaneBuilder(Image image){
+        //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
+
+        StackPane stackPane = new StackPane();
+        stackPane.setMaxWidth(113);
+        stackPane.setMinWidth(113);
+        stackPane.setMaxHeight(60);
+        stackPane.setMinHeight(60);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(150);
+        imageView.setImage(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+
+        stackPane.getChildren().add(imageView);
+
+        return stackPane;
     }
 
 }

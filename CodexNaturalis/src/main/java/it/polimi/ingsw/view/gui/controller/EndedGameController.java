@@ -1,101 +1,155 @@
 package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
+import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.card.CardType;
+import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.viewModel.EndedGameData;
+import it.polimi.ingsw.viewModel.ViewModel;
+import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EndedGameController extends FXMLController {
 
     @FXML
-    private Label congratulationsLabel;
+    private ImageView topGoldCard;
 
     @FXML
-    private Label gameEndedLabel;
+    private ImageView visibleGoldCard0;
 
     @FXML
-    private AnchorPane leaderboardAnchor1;
+    private ImageView visibleGoldCard1;
 
     @FXML
-    private AnchorPane leaderboardAnchor2;
+    private ImageView topResourceCard;
 
     @FXML
-    private AnchorPane leaderboardAnchor3;
+    private ImageView visibleResourceCard0;
 
     @FXML
-    private AnchorPane leaderboardAnchor4;
-
-    @FXML
-    private Label leaderboardLabel;
-
-    @FXML
-    private VBox leaderboardVbox;
+    private ImageView visibleResourceCard1;
 
     @FXML
     private Label gameName;
 
     @FXML
-    private AnchorPane mainAnchor;
+    private ImageView handCard0;
 
     @FXML
-    private Button newgameButton;
+    private ImageView handCard1;
 
     @FXML
-    private RadioButton playAreaButton1;
+    private ImageView handCard2;
 
     @FXML
-    private RadioButton playAreaButton2;
+    private ImageView commonObjective0;
 
     @FXML
-    private RadioButton playAreaButton3;
+    private ImageView commonObjective1;
 
     @FXML
-    private RadioButton playAreaButton4;
+    private ImageView secretObjective;
 
     @FXML
-    private Label playerText1;
+    private HBox player1;
 
     @FXML
-    private Label playerText2;
+    private HBox player2;
 
     @FXML
-    private Label playerText3;
+    private HBox player3;
 
     @FXML
-    private Label playerText4;
+    private HBox player4;
 
     @FXML
-    private Label points1;
+    private Text username1;
 
     @FXML
-    private Label points2;
+    private Text username2;
 
     @FXML
-    private Label points3;
+    private Text username3;
 
     @FXML
-    private Label points4;
+    private Text username4;
 
     @FXML
-    private Button quitButton;
+    private Text points1;
 
-    private List<RadioButton> radioButtons;
+    @FXML
+    private Text points2;
 
-    private List<AnchorPane> playerAnchorPanes;
+    @FXML
+    private Text points3;
+
+    @FXML
+    private Text points4;
+
+    @FXML
+    private ImageView token1;
+
+    @FXML
+    private ImageView token2;
+
+    @FXML
+    private ImageView token3;
+
+    @FXML
+    private ImageView token4;
+
+    @FXML
+    private ComboBox<String> playAreaSelection;
+
+
+    @FXML
+    private GridPane gridPane;
+
+
+
+    private List<ImageView> hand;
+
+    private List<ImageView> tokens;
+
+    private List<Text> points;
+
+    private List<Text> usernames;
+
+    private List<HBox> players;
+
+    private List<ImageView> visibleResourceCards;
+
+    private List<ImageView> visibleGoldCards;
+
+    private EndedGameData endedGameData;
+
+    private Map<Coordinate, Node> emptyPanesMap;
+
 
     public EndedGameController(){
         super();
@@ -106,10 +160,23 @@ public class EndedGameController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
-        playerAnchorPanes = Arrays.asList(leaderboardAnchor1, leaderboardAnchor2, leaderboardAnchor3, leaderboardAnchor4);
-        radioButtons = Arrays.asList(playAreaButton1, playAreaButton2, playAreaButton3, playAreaButton4);
-        setGameName();
+        endedGameData = controller.getEndedGameData();
+        emptyPanesMap = new HashMap<>();
 
+        hand = Arrays.asList(handCard0, handCard1, handCard2);
+        visibleResourceCards = Arrays.asList(visibleResourceCard0, visibleResourceCard1);
+        visibleGoldCards = Arrays.asList(visibleGoldCard0, visibleGoldCard1);
+        players = Arrays.asList(player1, player2, player3, player4);
+        usernames = Arrays.asList(username1, username2, username3, username4);
+        points = Arrays.asList(points1, points2, points3, points4);
+        tokens = Arrays.asList(token1, token2, token3, token4);
+
+        setGameName();
+        updateVisiblePlayAreasOptions();
+
+        showDecks();
+        showPlayers();
+        showPlayArea();
     }
 
     @Override
@@ -117,48 +184,180 @@ public class EndedGameController extends FXMLController {
 
     }
 
+    @FXML
+    public void showPlayArea(){
+        String playAreaChoice = playAreaSelection.getValue();
+        if(playAreaChoice.equals("Your board")){
+            showHand(controller.getUsername());
+            showGridPane(controller.getUsername());
+        }
+        else{
+            String username = playAreaChoice.substring(10);
+            showHand(username);
+            showGridPane(username);
+        }
+    }
+
+    private void showGridPane(String username){
+        int maxX, minX, maxY, minY;
+        maxX = 0;
+        minX = 0;
+        maxY = 0;
+        minY = 0;
+        gridPane.getChildren().clear();
+        emptyPanesMap.clear();
+
+        for(Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()){
+            int currX = coordinate.getX();
+            int currY = coordinate.getY();
+            if(currX > maxX){
+                maxX = currX;
+            }
+            else if(currX < minX){
+                minX = currX;
+            }
+            if(currY > maxY){
+                maxY = currY;
+            }
+            else if(currY < minY){
+                minY = currY;
+            }
+        }
+        int gridLength = (maxX + 1) - (minX - 1);
+        int gridHeight = (maxY + 1) - (minY - 1);
+
+        //Add empty slots
+        for(int j = 0; j <= gridHeight; j++) {
+            for (int k = 0; k <= gridLength; k++) {
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
+                StackPane emptyStackPane = stackPaneBuilder(image);
+                gridPane.add(emptyStackPane, k, j);
+                emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
+            }
+        }
+
+        //Add start card
+        ImmStartCard immStartCard = endedGameData.getPlayAreas().get(username).getStartCard();
+        StackPane startStackPane;
+        Image image;
+        if (!immStartCard.isFlipped()) {
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png");
+        } else {
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
+        }
+        startStackPane = stackPaneBuilder(image);
+        Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
+        gridPane.getChildren().remove(startNodeToRemove);
+        gridPane.add(startStackPane, -minX + 1, maxY + 1);
+
+        //Adds the played cards in the grid
+        for(Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()) {
+            int k = coordinate.getX() - minX + 1;
+            int j = maxY - coordinate.getY() + 1;
+
+            ImmPlayableCard immPlayableCard = endedGameData.getPlayAreas().get(username).getPlayedCards().get(coordinate);
+            StackPane playedStackPane;
+            if (!immPlayableCard.isFlipped()) {
+                image = getFrontCardImage(immPlayableCard.getId(), immPlayableCard.getType());
+            } else {
+                image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
+            }
+            playedStackPane = stackPaneBuilder(image);
+            Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
+            gridPane.getChildren().remove(nodeToRemove);
+            gridPane.add(playedStackPane, k, j);
+        }
+    }
+
+    private void showDecks(){
+        ImmPlayableCard[] visibleGoldCards = endedGameData.getVisibleGoldCards();
+        ImmPlayableCard[] visibleResourceCards = endedGameData.getVisibleResourceCards();
+        int i = 0;
+        for(ImmPlayableCard card : visibleGoldCards){
+            this.visibleGoldCards.get(i).setVisible(true);
+            this.visibleGoldCards.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
+            i++;
+        }
+        i = 0;
+        for(ImmPlayableCard card : visibleResourceCards){
+            this.visibleResourceCards.get(i).setVisible(true);
+            this.visibleResourceCards.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
+            i++;
+        }
+        if(endedGameData.getTopGoldDeck() != null){
+            topGoldCard.setVisible(true);
+            topGoldCard.setImage(getBackCardImage(endedGameData.getTopGoldDeck(), CardType.GOLD));
+        }
+        if(endedGameData.getTopResourceDeck() != null){
+            topResourceCard.setVisible(true);
+            topResourceCard.setImage(getBackCardImage(endedGameData.getTopResourceDeck(), CardType.RESOURCE));
+        }
+
+        ImmObjectiveCard objectiveCard0 = endedGameData.getCommonObjectives()[0];
+        commonObjective0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png"));
+        ImmObjectiveCard objectiveCard1 = endedGameData.getCommonObjectives()[1];
+        commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png"));
+    }
+
+    private void showPlayers(){
+        int i = 0;
+        for(String username : endedGameData.getResults()){
+            players.get(i).setVisible(true);
+            usernames.get(i).setText(username);
+            points.get(i).setText(endedGameData.getScoreboard().get(username).toString());
+            Token token = endedGameData.getPlayerTokens().get(username);
+            tokens.get(i).setImage(getTokenImage(token));
+            i++;
+        }
+    }
+
+    private void showHand(String username){
+        int i = 0;
+        for(ImmPlayableCard card : endedGameData.getPlayAreas().get(username).getHand()){
+            this.hand.get(i).setVisible(true);
+            this.hand.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
+            i++;
+        }
+        while(i < this.hand.size()){
+            hand.get(i).setVisible(false);
+            i++;
+        }
+        ImmObjectiveCard secretObjCard = endedGameData.getSecretObjectives().get(username);
+        secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png"));
+    }
+
+    private void updateVisiblePlayAreasOptions(){
+        playAreaSelection.getItems().clear();
+
+        playAreaSelection.getItems().add("Your board");
+        playAreaSelection.getSelectionModel().select("Your board");
+
+        for(String user : endedGameData.getResults()){
+            if(!controller.getUsername().equals(user)){
+                playAreaSelection.getItems().add("Opponent: " + user);
+            }
+        }
+    }
+
     private void setGameName() {
         this.gameName.setText("GAME:" + controller.getLobbyId());
     }
-    private void setCongratulationsMessage(String winner) {
-        this.congratulationsLabel.setText("CONGRATULATIONS " + winner + ", YOU WON!");
-    }
-
 
     @FXML
     public void goMainMenu(ActionEvent e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
             Parent root = loader.load();
-            MainMenuController nextController = loader.getController();
+            MenuController nextController = loader.getController();
 
             Scene scene = stage.getScene();
             scene.setRoot(root);
-
             transition(nextController);
         }
         catch (IOException exception){
             exception.printStackTrace();
         }
     }
-
-    @FXML
-    public void goLobbies(ActionEvent e){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-            Parent root = loader.load();
-            EnterLobbiesController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-
-            transition(nextController);
-        }
-        catch (IOException exception){
-            exception.printStackTrace();
-        }
-    }
-
 
     @Override
     public boolean inGame(){
