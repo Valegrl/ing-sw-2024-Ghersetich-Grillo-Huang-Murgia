@@ -12,7 +12,6 @@
 #borderPane{
     -fx-background-color: #fbfbbb;
 }
-
 .combo-box{
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 15;
@@ -31,7 +30,7 @@
     -fx-padding: 0;
 }
 .button:hover{
-    -fx-text-fill: #000000;
+    -fx-text-fill: #dddddd;
 }
 
 .text-area{
