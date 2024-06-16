@@ -1,0 +1,30 @@
+#mainAnchor{
+    -fx-background-image: url("/it/polimi/ingsw/images/background/CodexNaturalisBackgroundDarkest.png");
+}
+
+#reconnectLabel{
+    -fx-font-size: 55px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-text-fill: rgba(255, 0, 0, 0.75);
+}
+
+#quitButton{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#gameLabel{
+    -fx-text-fill: #f1d546;
+    -fx-font-size: 25px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+}
+
+#upperAnchor{
+    -fx-background-color: rgb(54, 45, 16);
+}
