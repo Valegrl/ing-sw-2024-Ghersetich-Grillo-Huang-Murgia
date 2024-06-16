@@ -9,9 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.util.Arrays;
-
-public class ReconnectController extends FXMLController {
+public class ReconnectMenuController extends FXMLController {
 
     @FXML
     private Label gameLabel;
@@ -28,7 +26,7 @@ public class ReconnectController extends FXMLController {
     @FXML
     private AnchorPane upperAnchor;
 
-    public ReconnectController(){
+    public ReconnectMenuController(){
         super();
     }
 

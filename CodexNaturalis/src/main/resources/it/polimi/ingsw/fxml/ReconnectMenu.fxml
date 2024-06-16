@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/Reconnect.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ReconnectController">
+<AnchorPane fx:id="mainAnchor" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/ReconnectMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ReconnectMenuController">
    <children>
       <BorderPane prefHeight="1080.0" prefWidth="1920.0">
          <center>

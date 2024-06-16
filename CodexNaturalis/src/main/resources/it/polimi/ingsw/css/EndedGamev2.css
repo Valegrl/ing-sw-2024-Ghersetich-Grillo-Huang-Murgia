@@ -1,0 +1,33 @@
+#gameName{
+    -fx-font-size: 30;
+}
+#borderPane{
+    -fx-background-color: #fbfbbb;
+}
+.combo-box{
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 15;
+}
+
+#quitButton{
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
+}
+
+.label{
+    -fx-text-fill: #000000;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 20;
+}
+
+.button{
+    -fx-background-color: transparent;
+    -fx-text-fill: #0e0e0e;
+    -fx-font-size: 20;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+.button:hover{
+    -fx-text-fill: #dddddd;
+}
