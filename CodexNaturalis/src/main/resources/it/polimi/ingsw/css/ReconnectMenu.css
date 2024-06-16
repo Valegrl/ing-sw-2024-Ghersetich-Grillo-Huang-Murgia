@@ -5,26 +5,81 @@
 #reconnectLabel{
     -fx-font-size: 55px;
     -fx-font-family: "Bebas Neue Regular";
-    -fx-text-fill: rgba(255, 0, 0, 0.75);
+    -fx-text-fill: rgb(255, 255, 255);
 }
 
-#quitButton{
+#errorLabel{
+    -fx-font-size: 20px;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-text-fill: rgb(255, 0, 0);
+}
+
+
+.table-view{
     -fx-text-fill: #ffffff;
+    -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 40;
-    -fx-font-family: "Bebas Neue Regular";
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-insets: 0 10 0 10;
+    -fx-padding: 0 20 5 20;
+}
+
+.table-view .column-header {
     -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
+    -fx-text-fill: #ffffff;
 }
 
-#gameLabel{
-    -fx-text-fill: #f1d546;
-    -fx-font-size: 25px;
-    -fx-font-family: "Bebas Neue Regular";
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+.table-column {
+    -fx-alignment: CENTER;
 }
 
-#upperAnchor{
-    -fx-background-color: rgb(54, 45, 16);
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:hover {
+    -fx-text-background-color: #bbbbbb;
+}
+
+.table-row-cell:odd{
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-color: rgba(200, 200, 200, 0.2);
+}
+.table-row-cell:even{
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-color: rgba(150, 150, 150, 0.2);
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 10;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #0D0D0D
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color: #0D0D0D
 }

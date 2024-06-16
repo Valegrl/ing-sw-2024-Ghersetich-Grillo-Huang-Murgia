@@ -26,7 +26,7 @@
                </padding>
                <children>
                   <Button mnemonicParsing="false" onAction="#goEnterLobbies" styleClass="buttonSmall" text="Enter lobby" />
-                  <Button mnemonicParsing="false" styleClass="buttonSmall" text="Reconnect to game" />
+                  <Button mnemonicParsing="false" onAction="#goReconnectGames" styleClass="buttonSmall" text="Reconnect to game" />
                   <Button mnemonicParsing="false" onAction="#goProfileSettings" styleClass="buttonSmall" text="Profile settings" />
                   <Button mnemonicParsing="false" onAction="#exit" styleClass="buttonSmall" text="Exit">
                      <VBox.margin>

@@ -55,7 +55,18 @@ public class MenuController extends FXMLController {
 
     @FXML
     public void goReconnectGames(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ReconnectMenu.fxml"));
+            Parent root = loader.load();
+            ReconnectMenuController nextController = loader.getController();
 
+            Scene scene = stage.getScene();
+            scene.setRoot(root);
+            transition(nextController);
+        }
+        catch (IOException exception){
+            exception.printStackTrace();
+        }
     }
 
     @FXML
