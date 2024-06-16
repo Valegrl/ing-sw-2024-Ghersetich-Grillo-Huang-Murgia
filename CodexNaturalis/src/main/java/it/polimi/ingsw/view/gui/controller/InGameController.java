@@ -2,25 +2,32 @@ package it.polimi.ingsw.view.gui.controller;
 
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromModel.OtherDrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
+import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,20 +38,22 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * This class is responsible for managing the in-game GUI in the Codex Naturalis application.
+ * It extends the FXMLController abstract class and implements its abstract methods.
+ * The class provides methods for updating the game state, handling user interactions, and rendering the game state on the GUI.
+ * It interacts with the model through the controller to get the game state and send user actions.
+ * The class uses JavaFX for the GUI and uses FXML for the layout of the GUI.
+ * The GUI includes a grid for the player's play area and the opponent's play area, a hand of cards, a deck of cards, and a chat area.
+ * The class also provides methods for drag and drop functionality for the cards and for submitting chat messages.
+ */
 public class InGameController extends FXMLController {
-
-    @FXML
-    private AnchorPane scoreBoard;
-
-
-    @FXML
-    private  BorderPane borderPane;
 
     @FXML
     private GridPane gridPane;
@@ -53,16 +62,16 @@ public class InGameController extends FXMLController {
     private GridPane opponentGridPane;
 
     @FXML
-    private AnchorPane uncovered1;
+    private HBox uncovered1;
 
     @FXML
-    private AnchorPane uncovered2;
+    private HBox uncovered2;
 
     @FXML
-    private AnchorPane uncovered3;
+    private HBox uncovered3;
 
     @FXML
-    private AnchorPane uncovered4;
+    private HBox uncovered4;
 
     @FXML
     private Text uncoveredUsername1;
@@ -172,6 +181,18 @@ public class InGameController extends FXMLController {
     @FXML
     private Label quillOcc4;
 
+    @FXML
+    private ImageView token1;
+
+    @FXML
+    private ImageView token2;
+
+    @FXML
+    private ImageView token3;
+
+    @FXML
+    private ImageView token4;
+
 
 
     @FXML
@@ -198,7 +219,7 @@ public class InGameController extends FXMLController {
     private ImageView secretObjectiveCard;
 
     @FXML
-    private AnchorPane secretObjectiveAnchor;
+    private VBox secretObjectiveVBox;
 
 
     @FXML
@@ -268,6 +289,8 @@ public class InGameController extends FXMLController {
     //Collection of JavaFX objects for ease of use
     private List<ImageView> visibleGoldCards;
 
+    private List<ImageView> tokens;
+
     private List<ImageView> visibleResourceCards;
 
     private List<Label> playerPoints;
@@ -286,7 +309,7 @@ public class InGameController extends FXMLController {
 
     private List<Label> quillOccurrences;
 
-    private List<AnchorPane> uncoveredList;
+    private List<HBox> uncoveredList;
 
     private List<Text> uncoveredUsernames;
 
@@ -306,6 +329,7 @@ public class InGameController extends FXMLController {
 
         handCardImages = Arrays.asList(handCard0, handCard1, handCard2);
         opponentCardImages = Arrays.asList(opponentHandCard0, opponentHandCard1,opponentHandCard2);
+        tokens = Arrays.asList(token1, token2, token3, token4);
         uncoveredList = Arrays.asList(uncovered1, uncovered2, uncovered3, uncovered4);
         uncoveredUsernames = Arrays.asList(uncoveredUsername1, uncoveredUsername2, uncoveredUsername3, uncoveredUsername4);
         visibleGoldCards = Arrays.asList(visibleGoldCard0, visibleGoldCard1);
@@ -348,8 +372,8 @@ public class InGameController extends FXMLController {
                     hasToDraw = true;
                     updateAboveLabel();
                     showPlayArea();
-                    //Update decks needed for adding listeners for choosing the card to draw
-                    updateDecks();
+                    //needed for adding listeners for choosing the card to draw
+                    addDeckChoiceSelection();
                     updatePoints();
                     gameUpdatesArea.appendText(message +"\n");
                 });
@@ -364,7 +388,9 @@ public class InGameController extends FXMLController {
                 break;
             case OTHER_PLACE_CARD:
                 Platform.runLater(() ->{
-                    //showPlayArea();
+                    if(!playAreaSelection.getValue().equals("Your board")) {
+                        showPlayArea();
+                    }
                     updatePoints();
                     gameUpdatesArea.appendText(message + "\n");
                 });
@@ -379,7 +405,9 @@ public class InGameController extends FXMLController {
                 break;
             case OTHER_DRAW_CARD:
                 Platform.runLater(() -> {
-                    //showPlayArea();
+                    if(!playAreaSelection.getValue().equals("Your board")) {
+                        showPlayArea();
+                    }
                     updateDecks();
                     gameUpdatesArea.appendText(message + "\n");
                 });
@@ -389,19 +417,59 @@ public class InGameController extends FXMLController {
                     hasToDraw = false;
                     updateAboveLabel();
                     showPlayArea();
-                    //updateDecks();
-                    //updatePoints();
                     gameUpdatesArea.appendText(message + "\n");
                 });
                 break;
             case ENDED_GAME:
+                Platform.runLater(() ->{
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EndedGame.fxml"));
+                        Parent root = loader.load();
+                        EndedGameController nextController = loader.getController();
+
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    }
+                    catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                });
+                break;
+            case UPDATE_GAME_PLAYERS:
+                Platform.runLater(() -> {
+                    updateAboveLabel();
+                    updatePoints();
+                    updateVisiblePlayAreasOptions();
+                    updateChatOptions();
+                    showPlayArea();
+                    gameUpdatesArea.appendText(message + "\n");
+                });
                 break;
             case CHAT_GM, CHAT_PM:
-                if (feedback.equals(Feedback.SUCCESS)) {
+                if (feedback == Feedback.SUCCESS) {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
                     chatArea.appendText(formattedMessage + "\n");
                 } else {
                     System.out.println("Message unable to send!");
+                }
+                break;
+            case QUIT_GAME:
+                if(feedback == Feedback.SUCCESS){
+                    Platform.runLater(() ->{
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
+                            Parent root = loader.load();
+                            MenuController nextController = loader.getController();
+
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                        }
+                        catch (IOException exception){
+                            exception.printStackTrace();
+                        }
+                    });
                 }
                 break;
         }
@@ -409,12 +477,24 @@ public class InGameController extends FXMLController {
     }
 
     /**
-     * This method flips the playFlipped variable and updates the hand.
+     * This method flips the {@code playFlipped} variable and updates the hand shown.
      */
     @FXML
     public void setPlayFlipped(){
         playFlipped = !playFlipped;
         updateHand();
+    }
+
+    /**
+     * This method is used to quit the current game.
+     * It creates a new QuitGameEvent and sends it to the server through the controller.
+     * After sending the event, it waits for a response from the server.
+     */
+    @FXML
+    public void quit(){
+        Event event = new QuitGameEvent();
+        controller.newViewEvent(event);
+        waitForResponse();
     }
 
     /**
@@ -426,7 +506,7 @@ public class InGameController extends FXMLController {
     private void addHandChoiceSelection(){
         int i = 0;
         // Setups drag and select for each card ImageView in the hand
-        for(ImageView cardImageView : handCardImages) {
+        for(ImageView cardImageView : this.handCardImages) {
             if(i < controller.getModel().getSelfPlayer().getPlayArea().getHand().size()) {
                 ImmPlayableCard currCard = controller.getModel().getSelfPlayer().getPlayArea().getHand().get(i);
                 //Drag and drop (start drag)
@@ -440,27 +520,28 @@ public class InGameController extends FXMLController {
                     event.consume();
                 });
             }
-            else{
-                cardImageView.setOnDragDetected(event -> {});
-            }
             i++;
         }
     }
 
+    /**
+     * This method adds click event listeners to the deck and visible cards.
+     * If the player has a turn and needs to draw a card, it sets up the click event listeners.
+     * When a deck or a visible card is clicked, it creates a new DrawCardEvent and sends it to the server through the controller.
+     * After sending the event, it waits for a response from the server.
+     * The method iterates over the visible gold and resource cards and sets up the click event listeners for each card.
+     */
     private void addDeckChoiceSelection(){
-        if(controller.hasTurn() && hasToDraw && controller.getGameStatus().equals(GameStatus.RUNNING)) {
-            if (controller.getModel().getTopResourceDeck() != null) {
-                resourceDeck.setOnMouseClicked(event -> {
-                    controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
-                    waitForResponse();
-                });
-            }
-            if (controller.getModel().getTopGoldDeck() != null) {
-                goldDeck.setOnMouseClicked(event -> {
-                    controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
-                    waitForResponse();
-                });
-            }
+        if(controller.hasTurn() && hasToDraw && controller.getModel().getGameStatus().equals(GameStatus.RUNNING)) {
+            //These can't be interacted with if their imageView have been set to be invisible
+            resourceDeck.setOnMouseClicked(event -> {
+                controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
+                waitForResponse();
+            });
+            goldDeck.setOnMouseClicked(event -> {
+                controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
+                waitForResponse();
+            });
 
             int i = 0;
             for (ImageView cardImageView : visibleGoldCards) {
@@ -474,7 +555,6 @@ public class InGameController extends FXMLController {
                 }
                 i++;
             }
-
             i = 0;
             for (ImageView cardImageView : visibleResourceCards) {
                 if (i < controller.getModel().getVisibleResourceCards().length) {
@@ -493,6 +573,11 @@ public class InGameController extends FXMLController {
     /**
      * This method updates the decks by getting the visible gold and resource cards from the viewModel.
      * It sets the images of the visible cards and the top cards of the decks.
+     * If there are less than 2 visible cards in either deck, it sets the remaining card slots to invisible.
+     * It also checks if there are cards left in the gold and resource decks.
+     * If there are, it sets the image of the top card of the deck.
+     * If there aren't, it sets the deck to invisible.
+     * After updating the decks, it adds the deck choice selection to the GUI.
      */
     private void updateDecks(){
         ImmPlayableCard[] visibleGoldCards = controller.getModel().getVisibleGoldCards();
@@ -503,8 +588,10 @@ public class InGameController extends FXMLController {
             this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
         }
         while(i < 2){
+            //Updating the ImageViews if there are less than 2 visibleGoldCards (deck ran out)
             this.visibleGoldCards.get(i).setImage(null);
             this.visibleGoldCards.get(i).setVisible(false);
+            i++;
         }
 
         for(i = 0; i < visibleResourceCards.length; i++){
@@ -512,8 +599,10 @@ public class InGameController extends FXMLController {
             this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
         }
         while(i < 2){
+            //Updating the ImageViews if there are less than 2 visibleGoldCards (deck ran out)
             this.visibleResourceCards.get(i).setImage(null);
             this.visibleResourceCards.get(i).setVisible(false);
+            i++;
         }
 
         Item itemGoldDeck = controller.getModel().getTopGoldDeck();
@@ -533,7 +622,7 @@ public class InGameController extends FXMLController {
         }
         else{
             resourceDeck.setImage(null);
-            goldDeck.setVisible(false);
+            resourceDeck.setVisible(false);
         }
         addDeckChoiceSelection();
     }
@@ -543,19 +632,18 @@ public class InGameController extends FXMLController {
      * It sets the images of the hand cards based on the playFlipped variable.
      */
     private void updateHand(){
+        int i = 0;
         //The fxml has 6 imageView, 3 for the current player's hand and 3 for the opponents
-        for(ImageView handCard : handCardImages){
-            handCard.setVisible(true);
-            handCard.setManaged(true);
-        }
         for(ImageView handCard : opponentCardImages){
             handCard.setVisible(false);
             handCard.setManaged(false);
         }
 
-        int i = 0;
+        //Updates the imageView of this user based on the hand from the viewModel
         for(ImmPlayableCard card : controller.getModel().getSelfPlayer().getPlayArea().getHand()){
             ImageView currImageView = handCardImages.get(i);
+            currImageView.setManaged(true);
+            currImageView.setVisible(true);
             if (!playFlipped) {
                 currImageView.setImage(getFrontCardImage(card.getId(), card.getType()));
             }
@@ -564,55 +652,67 @@ public class InGameController extends FXMLController {
             }
             i++;
         }
+        //Hides the rest of the cards if the hand has less than 3 cards
         while(i < handCardImages.size()){
             handCardImages.get(i).setImage(null);
+            handCardImages.get(i).setVisible(false);
             i++;
         }
         addHandChoiceSelection();
     }
 
+    /**
+     * This method updates the hand of the opponent in the GUI.
+     * It first hides all the cards in the current player's hand and then makes the opponent's hand visible.
+     * It then gets the back of the opponent's hand from the viewModel and sets the images of the opponent's hand cards.
+     * If the opponent has less than 3 cards in their hand, it sets the remaining card slots to invisible.
+     *
+     * @param opponent The username of the opponent whose hand is to be updated.
+     */
     private void updateOpponentHand(String opponent){
         for(ImageView handCard : handCardImages){
             handCard.setVisible(false);
             handCard.setManaged(false);
         }
-        for(ImageView handCard : opponentCardImages) {
-            handCard.setVisible(true);
+        for(ImageView handCard : opponentCardImages){
             handCard.setManaged(true);
         }
+
         List<BackPlayableCard> backHand = controller.getModel().getOpponent(opponent).getPlayArea().getHand();
         int i = 0;
         for(BackPlayableCard card : backHand){
             ImageView currImageView = opponentCardImages.get(i);
+            currImageView.setVisible(true);
             currImageView.setImage(getBackCardImage(card.getItem(), card.getCardType()));
             i++;
         }
         while(i < opponentCardImages.size()){
             opponentCardImages.get(i).setImage(null);
+            opponentCardImages.get(i).setVisible(false);
             i++;
         }
     }
 
     /**
      * This method is used to display the play area of the current player or the selected opponent.
-     * If the selected play area is "Your board", it sets the {@code gridPane} to visible and manages it, and sets the {@code opponentGridPane} to invisible and unmanaged.
-     * It also sets the {@code secretObjectiveAnchor} to visible, sets the {@code handLabel} to "MY HAND", and makes the hand cards of the current player visible and managed.
-     * If the selected play area is an opponent's board, it sets the {@code gridPane} to invisible and unmanaged, and sets the {@code opponentGridPane} to visible and managed.
-     * It also sets the {@code secretObjectiveAnchor} to invisible, sets the {@code handLabel} to the opponent's username + " hand", and makes the hand cards of the opponent visible and managed.
+     * If the selected play area is "Your board", it makes the secret objective visible, sets the hand label to "MY HAND",
+     * makes the flip button visible, updates the hand, and shows the current player's grid.
+     * If the selected play area is an opponent's board, it hides the secret objective, sets the hand label to the "opponent's username + hand",
+     * hides the flip button, updates the opponent's hand, and shows the opponent's grid.
      */
     @FXML
     public void showPlayArea() {
         String playAreaChoice = playAreaSelection.getValue();
 
         if(playAreaChoice.equals("Your board")){
-            secretObjectiveAnchor.setVisible(true);
+            secretObjectiveVBox.setVisible(true);
             handLabel.setText("MY HAND");
             flipButton.setVisible(true);
             updateHand();
             showYourGridPane();
         }
         else{
-            secretObjectiveAnchor.setVisible(false);
+            secretObjectiveVBox.setVisible(false);
             //Substring of 10 because of the annotation "Opponent: "
             String username = playAreaChoice.substring(10);
             handLabel.setText(username + " hand");
@@ -641,6 +741,7 @@ public class InGameController extends FXMLController {
         minX = 0;
         maxY = 0;
         minY = 0;
+        opponentGridPane.getChildren().clear();
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
@@ -681,23 +782,12 @@ public class InGameController extends FXMLController {
 
             Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png");
             StackPane availableStackPane = stackPaneBuilder(image);
-            /*
-            Node nodeToRemove = null;
-            for (Node node : gridPane.getChildren()) {
-                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                    nodeToRemove = node;
-                    break;
-                }
-            }
-            gridPane.getChildren().remove(nodeToRemove);
-            gridPane.add(availableStackPane, k, j);
-             */
             Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             gridPane.getChildren().remove(nodeToRemove);
             gridPane.add(availableStackPane, k, j);
 
-            //For drag and drop of the card
-            if(controller.hasTurn() && !hasToDraw) {
+            //For drag and drop of the card, this needed to be updated when the user has drawn or if it's not his turn.
+            if(controller.hasTurn() && !hasToDraw && (controller.getModel().getGameStatus().equals(GameStatus.RUNNING) || controller.getModel().getGameStatus().equals(GameStatus.LAST_CIRCLE))) {
                 availableStackPane.setOnDragOver(event -> {
                     if (event.getGestureSource() != availableStackPane && event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.MOVE);
@@ -712,7 +802,7 @@ public class InGameController extends FXMLController {
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         System.out.println("Waiting for server response on card " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
                         waitForResponse();
-                        //return;
+                        return;
                     }
                     event.setDropCompleted(success);
                     event.consume();
@@ -730,17 +820,6 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
         }
         startStackPane = stackPaneBuilder(image);
-        /*
-        Node startNodeToRemove = null;
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == -minX + 1 && GridPane.getRowIndex(node) == maxY + 1) {
-                startNodeToRemove = node;
-                break;
-            }
-        }
-        gridPane.getChildren().remove(startNodeToRemove);
-        gridPane.add(startStackPane, -minX + 1, maxY + 1);
-         */
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
         gridPane.getChildren().remove(startNodeToRemove);
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
@@ -758,23 +837,22 @@ public class InGameController extends FXMLController {
                 image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
             }
             playedStackPane = stackPaneBuilder(image);
-            /*
-            Node nodeToRemove = null;
-            for (Node node : gridPane.getChildren()) {
-                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                    nodeToRemove = node;
-                    break;
-                }
-            }
-            gridPane.getChildren().remove(nodeToRemove);
-            gridPane.add(playedStackPane, k, j);
-             */
             Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             gridPane.getChildren().remove(nodeToRemove);
             gridPane.add(playedStackPane, k, j);
         }
     }
 
+    /**
+     * This method is used to display the opponent's grid on the GUI.
+     * It first sets the visibility and management of the gridPane and opponentGridPane.
+     * Then it calculates the maximum and minimum X and Y coordinates of the played cards.
+     * It adds empty slots to the opponentGridPane based on the calculated grid dimensions.
+     * It then adds the start card and the played cards to the opponentGridPane.
+     * The method uses the opponent's username to get the opponent's play area from the viewModel.
+     *
+     * @param opponent The username of the opponent whose grid is to be displayed.
+     */
     private void showOpponentGridPane(String opponent){
         gridPane.setManaged(false);
         gridPane.setVisible(false);
@@ -787,6 +865,7 @@ public class InGameController extends FXMLController {
         maxY = 0;
         minY = 0;
         opponentGridPane.getChildren().clear();
+        gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
         for(Coordinate coordinate : controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().keySet()){
@@ -828,16 +907,6 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
         }
         startStackPane = stackPaneBuilder(image);
-        /*
-        Node startNodeToRemove = null;
-        for (Node node : opponentGridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == -minX + 1 && GridPane.getRowIndex(node) == maxY + 1) {
-                startNodeToRemove = node;
-            }
-        }
-        opponentGridPane.getChildren().remove(startNodeToRemove);
-        opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
-         */
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
         opponentGridPane.getChildren().remove(startNodeToRemove);
         opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
@@ -855,24 +924,18 @@ public class InGameController extends FXMLController {
                 image = getBackCardImage(immPlayableCard.getPermanentResource(), immPlayableCard.getType());
             }
             playedStackPane = stackPaneBuilder(image);
-            /*
-            Node nodeToRemove = null;
-            for (Node node : opponentGridPane.getChildren()) {
-                if (GridPane.getColumnIndex(node) == k && GridPane.getRowIndex(node) == j) {
-                    nodeToRemove = node;
-                    break;
-                }
-            }
-            opponentGridPane.getChildren().remove(nodeToRemove);
-            opponentGridPane.add(playedStackPane, k, j);
-             */
             Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             opponentGridPane.getChildren().remove(nodeToRemove);
             opponentGridPane.add(playedStackPane, k, j);
         }
     }
 
-
+    /**
+     * This method updates the text of the {@code aboveLabel} based on the current game state.
+     * If it's the player's turn, and they don't have to draw a card, it sets the text to "It's your turn, play a card".
+     * If it's the player's turn, and they have to draw a card, it sets the text to "Now draw a card to your hand".
+     * If it's not the player's turn, it sets the text to "Waiting for your turn".
+     */
     private void updateAboveLabel(){
         if(controller.hasTurn() && !hasToDraw){
             aboveLabel.setText("It's your turn, play a card");
@@ -925,8 +988,14 @@ public class InGameController extends FXMLController {
     }
 
     /**
-     * This method updates the points by getting the scoreboard from the viewModel.
-     * It sets the points and the occurrences of the items for each player.
+     * This method updates the points and item occurrences for each player in the game.
+     * It first hides all the uncovered items, then for each player in the game, it makes the player's uncovered items visible.
+     * If the player is online, it sets the player's username, otherwise it adds an offline tag to the username.
+     * It then gets the points of the current player from the scoreboard and sets the player's points.
+     * It checks whether the current user is this user and then gets the right map of uncovered items accordingly.
+     * It also gets the current token of the player and sets the image of the token.
+     * Using the lists of occurrences, it updates the current player's item occurrences.
+     * It does this for each item in the game: fungi, animal, plant, insect, inkwell, quill, and manuscript.
      */
     private void updatePoints(){
         int i = 0;
@@ -935,8 +1004,8 @@ public class InGameController extends FXMLController {
         Map<Item, Integer> currUncoveredItems;
         Map<String, Integer> scoreboard = controller.getModel().getScoreboard();
         //Hides everything so it can show the new scoreboard
-        for(AnchorPane pane : uncoveredList){
-            pane.setVisible(false);
+        for(HBox uncovered : uncoveredList){
+            uncovered.setVisible(false);
         }
         //Cycles through the users in game, even the ones who got disconnected
         for(String user : controller.getInMatchPlayerUsernames()){
@@ -956,9 +1025,15 @@ public class InGameController extends FXMLController {
             //Checks whether the current user is this user and then currUncoveredItems gets the right map accordingly
             if(user.equals(controller.getUsername())){
                 currUncoveredItems = controller.getModel().getSelfPlayer().getPlayArea().getUncoveredItems();
+                Token currToken = controller.getModel().getSelfPlayer().getToken();
+                Image imageToken = getTokenImage(currToken);
+                tokens.get(i).setImage(imageToken);
             }
             else {
                 currUncoveredItems = controller.getModel().getOpponent(user).getPlayArea().getUncoveredItems();
+                Token currToken = controller.getModel().getOpponent(user).getToken();
+                Image imageToken = getTokenImage(currToken);
+                tokens.get(i).setImage(imageToken);
             }
 
             //Using the lists of occurrences, updates current player items' number
@@ -1043,7 +1118,7 @@ public class InGameController extends FXMLController {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
         }
         else{
-            System.out.println("Error: player not in match");
+            chatArea.appendText("Error: player not in match");
         }
     }
 
@@ -1054,6 +1129,16 @@ public class InGameController extends FXMLController {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
+    /**
+     * This method creates a StackPane with an ImageView as its child.
+     * The ImageView is set with the provided Image.
+     * The StackPane is set with a fixed width of 113 and a fixed height of 60.
+     * The ImageView is set with a fit height of 100 and a fit width of 150, and its pickOnBounds and preserveRatio properties are set to true.
+     * The ImageView is then added to the StackPane's children.
+     *
+     * @param image The Image to be set on the ImageView.
+     * @return The created StackPane with the ImageView as its child.
+     */
     private StackPane stackPaneBuilder(Image image){
         //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
 
@@ -1075,12 +1160,45 @@ public class InGameController extends FXMLController {
         return stackPane;
     }
 
+    /**
+     * This method returns an Image object based on the provided Token.
+     * It uses a switch statement to determine which image to return based on the Token.
+     * If the Token is RED, it returns the image for the red token.
+     * If the Token is BLUE, it returns the image for the blue token.
+     * If the Token is GREEN, it returns the image for the green token.
+     * If the Token is YELLOW, it returns the image for the yellow token.
+     * If the Token is not one of the above, it returns null.
+     *
+     * @param token The Token to determine which image to return.
+     * @return The Image object for the provided Token, or null if the Token is not one of the specified cases.
+     */
+    private Image getTokenImage(Token token){
+        return switch (token) {
+            case RED -> new Image("/it/polimi/ingsw/images/icons/RedToken.png");
+            case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png");
+            case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png");
+            case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png");
+            default -> null;
+        };
+    }
 
+    /**
+     * This method is used to check if the user is in a game.
+     * It always returns true, indicating that the user is always in a game.
+     *
+     * @return True, indicating that the user is in a game.
+     */
     @Override
     public boolean inGame(){
         return true;
     }
 
+    /**
+     * This method is used to check if the user is in a chat.
+     * It always returns true, indicating that the user is always in a chat.
+     *
+     * @return True, indicating that the user is in a chat.
+     */
     @Override
     public boolean inChat(){ return true;}
 

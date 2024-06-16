@@ -154,6 +154,14 @@ public abstract class FXMLController {
         return image;
     }
 
+    /**
+     * This method is used to get the front image of a card based on the ID and card type.
+     * It constructs the path of the image file based on the ID and card type and creates an Image object.
+     *
+     * @param ID The ID of the card (RC01, RC02, GC01, GC02 etc...).
+     * @param type The type of the card (GOLD or RESOURCE).
+     * @return An Image object representing the front of the card.
+     */
     public Image getFrontCardImage(String ID, CardType type){
         Image image = null;
         if(type == CardType.GOLD){

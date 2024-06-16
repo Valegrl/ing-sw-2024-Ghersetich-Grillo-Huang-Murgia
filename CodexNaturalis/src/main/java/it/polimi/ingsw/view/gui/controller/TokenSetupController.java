@@ -215,7 +215,7 @@ public class TokenSetupController extends FXMLController {
                 if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGame.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
                             Parent root = loader.load();
                             InGameController nextController = loader.getController();
 

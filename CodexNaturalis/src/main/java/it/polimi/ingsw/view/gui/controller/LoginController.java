@@ -151,21 +151,23 @@ public class LoginController extends FXMLController {
         switch (EventID.getByID(eventID)) {
             case LOGIN:
                 if (feedback == Feedback.SUCCESS) {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
-                        Parent root = loader.load();
-                        MenuController nextController = loader.getController();
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
+                            Parent root = loader.load();
+                            MenuController nextController = loader.getController();
 
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
-                        //showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
-                    }
-                    catch (IOException exception){
-                        Platform.runLater(() -> errorLogin.setText("Error " + exception));
-                    }
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                            //showResponseMessage("Login for user '" + view.getUsername() + "' successful", 2000);
+                        }
+                        catch (IOException exception){
+                            errorLogin.setText("Error " + exception);
+                        }
+                    });
                 } else {
-                    Platform.runLater(() -> errorLogin.setText("Error " + message));
+                     Platform.runLater(() -> errorLogin.setText("Error " + message));
                     //showResponseMessage("Login failed: " + message, 2000);
                 }
                 break;
