@@ -209,26 +209,23 @@ public class TokenSetupController extends FXMLController {
                     break;
 
             case UPDATE_GAME_PLAYERS:
+                chatArea.appendText("\n" + message + "\n\n");
                 break;
 
             case UPDATE_LOCAL_MODEL:
-                if(controller.getGameStatus().equals(GameStatus.RUNNING)) {
-                    Platform.runLater(() -> {
-                        try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
-                            Parent root = loader.load();
-                            InGameController nextController = loader.getController();
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
+                        Parent root = loader.load();
+                        InGameController nextController = loader.getController();
 
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
-                        }
-                    });
-                } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
-                    //TODO do something ?
-                }
+                        Scene scene = stage.getScene();
+                        scene.setRoot(root);
+                        transition(nextController);
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                });
                 break;
 
             case GET_CHAT_MESSAGES:
