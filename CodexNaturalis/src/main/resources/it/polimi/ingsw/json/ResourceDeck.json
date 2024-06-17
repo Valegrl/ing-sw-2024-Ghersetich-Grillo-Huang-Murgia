@@ -362,7 +362,7 @@
     "points": 0,
     "permanentResource": "animal",
     "corners": [
-      "empty",
+      "hidden",
       "insect",
       "animal",
       "inkwell"
