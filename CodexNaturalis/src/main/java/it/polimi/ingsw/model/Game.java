@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromModel.*;
-import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.factory.DeckFactory;
@@ -324,7 +322,8 @@ public class Game {
 
         currPlayer.getPlayArea().placeCard(c, pos);
 
-        int points = c.getEvaluator().calculatePoints(currPlayer.getPlayArea());
+        int points = 0;
+        if (!flipped) points = c.getEvaluator().calculatePoints(currPlayer.getPlayArea());
 
         if (points != 0)
             assignPoints(currPlayer, points);

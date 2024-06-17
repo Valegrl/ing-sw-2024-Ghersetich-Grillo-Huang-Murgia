@@ -10,9 +10,6 @@ import it.polimi.ingsw.model.evaluator.Evaluator;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.*;
 
 public class DeckFactory {

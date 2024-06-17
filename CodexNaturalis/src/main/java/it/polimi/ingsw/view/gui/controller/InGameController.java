@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
-import it.polimi.ingsw.eventUtils.event.fromModel.OtherDrawCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatPMEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
@@ -17,8 +16,6 @@ import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.viewModel.EndedGameData;
-import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
