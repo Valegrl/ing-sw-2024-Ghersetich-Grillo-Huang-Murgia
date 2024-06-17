@@ -85,7 +85,7 @@
   },
   {
     "id": "OC04",
-    "points": 3,
+    "points": 2,
     "requiredPattern": [
       {
         "key": {
@@ -269,7 +269,7 @@
     "id": "OC14",
     "points": 2,
     "requiredItems": {
-      "manuscript": 3
+      "manuscript": 2
     },
     "evaluator": {"type": "ItemEvaluator"}
   },
