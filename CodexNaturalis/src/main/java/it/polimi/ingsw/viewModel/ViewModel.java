@@ -133,11 +133,11 @@ public class ViewModel implements Serializable, CardConverter {
      */
     public ViewModel(ViewModel vm) {
         this.gameId = vm.gameId;
-        this.opponents = vm.opponents;
+        this.opponents = Map.copyOf(vm.opponents);
         this.selfPlayer = vm.selfPlayer;
-        this.playerUsernames = vm.playerUsernames;
+        this.playerUsernames = List.copyOf(vm.playerUsernames);
         this.turnPlayerIndex = vm.turnPlayerIndex;
-        this.scoreboard = vm.scoreboard;
+        this.scoreboard = Map.copyOf(vm.scoreboard);
         this.commonObjectives = vm.commonObjectives;
         this.gameStatus = vm.gameStatus;
         this.detectedLC = vm.detectedLC;

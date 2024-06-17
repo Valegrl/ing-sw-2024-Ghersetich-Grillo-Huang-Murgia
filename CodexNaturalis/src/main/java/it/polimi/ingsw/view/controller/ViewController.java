@@ -256,11 +256,10 @@ public class ViewController implements ViewEventReceiver {
             view.handleResponse(event.getID(), null, event.getMessage());
         } else if (view.inGame()) {
             if (!inSetup.key() && !model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() == 1 && playersStatus.size() > 1) { // checking if the game needs to be set on WAITING or ENDED
+                previousGameStatus = new Pair<>(model.getGameStatus(), view.getState());
                 model.setGameStatus(GameStatus.WAITING);
                 view.stopInputRead(true);
                 view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, event.getMessage());
-                // note that previousGameStatus will be set from the current state using the setter method
-                // this is to make chat set the previousState to its previous state
             } else if (!inSetup.key() && model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() > 1) { // checking if the game needs to be running again
                 model.setGameStatus(previousGameStatus.key());
                 if (hasTurn()) {

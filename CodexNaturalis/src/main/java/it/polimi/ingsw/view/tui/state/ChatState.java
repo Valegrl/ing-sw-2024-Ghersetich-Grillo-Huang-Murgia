@@ -192,4 +192,9 @@ public class ChatState extends ViewState {
     public boolean inLobby() {
         return previousState.inLobby();
     }
+
+    @Override
+    public ViewState getState() {
+        return previousState;
+    }
 }

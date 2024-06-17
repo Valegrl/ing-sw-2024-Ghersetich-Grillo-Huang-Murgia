@@ -183,7 +183,7 @@ public class TUI implements View {
 
     @Override
     public ViewState getState() {
-        return state;
+        return state.getState();
     }
 
     @Override

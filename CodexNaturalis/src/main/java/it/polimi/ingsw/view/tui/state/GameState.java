@@ -125,7 +125,6 @@ public abstract class GameState extends ViewState {
     }
 
     protected void handleNewGameStatus(String message) {
-        controller.setPreviousGameStatus(new Pair<>(controller.getGameStatus(), this));
         clearConsole();
         view.stopInputRead(true);
         view.clearInput();

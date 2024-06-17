@@ -93,6 +93,12 @@ public abstract class ViewState {
     public boolean inChat() {return false;};
 
     /**
+     * Returns the state of the view.
+     * @return The state of the view.
+     */
+    public ViewState getState() {return this;};
+
+    /**
      * Prints the possible choices of input and reads an integer representing the user's choice.
      * @param options The list of possible choices.
      * @return The integer representing the user's choice.
