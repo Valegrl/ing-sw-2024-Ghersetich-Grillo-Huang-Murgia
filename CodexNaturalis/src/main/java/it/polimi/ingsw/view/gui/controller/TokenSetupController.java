@@ -227,7 +227,7 @@ public class TokenSetupController extends FXMLController {
                         }
                     });
                 } else if (controller.getGameStatus().equals(GameStatus.WAITING)) {
-                    //TODO
+                    //TODO do something ?
                 }
                 break;
 

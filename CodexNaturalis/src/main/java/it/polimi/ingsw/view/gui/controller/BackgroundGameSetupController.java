@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
+import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -10,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -35,35 +38,54 @@ public class BackgroundGameSetupController extends FXMLController {
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        if (EventID.getByID(eventID) == EventID.CHOOSE_CARDS_SETUP){
-            if(controller.getSetup() != null) {
-                Platform.runLater(() -> {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
-                        Parent root = loader.load();
-                        GameSetupController nextController = loader.getController();
+        switch (EventID.getByID(eventID)){
+            case EventID.CHOOSE_CARDS_SETUP :
+                if(controller.getSetup() != null) {
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                            Parent root = loader.load();
+                            GameSetupController nextController = loader.getController();
 
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
-                    }
-                    catch (IOException exception) {
-                    exception.printStackTrace();
-                    }
-                });
-            }
-            else{
-                System.out.println("Error, setup not initialized !");
-                //TODO go back to ENTER LOBBIES MENU or close the game?
-            }
-        }
-        else if(EventID.getByID(eventID) == EventID.RECONNECT_TO_GAME){
-            if(controller.getSetup() != null) {
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                        }
+                        catch (IOException exception) {
+                        exception.printStackTrace();
+                        }
+                    });
+                }
+                else{
+                    System.out.println("Error, setup not initialized !");
+                    QuitGameEvent event = new QuitGameEvent();
+                    controller.newViewEvent(event);
+                    waitForResponse();
+                }
+                break;
+            case EventID.RECONNECT_TO_GAME :
+                if(controller.getSetup() != null) {
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                            Parent root = loader.load();
+                            GameSetupController nextController = loader.getController();
+
+                            Scene scene = stage.getScene();
+                            scene.setRoot(root);
+                            transition(nextController);
+                        } catch (IOException exception) {
+                        exception.printStackTrace();
+                        }
+                    });
+                }
+                break;
+            case EventID.QUIT_GAME:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
                         Parent root = loader.load();
-                        GameSetupController nextController = loader.getController();
+                        MenuController nextController = loader.getController();
 
                         Scene scene = stage.getScene();
                         scene.setRoot(root);
@@ -72,8 +94,9 @@ public class BackgroundGameSetupController extends FXMLController {
                         exception.printStackTrace();
                     }
                 });
-            }
+                break;
         }
+        notifyResponse();
     }
 
     @Override

@@ -13,7 +13,7 @@
    <children>
       <HBox alignment="CENTER" minHeight="200.0" spacing="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
+            <Button mnemonicParsing="false" onAction="#goBack" text="Back" fx:id="backButton"/>
          </children>
       </HBox>
       <VBox alignment="BOTTOM_CENTER" minHeight="800.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
