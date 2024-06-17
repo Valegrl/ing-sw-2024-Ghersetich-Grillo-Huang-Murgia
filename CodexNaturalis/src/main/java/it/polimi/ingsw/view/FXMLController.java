@@ -5,10 +5,16 @@ import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.view.controller.ViewController;
+import it.polimi.ingsw.view.gui.controller.MenuController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Abstract class FXMLController.
@@ -48,8 +54,6 @@ public abstract class FXMLController {
      */
     public void transition(FXMLController nextController) {
         view.setFXMLController(nextController);
-        //TODO debug to see if it's needed
-        //this.controller = view.getController(); not needed I think
         nextController.run(view, stage);
     }
 
@@ -91,25 +95,30 @@ public abstract class FXMLController {
     }
 
     /**
-     * Shows a response message.
-     * @param message The message to be shown
-     * @param sleepTime The time to wait before showing the message
-     */
-    public void showResponseMessage(String message, int sleepTime) {
-        //TODO don't print, use the texts in the FXML
-        view.printMessage(message);
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException ignored) {}
-    }
-
-    /**
      * Notifies all waiting threads of a response.
      */
     public void notifyResponse() {
         synchronized (viewLock) {
             viewLock.notifyAll();
         }
+    }
+
+    /**
+     * The {@code switchScreen} method is used to switch the current screen to a new one.
+     * It loads the FXML file of the new screen, gets the controller of the new screen, and sets the root of the current scene to the root of the new screen.
+     * It then transitions to the new controller.
+     *
+     * @param FXML The name of the FXML file of the new screen.
+     * @throws IOException If an input or output exception occurred.
+     */
+    public void switchScreen(String FXML) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/" + FXML + ".fxml"));
+        Parent root = loader.load();
+        FXMLController nextController = loader.getController();
+
+        Scene scene = stage.getScene();
+        scene.setRoot(root);
+        transition(nextController);
     }
 
     /**

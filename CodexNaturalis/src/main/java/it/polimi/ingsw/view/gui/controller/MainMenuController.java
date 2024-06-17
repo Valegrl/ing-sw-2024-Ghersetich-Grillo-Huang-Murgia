@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * The MainMenuController class is responsible for handling the user interface of the main menu.
  * It extends the FXMLController class.
@@ -56,18 +58,11 @@ public class MainMenuController extends FXMLController {
 
     /**
      * Handles the action of going to the connection choice menu.
-     * @throws Exception If there is an error loading the FXML file
+     * @throws IOException If there is an error loading the FXML file
      */
     @FXML
-    public void goChooseConnection() throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ChooseConnectionMenu.fxml"));
-        Parent root = loader.load();
-        ChooseConnectionController nextController = loader.getController();
-
-        Scene scene = stage.getScene();
-        scene.setRoot(root);
-        transition(nextController);
+    public void goChooseConnection() throws IOException {
+        switchScreen("ChooseConnectionMenu");
     }
 
     /**
@@ -135,19 +130,11 @@ public class MainMenuController extends FXMLController {
 
     /**
      * Handles the action of going to the rules' menu.
-     * @throws Exception If there is an error loading the FXML file
+     * @throws IOException If there is an error loading the FXML file
      */
     @FXML
-    public void goRules() throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Rules.fxml"));
-        Parent root = loader.load();
-        RulesController controller = loader.getController();
-
-        Scene scene = stage.getScene();
-        scene.setRoot(root);
-
-        transition(controller);
+    public void goRules() throws IOException {
+        switchScreen("Rules");
     }
 
     /**

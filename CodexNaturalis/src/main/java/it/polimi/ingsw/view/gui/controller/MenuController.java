@@ -20,6 +20,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The MenuController class extends the {@link FXMLController} class and is responsible for handling the user interface and user interactions for the main menu.
+ * This includes handling button clicks, displaying error messages, and managing the different views (e.g., profile settings, delete account confirmation).
+ * The class also communicates with the ViewController to send and receive events.
+ */
 public class MenuController extends FXMLController {
 
     private String username;
@@ -42,7 +47,13 @@ public class MenuController extends FXMLController {
     @FXML
     private Text usernameTextFX;
 
-
+    /**
+     * The run method is called to initialize the view and stage for the controller.
+     * It also sets the username text.
+     *
+     * @param view the view to be set up
+     * @param stage the stage to be set up
+     */
     @Override
     public void run(View view, Stage stage) {
         this.view = view;
@@ -53,38 +64,38 @@ public class MenuController extends FXMLController {
         usernameTextFX.setText("Hello " + username + " !");
     }
 
+    /**
+     * The {@code goReconnectGames} method is called when the reconnect games button is clicked.
+     * It loads the ReconnectMenu view and transitions to the ReconnectMenuController.
+     */
     @FXML
-    public void goReconnectGames(){
+    public void goReconnectGames() throws IOException{
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ReconnectMenu.fxml"));
-            Parent root = loader.load();
-            ReconnectMenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-            transition(nextController);
+            switchScreen("ReconnectMenu");
         }
         catch (IOException exception){
-            exception.printStackTrace();
+            throw new IOException("Error loading the FXML: trying to load ReconnectMenu");
         }
     }
 
+    /**
+     * The {@code goEnterLobbies} method is called when the enter lobbies button is clicked.
+     * It loads the EnterLobbiesMenu view and transitions to the EnterLobbiesController.
+     */
     @FXML
-    public void goEnterLobbies(){
+    public void goEnterLobbies() throws  IOException{
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-            Parent root = loader.load();
-            EnterLobbiesController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-            transition(nextController);
+            switchScreen("EnterLobbiesMenu");
         }
         catch (IOException exception){
-            exception.printStackTrace();
+            throw new IOException("Error loading the FXML: trying to load EnterLobbiesMenu");
         }
     }
 
+    /**
+     * The {@code goProfileSettings} method is called when the profile settings button is clicked.
+     * It hides the main menu and shows the profile settings view.
+     */
     @FXML
     public void goProfileSettings(){
         errorProfileSettings.setText("");
@@ -94,6 +105,10 @@ public class MenuController extends FXMLController {
         profileSettingsMenuFX.setManaged(true);
     }
 
+    /**
+     * The {@code notifyDeleteAccount} method is called when the delete account button is clicked.
+     * It hides the profile settings view and shows the delete account confirmation view.
+     */
     @FXML
     public void notifyDeleteAccount(){
         profileSettingsVBox.setManaged(false);
@@ -102,14 +117,21 @@ public class MenuController extends FXMLController {
         confirmDeleteVBox.setVisible(true);
     }
 
+    /**
+     * The {@code confirmDeleteAccount} method is called when the confirm delete account button is clicked.
+     * It sends a {@code DeleteAccountEvent} to the server.
+     */
     @FXML
     public void confirmDeleteAccount(){
         deleteAccount();
     }
 
+    /**
+     * The {@code rejectDeleteAccount} method is called when the reject delete account button is clicked.
+     * It hides the delete account confirmation view and shows the profile settings view.
+     */
     @FXML
     public void rejectDeleteAccount(){
-        //showResponseMessage("Your account was NOT deleted.", 1000);
         errorProfileSettings.setText("Your account was not deleted.");
         profileSettingsVBox.setManaged(true);
         profileSettingsVBox.setVisible(true);
@@ -117,6 +139,10 @@ public class MenuController extends FXMLController {
         confirmDeleteVBox.setVisible(false);
     }
 
+    /**
+     * The logout method is called when the logout button is clicked.
+     * It sends a LogoutEvent to the server.
+     */
     @FXML
     public void logout(){
         Event event = new LogoutEvent();
@@ -125,6 +151,11 @@ public class MenuController extends FXMLController {
         waitForResponse();
     }
 
+    /**
+     * The {@code deleteAccount} method is used to send a {@link DeleteAccountEvent} to the server.
+     * It creates a new DeleteAccountEvent and sends it to the server via the controller.
+     * After sending the event, it waits for a response from the server.
+     */
     private void deleteAccount() {
         Event event = new DeleteAccountEvent();
         controller.newViewEvent(event);
@@ -132,13 +163,24 @@ public class MenuController extends FXMLController {
         waitForResponse();
     }
 
+    /**
+     * The exit method is called when the exit button is clicked.
+     * It exits the application.
+     */
     @FXML
     public void exit(){
         Platform.exit();
         System.exit(0);
     }
 
-    //TODO use runLater() ?
+    /**
+     * The handleResponse method is called to handle the response from the server.
+     * It updates the user interface based on the feedback received.
+     *
+     * @param feedback the feedback received from the server
+     * @param message the message received from the server
+     * @param eventID the ID of the event that triggered the response
+     */
     @FXML
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -147,13 +189,7 @@ public class MenuController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
-                            Parent root = loader.load();
-                            LoginController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("LoginMenu");
                         }
                         catch (IOException exception){
                             errorProfileSettings.setText("Account deletion failed " + message);
@@ -161,10 +197,8 @@ public class MenuController extends FXMLController {
                             confirmDeleteVBox.setVisible(false);
                             profileSettingsVBox.setManaged(true);
                             profileSettingsVBox.setVisible(true);
-                            //showResponseMessage("Account deletion failed: " + message, 2000);
                         }
                     });
-                    //showResponseMessage("Account deleted successfully!", 1500);
                 } else {
                     Platform.runLater(() -> {
                         errorProfileSettings.setText("Account deletion failed " + message);
@@ -173,58 +207,30 @@ public class MenuController extends FXMLController {
                         profileSettingsVBox.setManaged(true);
                         profileSettingsVBox.setVisible(true);
                     });
-                    //showResponseMessage("Account deletion failed: " + message, 2000);
                 }
-
                 break;
             case EventID.LOGOUT:
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
-                            Parent root = loader.load();
-                            LoginController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("LoginMenu");
                         }
                         catch (IOException exception){
                             Platform.runLater(() -> errorProfileSettings.setText("Logout failed " + message));
-                            //showResponseMessage("Logout failed: " + message, 2000);
                         }
                     });
-                    //showResponseMessage(message, 1500);
                 } else {
                     Platform.runLater(() -> errorProfileSettings.setText("Logout failed " + message));
-                    //showResponseMessage("Logout failed: " + message, 2000);
                 }
                 break;
-
-            /*
-            case EventID.GET_MY_OFFLINE_GAMES:
-                if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 800);
-                } else {
-                    showResponseMessage("Failed to get offline games: " + message, 2000);
-                    run();
-                }
-                break;
-            case EventID.RECONNECT_TO_GAME:
-                if (feedback == Feedback.SUCCESS) {
-                    showResponseMessage(message, 2000);
-                    // TODO Reconnect to game status
-                } else {
-                    showResponseMessage("Failed to reconnect to game: " + message, 2000);
-                    reconnect();
-                }
-                break;
-             */
-
         }
         notifyResponse();
     }
 
+    /**
+     * The {@code goBack} method is called when the back button is clicked on the profile settings view.
+     * It hides the profile settings view and shows the main menu.
+     */
     @FXML
     public void goBack(){
         menuFX.setManaged(true);
@@ -233,6 +239,12 @@ public class MenuController extends FXMLController {
         profileSettingsMenuFX.setManaged(false);
     }
 
+    /**
+     * The {@code inMenu} method is used to check if the player is in the menu.
+     * It returns true as the player is in the menu during the main menu phase.
+     *
+     * @return true
+     */
     @Override
     public boolean inMenu(){
         return  true;

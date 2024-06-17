@@ -934,14 +934,14 @@ public class InGameController extends FXMLController {
      * If it's not the player's turn, it sets the text to "Waiting for your turn".
      */
     private void updateAboveLabel(){
-        if(controller.hasTurn() && !hasToDraw){
-            aboveLabel.setText("It's your turn, play a card");
-        }
-        else if(controller.hasTurn() && hasToDraw){
-            aboveLabel.setText("Now draw a card to your hand");
-        }
-        else{
-            aboveLabel.setText("Waiting for your turn");
+        if(controller.getGameStatus() == GameStatus.RUNNING || controller.getGameStatus() == GameStatus.LAST_CIRCLE) {
+            if (controller.hasTurn() && !hasToDraw) {
+                aboveLabel.setText("It's your turn, play a card");
+            } else if (controller.hasTurn() && hasToDraw) {
+                aboveLabel.setText("Now draw a card to your hand");
+            } else {
+                aboveLabel.setText("Waiting for your turn");
+            }
         }
     }
 

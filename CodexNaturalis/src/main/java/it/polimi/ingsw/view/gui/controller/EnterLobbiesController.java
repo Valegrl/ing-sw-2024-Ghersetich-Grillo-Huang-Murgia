@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class EnterLobbiesController extends FXMLController {
-    //TODO add event listener if i click on a row i'll join the lobby
 
     @FXML
     private BorderPane availableLobbiesMenuFX;
@@ -76,18 +75,14 @@ public class EnterLobbiesController extends FXMLController {
         });
 
         refreshLobbies();
-
     }
 
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case EventID.AVAILABLE_LOBBIES:
-                if(feedback == Feedback.SUCCESS) {
-                    //showResponseMessage(message, 0);
-                } else {
+                if(feedback == Feedback.FAILURE) {
                     errorLobbies.setText("Failed to get available lobbies from server: " + message);
-                    //showResponseMessage("Failed to get available lobbies from server: " + message, 2000);
                 }
                 break;
             case EventID.CREATE_LOBBY:
@@ -102,10 +97,9 @@ public class EnterLobbiesController extends FXMLController {
                             scene.setRoot(root);
                             transition(nextController);
                         } catch (IOException exception) {
-                            errorLobbies.setText("Failed to join lobby.");
+                            errorLobbies.setText("Lobby creation failed.");
                         }
                     });
-                    showResponseMessage("Lobby created:" + message, 0);
                 } else {
                     Platform.runLater(() -> errorLobbies.setText("Lobby creation failed: " + message));
                 }
@@ -122,7 +116,7 @@ public class EnterLobbiesController extends FXMLController {
                             scene.setRoot(root);
                             transition(nextController);
                         } catch (IOException exception) {
-                            errorLobbies.setText("IOException: Failed to join lobby.");
+                            errorLobbies.setText("Failed to join lobby.");
                         }
                     });
                 }

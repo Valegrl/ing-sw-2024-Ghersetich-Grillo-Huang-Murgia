@@ -90,7 +90,6 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     public void submitSocket(ActionEvent e) {
         String IpSocket = ipSocketField.getText();
-        System.out.println(IpSocket);
 
         if (!ClientManager.validateAddress(IpSocket)) {
             errorSocket.setText("Invalid IP address. Please provide a valid one:");
@@ -102,14 +101,7 @@ public class ChooseConnectionController extends FXMLController {
             Platform.runLater(() ->{
                 try {
                     ClientManager.getInstance().initSocket(IpSocket, 1098);
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
-                    Parent root = loader.load();
-                    LoginController nextController = loader.getController();
-
-                    Scene scene = stage.getScene();
-                    scene.setRoot(root);
-                    transition(nextController);
-
+                    switchScreen("LoginMenu");
                 } catch (IOException exception) {
                     errorSocket.setText("Cannot connect with Socket. Make sure the IP provided is valid and try again later...");
                 }
@@ -126,7 +118,6 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     public void submitRmi(ActionEvent e){
         String IpRmi = ipRmiField.getText();
-        System.out.println(IpRmi);
 
         if (!ClientManager.validateAddress(IpRmi)) {
             errorRmi.setText("Invalid IP address. Please provide a valid one:");
@@ -138,15 +129,7 @@ public class ChooseConnectionController extends FXMLController {
             Platform.runLater(() -> {
                 try {
                     ClientManager.getInstance().initRMI(IpRmi);
-
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LoginMenu.fxml"));
-                    Parent root = loader.load();
-                    LoginController nextController = loader.getController();
-
-                    Scene scene = stage.getScene();
-                    scene.setRoot(root);
-                    transition(nextController);
-
+                    switchScreen("LoginMenu");
                 } catch (IOException exception) {
                     errorRmi.setText("Cannot connect with RMI. Make sure the IP provided is valid and try again later...");
                 }
@@ -162,14 +145,7 @@ public class ChooseConnectionController extends FXMLController {
     @FXML
     public void goBackMain(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
-            Parent root = loader.load();
-            MainMenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-
-            transition(nextController);
+            switchScreen("MainMenu");
         } catch (IOException exception) {
             exception.printStackTrace();
         }

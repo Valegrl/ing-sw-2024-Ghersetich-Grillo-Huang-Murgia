@@ -16,8 +16,6 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -259,12 +257,7 @@ public class LobbyController extends FXMLController {
         setLobbyName(controller.getLobbyId());
         chatArea.appendText("Welcome to the lobby: " + controller.getLobbyId() + "\n");
 
-        chatInput.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                submitMessage();
-            }
-        });
+        chatInput.setOnAction(actionEvent -> submitMessage());
 
         updateLobby();
     }
@@ -391,12 +384,7 @@ public class LobbyController extends FXMLController {
                 usernames.get(i).setText(user);
                 playerButtons.get(i).setVisible(true);
                 playerButtons.get(i).setText("Quit");
-                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        quitLobby();
-                    }
-                });
+                playerButtons.get(i).setOnAction(actionEvent -> quitLobby());
             }
             else{
 
@@ -413,12 +401,7 @@ public class LobbyController extends FXMLController {
                 usernames.get(i).setText(user);
                 playerButtons.get(i).setVisible(true);
                 playerButtons.get(i).setText("Kick");
-                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        kickPlayer(user);
-                    }
-                });
+                playerButtons.get(i).setOnAction(actionEvent -> kickPlayer(user));
             }
             i++;
         }
@@ -461,12 +444,7 @@ public class LobbyController extends FXMLController {
                 usernames.get(i).setText(user);
                 playerButtons.get(i).setVisible(true);
                 playerButtons.get(i).setText("Quit");
-                playerButtons.get(i).setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        quitLobby();
-                    }
-                });
+                playerButtons.get(i).setOnAction(actionEvent -> quitLobby());
             }
             else{
 
@@ -564,7 +542,7 @@ public class LobbyController extends FXMLController {
         String message = chatInput.getText();
 
         if(message.isEmpty()){
-
+            return;
         }
         else {
             if (generalRadioButton.isSelected()) {

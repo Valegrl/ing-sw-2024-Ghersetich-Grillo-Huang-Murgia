@@ -29,7 +29,7 @@ public class GUI extends Application implements View {
 
     /**
      * The main stage of the application where all scenes are displayed.
-     * * The GUI never changes its stage during its time.
+     * The GUI never changes its stage during its time.
      */
     private Stage stage;
 

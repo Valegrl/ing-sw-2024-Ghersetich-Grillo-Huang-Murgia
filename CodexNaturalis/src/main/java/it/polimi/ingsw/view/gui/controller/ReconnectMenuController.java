@@ -120,13 +120,7 @@ public class ReconnectMenuController extends FXMLController {
                     if(!controller.isInSetup() && !controller.isInTokenSetup()) {
                         Platform.runLater(() -> {
                             try {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
-                                Parent root = loader.load();
-                                InGameController nextController = loader.getController();
-
-                                Scene scene = stage.getScene();
-                                scene.setRoot(root);
-                                transition(nextController);
+                                switchScreen("InGamev2");
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
@@ -146,13 +140,7 @@ public class ReconnectMenuController extends FXMLController {
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/TokenSetup.fxml"));
-                        Parent root = loader.load();
-                        TokenSetupController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                        switchScreen("TokenSetup");
                     } catch (IOException exception) {
                         exception.printStackTrace();
                     }
@@ -161,13 +149,7 @@ public class ReconnectMenuController extends FXMLController {
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
-                        Parent root = loader.load();
-                        InGameController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                        switchScreen("InGamev2");
                     } catch (IOException exception) {
                         exception.printStackTrace();
                     }
@@ -182,18 +164,12 @@ public class ReconnectMenuController extends FXMLController {
      * It loads the menu view and transitions to the {@link MenuController}.
      */
     @FXML
-    public void goBack(){
+    public void goBack() throws IOException{
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
-            Parent root = loader.load();
-            MenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-            transition(nextController);
+            switchScreen("Menu");
         }
         catch (IOException exception){
-            errorLabel.setText("Error occurred, can't go back to menu.");
+            throw new IOException("Error loading the FXML: trying to load Menu");
         }
     }
 
