@@ -53,7 +53,7 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
                                        <children>
-                                          <Text fx:id="username1" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="username1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="Text" />
                                           <ImageView fx:id="token1" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <opaqueInsets>
@@ -76,7 +76,7 @@
                                              <image>
                                                 <Image url="@../images/icons/pointsIcon.png" />
                                              </image></ImageView>
-                                          <Text fx:id="points1" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                          <Text fx:id="points1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="points" />
                                        </children>
                                     </HBox>
                                  </children></HBox>
@@ -84,7 +84,7 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
                                        <children>
-                                          <Text fx:id="username2" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="username2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="Text" />
                                           <ImageView fx:id="token2" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <opaqueInsets>
@@ -107,7 +107,7 @@
                                              <image>
                                                 <Image url="@../images/icons/pointsIcon.png" />
                                              </image></ImageView>
-                                          <Text fx:id="points2" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                          <Text fx:id="points2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="points" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -116,7 +116,7 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
                                        <children>
-                                          <Text fx:id="username3" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="username3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="Text" />
                                           <ImageView fx:id="token3" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <opaqueInsets>
@@ -139,7 +139,7 @@
                                              <image>
                                                 <Image url="@../images/icons/pointsIcon.png" />
                                              </image></ImageView>
-                                          <Text fx:id="points3" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                          <Text fx:id="points3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="points" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -148,7 +148,7 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" maxWidth="180.0" minWidth="180.0" spacing="10.0">
                                        <children>
-                                          <Text fx:id="username4" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                          <Text fx:id="username4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="Text" />
                                           <ImageView fx:id="token4" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <opaqueInsets>
@@ -168,7 +168,7 @@
                                              <image>
                                                 <Image url="@../images/icons/pointsIcon.png" />
                                              </image></ImageView>
-                                          <Text fx:id="points4" strokeType="OUTSIDE" strokeWidth="0.0" text="points" />
+                                          <Text fx:id="points4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreboard-text" text="points" />
                                        </children>
                                     </HBox>
                                  </children>

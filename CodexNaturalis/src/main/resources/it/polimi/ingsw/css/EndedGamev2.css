@@ -73,3 +73,9 @@
 .button:hover{
     -fx-text-fill: #BBBBBB;
 }
+
+.scoreboard-text{
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-fill: #FFFFFF;
+    -fx-font-size: 20;
+}
