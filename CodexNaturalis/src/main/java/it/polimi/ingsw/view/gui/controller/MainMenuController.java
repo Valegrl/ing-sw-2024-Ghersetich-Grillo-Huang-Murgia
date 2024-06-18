@@ -5,9 +5,6 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 

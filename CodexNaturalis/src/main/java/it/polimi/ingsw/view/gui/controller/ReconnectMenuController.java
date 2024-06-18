@@ -1,38 +1,24 @@
 package it.polimi.ingsw.view.gui.controller;
 
-import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.GetMyOfflineGamesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.LobbyState;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.tui.state.PlaceCardState;
-import it.polimi.ingsw.view.tui.state.TokenSetupState;
-import it.polimi.ingsw.view.tui.state.WaitForTurnState;
-import it.polimi.ingsw.view.tui.state.WaitingReconnectState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The ReconnectMenuController class extends the FXMLController class and is responsible for handling the user interface and user interactions for the reconnect menu.
@@ -117,7 +103,7 @@ public class ReconnectMenuController extends FXMLController {
                 break;
             case RECONNECT_TO_GAME:
                 if(feedback == Feedback.SUCCESS){
-                    if(!controller.isInSetup() && !controller.isInTokenSetup()) {
+                    if(!controller.isInSetup()) {
                         Platform.runLater(() -> {
                             try {
                                 switchScreen("InGamev2");
@@ -126,7 +112,7 @@ public class ReconnectMenuController extends FXMLController {
                             }
                         });
                     }
-                    else if(controller.isInSetup() || controller.isInTokenSetup()){
+                    else if(controller.isInSetup()){
                         Platform.runLater(() -> {
                             reconnectLabel.setText("Wait, we are connecting you to the game.");
                             backButton.setVisible(false);
@@ -138,13 +124,15 @@ public class ReconnectMenuController extends FXMLController {
                 }
                 break;
             case CHOOSE_TOKEN_SETUP:
-                Platform.runLater(() -> {
-                    try {
-                        switchScreen("TokenSetup");
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-                });
+                if(!controller.isInTokenSetup()) {
+                    Platform.runLater(() -> {
+                        try {
+                            switchScreen("TokenSetup");
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+                    });
+                }
                 break;
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
@@ -154,6 +142,23 @@ public class ReconnectMenuController extends FXMLController {
                         exception.printStackTrace();
                     }
                 });
+                break;
+            case QUIT_GAME:
+                if (feedback == Feedback.SUCCESS){
+                    Platform.runLater(() -> {
+                        try {
+                            switchScreen("Menu");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+                else {
+                    Platform.runLater(() -> {
+                        errorLabel.setVisible(true);
+                        errorLabel.setText("Can't quit from the reconnection");
+                    });
+                }
                 break;
         }
         notifyResponse();

@@ -1184,7 +1184,7 @@ public class ViewController implements ViewEventReceiver {
      * Retrieves the username of the player with the black token.
      * @return The username of the player with the black token.
      */
-    private String getBlackTokenPlayer() {
+    public String getBlackTokenPlayer() {
         List<String> usernames = getPlayerUsernames();
         return usernames.stream()
                 .filter(player -> getPlayersStatus().get(player))

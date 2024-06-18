@@ -17,9 +17,6 @@ import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -286,14 +283,7 @@ public class LobbyController extends FXMLController {
                 if(feedback == Feedback.SUCCESS){
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-                            Parent root = loader.load();
-                            EnterLobbiesController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
-
+                           switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
                             exception.printStackTrace();
@@ -301,19 +291,13 @@ public class LobbyController extends FXMLController {
                     });
                 }
                 else{
-                    System.out.println("Something bad happened, you can't quit!");
+                    chatArea.appendText("Something bad happened, you can't quit!");
                 }
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-                        Parent root = loader.load();
-                        EnterLobbiesController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                        switchScreen("EnterLobbiesMenu");
                     }
                     catch (IOException exception){
                         exception.printStackTrace();

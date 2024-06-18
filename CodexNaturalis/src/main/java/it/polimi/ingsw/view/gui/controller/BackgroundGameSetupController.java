@@ -1,18 +1,13 @@
 package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
-import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -43,13 +38,7 @@ public class BackgroundGameSetupController extends FXMLController {
                 if(controller.getSetup() != null) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
-                            Parent root = loader.load();
-                            GameSetupController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("GameSetup");
                         }
                         catch (IOException exception) {
                         exception.printStackTrace();
@@ -63,33 +52,10 @@ public class BackgroundGameSetupController extends FXMLController {
                     waitForResponse();
                 }
                 break;
-            case EventID.RECONNECT_TO_GAME :
-                if(controller.getSetup() != null) {
-                    Platform.runLater(() -> {
-                        try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/GameSetup.fxml"));
-                            Parent root = loader.load();
-                            GameSetupController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
-                        } catch (IOException exception) {
-                        exception.printStackTrace();
-                        }
-                    });
-                }
-                break;
             case EventID.QUIT_GAME:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
-                        Parent root = loader.load();
-                        MenuController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                        switchScreen("Menu");
                     } catch (IOException exception) {
                         exception.printStackTrace();
                     }

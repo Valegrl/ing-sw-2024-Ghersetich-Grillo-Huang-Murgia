@@ -19,11 +19,7 @@ import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -291,12 +287,7 @@ public class GameSetupController extends FXMLController {
         controller.newViewEvent(new GetChatMessagesEvent());
         waitForResponse();
         chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
-        chatInput.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                submitMessage();
-            }
-        });
+        chatInput.setOnAction(actionEvent -> submitMessage());
     }
 
     /**
@@ -330,13 +321,7 @@ public class GameSetupController extends FXMLController {
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/TokenSetup.fxml"));
-                        Parent root = loader.load();
-                        TokenSetupController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                       switchScreen("TokenSetup");
                     }
                     catch (IOException exception){
                         exception.printStackTrace();
@@ -347,13 +332,7 @@ public class GameSetupController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-                            Parent root = loader.load();
-                            EnterLobbiesController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
                             exception.printStackTrace();

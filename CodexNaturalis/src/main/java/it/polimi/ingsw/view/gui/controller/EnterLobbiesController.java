@@ -12,9 +12,6 @@ import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -89,13 +86,7 @@ public class EnterLobbiesController extends FXMLController {
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LobbyMenu.fxml"));
-                            Parent root = loader.load();
-                            LobbyController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("LobbyMenu");
                         } catch (IOException exception) {
                             errorLobbies.setText("Lobby creation failed.");
                         }
@@ -108,13 +99,7 @@ public class EnterLobbiesController extends FXMLController {
                 if (feedback == Feedback.SUCCESS){
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/LobbyMenu.fxml"));
-                            Parent root = loader.load();
-                            LobbyController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("LobbyMenu");
                         } catch (IOException exception) {
                             errorLobbies.setText("Failed to join lobby.");
                         }
@@ -139,13 +124,7 @@ public class EnterLobbiesController extends FXMLController {
     @FXML
     public void goBack(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
-            Parent root = loader.load();
-            MenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-            transition(nextController);
+            switchScreen("Menu");
         }
         catch (IOException exception){
             errorLobbies.setText("Error occurred, can't go back to menu.");

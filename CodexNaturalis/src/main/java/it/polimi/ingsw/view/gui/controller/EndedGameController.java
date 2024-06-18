@@ -1,29 +1,21 @@
 package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.EndedGameData;
-import it.polimi.ingsw.viewModel.ViewModel;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -346,13 +338,7 @@ public class EndedGameController extends FXMLController {
     @FXML
     public void goMainMenu(ActionEvent e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/Menu.fxml"));
-            Parent root = loader.load();
-            MenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-            transition(nextController);
+            switchScreen("Menu");
         }
         catch (IOException exception){
             exception.printStackTrace();

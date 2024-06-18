@@ -5,10 +5,7 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.Image;
@@ -85,14 +82,7 @@ public class RulesController extends FXMLController{
     @FXML
     public void goBackMain(ActionEvent e){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
-            Parent root = loader.load();
-            MainMenuController nextController = loader.getController();
-
-            Scene scene = stage.getScene();
-            scene.setRoot(root);
-
-            transition(nextController);
+            switchScreen("MainMenu");
         }
         catch (IOException exception){
             exception.printStackTrace();

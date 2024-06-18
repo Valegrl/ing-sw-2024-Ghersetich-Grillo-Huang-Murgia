@@ -8,26 +8,17 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.ChosenTokenSetupEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.tui.state.PlaceCardState;
-import it.polimi.ingsw.view.tui.state.WaitForTurnState;
-import it.polimi.ingsw.view.tui.state.WaitingReconnectState;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
@@ -155,12 +146,7 @@ public class TokenSetupController extends FXMLController {
         controller.newViewEvent(new GetChatMessagesEvent());
         waitForResponse();
 
-        chatInput.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                submitMessage();
-            }
-        });
+        chatInput.setOnAction(actionEvent -> submitMessage());
     }
 
     /**
@@ -215,13 +201,7 @@ public class TokenSetupController extends FXMLController {
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/InGamev2.fxml"));
-                        Parent root = loader.load();
-                        InGameController nextController = loader.getController();
-
-                        Scene scene = stage.getScene();
-                        scene.setRoot(root);
-                        transition(nextController);
+                       switchScreen("InGamev2");
                     } catch (IOException exception) {
                         exception.printStackTrace();
                     }
@@ -238,7 +218,7 @@ public class TokenSetupController extends FXMLController {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
                     chatArea.appendText(formattedMessage + "\n");
                 } else {
-                    System.out.println("Message unable to send!");
+                    chatArea.appendText(message);
                 }
                 break;
 
@@ -246,13 +226,7 @@ public class TokenSetupController extends FXMLController {
                 if(feedback == Feedback.SUCCESS){
                     Platform.runLater(() -> {
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/EnterLobbiesMenu.fxml"));
-                            Parent root = loader.load();
-                            EnterLobbiesController nextController = loader.getController();
-
-                            Scene scene = stage.getScene();
-                            scene.setRoot(root);
-                            transition(nextController);
+                            switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
                             exception.printStackTrace();
@@ -260,7 +234,7 @@ public class TokenSetupController extends FXMLController {
                     });
                 }
                 else{
-                    System.out.println("Something bad happened, you can't quit!");
+                    chatArea.appendText(message);
                 }
                 break;
         }
@@ -299,13 +273,9 @@ public class TokenSetupController extends FXMLController {
         highlight.setOffsetX(0);
         highlight.setOffsetY(0);
         for(ImageView imageView : visibleTokens.values()){
-            imageView.setOnMouseEntered(event -> {
-                imageView.setEffect(highlight);
-            });
+            imageView.setOnMouseEntered(event -> imageView.setEffect(highlight));
 
-            imageView.setOnMouseExited(event -> {
-                imageView.setEffect(null);
-            });
+            imageView.setOnMouseExited(event -> imageView.setEffect(null));
         }
     }
 
@@ -316,18 +286,10 @@ public class TokenSetupController extends FXMLController {
      * The controller then handles the event and updates the game state accordingly.
      */
     private void addChoiceSelection(){
-        red.setOnMouseClicked(event -> {
-            controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED));
-        });
-        blue.setOnMouseClicked(event -> {
-            controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE));
-        });
-        green.setOnMouseClicked(event -> {
-            controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN));
-        });
-        yellow.setOnMouseClicked(event -> {
-            controller.newViewEvent(new ChosenTokenSetupEvent(Token.YELLOW));
-        });
+        red.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED)));
+        blue.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE)));
+        green.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN)));
+        yellow.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.YELLOW)));
     }
 
     /**
