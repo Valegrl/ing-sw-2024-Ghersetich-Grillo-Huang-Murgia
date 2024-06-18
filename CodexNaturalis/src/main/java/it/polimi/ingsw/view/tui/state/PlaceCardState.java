@@ -29,7 +29,7 @@ public class PlaceCardState extends GameState {
 
         view.printMessage(controller.selfPlayAreaToString());
 
-        if (controller.getGameStatus().equals(GameStatus.LAST_CIRCLE))
+        if (controller.isLastCircle())
             view.printMessage("This is the " + boldText("last circle") + " of the game. You can only place a card.");
         view.printMessage("It's your turn\n\nChoose an option:");
         int choice = readChoiceFromInput(Arrays.asList(

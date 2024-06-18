@@ -810,9 +810,7 @@ public class InGameController extends FXMLController {
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
 
         //Adds the played cards in the grid
-        System.out.println(controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().getClass());
         for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().keySet()) {
-            System.out.println(coordinate);
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 

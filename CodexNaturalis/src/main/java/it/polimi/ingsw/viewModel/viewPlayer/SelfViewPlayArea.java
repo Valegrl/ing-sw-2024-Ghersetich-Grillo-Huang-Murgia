@@ -52,9 +52,14 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
                 .toList();
         this.startCard = new ImmStartCard(playArea.getStartCard());
         this.playedCards = playArea.getPlayedCards().entrySet().stream()
-                .collect(Collectors.toUnmodifiableMap(
-                        Map.Entry::getKey,
-                        entry -> this.convertToImmCardType(entry.getValue())
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> this.convertToImmCardType(entry.getValue()),
+                                (e1, e2) -> e1,
+                                LinkedHashMap::new
+                        ),
+                        Collections::unmodifiableMap
                 ));
         this.uncoveredItems = new LinkedHashMap<>(playArea.getUncoveredItems());
         if (playArea.getSelectedCard().key() == null)
