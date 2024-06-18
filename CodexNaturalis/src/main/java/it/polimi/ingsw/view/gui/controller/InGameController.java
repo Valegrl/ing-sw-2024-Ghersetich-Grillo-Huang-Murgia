@@ -511,6 +511,7 @@ public class InGameController extends FXMLController {
                     content.putImage(dragImageView.snapshot(null, null));
                     content.putString(currCard.getId());
                     db.setContent(content);
+                    db.setDragView(dragImageView.snapshot(null, null), dragImageView.getFitWidth()/2, dragImageView.getFitHeight()/2);
                     event.consume();
                 });
             }
@@ -578,7 +579,7 @@ public class InGameController extends FXMLController {
         ImmPlayableCard[] visibleResourceCards = controller.getModel().getVisibleResourceCards();
         int i;
         DropShadow highlight = new DropShadow();
-        highlight.setColor(Color.CYAN);
+        highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
         highlight.setOffsetX(0);
         highlight.setOffsetY(0);
@@ -817,7 +818,7 @@ public class InGameController extends FXMLController {
                 availableStackPane.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
                     boolean success = false;
-                    if (db.hasImage() && db.hasString()){
+                    if (db.hasString()){
                         success = true;
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         //For debugging purposes

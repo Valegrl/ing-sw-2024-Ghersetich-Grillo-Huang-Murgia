@@ -494,7 +494,7 @@
          <children>
             <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
-                  <StackPane maxHeight="Infinity" maxWidth="Infinity">
+                  <StackPane maxHeight="Infinity" maxWidth="Infinity" id="stackPane">
                      <children>
                         <GridPane fx:id="opponentGridPane" alignment="CENTER" gridLinesVisible="true" managed="false" visible="false">
                           <columnConstraints>
