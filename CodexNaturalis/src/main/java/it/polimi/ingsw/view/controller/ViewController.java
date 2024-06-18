@@ -259,6 +259,7 @@ public class ViewController implements ViewEventReceiver {
                 previousGameStatus = new Pair<>(model.getGameStatus(), view.getState());
                 model.setGameStatus(GameStatus.WAITING);
                 view.stopInputRead(true);
+                view.handleResponse(event.getID(), null, event.getMessage());
                 view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, event.getMessage());
             } else if (!inSetup.key() && model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() > 1) { // checking if the game needs to be running again
                 model.setGameStatus(previousGameStatus.key());

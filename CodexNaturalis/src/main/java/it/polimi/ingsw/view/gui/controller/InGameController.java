@@ -409,6 +409,11 @@ public class InGameController extends FXMLController {
                     gameUpdatesArea.appendText(message + "\n");
                 });
                 break;
+            case SELF_TURN_TIMER_EXPIRED:
+                Platform.runLater(() -> {
+                    gameUpdatesArea.appendText("Your turn-timer has expired.\nYour turn has been skipped.\n");
+                });
+                break;
             case NEW_TURN:
                 Platform.runLater(() -> {
                     hasToDraw = false;
@@ -431,13 +436,14 @@ public class InGameController extends FXMLController {
                 Platform.runLater(() -> updateAboveLabel());
                 break;
             case UPDATE_GAME_PLAYERS:
+                System.out.println(message);
                 Platform.runLater(() -> {
+                    gameUpdatesArea.appendText(message + "\n");
                     updateAboveLabel();
                     updatePoints();
                     updateVisiblePlayAreasOptions();
                     updateChatOptions();
                     showPlayArea();
-                    gameUpdatesArea.appendText(message + "\n");
                 });
                 break;
             case CHAT_GM, CHAT_PM:

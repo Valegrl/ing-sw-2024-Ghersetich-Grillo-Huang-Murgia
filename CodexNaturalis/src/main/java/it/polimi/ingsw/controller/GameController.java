@@ -688,7 +688,7 @@ public class GameController {
             joinedPlayers.put(account, null);
             virtualViewAccounts.remove(vv);
 
-            notifyAllOnlineGamePlayers("Player " + account.getUsername() + " has been disconnected!");
+            notifyAllOnlineGamePlayers("Player " + account.getUsername() + " has disconnected!");
             handlePlayerOffline(account.getUsername());
         }
     }
