@@ -23,12 +23,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -499,7 +501,14 @@ public class InGameController extends FXMLController {
                     selectedPlayableCard = currCard;
                     Dragboard db = cardImageView.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
-                    content.putImage(cardImageView.getImage());
+
+                    //This is to set the Width and Height of the ImageView original
+                    ImageView dragImageView = new ImageView(cardImageView.getImage());
+                    dragImageView.setFitWidth(cardImageView.getFitWidth());
+                    dragImageView.setFitHeight(cardImageView.getFitHeight());
+
+                    //content.putImage(cardImageView.getImage());
+                    content.putImage(dragImageView.snapshot(null, null));
                     content.putString(currCard.getId());
                     db.setContent(content);
                     event.consume();
@@ -518,15 +527,19 @@ public class InGameController extends FXMLController {
      */
     private void addDeckChoiceSelection(){
         if(controller.hasTurn() && hasToDraw && controller.getModel().getGameStatus().equals(GameStatus.RUNNING)) {
-            //These can't be interacted with if their imageView have been set to be invisible
-            resourceDeck.setOnMouseClicked(event -> {
-                controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
-                waitForResponse();
-            });
-            goldDeck.setOnMouseClicked(event -> {
+            //These can't be interacted with if there is no card
+            if(controller.getModel().getTopResourceDeck() != null){
+                resourceDeck.setOnMouseClicked(event -> {
+                    controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
+                    waitForResponse();
+                });
+            }
+            if(controller.getModel().getTopGoldDeck() != null){
+                goldDeck.setOnMouseClicked(event -> {
                 controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
                 waitForResponse();
-            });
+                });
+            }
 
             ImmPlayableCard[] visibleGoldCards = controller.getModel().getVisibleGoldCards();
             ImmPlayableCard[] visibleResourceCards = controller.getModel().getVisibleResourceCards();
@@ -564,15 +577,25 @@ public class InGameController extends FXMLController {
         ImmPlayableCard[] visibleGoldCards = controller.getModel().getVisibleGoldCards();
         ImmPlayableCard[] visibleResourceCards = controller.getModel().getVisibleResourceCards();
         int i;
+        DropShadow highlight = new DropShadow();
+        highlight.setColor(Color.CYAN);
+        highlight.setRadius(10.0);
+        highlight.setOffsetX(0);
+        highlight.setOffsetY(0);
+
         for(i = 0; i < visibleGoldCards.length; i++){
             //Updating the ImageViews of the gold deck
             if(visibleGoldCards[i] != null) {
                 this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
+                if(hasToDraw){
+                    this.visibleGoldCards.get(i).setEffect(highlight);
+                }
+                else{
+                    this.visibleGoldCards.get(i).setEffect(null);
+                }
             }
             else{
-                //TODO add image for empty slot
-                this.visibleGoldCards.get(i).setImage(null);
-                this.visibleGoldCards.get(i).setVisible(false);
+                this.visibleGoldCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png"));
             }
         }
 
@@ -580,11 +603,15 @@ public class InGameController extends FXMLController {
             //Updating the ImageViews of the resource deck
             if(visibleResourceCards[i] != null) {
                 this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
+                if(hasToDraw){
+                    this.visibleResourceCards.get(i).setEffect(highlight);
+                }
+                else{
+                    this.visibleResourceCards.get(i).setEffect(null);
+                }
             }
             else{
-                //TODO add image for empty slot
-                this.visibleResourceCards.get(i).setImage(null);
-                this.visibleResourceCards.get(i).setVisible(false);
+                this.visibleResourceCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png"));
             }
         }
 
@@ -592,20 +619,30 @@ public class InGameController extends FXMLController {
         if(itemGoldDeck != null) {
             Image backGoldCardImage = getBackCardImage(itemGoldDeck, CardType.GOLD);
             goldDeck.setImage(backGoldCardImage);
+            if(hasToDraw){
+                goldDeck.setEffect(highlight);
+            }
+            else{
+                goldDeck.setEffect(null);
+            }
         }
         else{
-            goldDeck.setImage(null);
-            goldDeck.setVisible(false);
+            goldDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png"));
         }
 
         Item itemResourceDeck = controller.getModel().getTopResourceDeck();
         if(itemResourceDeck != null) {
             Image backResourceCardImage = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
             resourceDeck.setImage(backResourceCardImage);
+            if(hasToDraw){
+                resourceDeck.setEffect(highlight);
+            }
+            else{
+                resourceDeck.setEffect(null);
+            }
         }
         else{
-            resourceDeck.setImage(null);
-            resourceDeck.setVisible(false);
+            resourceDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png"));
         }
         addDeckChoiceSelection();
     }
@@ -750,7 +787,7 @@ public class InGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png");
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -770,7 +807,7 @@ public class InGameController extends FXMLController {
             gridPane.add(availableStackPane, k, j);
 
             //For drag and drop of the card, this needed to be updated when the user has drawn or if it's not his turn.
-            if(controller.hasTurn() && !hasToDraw && controller.getModel().getGameStatus().equals(GameStatus.RUNNING)) {
+            if(controller.hasTurn() && !hasToDraw && (controller.getModel().getGameStatus().equals(GameStatus.RUNNING) || controller.getModel().getGameStatus().equals(GameStatus.LAST_CIRCLE))) {
                 availableStackPane.setOnDragOver(event -> {
                     if (event.getGestureSource() != availableStackPane && event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.MOVE);
@@ -875,7 +912,7 @@ public class InGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png");
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 opponentGridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -923,7 +960,7 @@ public class InGameController extends FXMLController {
      */
     private void updateAboveLabel(){
         if(controller.getModel().isDetectedLC()){
-            gameUpdatesArea.appendText("The last circle will start with " + controller.getBlackTokenPlayer() + "'s turn");
+            gameUpdatesArea.appendText("The last circle will start with " + controller.getBlackTokenPlayer() + "'s turn\n");
         }
 
         if(controller.getGameStatus() == GameStatus.WAITING){

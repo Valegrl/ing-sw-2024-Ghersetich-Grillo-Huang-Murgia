@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.controller;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
+import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.GetMyOfflineGamesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.utils.LobbyState;
@@ -29,6 +30,9 @@ public class ReconnectMenuController extends FXMLController {
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private Button quitButton;
 
     @FXML
     private Label reconnectLabel;
@@ -108,7 +112,7 @@ public class ReconnectMenuController extends FXMLController {
                             try {
                                 switchScreen("InGamev2");
                             } catch (IOException exception) {
-                                exception.printStackTrace();
+                                throw new RuntimeException(exception);
                             }
                         });
                     }
@@ -116,6 +120,9 @@ public class ReconnectMenuController extends FXMLController {
                         Platform.runLater(() -> {
                             reconnectLabel.setText("Wait, we are connecting you to the game.");
                             backButton.setVisible(false);
+                            backButton.setManaged(false);
+                            quitButton.setVisible(true);
+                            quitButton.setManaged(true);
                         });
                     }
                 }
@@ -129,7 +136,7 @@ public class ReconnectMenuController extends FXMLController {
                         try {
                             switchScreen("TokenSetup");
                         } catch (IOException exception) {
-                            exception.printStackTrace();
+                            throw new RuntimeException(exception);
                         }
                     });
                 }
@@ -139,7 +146,7 @@ public class ReconnectMenuController extends FXMLController {
                     try {
                         switchScreen("InGamev2");
                     } catch (IOException exception) {
-                        exception.printStackTrace();
+                        throw new RuntimeException(exception);
                     }
                 });
                 break;
@@ -176,6 +183,18 @@ public class ReconnectMenuController extends FXMLController {
         catch (IOException exception){
             throw new IOException("Error loading the FXML: trying to load Menu");
         }
+    }
+
+    /**
+     * The quit method is called when the quit button is clicked.
+     * It creates a new {@link QuitGameEvent} and sends it to the controller.
+     * After sending the event, it waits for a response from the server.
+     */
+    @FXML
+    public void quit(){
+        QuitGameEvent event = new QuitGameEvent();
+        controller.newViewEvent(event);
+        waitForResponse();
     }
 
     /**

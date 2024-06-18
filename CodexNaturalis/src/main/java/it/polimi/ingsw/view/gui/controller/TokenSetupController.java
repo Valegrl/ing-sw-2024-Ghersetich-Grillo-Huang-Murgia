@@ -177,7 +177,7 @@ public class TokenSetupController extends FXMLController {
         switch (EventID.getByID(eventID)) {
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
-                    chatArea.appendText("\n" + message + "\n\n");
+                    chatArea.appendText("\n" + message + "\n");
                     update();
                 });
                 break;
@@ -191,11 +191,11 @@ public class TokenSetupController extends FXMLController {
                     quitButton.setVisible(false);
                     Platform.runLater(() -> chooseLabel.setText("TOKEN CHOSEN"));
                 }
-                chatArea.appendText("\n" + message + "\n\n");
+                chatArea.appendText("\n" + message + "\n");
                     break;
 
             case UPDATE_GAME_PLAYERS:
-                chatArea.appendText("\n" + message + "\n\n");
+                chatArea.appendText("\n" + message + "\n");
                 break;
 
             case UPDATE_LOCAL_MODEL:

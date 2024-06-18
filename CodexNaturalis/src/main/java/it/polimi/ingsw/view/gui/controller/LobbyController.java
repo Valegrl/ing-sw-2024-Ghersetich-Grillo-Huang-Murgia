@@ -276,7 +276,7 @@ public class LobbyController extends FXMLController {
                 Platform.runLater(this::updateLobby);
                 break;
             case EventID.UPDATE_LOBBY_PLAYERS:
-                chatArea.appendText("\n" + message + "\n\n");
+                chatArea.appendText("\n" + message + "\n");
                 Platform.runLater(this::updateLobby);
                 break;
             case EventID.QUIT_LOBBY:

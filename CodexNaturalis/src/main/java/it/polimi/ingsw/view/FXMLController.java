@@ -221,8 +221,8 @@ public abstract class FXMLController {
         //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
 
         StackPane stackPane = new StackPane();
-        stackPane.setMaxWidth(113);
-        stackPane.setMinWidth(113);
+        stackPane.setMaxWidth(116);
+        stackPane.setMinWidth(116);
         stackPane.setMaxHeight(60);
         stackPane.setMinHeight(60);
 

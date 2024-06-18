@@ -459,7 +459,10 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <TextArea id="chatArea" fx:id="chatArea" editable="false" minHeight="220.0" minWidth="250.0" wrapText="true" />
+            <TextArea id="chatArea" fx:id="chatArea" editable="false" minHeight="220.0" minWidth="250.0" wrapText="true">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></TextArea>
             <TextField id="chatInput" fx:id="chatInput" minHeight="40.0" minWidth="250.0" />
             <Label text=" SHOWING PLAY AREA">
                <VBox.margin>
@@ -474,6 +477,9 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                   </TextArea>
                </children>
             </VBox>
