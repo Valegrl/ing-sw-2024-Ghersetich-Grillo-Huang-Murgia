@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -507,11 +508,12 @@ public class InGameController extends FXMLController {
                     dragImageView.setFitWidth(cardImageView.getFitWidth());
                     dragImageView.setFitHeight(cardImageView.getFitHeight());
 
-                    //content.putImage(cardImageView.getImage());
-                    content.putImage(dragImageView.snapshot(null, null));
+                    SnapshotParameters parameters = new SnapshotParameters();
+                    parameters.setFill(Color.TRANSPARENT);
+
                     content.putString(currCard.getId());
                     db.setContent(content);
-                    db.setDragView(dragImageView.snapshot(null, null), dragImageView.getFitWidth()/2, dragImageView.getFitHeight()/2);
+                    db.setDragView(dragImageView.snapshot(parameters, null), dragImageView.getFitWidth()/2, dragImageView.getFitHeight()/2);
                     event.consume();
                 });
             }
@@ -653,6 +655,12 @@ public class InGameController extends FXMLController {
      * It sets the images of the hand cards based on the playFlipped variable.
      */
     private void updateHand(){
+        DropShadow highlight = new DropShadow();
+        highlight.setColor(Color.WHITE);
+        highlight.setRadius(10.0);
+        highlight.setOffsetX(0);
+        highlight.setOffsetY(0);
+
         //The fxml has 6 imageView, 3 for the current player's hand and 3 for the opponents
         for(ImageView handCard : opponentCardImages){
             handCard.setVisible(false);
@@ -670,6 +678,12 @@ public class InGameController extends FXMLController {
             }
             else {
                 currImageView.setImage(getBackCardImage(card.getPermanentResource(), card.getType()));
+            }
+            if(controller.hasTurn() && !hasToDraw){
+                currImageView.setEffect(highlight);
+            }
+            else{
+                currImageView.setEffect(null);
             }
             i++;
         }
@@ -757,33 +771,15 @@ public class InGameController extends FXMLController {
         gridPane.setVisible(true);
         opponentGridPane.setVisible(false);
         opponentGridPane.setManaged(false);
-        int maxX, minX, maxY, minY;
-        maxX = 0;
-        minX = 0;
-        maxY = 0;
-        minY = 0;
+
         opponentGridPane.getChildren().clear();
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
-        for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().keySet()){
-            int currX = coordinate.getX();
-            int currY = coordinate.getY();
-            if(currX > maxX){
-                maxX = currX;
-            }
-            else if(currX < minX){
-                minX = currX;
-            }
-            if(currY > maxY){
-                maxY = currY;
-            }
-            else if(currY < minY){
-                minY = currY;
-            }
-        }
-        int gridLength = (maxX + 1) - (minX - 1);
-        int gridHeight = (maxY + 1) - (minY - 1);
+        int gridLength = calculateGridLength(controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards());
+        int gridHeight = calculateGridHeight(controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards());
+        int minX = calculateMinX(controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards());
+        int maxY = calculateMaxY(controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards());
 
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
@@ -794,7 +790,6 @@ public class InGameController extends FXMLController {
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
             }
         }
-
 
         //Add available slots
         for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getAvailablePos()){
@@ -810,7 +805,7 @@ public class InGameController extends FXMLController {
             //For drag and drop of the card, this needed to be updated when the user has drawn or if it's not his turn.
             if(controller.hasTurn() && !hasToDraw && (controller.getModel().getGameStatus().equals(GameStatus.RUNNING) || controller.getModel().getGameStatus().equals(GameStatus.LAST_CIRCLE))) {
                 availableStackPane.setOnDragOver(event -> {
-                    if (event.getGestureSource() != availableStackPane && event.getDragboard().hasImage()) {
+                    if (event.getGestureSource() != availableStackPane) {
                         event.acceptTransferModes(TransferMode.MOVE);
                     }
                     event.consume();
@@ -882,33 +877,14 @@ public class InGameController extends FXMLController {
         opponentGridPane.setVisible(true);
         opponentGridPane.setManaged(true);
 
-        int maxX, minX, maxY, minY;
-        maxX = 0;
-        minX = 0;
-        maxY = 0;
-        minY = 0;
         opponentGridPane.getChildren().clear();
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
-        for(Coordinate coordinate : controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().keySet()){
-            int currX = coordinate.getX();
-            int currY = coordinate.getY();
-            if(currX > maxX){
-                maxX = currX;
-            }
-            else if(currX < minX){
-                minX = currX;
-            }
-            if(currY > maxY){
-                maxY = currY;
-            }
-            else if(currY < minY){
-                minY = currY;
-            }
-        }
-        int gridLength = (maxX + 1) - (minX - 1);
-        int gridHeight = (maxY + 1) - (minY - 1);
+        int gridLength = calculateGridLength(controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards());
+        int gridHeight = calculateGridHeight(controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards());
+        int minX = calculateMinX(controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards());
+        int maxY = calculateMaxY(controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards());
 
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {

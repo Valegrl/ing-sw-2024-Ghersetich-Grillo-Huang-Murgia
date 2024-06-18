@@ -191,37 +191,18 @@ public class EndedGameController extends FXMLController {
     }
 
     private void showGridPane(String username){
-        int maxX, minX, maxY, minY;
-        maxX = 0;
-        minX = 0;
-        maxY = 0;
-        minY = 0;
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
-        for(Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()){
-            int currX = coordinate.getX();
-            int currY = coordinate.getY();
-            if(currX > maxX){
-                maxX = currX;
-            }
-            else if(currX < minX){
-                minX = currX;
-            }
-            if(currY > maxY){
-                maxY = currY;
-            }
-            else if(currY < minY){
-                minY = currY;
-            }
-        }
-        int gridLength = (maxX + 1) - (minX - 1);
-        int gridHeight = (maxY + 1) - (minY - 1);
+        int gridLength = calculateGridLength(endedGameData.getPlayAreas().get(username).getPlayedCards());
+        int gridHeight = calculateGridHeight(endedGameData.getPlayAreas().get(username).getPlayedCards());
+        int minX = calculateMinX(endedGameData.getPlayAreas().get(username).getPlayedCards());
+        int maxY = calculateMaxY(endedGameData.getPlayAreas().get(username).getPlayedCards());
 
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty.png");
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png");
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -264,17 +245,21 @@ public class EndedGameController extends FXMLController {
     private void showDecks(){
         ImmPlayableCard[] visibleGoldCards = endedGameData.getVisibleGoldCards();
         ImmPlayableCard[] visibleResourceCards = endedGameData.getVisibleResourceCards();
-        int i = 0;
-        for(ImmPlayableCard card : visibleGoldCards){
-            this.visibleGoldCards.get(i).setVisible(true);
-            this.visibleGoldCards.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
-            i++;
+
+        for(int i = 0; i < visibleGoldCards.length; i++){
+            if(visibleGoldCards[i] != null){
+                this.visibleGoldCards.get(i).setVisible(true);
+                this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
+            }
+            else this.visibleGoldCards.get(i).setVisible(false);
         }
-        i = 0;
-        for(ImmPlayableCard card : visibleResourceCards){
-            this.visibleResourceCards.get(i).setVisible(true);
-            this.visibleResourceCards.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
-            i++;
+
+        for(int i = 0; i < visibleResourceCards.length; i++){
+            if(visibleResourceCards[i] != null){
+                this.visibleResourceCards.get(i).setVisible(true);
+                this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
+            }
+            else this.visibleResourceCards.get(i).setVisible(false);
         }
         if(endedGameData.getTopGoldDeck() != null){
             topGoldCard.setVisible(true);
@@ -336,12 +321,12 @@ public class EndedGameController extends FXMLController {
     }
 
     @FXML
-    public void goMainMenu(ActionEvent e){
+    public void goMainMenu(ActionEvent e) throws IOException{
         try {
             switchScreen("Menu");
         }
         catch (IOException exception){
-            exception.printStackTrace();
+            throw new IOException("Error loading the FXML: trying to load Menu");
         }
     }
 

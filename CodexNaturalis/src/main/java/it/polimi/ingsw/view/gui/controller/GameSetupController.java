@@ -309,12 +309,12 @@ public class GameSetupController extends FXMLController {
                 chatArea.appendText(getChatFormattedMessages + "\n");
                 break;
             case CHOSEN_CARDS_SETUP:
-                chatArea.appendText("\n" + message + "\n\n");
+                chatArea.appendText("\n" + message + "\n");
                 readyButton.setVisible(false);
                 break;
             case UPDATE_GAME_PLAYERS:
                 Platform.runLater(() -> {
-                    chatArea.appendText("\n" + message + "\n\n");
+                    chatArea.appendText("\n" + message + "\n");
                     update();
                 });
                 break;

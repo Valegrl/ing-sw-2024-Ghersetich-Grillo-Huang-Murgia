@@ -32,7 +32,7 @@
                   </HBox>
                   <HBox alignment="CENTER" maxWidth="1000.0" minHeight="50.0" minWidth="1000.0">
                      <children>
-                        <Label text="Game ended. Here are the results:" />
+                        <Label id="gameEndedLabel" text="Game ended. Here are the results:" />
                      </children>
                   </HBox>
                </children>
@@ -46,7 +46,7 @@
                <children>
                   <VBox alignment="CENTER" minHeight="400.0" spacing="10.0">
                      <children>
-                        <Label text="Leaderboard" />
+                        <Label id="leaderboardLabel" text="Leaderboard" />
                         <VBox alignment="CENTER" minHeight="300.0" spacing="10.0">
                            <children>
                               <HBox fx:id="player1" alignment="CENTER_RIGHT" visible="false">
@@ -202,16 +202,13 @@
          <bottom>
             <HBox alignment="CENTER_LEFT" maxHeight="150.0" minHeight="150.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_LEFT" minWidth="400.0">
+                  <HBox alignment="CENTER" minWidth="400.0">
                      <children>
                         <Button id="quitButton" mnemonicParsing="false" onAction="#goMainMenu" text="Quit" />
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
                   </HBox>
                   <HBox alignment="CENTER" maxWidth="1200.0" minWidth="1000.0">
                      <children>
@@ -267,12 +264,12 @@
                         <Insets left="10.0" />
                      </padding>
                   </HBox>
-                  <Label text=" SHOWING PLAY AREA">
+                  <Label id="showingLabel" text=" SHOWING PLAY AREA">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <ComboBox fx:id="playAreaSelection" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" />
+                  <ComboBox fx:id="playAreaSelection" maxHeight="40.0" maxWidth="250.0" minHeight="40.0" minWidth="250.0" />
                   <Button mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
                </children>
                <padding>
@@ -285,7 +282,7 @@
                <children>
                   <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                      <content>
-                        <StackPane maxHeight="Infinity" maxWidth="Infinity">
+                        <StackPane id="stackPane" maxHeight="Infinity" maxWidth="Infinity">
                            <children>
                               <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true">
                                  <columnConstraints>

@@ -113,6 +113,11 @@ public class GUI extends Application implements View {
         stage.setMinHeight(720);
         stage.setMinWidth(1280);
 
+        stage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         this.stage = stage;
 
         FXMLController.run(this, stage);

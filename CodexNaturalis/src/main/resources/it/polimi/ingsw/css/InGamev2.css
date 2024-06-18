@@ -1,5 +1,5 @@
 .label{
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FFFFFF;
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 20;
 }
@@ -10,17 +10,41 @@
     -fx-font-size: 30;
 }
 #borderPane{
-    -fx-background-color: #fbfbbb;
+    /*-fx-background-color: #fbfbbb;*/
     /*-fx-background-color: #98E1DC;*/
+    -fx-background-color: #2B2D30;
 }
 
 #stackPane{
-    -fx-background-color: #292d2e;
+    -fx-background-color: #1E1F22;
+}
+
+#chatLabel{
+    -fx-font-family: "Bebas Neue Regular";
+}
+
+#showingLabel{
+    -fx-font-family: "Bebas Neue Regular";
 }
 
 .combo-box{
+    -fx-font-size: 20;
     -fx-font-family: "BebasNeuePro-Regular";
-    -fx-font-size: 15;
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+}
+.combo-box .list-cell {
+    -fx-font-size: 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1E1F22;
+}
+
+.combo-box .text-field {
+    -fx-font-size: 20;
+    -fx-text-fill: #FFFFFF;
+}
+
+.choice-box .choice-box-popup .list-view {
+    -fx-background-color: #1E1F22;
 }
 
 #quitButton{
@@ -29,20 +53,20 @@
 
 .button{
     -fx-background-color: transparent;
-    -fx-text-fill: #0e0e0e;
+    -fx-text-fill: #FFFFFF;
     -fx-font-size: 20;
     -fx-font-family: "Bebas Neue Regular";
     -fx-border-width: 0;
     -fx-padding: 0;
 }
 .button:hover{
-    -fx-text-fill: #dddddd;
+    -fx-text-fill: #BBBBBB;
 }
 
 .text-area{
     -fx-font-size: 25;
     -fx-font-family: "BebasNeuePro-Regular";
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FFFFFF;
     -fx-background-color: transparent;
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
@@ -84,7 +108,7 @@
 }
 
 .text-input{
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FFFFFF;
     -fx-background-color: rgba(20, 20, 20, 0.5);
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 20;
@@ -96,7 +120,7 @@
 }
 
 .userTexts{
-    -fx-text-fill: #000000;
+    -fx-fill: #FFFFFF;
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 20;
 }

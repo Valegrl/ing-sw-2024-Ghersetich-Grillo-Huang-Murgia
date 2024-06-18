@@ -4,17 +4,21 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
+import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.view.gui.controller.MenuController;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Abstract class FXMLController.
@@ -237,5 +241,62 @@ public abstract class FXMLController {
 
         return stackPane;
     }
+
+    public int calculateGridLength(Map<Coordinate, ImmPlayableCard> playedCards){
+        int maxX, minX;
+        maxX = 0;
+        minX = 0;
+        for(Coordinate coordinate : playedCards.keySet()){
+            int currX = coordinate.getX();
+            if(currX > maxX){
+                maxX = currX;
+            }
+            else if(currX < minX){
+                minX = currX;
+            }
+        }
+        return (maxX + 1) - (minX - 1);
+    }
+
+    public int calculateGridHeight(Map<Coordinate, ImmPlayableCard> playedCards){
+        int maxY, minY;
+        maxY = 0;
+        minY = 0;
+        for(Coordinate coordinate : playedCards.keySet()){
+            int currY = coordinate.getY();
+            if(currY > maxY){
+                maxY = currY;
+            }
+            else if(currY < minY){
+                minY = currY;
+            }
+        }
+        return (maxY + 1) - (minY - 1);
+    }
+
+    public int calculateMinX(Map<Coordinate, ImmPlayableCard> playedCards){
+        int minX;
+        minX = 0;
+        for(Coordinate coordinate : playedCards.keySet()){
+            int currX = coordinate.getX();
+            if(currX < minX){
+                minX = currX;
+            }
+        }
+        return minX;
+    }
+
+    public int calculateMaxY(Map<Coordinate, ImmPlayableCard> playedCards){
+        int maxY;
+        maxY = 0;
+        for(Coordinate coordinate : playedCards.keySet()){
+            int currY = coordinate.getY();
+            if(currY > maxY){
+                maxY = currY;
+            }
+        }
+        return maxY;
+    }
+
 
 }

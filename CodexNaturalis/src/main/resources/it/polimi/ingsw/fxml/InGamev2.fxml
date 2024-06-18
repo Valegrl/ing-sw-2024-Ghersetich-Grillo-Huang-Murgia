@@ -140,7 +140,7 @@
                      <children>
                         <!-- colored token -->
                         <Text fx:id="uncoveredUsername1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user1" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="400.0" spacing="5.0">
+                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
                            <children>
                               <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
@@ -148,6 +148,9 @@
                                     <ImageView fx:id="token1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="playerPoints1" text="n" />
                                  </children>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
@@ -222,13 +225,16 @@
                      </padding>
                      <children>
                         <Text fx:id="uncoveredUsername2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user2" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="400.0" spacing="5.0">
+                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
                            <children>
                               <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="token2" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="playerPoints2" text="n" />
                                  </children>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
@@ -296,13 +302,16 @@
                      </VBox.margin>
                      <children>
                         <Text fx:id="uncoveredUsername3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user3" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="400.0" spacing="5.0">
+                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
                            <children>
                               <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="token3" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="playerPoints3" text="n" />
                                  </children>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
@@ -370,13 +379,16 @@
                      </VBox.margin>
                      <children>
                         <Text fx:id="uncoveredUsername4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user4" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="400.0" spacing="5.0">
+                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
                            <children>
                               <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="token4" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="playerPoints4" text="n" />
                                  </children>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
                                  <children>
@@ -444,36 +456,36 @@
       </HBox>
    </bottom>
    <right>
-      <VBox alignment="TOP_CENTER" maxWidth="270.0" minWidth="270.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" maxWidth="270.0" minWidth="270.0" prefHeight="908.0" prefWidth="270.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="92.0" minHeight="80.0" prefWidth="250.0" spacing="10.0">
                <children>
-                  <Label text="Chat">
+                  <Label id="chatLabel" text="Chat">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="chatSelection" maxHeight="30.0" maxWidth="150.0" minHeight="30.0" minWidth="150.0" />
+                  <ComboBox fx:id="chatSelection" maxHeight="30.0" maxWidth="150.0" minHeight="40.0" minWidth="150.0" />
                </children>
                <padding>
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <TextArea id="chatArea" fx:id="chatArea" editable="false" minHeight="220.0" minWidth="250.0" wrapText="true">
+            <TextArea id="chatArea" fx:id="chatArea" editable="false" maxHeight="200.0" minHeight="200.0" minWidth="250.0" wrapText="true">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding></TextArea>
             <TextField id="chatInput" fx:id="chatInput" minHeight="40.0" minWidth="250.0" />
-            <Label text=" SHOWING PLAY AREA">
+            <Label id="showingLabel" text=" SHOWING PLAY AREA">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="playAreaSelection" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" />
+            <ComboBox fx:id="playAreaSelection" maxHeight="30.0" maxWidth="250.0" minHeight="40.0" minWidth="250.0" />
             <Button mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
             <VBox alignment="BOTTOM_CENTER">
                <children>
-                  <TextArea fx:id="gameUpdatesArea" editable="false" minHeight="350.0" minWidth="250.0" wrapText="true">
+                  <TextArea fx:id="gameUpdatesArea" editable="false" minHeight="300.0" minWidth="250.0" wrapText="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -494,7 +506,7 @@
          <children>
             <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
-                  <StackPane maxHeight="Infinity" maxWidth="Infinity" id="stackPane">
+                  <StackPane id="stackPane" maxHeight="Infinity" maxWidth="Infinity">
                      <children>
                         <GridPane fx:id="opponentGridPane" alignment="CENTER" gridLinesVisible="true" managed="false" visible="false">
                           <columnConstraints>
