@@ -11,12 +11,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.FlowPane?>
 <BorderPane id="mainPane" fx:id="mainAnchor" minHeight="720.0" minWidth="1280.0" stylesheets="@../css/GameSetup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.GameSetupController">
    <top>
       <AnchorPane minHeight="50.0" BorderPane.alignment="CENTER">
@@ -34,9 +33,9 @@
          <children>
             <VBox id="vboxMain" alignment="CENTER" layoutX="634.0" layoutY="284.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
-                  <Text fx:id="text0" text="Choose a side to play the start card and one secret objective card."/>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
+                  <Text fx:id="text0" text="Choose a side to play the start card and one secret objective card." />
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
                   <AnchorPane>
                      <children>
                         <Text fx:id="text1" text="Hand:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -70,7 +69,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </AnchorPane>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
                   <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
@@ -88,7 +87,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
                   <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
@@ -106,7 +105,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
                   <AnchorPane>
                      <padding>
                         <Insets left="40.0" />
@@ -124,7 +123,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <Region VBox.vgrow="ALWAYS" maxHeight="100"/>
+                  <Region maxHeight="100" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </children>

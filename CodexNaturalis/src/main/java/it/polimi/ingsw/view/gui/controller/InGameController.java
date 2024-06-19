@@ -442,12 +442,12 @@ public class InGameController extends FXMLController {
                 Platform.runLater(() -> updateAboveLabel());
                 break;
             case UPDATE_GAME_PLAYERS:
-                System.out.println(message);
                 Platform.runLater(() -> {
                     gameUpdatesArea.appendText(message + "\n");
                     updateAboveLabel();
                     updatePoints();
                     updateVisiblePlayAreasOptions();
+                    updateDecks(); //Check if player disconnecting and other guy waiting can draw
                     updateChatOptions();
                     showPlayArea();
                 });
@@ -457,7 +457,7 @@ public class InGameController extends FXMLController {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
                     chatArea.appendText(formattedMessage + "\n");
                 } else {
-                    System.out.println("Message unable to send!");
+                    chatArea.appendText("Message unable to send!");
                 }
                 break;
             case QUIT_GAME:
@@ -602,7 +602,7 @@ public class InGameController extends FXMLController {
             //Updating the ImageViews of the gold deck
             if(visibleGoldCards[i] != null) {
                 this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
-                if(hasToDraw){
+                if(controller.hasTurn() && hasToDraw && controller.getGameStatus() == GameStatus.RUNNING){
                     this.visibleGoldCards.get(i).setEffect(highlight);
                 }
                 else{
@@ -618,7 +618,7 @@ public class InGameController extends FXMLController {
             //Updating the ImageViews of the resource deck
             if(visibleResourceCards[i] != null) {
                 this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
-                if(hasToDraw){
+                if(controller.hasTurn() && hasToDraw && controller.getGameStatus() == GameStatus.RUNNING){
                     this.visibleResourceCards.get(i).setEffect(highlight);
                 }
                 else{
@@ -634,7 +634,7 @@ public class InGameController extends FXMLController {
         if(itemGoldDeck != null) {
             Image backGoldCardImage = getBackCardImage(itemGoldDeck, CardType.GOLD);
             goldDeck.setImage(backGoldCardImage);
-            if(hasToDraw){
+            if(controller.hasTurn() && hasToDraw && controller.getGameStatus() == GameStatus.RUNNING){
                 goldDeck.setEffect(highlight);
             }
             else{
@@ -649,7 +649,7 @@ public class InGameController extends FXMLController {
         if(itemResourceDeck != null) {
             Image backResourceCardImage = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
             resourceDeck.setImage(backResourceCardImage);
-            if(hasToDraw){
+            if(controller.hasTurn() && hasToDraw && controller.getGameStatus() == GameStatus.RUNNING){
                 resourceDeck.setEffect(highlight);
             }
             else{
@@ -691,7 +691,7 @@ public class InGameController extends FXMLController {
             else {
                 currImageView.setImage(getBackCardImage(card.getPermanentResource(), card.getType()));
             }
-            if(controller.hasTurn() && !hasToDraw){
+            if(controller.hasTurn() && !hasToDraw && (controller.getGameStatus() == GameStatus.RUNNING || controller.getGameStatus() == GameStatus.LAST_CIRCLE)){
                 currImageView.setEffect(highlight);
             }
             else{

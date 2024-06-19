@@ -84,7 +84,7 @@
 
 .label{
     -fx-text-fill: #ffffff;
-    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-family: "Bebas Neue Regular";
     -fx-font-size: 40;
     -fx-border-width: 0;
     -fx-padding: 0;
@@ -164,3 +164,4 @@
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
 }
+

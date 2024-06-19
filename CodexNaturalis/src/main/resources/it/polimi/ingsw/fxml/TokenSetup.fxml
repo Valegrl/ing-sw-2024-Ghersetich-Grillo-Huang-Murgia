@@ -22,7 +22,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="1100.0">
                <children>
-                  <Label text="CHOOSE YOUR TOKEN" textFill="WHITE" fx:id="chooseLabel">
+                  <Label fx:id="chooseLabel" text="CHOOSE YOUR TOKEN" textFill="WHITE">
                      <font>
                         <Font size="36.0" />
                      </font>
@@ -125,7 +125,7 @@
             </VBox>
          </children>
       </HBox>
-      <Button fx:id="quitButton" layoutX="890.0" layoutY="1007.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="59.0" prefWidth="166.0" text="QUIT GAME">
+      <Button id="quitButton" fx:id="quitButton" layoutX="890.0" layoutY="1007.0" mnemonicParsing="false" onAction="#quitGame" prefHeight="59.0" prefWidth="166.0" text="QUIT GAME">
          <font>
             <Font size="11.0" />
          </font>

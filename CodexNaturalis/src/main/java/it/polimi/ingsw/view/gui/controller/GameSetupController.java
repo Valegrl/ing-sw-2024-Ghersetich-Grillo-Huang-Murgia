@@ -44,6 +44,12 @@ public class GameSetupController extends FXMLController {
     public BorderPane mainAnchor;
 
     @FXML
+    public AnchorPane secretObjectivePane;
+
+    @FXML
+    public AnchorPane startCardPane;
+
+    @FXML
     public Text text0;
 
     @FXML
@@ -478,6 +484,8 @@ public class GameSetupController extends FXMLController {
      */
     @FXML
     public void showYourSetup(){
+        text4.setVisible(true);
+        text3.setVisible(true);
         secretObjectiveHBox.setManaged(true);
         secretObjectiveHBox.setVisible(true);
         startCardHBox.setManaged(true);
@@ -501,6 +509,8 @@ public class GameSetupController extends FXMLController {
      */
     @FXML
     public void showPlayerSetup(ActionEvent e){
+        text3.setVisible(false);
+        text4.setVisible(false);
         for(ImageView imageView : handCardImages){
             imageView.setManaged(false);
             imageView.setVisible(false);
