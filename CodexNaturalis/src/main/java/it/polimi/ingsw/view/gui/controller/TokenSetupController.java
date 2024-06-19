@@ -18,11 +18,17 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -46,14 +52,22 @@ import java.util.Map;
 public class TokenSetupController extends FXMLController {
 
     @FXML
-    private Label lobbyName;
+    public AnchorPane mainAnchor;
+
+    @FXML
+    public VBox vboxChat;
+
+    @FXML
+    public VBox vBox;
+
+    @FXML
+    private Text lobbyName;
 
     @FXML
     private TextArea chatArea;
 
     @FXML
     private TextField chatInput;
-
 
     @FXML
     private RadioButton generalRadioButton;
@@ -97,6 +111,32 @@ public class TokenSetupController extends FXMLController {
     private Map<String, ImageView> visibleTokens;
 
     boolean tokenChosen;
+
+    public void initialize() {
+        double relativePercentage = 0.15;
+
+        List<ImageView> imageViews = Arrays.asList(red, blue, green, yellow);
+
+        for (ImageView imageView : imageViews) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    vBox.getWidth() * relativePercentage, vBox.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    vBox.getHeight() * relativePercentage, vBox.heightProperty()
+            ));
+        }
+
+        double vboxChatPercentage = 0.32;
+
+        vboxChat.maxWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                vBox.getWidth() * vboxChatPercentage, vBox.widthProperty()
+        ));
+
+        vboxChat.maxHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                vBox.getHeight() * (1-vboxChatPercentage), vBox.heightProperty()
+        ));
+    }
 
 
     public TokenSetupController(){

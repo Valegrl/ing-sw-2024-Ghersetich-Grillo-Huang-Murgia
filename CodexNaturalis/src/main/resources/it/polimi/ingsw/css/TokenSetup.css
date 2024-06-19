@@ -31,10 +31,6 @@
     -fx-padding: 0;
 }
 
-#quitButton:hover{
-    -fx-text-fill: #bbbbbb;
-}
-
 #vbox1{
     -fx-background-radius: 20 20 20 20;
     -fx-border-radius: 20 20 20 20;
@@ -62,12 +58,31 @@
     -fx-padding: 0;
 }
 
+.button{
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 50;
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+.button:hover{
+    -fx-text-fill: #bbbbbb;
+}
+
 .radio-button{
     -fx-font-size: 25;
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-text-fill: #ffffff;
 }
 
+Text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 50;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
 
 .text-area{
     -fx-font-size: 30;
