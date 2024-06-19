@@ -163,10 +163,10 @@ public class Controller {
         if (!virtualViewAccounts.containsKey(vv))
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "You must log in first."), null);
 
-        if (lobbyID == null || lobbyID.isEmpty())
+        if (lobbyID == null || lobbyID.isEmpty() || lobbyID.length() > 32) //FIXME config file
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The provided lobby ID is not allowed."), null);
 
-        if (nRequiredPlayers <2 || nRequiredPlayers > 4)
+        if (nRequiredPlayers < 2 || nRequiredPlayers > 4)
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The number of players should be between 2 and 4."), null);
 
         Account account = virtualViewAccounts.get(vv);
@@ -365,7 +365,7 @@ public class Controller {
      * @return true if the format is invalid, false otherwise.
      */
     private boolean isFormatInvalid(String input) {
-        return input == null || input.isEmpty() || input.contains(" ");
+        return input == null || input.isEmpty() || input.contains(" ") || input.length() > 16; //FIXME config file
     }
 
     /**
