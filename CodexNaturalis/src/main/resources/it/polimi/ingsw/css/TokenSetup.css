@@ -23,14 +23,12 @@
 }
 
 #quitButton {
-    -fx-background-color: #ebe1b8;
-    -fx-border-color: #000000;
-    -fx-border-width: 3px;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 50;
     -fx-font-family: "Bebas Neue Regular";
-    -fx-font-size: 15px;
-    -fx-padding: 10px 20px;
-    -fx-cursor: pointer;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
 }
 
 #vbox1{
