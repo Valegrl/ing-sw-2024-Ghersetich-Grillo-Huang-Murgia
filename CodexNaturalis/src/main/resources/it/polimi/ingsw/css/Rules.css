@@ -14,21 +14,16 @@
     -fx-pref-height: 300px;
 }
 
+
 #backButton {
-    -fx-background-color: #ebe1b8;
-    -fx-border-color: #000000;
-    -fx-border-width: 3px;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 60;
     -fx-font-family: "Bebas Neue Regular";
-    -fx-font-size: 27px;
-    -fx-padding: 10px 20px;
-    -fx-cursor: pointer;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
 }
 
-#backButton:hover {
-    -fx-background-color: #c8b052;
-    -fx-text-fill: #f0f0f0;
-}
 
 #pagination {
     -fx-background-color: transparent;
@@ -43,9 +38,9 @@
 }
 
 #pagination .control-box .number-button {
-    -fx-background-color: #ebe1b8;
+    -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-text-fill: #000000;
-    -fx-border-color: #c8b052;
+    -fx-border-color: #000000;
     -fx-font-size: 20px;
     -fx-font-family: "Bebas Neue Regular";
     -fx-padding: 5px 10px;
@@ -55,10 +50,10 @@
 }
 
 #pagination .control-box .number-button:hover {
-    -fx-background-color: #c8b052;
+    -fx-background-color: #ffffff;
 }
 
 #pagination .control-box .number-button:selected {
-    -fx-background-color: #c8b052;
+    -fx-background-color: #000000;
     -fx-text-fill: #ffffff;
 }
