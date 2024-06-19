@@ -59,6 +59,12 @@ public class InGameController extends FXMLController {
     private GridPane opponentGridPane;
 
     @FXML
+    private ScrollPane gameScrollPane;
+
+    @FXML
+    private StackPane waitingPane;
+
+    @FXML
     private HBox uncovered1;
 
     @FXML
@@ -948,6 +954,10 @@ public class InGameController extends FXMLController {
 
         if(controller.getGameStatus() == GameStatus.WAITING){
             aboveLabel.setText("Waiting for a player to join in or for the timer to run out");
+            gameScrollPane.setManaged(false);
+            gameScrollPane.setVisible(false);
+            waitingPane.setManaged(true);
+            waitingPane.setVisible(true);
         }
         else if(controller.getGameStatus() == GameStatus.RUNNING) {
             if (controller.hasTurn() && !hasToDraw) {
@@ -1149,6 +1159,13 @@ public class InGameController extends FXMLController {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
+    @FXML
+    public void hideWaitingPane(){
+        this.gameScrollPane.setVisible(true);
+        this.gameScrollPane.setManaged(true);
+        this.waitingPane.setVisible(false);
+        this.waitingPane.setManaged(false);
+    }
     /**
      * This method is used to check if the user is in a game.
      * It always returns true, indicating that the user is always in a game.

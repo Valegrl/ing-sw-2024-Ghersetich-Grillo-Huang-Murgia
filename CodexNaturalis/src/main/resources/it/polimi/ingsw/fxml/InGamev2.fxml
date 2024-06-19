@@ -504,7 +504,16 @@
    <center>
       <StackPane>
          <children>
-            <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+            <StackPane fx:id="waitingPane" visible="false" managed="false" id="waitingPane">
+               <children>
+                  <VBox alignment="CENTER" spacing="50.0">
+                     <children>
+                        <Label id="waitingLabel" text="Waiting for a player to join in or for the timer to run out" />
+                        <Button id="hideButton" mnemonicParsing="false" onAction="#hideWaitingPane" text="Hide" />
+                     </children>
+                  </VBox>
+               </children></StackPane>
+            <ScrollPane fx:id="gameScrollPane" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
                   <StackPane id="stackPane" maxHeight="Infinity" maxWidth="Infinity">
                      <children>

@@ -27,6 +27,20 @@
     -fx-font-family: "Bebas Neue Regular";
 }
 
+#waitingLabel{
+    -fx-font-family: "Bebas Neue Regular";
+    -fx-text-fill: #FF0000;
+    -fx-font-size: 40;
+}
+
+#hideButton{
+    -fx-font-size: 40;
+}
+
+#waitingPane{
+    -fx-background-color: #1E1F22;
+}
+
 .combo-box{
     -fx-font-size: 20;
     -fx-font-family: "BebasNeuePro-Regular";
