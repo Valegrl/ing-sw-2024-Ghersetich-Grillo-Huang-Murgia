@@ -620,7 +620,7 @@ public class GameController {
      * If all attempts fail, it throws a RuntimeException.
      */
     private synchronized void autoDrawCard(boolean callNextTurn) {
-        if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING)) {
+        if (gameStarted && (game.getGameStatus() == GameStatus.RUNNING || !callNextTurn)) {
             if (startedMove) {
                 List<Pair<CardType, Integer>> drawOptions = new ArrayList<>(){{ //FIXME config file
                     add(new Pair<>(CardType.RESOURCE, 2));

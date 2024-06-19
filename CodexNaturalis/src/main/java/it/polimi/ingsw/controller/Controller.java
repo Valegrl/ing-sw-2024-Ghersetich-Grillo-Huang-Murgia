@@ -369,13 +369,25 @@ public class Controller {
     }
 
     /**
-     * Returns the single instance of the Controller class.
-     *
      * @return the instance of the Controller class.
      */
     public synchronized static Controller getInstance(){
         if(controller == null)
             controller = new Controller();
         return controller;
+    }
+
+    /**
+     * @return A map of VirtualView and Account pairs representing the users currently logged in.
+     */
+    protected synchronized Map<VirtualView, Account> getVirtualViewAccounts() {
+        return this.virtualViewAccounts;
+    }
+
+    /**
+     * @return A list of GameController instances representing the currently active games.
+     */
+    protected synchronized List<GameController> getGameControllers() {
+        return this.gameControllers;
     }
 }
