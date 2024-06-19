@@ -486,6 +486,7 @@ public class GameSetupController extends FXMLController {
     public void showYourSetup(){
         text4.setVisible(true);
         text3.setVisible(true);
+        text0.setText("Choose a side to play the start card and one secret objective card.");
         secretObjectiveHBox.setManaged(true);
         secretObjectiveHBox.setVisible(true);
         startCardHBox.setManaged(true);
@@ -521,6 +522,7 @@ public class GameSetupController extends FXMLController {
         }
         Button button = (Button) e.getSource();
         String buttonText = button.getText();
+        text0.setText(buttonText + "'s setup");
         showOthersHand(buttonText);
     }
 

@@ -504,11 +504,11 @@
    <center>
       <StackPane>
          <children>
-            <StackPane fx:id="waitingPane" visible="false" managed="false" id="waitingPane">
+            <StackPane id="waitingPane" fx:id="waitingPane" managed="false" visible="false">
                <children>
                   <VBox alignment="CENTER" spacing="50.0">
                      <children>
-                        <Label id="waitingLabel" text="Waiting for a player to join in or for the timer to run out" />
+                        <Label id="waitingLabel" alignment="CENTER" maxHeight="180.0" maxWidth="800.0" minHeight="180.0" minWidth="800.0" prefHeight="180.0" prefWidth="680.0" text="You're the only player online in this match. Waiting for a player to join back or for the time to run out" textAlignment="CENTER" wrapText="true" />
                         <Button id="hideButton" mnemonicParsing="false" onAction="#hideWaitingPane" text="Hide" />
                      </children>
                   </VBox>

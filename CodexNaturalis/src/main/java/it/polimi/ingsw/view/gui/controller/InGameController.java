@@ -953,7 +953,7 @@ public class InGameController extends FXMLController {
         }
 
         if(controller.getGameStatus() == GameStatus.WAITING){
-            aboveLabel.setText("Waiting for a player to join in or for the timer to run out");
+            aboveLabel.setText("Waiting for a player to join back or for the timer to run out");
             gameScrollPane.setManaged(false);
             gameScrollPane.setVisible(false);
             waitingPane.setManaged(true);

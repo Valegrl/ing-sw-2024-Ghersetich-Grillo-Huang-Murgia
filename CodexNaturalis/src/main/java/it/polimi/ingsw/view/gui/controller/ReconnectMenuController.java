@@ -72,6 +72,7 @@ public class ReconnectMenuController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
+        lobbiesTable.setPlaceholder(new Label(""));
 
         lobbiesTable.setOnMouseClicked(event -> {
             if(event.getClickCount() == 2 && (!lobbiesTable.getSelectionModel().isEmpty()))
