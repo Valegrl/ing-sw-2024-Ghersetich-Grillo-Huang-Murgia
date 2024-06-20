@@ -326,7 +326,10 @@ public class InGameController extends FXMLController {
         double relativePercentage = 0.09;
 
         List<ImageView> imageViews = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
-                goldDeck, visibleGoldCard0, visibleGoldCard1);
+                goldDeck, visibleGoldCard0, visibleGoldCard1,
+                handCard0, handCard1, handCard2,
+                opponentHandCard0, opponentHandCard1, opponentHandCard2,
+                commonObjectiveCard0, commonObjectiveCard1, secretObjectiveCard);
 
         for (ImageView imageView : imageViews) {
             imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
@@ -335,22 +338,6 @@ public class InGameController extends FXMLController {
 
             imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
                     borderPane.getHeight() * relativePercentage, borderPane.heightProperty()
-            ));
-        }
-
-        double relativePercentage1 = 0.09;
-
-        List<ImageView> imageViews1 = Arrays.asList(handCard0, handCard1, handCard2,
-                opponentHandCard0, opponentHandCard1, opponentHandCard2,
-                commonObjectiveCard0, commonObjectiveCard1, secretObjectiveCard);
-
-        for (ImageView imageView : imageViews1) {
-            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getWidth() * relativePercentage1, borderPane.widthProperty()
-            ));
-
-            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getHeight() * relativePercentage1, borderPane.heightProperty()
             ));
         }
     }
