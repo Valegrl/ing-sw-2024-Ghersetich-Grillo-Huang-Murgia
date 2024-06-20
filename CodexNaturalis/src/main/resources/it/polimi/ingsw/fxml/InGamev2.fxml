@@ -191,7 +191,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/quill.png" />
                                     </ImageView>
-                                    <Label fx:id="quillOcc1" text="n" />
+                                    <Label fx:id="inkwellOcc1" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -201,7 +201,7 @@
                                           <Image url="@../images/icons/inkwell.png" />
                                        </image>
                                     </ImageView>
-                                    <Label fx:id="inkwellOcc1" text="n" />
+                                    <Label fx:id="quillOcc1" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -273,7 +273,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/quill.png" />
                                     </ImageView>
-                                    <Label fx:id="quillOcc2" text="n" />
+                                    <Label fx:id="inkwellOcc2" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -281,7 +281,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/inkwell.png" />
                                     </ImageView>
-                                    <Label fx:id="inkwellOcc2" text="n" />
+                                    <Label fx:id="quillOcc2" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -350,7 +350,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/quill.png" />
                                     </ImageView>
-                                    <Label fx:id="quillOcc3" text="n" />
+                                    <Label fx:id="inkwellOcc3" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -358,7 +358,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/inkwell.png" />
                                     </ImageView>
-                                    <Label fx:id="inkwellOcc3" text="n" />
+                                    <Label fx:id="quillOcc3" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -427,7 +427,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/quill.png" />
                                     </ImageView>
-                                    <Label fx:id="quillOcc4" text="n" />
+                                    <Label fx:id="inkwellOcc4" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
@@ -435,7 +435,7 @@
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <Image url="@../images/icons/inkwell.png" />
                                     </ImageView>
-                                    <Label fx:id="inkwellOcc4" text="n" />
+                                    <Label fx:id="quillOcc4" text="n" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
