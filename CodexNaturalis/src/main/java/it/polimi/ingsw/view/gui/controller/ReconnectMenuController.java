@@ -111,25 +111,14 @@ public class ReconnectMenuController extends FXMLController {
                 System.out.println(message);
                 if(feedback == Feedback.SUCCESS){
                     if(!controller.isInSetup()) {
-                        if (controller.getGameStatus().equals(GameStatus.RUNNING)) {
-                            Platform.runLater(() -> {
-                                try {
-                                    switchScreen("InGamev2");
-                                } catch (IOException exception) {
-                                    throw new RuntimeException(exception);
-                                }
-                            });
-                        } else if (controller.getGameStatus().equals(GameStatus.ENDED)) {
-                            Platform.runLater(() -> {
-                                try {
-                                    switchScreen("EndedGamev2");
-                                } catch (IOException exception) {
-                                    throw new RuntimeException(exception);
-                                }
-                            });
-                        }
-                    }
-                    else if(controller.isInSetup()){
+                        Platform.runLater(() -> {
+                            try {
+                                switchScreen("InGamev2");
+                            } catch (IOException exception) {
+                                throw new RuntimeException(exception);
+                            }
+                        });
+                    } else if(controller.isInSetup()) {
                         Platform.runLater(() -> {
                             reconnectLabel.setText("Wait, we are connecting you to the game.");
                             backButton.setVisible(false);
@@ -142,6 +131,15 @@ public class ReconnectMenuController extends FXMLController {
                 else{
                     Platform.runLater(() -> errorLabel.setText(message));
                 }
+                break;
+            case ENDED_GAME:
+                Platform.runLater(() -> {
+                    try {
+                        switchScreen("EndedGamev2");
+                    } catch (IOException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                });
                 break;
             case CHOOSE_TOKEN_SETUP:
                 if(!controller.isInTokenSetup()) {

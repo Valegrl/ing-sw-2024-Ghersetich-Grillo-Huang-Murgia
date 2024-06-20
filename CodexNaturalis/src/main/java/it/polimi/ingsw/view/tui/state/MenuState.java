@@ -102,6 +102,13 @@ public class MenuState extends ViewState {
                     reconnect();
                 }
                 break;
+            case ENDED_GAME:
+                clearConsole();
+                view.stopInputRead(true);
+                showResponseMessage(message, 2000);
+                view.clearInput();
+                transition(new EndedGameState(view));
+                break;
         }
         notifyResponse();
     }

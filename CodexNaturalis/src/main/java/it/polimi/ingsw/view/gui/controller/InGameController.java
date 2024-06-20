@@ -440,7 +440,7 @@ public class InGameController extends FXMLController {
                 break;
             case NEW_GAME_STATUS:
                 Platform.runLater(() -> {
-                    if (controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                    if (controller.getGameStatus().equals(GameStatus.RUNNING) || controller.getGameStatus().equals(GameStatus.LAST_CIRCLE)) {
                         gameUpdatesArea.appendText(message + "\n");
                     }
                     updateAboveLabel();
