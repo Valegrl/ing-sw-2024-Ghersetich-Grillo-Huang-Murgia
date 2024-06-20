@@ -38,12 +38,9 @@ class ControllerTest {
         virtualView1 = new VirtualView(gameListener1);
         virtualView2 = new VirtualView(gameListener2);
         virtualView3 = new VirtualView(gameListener3);
-        String password1 = "password1";
-        account1 = new Account(username1, password1);
-        String password2 = "password2";
-        account2 = new Account(username2, password2);
-        String password3 = "password3";
-        account3 = new Account(username3, password3);
+        account1 = new Account(username1, "password1");
+        account2 = new Account(username2, "password2");
+        account3 = new Account(username3, "password3");
 
         controller.register(account1);
         controller.register(account2);

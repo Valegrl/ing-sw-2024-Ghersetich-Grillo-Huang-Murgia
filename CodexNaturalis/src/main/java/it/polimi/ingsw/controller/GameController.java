@@ -1032,7 +1032,7 @@ public class GameController {
      * This method is called when a player's turn ends.
      * It updates the game's turn and starts the action timer for the next player.
      */
-    private synchronized void nextTurn(){
+    private void nextTurn(){
         this.startedMove = false;
         this.actionTimer.cancel();
         game.newTurn(true);
