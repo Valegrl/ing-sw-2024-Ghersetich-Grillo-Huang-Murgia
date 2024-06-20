@@ -202,7 +202,7 @@ public class EndedGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png");
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", 150, 100, true, true);
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -214,9 +214,9 @@ public class EndedGameController extends FXMLController {
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png");
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", 150, 100, true, true);
         } else {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png");
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", 150, 100, true, true);
         }
         startStackPane = stackPaneBuilder(image);
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
@@ -271,9 +271,9 @@ public class EndedGameController extends FXMLController {
         }
 
         ImmObjectiveCard objectiveCard0 = endedGameData.getCommonObjectives()[0];
-        commonObjective0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png"));
+        commonObjective0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png", 150, 100, true, true));
         ImmObjectiveCard objectiveCard1 = endedGameData.getCommonObjectives()[1];
-        commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png"));
+        commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", 150, 100, true, true));
     }
 
     private void showPlayers(){
@@ -300,7 +300,7 @@ public class EndedGameController extends FXMLController {
             i++;
         }
         ImmObjectiveCard secretObjCard = endedGameData.getSecretObjectives().get(username);
-        secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png"));
+        secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", 150, 100, true, true));
     }
 
     private void updateVisiblePlayAreasOptions(){
