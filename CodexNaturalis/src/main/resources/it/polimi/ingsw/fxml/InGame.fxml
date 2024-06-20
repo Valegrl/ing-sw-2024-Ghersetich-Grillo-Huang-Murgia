@@ -18,445 +18,447 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="borderPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/InGame.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.InGameController">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+<BorderPane fx:id="borderPane" minHeight="720.0" minWidth="1280.0" stylesheets="@../css/InGame.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.InGameController">
    <top>
-      <HBox alignment="CENTER_LEFT" minHeight="50.0" minWidth="1870.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="50.0" minHeight="50.0" BorderPane.alignment="CENTER" >
          <children>
-            <HBox alignment="CENTER" minWidth="500.0">
-               <children>
-                  <Label id="gameName" fx:id="gameName" text="Game:">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-               </children>
+            <HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="200.0">
+               <Label id="gameName" fx:id="gameName" text="Game:">
+                  <HBox.margin>
+                     <Insets/>
+                  </HBox.margin>
+               </Label>
             </HBox>
-            <HBox alignment="CENTER" minWidth="1000.0">
-               <children>
-                  <Label id="aboveLabel" fx:id="aboveLabel" text="Action:">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-               </children>
+            <HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="270.0">
+               <Label id="aboveLabel" fx:id="aboveLabel" text="Action:">
+                  <HBox.margin>
+                     <Insets/>
+                  </HBox.margin>
+               </Label>
             </HBox>
          </children>
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-      </HBox>
+      </AnchorPane>
    </top>
    <left>
-      <VBox alignment="CENTER" maxWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="CENTER" maxWidth="190.0" minHeight="400.0" minWidth="190.0" spacing="10.0">
-               <children>
-                  <Label text="Resource cards" />
-                  <ImageView fx:id="resourceDeck" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="visibleResourceCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="visibleResourceCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" maxWidth="190.0" minHeight="400.0" minWidth="190.0" spacing="10.0">
-               <children>
-                  <Label text="Gold cards" />
-                  <ImageView fx:id="goldDeck" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="visibleGoldCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="visibleGoldCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </VBox>
-         </children>
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
-      </VBox>
+      <AnchorPane minWidth="160.0" BorderPane.alignment="CENTER">
+         <VBox BorderPane.alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+               <VBox alignment="CENTER" spacing="10.0">
+                  <children>
+                     <Label text="Resource cards" />
+                     <ImageView fx:id="resourceDeck" pickOnBounds="true" preserveRatio="true" />
+                     <ImageView fx:id="visibleResourceCard0" pickOnBounds="true" preserveRatio="true" />
+                     <ImageView fx:id="visibleResourceCard1" pickOnBounds="true" preserveRatio="true" />
+                  </children>
+               </VBox>
+               <Region minHeight="20"/>
+               <VBox alignment="CENTER" spacing="10.0">
+                  <children>
+                     <Label text="Gold cards" />
+                     <ImageView fx:id="goldDeck" pickOnBounds="true" preserveRatio="true" />
+                     <ImageView fx:id="visibleGoldCard0" pickOnBounds="true" preserveRatio="true" />
+                     <ImageView fx:id="visibleGoldCard1" pickOnBounds="true" preserveRatio="true" />
+                  </children>
+               </VBox>
+               <Region VBox.vgrow="ALWAYS" />
+            </children>
+            <padding>
+               <Insets left="5.0" right="5.0" />
+            </padding>
+         </VBox>
+      </AnchorPane>
    </left>
    <bottom>
-      <HBox alignment="CENTER_RIGHT" maxHeight="200.0" minHeight="200.0" minWidth="1870.0" spacing="20.0" BorderPane.alignment="CENTER_RIGHT">
-         <children>
-            <VBox alignment="CENTER" minHeight="200.0" minWidth="110.0">
-               <children>
-                  <Button id="quitButton" mnemonicParsing="false" onAction="#quit" text="Quit" />
-               </children>
-            </VBox>
-            <VBox alignment="TOP_CENTER" maxWidth="520.0" minWidth="520.0" spacing="10.0">
-               <children>
-                  <Label fx:id="handLabel" text="My hand" />
-                  <HBox alignment="CENTER" minHeight="120.0" spacing="15.0">
-                     <children>
-                        <ImageView fx:id="handCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="handCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="handCard2" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="opponentHandCard0" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
-                        <ImageView fx:id="opponentHandCard1" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
-                        <ImageView fx:id="opponentHandCard2" fitHeight="100.0" fitWidth="150.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
-                     </children>
-                  </HBox>
-                  <Button fx:id="flipButton" mnemonicParsing="false" onAction="#setPlayFlipped" text="Flip" />
-               </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-            </VBox>
-            <VBox alignment="TOP_CENTER" maxWidth="360.0" minWidth="360.0" spacing="10.0">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-               <children>
-                  <Label text="Common objectives" />
-                  <HBox alignment="CENTER" minHeight="120.0" spacing="15.0">
-                     <children>
-                        <ImageView fx:id="commonObjectiveCard0" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="commonObjectiveCard1" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="secretObjectiveVBox" alignment="TOP_CENTER" maxWidth="220.0" minWidth="220.0" spacing="10.0">
-               <children>
-                  <Label text="Secret objective" />
-                  <HBox alignment="CENTER" minHeight="120.0">
-                     <children>
-                        <ImageView fx:id="secretObjectiveCard" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-            </VBox>
-            <VBox alignment="CENTER_RIGHT" maxWidth="560.0" minWidth="560.0">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <children>
-                  <HBox fx:id="uncovered1" alignment="CENTER_RIGHT" minHeight="40.0">
-                     <children>
-                        <!-- colored token -->
-                        <Text fx:id="uncoveredUsername1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user1" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
-                           <children>
-                              <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <!-- Points -->
-                                    <ImageView fx:id="token1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="playerPoints1" text="n" />
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/fungi.png" />
-                                    </ImageView>
-                                    <Label fx:id="fungiOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/plant.png" />
-                                    </ImageView>
-                                    <Label fx:id="plantOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/animal.png" />
-                                    </ImageView>
-                                    <Label fx:id="animalOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/icons/insect.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="insectOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/quill.png" />
-                                    </ImageView>
-                                    <Label fx:id="inkwellOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/icons/inkwell.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="quillOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/manuscript.png" />
-                                    </ImageView>
-                                    <Label fx:id="manuscriptOcc1" text="n" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
-                  </HBox>
-                  <HBox fx:id="uncovered2" alignment="CENTER_RIGHT" minHeight="40.0">
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
-                     <children>
-                        <Text fx:id="uncoveredUsername2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user2" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
-                           <children>
-                              <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fx:id="token2" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="playerPoints2" text="n" />
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+      <AnchorPane BorderPane.alignment="CENTER">
+         <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" maxHeight="200.0" minHeight="200.0" spacing="20.0">
+            <children>
+               <VBox alignment="CENTER" minHeight="200.0">
+                  <children>
+                     <Button id="quitButton" minWidth="80.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
+                  </children>
+               </VBox>
+               <Region HBox.hgrow="ALWAYS"/>
+               <VBox alignment="TOP_CENTER" spacing="10.0">
+                  <children>
+                     <Label fx:id="handLabel" text="My hand" />
+                     <HBox alignment="CENTER" spacing="15.0">
+                        <children>
+                           <ImageView fx:id="handCard0" pickOnBounds="true" preserveRatio="true" />
+                           <ImageView fx:id="handCard1" pickOnBounds="true" preserveRatio="true" />
+                           <ImageView fx:id="handCard2" pickOnBounds="true" preserveRatio="true" />
+                           <ImageView fx:id="opponentHandCard0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                           <ImageView fx:id="opponentHandCard1" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                           <ImageView fx:id="opponentHandCard2" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                        </children>
+                     </HBox>
+                     <Button fx:id="flipButton" mnemonicParsing="false" onAction="#setPlayFlipped" text="Flip" />
+                  </children>
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+               </VBox>
+               <VBox alignment="TOP_CENTER" spacing="10.0">
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <children>
+                     <Label text="Common objectives" />
+                     <HBox alignment="CENTER" spacing="15.0">
+                        <children>
+                           <ImageView fx:id="commonObjectiveCard0" pickOnBounds="true" preserveRatio="true" />
+                           <ImageView fx:id="commonObjectiveCard1" pickOnBounds="true" preserveRatio="true" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+               <VBox fx:id="secretObjectiveVBox" alignment="TOP_CENTER" spacing="10.0">
+                  <children>
+                     <Label text="Secret objective" />
+                     <HBox alignment="CENTER">
+                        <children>
+                           <ImageView fx:id="secretObjectiveCard" pickOnBounds="true" preserveRatio="true" />
+                        </children>
+                     </HBox>
+                  </children>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+               </VBox>
+               <VBox alignment="CENTER_RIGHT">
+                  <HBox.margin>
+                     <Insets right="20.0" />
+                  </HBox.margin>
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <children>
+                     <HBox fx:id="uncovered1" alignment="CENTER_RIGHT" minHeight="40.0">
+                        <children>
+                           <!-- colored token -->
+                           <Text fx:id="uncoveredUsername1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user1" />
+                           <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                              <children>
+                                 <HBox alignment="CENTER" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <!-- Points -->
+                                       <ImageView fx:id="token1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                                       <Label fx:id="playerPoints1" text="n" />
+                                    </children>
+                                    <HBox.margin>
+                                       <Insets right="40.0" />
+                                    </HBox.margin>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                           <Image url="@../images/icons/fungi.png" />
-                                    </ImageView>
-                                    <Label fx:id="fungiOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/plant.png" />
-                                    </ImageView>
-                                    <Label fx:id="plantOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/animal.png" />
-                                    </ImageView>
-                                    <Label fx:id="animalOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/insect.png" />
-                                    </ImageView>
-                                    <Label fx:id="insectOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/quill.png" />
-                                    </ImageView>
-                                    <Label fx:id="inkwellOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/inkwell.png" />
-                                    </ImageView>
-                                    <Label fx:id="quillOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/manuscript.png" />
-                                    </ImageView>
-                                    <Label fx:id="manuscriptOcc2" text="n" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
-                  <HBox fx:id="uncovered3" alignment="CENTER_RIGHT" minHeight="40.0">
-                     <VBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </VBox.margin>
-                     <children>
-                        <Text fx:id="uncoveredUsername3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user3" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
-                           <children>
-                              <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fx:id="token3" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="playerPoints3" text="n" />
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/fungi.png" />
-                                    </ImageView>
-                                    <Label fx:id="fungiOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/plant.png" />
-                                    </ImageView>
-                                    <Label fx:id="plantOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/animal.png" />
-                                    </ImageView>
-                                    <Label fx:id="animalOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/insect.png" />
-                                    </ImageView>
-                                    <Label fx:id="insectOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/quill.png" />
-                                    </ImageView>
-                                    <Label fx:id="inkwellOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/inkwell.png" />
-                                    </ImageView>
-                                    <Label fx:id="quillOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/manuscript.png" />
-                                    </ImageView>
-                                    <Label fx:id="manuscriptOcc3" text="n" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
-                  <HBox fx:id="uncovered4" alignment="CENTER_RIGHT" minHeight="40.0">
-                     <VBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </VBox.margin>
-                     <children>
-                        <Text fx:id="uncoveredUsername4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user4" />
-                        <HBox alignment="CENTER_RIGHT" minWidth="350.0" spacing="5.0">
-                           <children>
-                              <HBox alignment="CENTER" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fx:id="token4" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="playerPoints4" text="n" />
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets right="50.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/fungi.png" />
-                                    </ImageView>
-                                    <Label fx:id="fungiOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/plant.png" />
-                                    </ImageView>
-                                    <Label fx:id="plantOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/animal.png" />
-                                    </ImageView>
-                                    <Label fx:id="animalOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/insect.png" />
-                                    </ImageView>
-                                    <Label fx:id="insectOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/quill.png" />
-                                    </ImageView>
-                                    <Label fx:id="inkwellOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/inkwell.png" />
-                                    </ImageView>
-                                    <Label fx:id="quillOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="40.0" minWidth="40.0" spacing="5.0">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <Image url="@../images/icons/manuscript.png" />
-                                    </ImageView>
-                                    <Label fx:id="manuscriptOcc4" text="n" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
+                                       </ImageView>
+                                       <Label fx:id="fungiOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/plant.png" />
+                                       </ImageView>
+                                       <Label fx:id="plantOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/animal.png" />
+                                       </ImageView>
+                                       <Label fx:id="animalOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@../images/icons/insect.png" />
+                                          </image>
+                                       </ImageView>
+                                       <Label fx:id="insectOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/quill.png" />
+                                       </ImageView>
+                                       <Label fx:id="inkwellOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@../images/icons/inkwell.png" />
+                                          </image>
+                                       </ImageView>
+                                       <Label fx:id="quillOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/manuscript.png" />
+                                       </ImageView>
+                                       <Label fx:id="manuscriptOcc1" text="n" />
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </HBox>
+                        </children>
+                        <padding>
+                           <Insets left="5.0" right="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox fx:id="uncovered2" alignment="CENTER_RIGHT" minHeight="40.0">
+                        <padding>
+                           <Insets left="5.0" right="5.0" />
+                        </padding>
+                        <children>
+                           <Text fx:id="uncoveredUsername2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user2" />
+                           <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                              <children>
+                                 <HBox alignment="CENTER" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fx:id="token2" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                                       <Label fx:id="playerPoints2" text="n" />
+                                    </children>
+                                    <HBox.margin>
+                                       <Insets right="40.0" />
+                                    </HBox.margin>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <Image url="@../images/icons/fungi.png" />
+                                       </ImageView>
+                                       <Label fx:id="fungiOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/plant.png" />
+                                       </ImageView>
+                                       <Label fx:id="plantOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/animal.png" />
+                                       </ImageView>
+                                       <Label fx:id="animalOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/insect.png" />
+                                       </ImageView>
+                                       <Label fx:id="insectOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/quill.png" />
+                                       </ImageView>
+                                       <Label fx:id="inkwellOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/inkwell.png" />
+                                       </ImageView>
+                                       <Label fx:id="quillOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/manuscript.png" />
+                                       </ImageView>
+                                       <Label fx:id="manuscriptOcc2" text="n" />
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </HBox>
+                        </children>
+                     </HBox>
+                     <HBox fx:id="uncovered3" alignment="CENTER_RIGHT" minHeight="40.0">
+                        <VBox.margin>
+                           <Insets left="5.0" right="5.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text fx:id="uncoveredUsername3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user3" />
+                           <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                              <children>
+                                 <HBox alignment="CENTER" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fx:id="token3" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                                       <Label fx:id="playerPoints3" text="n" />
+                                    </children>
+                                    <HBox.margin>
+                                       <Insets right="40.0" />
+                                    </HBox.margin>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/fungi.png" />
+                                       </ImageView>
+                                       <Label fx:id="fungiOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/plant.png" />
+                                       </ImageView>
+                                       <Label fx:id="plantOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/animal.png" />
+                                       </ImageView>
+                                       <Label fx:id="animalOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/insect.png" />
+                                       </ImageView>
+                                       <Label fx:id="insectOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/quill.png" />
+                                       </ImageView>
+                                       <Label fx:id="inkwellOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/inkwell.png" />
+                                       </ImageView>
+                                       <Label fx:id="quillOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/manuscript.png" />
+                                       </ImageView>
+                                       <Label fx:id="manuscriptOcc3" text="n" />
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </HBox>
+                        </children>
+                     </HBox>
+                     <HBox fx:id="uncovered4" alignment="CENTER_RIGHT" minHeight="40.0">
+                        <VBox.margin>
+                           <Insets left="5.0" right="5.0" />
+                        </VBox.margin>
+                        <children>
+                           <Text fx:id="uncoveredUsername4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userTexts" text="user4" />
+                           <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                              <children>
+                                 <HBox alignment="CENTER" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fx:id="token4" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                                       <Label fx:id="playerPoints4" text="n" />
+                                    </children>
+                                    <HBox.margin>
+                                       <Insets right="40.0" />
+                                    </HBox.margin>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="215.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/fungi.png" />
+                                       </ImageView>
+                                       <Label fx:id="fungiOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/plant.png" />
+                                       </ImageView>
+                                       <Label fx:id="plantOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/animal.png" />
+                                       </ImageView>
+                                       <Label fx:id="animalOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="193.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/insect.png" />
+                                       </ImageView>
+                                       <Label fx:id="insectOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="125.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/quill.png" />
+                                       </ImageView>
+                                       <Label fx:id="inkwellOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="238.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/inkwell.png" />
+                                       </ImageView>
+                                       <Label fx:id="quillOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                                 <HBox alignment="CENTER" layoutX="260.0" layoutY="10.0" maxWidth="30.0" minWidth="30.0" spacing="5.0">
+                                    <children>
+                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <Image url="@../images/icons/manuscript.png" />
+                                       </ImageView>
+                                       <Label fx:id="manuscriptOcc4" text="n" />
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </HBox>
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
+      </AnchorPane>
    </bottom>
    <right>
-      <VBox alignment="TOP_CENTER" maxWidth="270.0" minWidth="270.0" prefHeight="908.0" prefWidth="270.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" maxWidth="270.0" minWidth="270.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_LEFT" maxHeight="92.0" minHeight="80.0" prefWidth="250.0" spacing="10.0">
                <children>
@@ -471,10 +473,11 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <TextArea id="chatArea" fx:id="chatArea" editable="false" maxHeight="200.0" minHeight="200.0" minWidth="250.0" wrapText="true">
+            <TextArea id="chatArea" fx:id="chatArea" editable="false" maxHeight="200.0" minWidth="250.0" wrapText="true">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding></TextArea>
+               </padding>
+            </TextArea>
             <TextField id="chatInput" fx:id="chatInput" minHeight="40.0" minWidth="250.0" />
             <Label id="showingLabel" text=" SHOWING PLAY AREA">
                <VBox.margin>
@@ -485,7 +488,7 @@
             <Button mnemonicParsing="false" onAction="#showPlayArea" text="Show" />
             <VBox alignment="BOTTOM_CENTER">
                <children>
-                  <TextArea fx:id="gameUpdatesArea" editable="false" minHeight="300.0" minWidth="250.0" wrapText="true">
+                  <TextArea fx:id="gameUpdatesArea" editable="false" maxHeight="300.0" minWidth="250.0" wrapText="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>

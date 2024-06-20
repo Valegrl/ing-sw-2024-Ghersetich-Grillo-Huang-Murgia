@@ -18,6 +18,7 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -49,6 +50,9 @@ import java.util.Map;
  * The class also provides methods for drag and drop functionality for the cards and for submitting chat messages.
  */
 public class InGameController extends FXMLController {
+
+    @FXML
+    public BorderPane borderPane;
 
     @FXML
     private GridPane gridPane;
@@ -318,7 +322,38 @@ public class InGameController extends FXMLController {
 
     private List<ImageView> opponentCardImages;
 
+    public void initialize(){
+        double relativePercentage = 0.09;
 
+        List<ImageView> imageViews = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
+                goldDeck, visibleGoldCard0, visibleGoldCard1);
+
+        for (ImageView imageView : imageViews) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * relativePercentage, borderPane.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getHeight() * relativePercentage, borderPane.heightProperty()
+            ));
+        }
+
+        double relativePercentage1 = 0.09;
+
+        List<ImageView> imageViews1 = Arrays.asList(handCard0, handCard1, handCard2,
+                opponentHandCard0, opponentHandCard1, opponentHandCard2,
+                commonObjectiveCard0, commonObjectiveCard1, secretObjectiveCard);
+
+        for (ImageView imageView : imageViews1) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * relativePercentage1, borderPane.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getHeight() * relativePercentage1, borderPane.heightProperty()
+            ));
+        }
+    }
 
     @Override
     public void run(View view, Stage stage){
