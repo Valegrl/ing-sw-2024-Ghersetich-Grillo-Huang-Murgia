@@ -138,32 +138,32 @@ public abstract class FXMLController {
         if(type == CardType.GOLD){
             switch (item){
                 case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", 150, 100, true, true);
                     break;
                 case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", 150, 100, true, true);
                     break;
                 case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", 150, 100, true, true);
                     break;
                 case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", 150, 100, true, true);
                     break;
             }
         }
         else{
             switch (item){
                 case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", 150, 100, true, true);
                     break;
                 case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", 150, 100, true, true);
                     break;
                 case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", 150, 100, true, true);
                     break;
                 case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png");
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", 150, 100, true, true);
                     break;
             }
         }
@@ -181,10 +181,10 @@ public abstract class FXMLController {
     public Image getFrontCardImage(String ID, CardType type){
         Image image = null;
         if(type == CardType.GOLD){
-            image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png");
+            image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png", 150, 100, true, true);
         }
         else{
-            image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png");
+            image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png", 150, 100, true, true);
         }
         return image;
     }
