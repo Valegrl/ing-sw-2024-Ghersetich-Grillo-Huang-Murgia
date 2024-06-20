@@ -286,12 +286,12 @@ public class LobbyController extends FXMLController {
                            switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
-                            exception.printStackTrace();
+                            throw new RuntimeException("FXML Exception: failed to load enter EnterLobbiesMenu", exception);
                         }
                     });
                 }
                 else{
-                    chatArea.appendText("Something bad happened, you can't quit!");
+                    Platform.runLater(() -> chatArea.appendText("Something bad happened, you can't quit!"));
                 }
                 break;
             case EventID.KICKED_PLAYER_FROM_LOBBY:
@@ -300,20 +300,20 @@ public class LobbyController extends FXMLController {
                         switchScreen("EnterLobbiesMenu");
                     }
                     catch (IOException exception){
-                        exception.printStackTrace();
+                        throw new RuntimeException("FXML Exception: failed to load enter EnterLobbiesMenu", exception);
                     }
                 });
                 break;
             case EventID.GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
-                    chatArea.appendText(getChatFormattedMessages + "\n");
+                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"));
                 break;
             case EventID.CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
-                    chatArea.appendText(formattedMessage + "\n");
+                    Platform.runLater(() ->chatArea.appendText(formattedMessage + "\n"));
                 } else {
-                    System.out.println("Message unable to send!");
+                    Platform.runLater(() ->chatArea.appendText("Message unable to send!\n"));
                 }
                 break;
 
@@ -321,7 +321,6 @@ public class LobbyController extends FXMLController {
                 BackgroundGameSetupController nextController = new BackgroundGameSetupController();
                 transition(nextController);
                 break;
-
         }
         notifyResponse();
     }

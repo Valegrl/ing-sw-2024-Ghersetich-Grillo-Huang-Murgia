@@ -44,12 +44,6 @@ public class GameSetupController extends FXMLController {
     public BorderPane mainAnchor;
 
     @FXML
-    public AnchorPane secretObjectivePane;
-
-    @FXML
-    public AnchorPane startCardPane;
-
-    @FXML
     public Text text0;
 
     @FXML
@@ -160,10 +154,6 @@ public class GameSetupController extends FXMLController {
     @FXML
     private RadioButton radioButton3;
 
-
-
-    @FXML
-    private Button yourSetupButton;
 
     @FXML
     private Button setupButton1;
@@ -312,11 +302,13 @@ public class GameSetupController extends FXMLController {
         switch(EventID.getByID(eventID)) {
             case GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
-                chatArea.appendText(getChatFormattedMessages + "\n");
+                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"));
                 break;
             case CHOSEN_CARDS_SETUP:
-                chatArea.appendText("\n" + message + "\n");
-                readyButton.setVisible(false);
+                Platform.runLater(() ->{
+                    chatArea.appendText("\n" + message + "\n");
+                    readyButton.setVisible(false);
+                });
                 break;
             case UPDATE_GAME_PLAYERS:
                 Platform.runLater(() -> {
@@ -330,7 +322,7 @@ public class GameSetupController extends FXMLController {
                        switchScreen("TokenSetup");
                     }
                     catch (IOException exception){
-                        exception.printStackTrace();
+                        throw new RuntimeException("FXML Exception: failed to load TokenSetup", exception);
                     }
                 });
                 break;
@@ -341,20 +333,20 @@ public class GameSetupController extends FXMLController {
                             switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
-                            exception.printStackTrace();
+                            throw new RuntimeException("FXML Exception: failed to load EnterLobbies", exception);
                         }
                     });
                 }
                 else{
-                    System.out.println("Something bad happened, you can't quit!");
+                    Platform.runLater(() -> chatArea.appendText("Something bad happened, you can't quit!"));
                 }
                 break;
             case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
-                    chatArea.appendText(formattedMessage + "\n");
+                    Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
-                    System.out.println("Message unable to send!");
+                    Platform.runLater(() -> chatArea.appendText("Message unable to send!\n"));
                 }
                 break;
         }

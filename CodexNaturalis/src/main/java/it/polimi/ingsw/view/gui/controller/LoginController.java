@@ -205,7 +205,8 @@ public class LoginController extends FXMLController {
                             switchScreen("Menu");
                         }
                         catch (IOException exception){
-                            errorLogin.setText("Error " + exception);
+                            errorLogin.setText("Login failed");
+                            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                         }
                     });
                 } else {

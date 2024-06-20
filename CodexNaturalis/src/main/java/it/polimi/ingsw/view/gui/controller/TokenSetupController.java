@@ -24,8 +24,6 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -98,9 +96,6 @@ public class TokenSetupController extends FXMLController {
 
     @FXML
     private Button quitButton;
-
-    @FXML
-    private Button sendButton;
 
     @FXML
     private Label chooseLabel;
@@ -225,17 +220,19 @@ public class TokenSetupController extends FXMLController {
             case CHOSEN_TOKEN_SETUP:
                 if(feedback == Feedback.SUCCESS){
                     tokenChosen = true;
-                    for (ImageView imageView : visibleTokens.values()) {
-                        imageView.setVisible(false);
-                    }
-                    quitButton.setVisible(false);
-                    Platform.runLater(() -> chooseLabel.setText("TOKEN CHOSEN"));
+                    Platform.runLater(() -> {
+                        for (ImageView imageView : visibleTokens.values()) {
+                            imageView.setVisible(false);
+                        }
+                        quitButton.setVisible(false);
+                        chooseLabel.setText("TOKEN CHOSEN");
+                        chatArea.appendText("\n" + message + "\n");
+                    });
                 }
-                chatArea.appendText("\n" + message + "\n");
-                    break;
+                break;
 
             case UPDATE_GAME_PLAYERS:
-                chatArea.appendText("\n" + message + "\n");
+                Platform.runLater(() -> chatArea.appendText("\n" + message + "\n"));
                 break;
 
             case UPDATE_LOCAL_MODEL:
@@ -243,22 +240,22 @@ public class TokenSetupController extends FXMLController {
                     try {
                        switchScreen("InGamev2");
                     } catch (IOException exception) {
-                        exception.printStackTrace();
+                        throw new RuntimeException("FXML Exception: failed to load InGame", exception);
                     }
                 });
                 break;
 
             case GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
-                chatArea.appendText(getChatFormattedMessages + "\n");
+                Platform.runLater(() -> chatArea.appendText(getChatFormattedMessages + "\n"));
                 break;
 
             case CHAT_GM, CHAT_PM:
+                String formattedMessage = message.replace("[1m", " ").replace("[0m","");
                 if (feedback.equals(Feedback.SUCCESS)) {
-                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
-                    chatArea.appendText(formattedMessage + "\n");
+                    Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
-                    chatArea.appendText(message);
+                    Platform.runLater(() -> chatArea.appendText(message));
                 }
                 break;
 
@@ -269,12 +266,12 @@ public class TokenSetupController extends FXMLController {
                             switchScreen("EnterLobbiesMenu");
                         }
                         catch (IOException exception){
-                            exception.printStackTrace();
+                            throw new RuntimeException("FXML Exception: failed to load EnterLobbiesMenu", exception);
                         }
                     });
                 }
                 else{
-                    chatArea.appendText(message);
+                    Platform.runLater(() -> chatArea.appendText(message));
                 }
                 break;
         }

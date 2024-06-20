@@ -6,7 +6,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.GetMyOfflineGamesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
@@ -115,7 +114,7 @@ public class ReconnectMenuController extends FXMLController {
                             try {
                                 switchScreen("InGamev2");
                             } catch (IOException exception) {
-                                throw new RuntimeException(exception);
+                                throw new RuntimeException("FXML Exception: failed to load InGame",exception);
                             }
                         });
                     } else if(controller.isInSetup()) {
@@ -137,7 +136,7 @@ public class ReconnectMenuController extends FXMLController {
                     try {
                         switchScreen("EndedGamev2");
                     } catch (IOException exception) {
-                        throw new RuntimeException(exception);
+                        throw new RuntimeException("FXML Exception: failed to load EndedGame", exception);
                     }
                 });
                 break;
@@ -147,7 +146,7 @@ public class ReconnectMenuController extends FXMLController {
                         try {
                             switchScreen("TokenSetup");
                         } catch (IOException exception) {
-                            throw new RuntimeException(exception);
+                            throw new RuntimeException("FXML Exception: failed to load TokenSetup", exception);
                         }
                     });
                 }
@@ -157,7 +156,7 @@ public class ReconnectMenuController extends FXMLController {
                     try {
                         switchScreen("InGamev2");
                     } catch (IOException exception) {
-                        throw new RuntimeException(exception);
+                        throw new RuntimeException("FXML Exception: failed to load InGame",exception);
                     }
                 });
                 break;
@@ -166,8 +165,8 @@ public class ReconnectMenuController extends FXMLController {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("Menu");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        } catch (IOException exception) {
+                            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                         }
                     });
                 }
@@ -187,12 +186,12 @@ public class ReconnectMenuController extends FXMLController {
      * It loads the menu view and transitions to the {@link MenuController}.
      */
     @FXML
-    public void goBack() throws IOException{
+    public void goBack(){
         try {
             switchScreen("Menu");
         }
         catch (IOException exception){
-            throw new IOException("Error loading the FXML: trying to load Menu");
+            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
         }
     }
 

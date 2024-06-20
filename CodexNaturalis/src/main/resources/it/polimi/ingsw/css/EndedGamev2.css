@@ -2,7 +2,8 @@
     -fx-font-size: 30;
 }
 #gameEndedLabel{
-    -fx-font-size: 30;
+    -fx-font-size: 40;
+    -fx-font-family: "Bebas Neue Regular";
 }
 
 #quitButton{
@@ -30,13 +31,16 @@
     -fx-background-color: #1E1F22;
 }
 
-#chatLabel{
-    -fx-font-family: "Bebas Neue Regular";
-}
-
 #showingLabel{
     -fx-font-family: "Bebas Neue Regular";
 }
+
+#leaderboardVBox{
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
+}
+
 
 .combo-box{
     -fx-font-size: 20;

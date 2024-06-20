@@ -3,14 +3,11 @@ package it.polimi.ingsw.view.gui.controller;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,13 +16,7 @@ import java.io.IOException;
 public class RulesController extends FXMLController{
 
     @FXML
-    private Button backButton;
-
-    @FXML
     private ImageView imageView;
-
-    @FXML
-    private AnchorPane mainAnchor;
 
     @FXML
     private Pagination pagination;
@@ -64,8 +55,7 @@ public class RulesController extends FXMLController{
     }
 
     private Node createPage(int pageIndex) {
-        VBox box = new VBox();
-        return box;
+        return new VBox();
     }
 
     @Override
@@ -80,12 +70,12 @@ public class RulesController extends FXMLController{
     }
 
     @FXML
-    public void goBackMain(ActionEvent e){
+    public void goBackMain(){
         try {
             switchScreen("MainMenu");
         }
         catch (IOException exception){
-            exception.printStackTrace();
+            throw new RuntimeException("FXML Exception: failed to load MainMenu", exception);
         }
     }
 }

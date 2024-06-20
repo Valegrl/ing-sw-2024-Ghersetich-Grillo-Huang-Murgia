@@ -41,7 +41,7 @@ public class BackgroundGameSetupController extends FXMLController {
                             switchScreen("GameSetup");
                         }
                         catch (IOException exception) {
-                        exception.printStackTrace();
+                            throw new RuntimeException("FXML Exception: failed to load GameSetup", exception);
                         }
                     });
                 }
@@ -57,7 +57,7 @@ public class BackgroundGameSetupController extends FXMLController {
                     try {
                         switchScreen("Menu");
                     } catch (IOException exception) {
-                        exception.printStackTrace();
+                        throw new RuntimeException("FXML Exception: failed to load Menu",exception);
                     }
                 });
                 break;

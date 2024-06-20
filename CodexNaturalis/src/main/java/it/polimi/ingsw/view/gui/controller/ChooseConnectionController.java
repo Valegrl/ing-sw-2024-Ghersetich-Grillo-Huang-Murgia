@@ -144,7 +144,7 @@ public class ChooseConnectionController extends FXMLController {
         try {
             switchScreen("MainMenu");
         } catch (IOException exception) {
-            exception.printStackTrace();
+            throw new RuntimeException("FXML Exception: failed to load MainMenu", exception);
         }
     }
 

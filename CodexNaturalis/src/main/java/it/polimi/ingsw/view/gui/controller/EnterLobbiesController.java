@@ -15,16 +15,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
 
 public class EnterLobbiesController extends FXMLController {
-
-    @FXML
-    private BorderPane availableLobbiesMenuFX;
 
     @FXML
     private TableView<LobbyState> lobbiesTable;
@@ -79,7 +75,7 @@ public class EnterLobbiesController extends FXMLController {
         switch (EventID.getByID(eventID)) {
             case EventID.AVAILABLE_LOBBIES:
                 if(feedback == Feedback.FAILURE) {
-                    errorLobbies.setText("Failed to get available lobbies from server: " + message);
+                    Platform.runLater(() ->errorLobbies.setText("Failed to get available lobbies from server: " + message));
                 }
                 break;
             case EventID.CREATE_LOBBY:
@@ -88,7 +84,8 @@ public class EnterLobbiesController extends FXMLController {
                         try {
                             switchScreen("LobbyMenu");
                         } catch (IOException exception) {
-                            errorLobbies.setText("Lobby creation failed.");
+                            errorLobbies.setText("Lobby creation failed");
+                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu",exception);
                         }
                     });
                 } else {
@@ -101,7 +98,8 @@ public class EnterLobbiesController extends FXMLController {
                         try {
                             switchScreen("LobbyMenu");
                         } catch (IOException exception) {
-                            errorLobbies.setText("Failed to join lobby.");
+                            errorLobbies.setText("Failed to join lobby");
+                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu",exception);
                         }
                     });
                 }
@@ -127,7 +125,8 @@ public class EnterLobbiesController extends FXMLController {
             switchScreen("Menu");
         }
         catch (IOException exception){
-            errorLobbies.setText("Error occurred, can't go back to menu.");
+            errorLobbies.setText("Error occurred, can't go back to menu");
+            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
         }
     }
 

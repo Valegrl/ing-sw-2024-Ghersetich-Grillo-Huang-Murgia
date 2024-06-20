@@ -18,8 +18,6 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -359,12 +357,7 @@ public class InGameController extends FXMLController {
 
         showPlayArea();
 
-        chatInput.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                submitMessage();
-            }
-        });
+        chatInput.setOnAction(actionEvent -> submitMessage());
     }
 
     @Override
@@ -416,9 +409,7 @@ public class InGameController extends FXMLController {
                 });
                 break;
             case SELF_TURN_TIMER_EXPIRED:
-                Platform.runLater(() -> {
-                    gameUpdatesArea.appendText("Your turn-timer has expired.\nYour turn has been skipped.\n");
-                });
+                Platform.runLater(() -> gameUpdatesArea.appendText("Your turn-timer has expired.\nYour turn has been skipped.\n"));
                 break;
             case NEW_TURN:
                 Platform.runLater(() -> {
@@ -434,7 +425,7 @@ public class InGameController extends FXMLController {
                         switchScreen("EndedGamev2");
                     }
                     catch (IOException exception){
-                        exception.printStackTrace();
+                        throw new RuntimeException("FXML Exception: failed to load EndedGame", exception);
                     }
                 });
                 break;
@@ -460,9 +451,9 @@ public class InGameController extends FXMLController {
             case CHAT_GM, CHAT_PM:
                 if (feedback == Feedback.SUCCESS) {
                     String formattedMessage = message.replace("[1m", " ").replace("[0m","");
-                    chatArea.appendText(formattedMessage + "\n");
+                    Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
-                    chatArea.appendText("Message unable to send!");
+                    Platform.runLater(() -> chatArea.appendText("Message unable to send!"));
                 }
                 break;
             case QUIT_GAME:
@@ -472,7 +463,7 @@ public class InGameController extends FXMLController {
                             switchScreen("Menu");
                         }
                         catch (IOException exception){
-                            exception.printStackTrace();
+                            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                         }
                     });
                 }
@@ -567,18 +558,14 @@ public class InGameController extends FXMLController {
             for(int i = 0; i < visibleGoldCards.length; i ++){
                 if(visibleGoldCards[i] != null) {
                     int finalI = i;
-                    this.visibleGoldCards.get(i).setOnMouseClicked(event -> {
-                        controller.newViewEvent(new DrawCardEvent(CardType.GOLD, finalI));
-                    });
+                    this.visibleGoldCards.get(i).setOnMouseClicked(event -> controller.newViewEvent(new DrawCardEvent(CardType.GOLD, finalI)));
                 }
             }
 
             for(int i = 0; i < visibleResourceCards.length; i ++){
                 if(visibleResourceCards[i] != null) {
                     int finalI = i;
-                    this.visibleResourceCards.get(i).setOnMouseClicked(event -> {
-                        controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, finalI));
-                    });
+                    this.visibleResourceCards.get(i).setOnMouseClicked(event -> controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, finalI)));
                 }
             }
         }

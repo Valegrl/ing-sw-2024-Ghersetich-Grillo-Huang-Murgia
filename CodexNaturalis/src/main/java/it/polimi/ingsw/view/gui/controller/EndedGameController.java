@@ -321,12 +321,12 @@ public class EndedGameController extends FXMLController {
     }
 
     @FXML
-    public void goMainMenu(ActionEvent e) throws IOException{
+    public void goMainMenu(ActionEvent e) {
         try {
             switchScreen("Menu");
         }
         catch (IOException exception){
-            throw new IOException("Error loading the FXML: trying to load Menu");
+            throw new RuntimeException("FXML Exception: failed to load Menu",exception);
         }
     }
 

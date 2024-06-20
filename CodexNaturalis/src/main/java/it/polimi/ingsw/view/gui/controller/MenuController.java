@@ -24,8 +24,6 @@ import java.io.IOException;
  */
 public class MenuController extends FXMLController {
 
-    private String username;
-
     @FXML
     private AnchorPane menuFX;
 
@@ -56,7 +54,7 @@ public class MenuController extends FXMLController {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
-        this.username = view.getUsername();
+        String username = view.getUsername();
 
         usernameTextFX.setText("Hello " + username + " !");
     }
@@ -66,12 +64,12 @@ public class MenuController extends FXMLController {
      * It loads the ReconnectMenu view and transitions to the ReconnectMenuController.
      */
     @FXML
-    public void goReconnectGames() throws IOException{
+    public void goReconnectGames(){
         try {
             switchScreen("ReconnectMenu");
         }
         catch (IOException exception){
-            throw new IOException("Error loading the FXML: trying to load ReconnectMenu");
+            throw new RuntimeException("FXML Exception: failed to load ReconnectMenu", exception);
         }
     }
 
@@ -80,12 +78,12 @@ public class MenuController extends FXMLController {
      * It loads the EnterLobbiesMenu view and transitions to the EnterLobbiesController.
      */
     @FXML
-    public void goEnterLobbies() throws  IOException{
+    public void goEnterLobbies(){
         try {
             switchScreen("EnterLobbiesMenu");
         }
         catch (IOException exception){
-            throw new IOException("Error loading the FXML: trying to load EnterLobbiesMenu");
+            throw new RuntimeException("FXML Exception: failed to load EnterLobbiesMenu", exception);
         }
     }
 
