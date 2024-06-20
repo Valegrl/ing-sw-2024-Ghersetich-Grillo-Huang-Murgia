@@ -9,19 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="1080.0" minWidth="1920.0" stylesheets="@../css/ReconnectMenu.css, @../css/Buttons.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ReconnectMenuController">
+<AnchorPane fx:id="mainAnchor" minHeight="720.0" minWidth="1280.0" stylesheets="@../css/ReconnectMenu.css, @../css/Buttons.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controller.ReconnectMenuController">
    <children>
-      <HBox alignment="CENTER" minHeight="200.0" spacing="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" text="Back" />
-            <Button mnemonicParsing="false" text="Quit" visible="false" managed="false" fx:id="quitButton" onAction="#quit"/>
-         </children>
-      </HBox>
-      <VBox alignment="BOTTOM_CENTER" minHeight="800.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="vBox" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
          <children>
             <Label id="reconnectLabel" fx:id="reconnectLabel" text="Reconnect to disconnected game ?" />
             <Label id="errorLabel" fx:id="errorLabel" text="Something" visible="false" />
-            <TableView fx:id="lobbiesTable" maxWidth="1200.0" minHeight="500.0" minWidth="730.0">
+            <TableView fx:id="lobbiesTable" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="lobbyName" text="Lobby name" />
                   <TableColumn fx:id="numPlayers" text="Players online" />
@@ -32,9 +26,12 @@
                </columnResizePolicy>
             </TableView>
          </children>
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
       </VBox>
+      <HBox alignment="CENTER" minHeight="40" maxHeight="40" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="backButton" alignment="CENTER" mnemonicParsing="false" text="Back" styleClass="buttonSmall" onAction="#goBack"  />
+            <Button fx:id="quitButton" alignment="CENTER" mnemonicParsing="false" text="Quit" styleClass="buttonSmall" visible="false" managed="false" onAction="#quit"/>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

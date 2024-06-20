@@ -10,12 +10,15 @@ import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +30,12 @@ import java.util.List;
  * The class also communicates with the GameController to send and receive events.
  */
 public class ReconnectMenuController extends FXMLController {
+
+    @FXML
+    public AnchorPane mainAnchor;
+
+    @FXML
+    public VBox vBox;
 
     @FXML
     private Button backButton;
@@ -51,6 +60,18 @@ public class ReconnectMenuController extends FXMLController {
 
     @FXML
     private TableColumn<LobbyState, Integer> numRequired;
+
+    public void initialize(){
+        double vBoxWidthPercentage = 0.90;
+        double vBoxHeightPercentage = 0.80;
+
+        vBox.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                mainAnchor.getWidth() * vBoxWidthPercentage, mainAnchor.widthProperty()
+        ));
+        vBox.prefHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                mainAnchor.getHeight() * vBoxHeightPercentage, mainAnchor.heightProperty()
+        ));
+    }
 
     /**
      * The constructor for the ReconnectMenuController class.
