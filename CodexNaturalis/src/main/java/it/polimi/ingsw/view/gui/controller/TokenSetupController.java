@@ -238,7 +238,7 @@ public class TokenSetupController extends FXMLController {
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
                     try {
-                       switchScreen("InGamev2");
+                       switchScreen("InGame");
                     } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load InGame", exception);
                     }

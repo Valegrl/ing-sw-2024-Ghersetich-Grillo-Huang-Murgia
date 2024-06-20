@@ -133,7 +133,7 @@ public class ReconnectMenuController extends FXMLController {
                     if(!controller.isInSetup()) {
                         Platform.runLater(() -> {
                             try {
-                                switchScreen("InGamev2");
+                                switchScreen("InGame");
                             } catch (IOException exception) {
                                 throw new RuntimeException("FXML Exception: failed to load InGame",exception);
                             }
@@ -155,7 +155,7 @@ public class ReconnectMenuController extends FXMLController {
             case ENDED_GAME:
                 Platform.runLater(() -> {
                     try {
-                        switchScreen("EndedGamev2");
+                        switchScreen("EndedGame");
                     } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load EndedGame", exception);
                     }
@@ -175,7 +175,7 @@ public class ReconnectMenuController extends FXMLController {
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
                     try {
-                        switchScreen("InGamev2");
+                        switchScreen("InGame");
                     } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load InGame",exception);
                     }

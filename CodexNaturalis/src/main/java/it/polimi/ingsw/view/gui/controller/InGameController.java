@@ -422,7 +422,7 @@ public class InGameController extends FXMLController {
             case ENDED_GAME:
                 Platform.runLater(() ->{
                     try {
-                        switchScreen("EndedGamev2");
+                        switchScreen("EndedGame");
                     }
                     catch (IOException exception){
                         throw new RuntimeException("FXML Exception: failed to load EndedGame", exception);

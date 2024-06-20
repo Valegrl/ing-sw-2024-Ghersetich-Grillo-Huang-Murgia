@@ -1,104 +1,107 @@
-#gameName {
-    -fx-text-fill: #f1d546;
-    -fx-font-size: 25px;
-    -fx-font-family: "Bebas Neue Regular";
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
+#gameName{
+    -fx-font-size: 30;
 }
-
 #gameEndedLabel{
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 25px;
+    -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 3, 0, 0, 0);
-
 }
 
-#congratulationsLabel{
-    -fx-text-fill: #342b05;
-    -fx-font-size: 25px;
+#quitButton{
+    -fx-font-size: 40;
     -fx-font-family: "Bebas Neue Regular";
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 5, 0, 0, 0);
-
-}
-
-#leaderboardAnchor1 {
-    -fx-border-color: #342b05;
-    -fx-border-width: 3px;
-    -fx-border-radius: 20px;
-    -fx-background-color: rgba(222, 181, 76, 0.99);
-    -fx-background-radius: 20px;
-}
-
-#leaderboardAnchor2 {
-    -fx-border-color: #342b05;
-    -fx-border-width: 3px;
-    -fx-border-radius: 20px;
-    -fx-background-color: rgba(147, 143, 130, 0.75);
-    -fx-background-radius: 20px;
-}
-
-#leaderboardAnchor3 {
-    -fx-border-color: #342b05;
-    -fx-border-width: 3px;
-    -fx-border-radius: 20px;
-    -fx-background-color: rgba(229, 144, 48, 0.75);
-    -fx-background-radius: 20px;
-}
-
-#leaderboardAnchor4 {
-    -fx-border-color: #342b05;
-    -fx-border-width: 3px;
-    -fx-border-radius: 20px;
-    -fx-background-color: #f6f4f0;
-    -fx-background-radius: 20px;
-}
-
-
-#leaderboardVbox{
-    -fx-border-color: #342b05;
-    -fx-border-radius: 40px;
-    -fx-background-radius: 40px;
-    -fx-border-width: 4px;
-    -fx-background-color: rgba(200, 176, 82, 0.3);
 }
 
 #leaderboardLabel{
-    -fx-border-color: #342b05;
-    -fx-text-fill: #625722;
-    -fx-font-size: 35px;
+    -fx-font-size: 30;
+}
+
+.label{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-font-size: 20;
+}
+
+#borderPane{
+    /*-fx-background-color: #fbfbbb;*/
+    /*-fx-background-color: #98E1DC;*/
+    -fx-background-color: #2B2D30;
+}
+
+#stackPane{
+    -fx-background-color: #1E1F22;
+}
+
+#showingLabel{
     -fx-font-family: "Bebas Neue Regular";
-    -fx-background-radius: 40px;
-    -fx-border-radius: 40px;
-    -fx-border-width: 5px;
-    -fx-background-color: #faeed3;
-
 }
 
-#gameEndedLabel{
-    -fx-font-size: 35px;
-    -fx-font-family: "Bebas Neue Regular";
+#leaderboardVBox{
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-radius: 20 20 20 20;
 }
 
-#upperAnchor{
-    -fx-background-color: rgb(54, 45, 16);
+
+.combo-box{
+    -fx-font-size: 20;
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-background-color: rgba(20, 20, 20, 0.5);
+}
+.combo-box .list-cell {
+    -fx-font-size: 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #1E1F22;
 }
 
-#lowerAnchor{
-    -fx-background-color: #ded7bb;
+.combo-box .text-field {
+    -fx-font-size: 20;
+    -fx-text-fill: #FFFFFF;
 }
 
-#leftAnchor{
-    -fx-background-color: #ded7bb;
+.choice-box .choice-box-popup .list-view {
+    -fx-background-color: #1E1F22;
 }
 
-#quitButton, #newgameButton {
-    -fx-text-fill: #ffffff;
+#quitButton{
     -fx-font-size: 40;
-    -fx-font-family: "Bebas Neue Regular";
+}
+
+.button{
     -fx-background-color: transparent;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 20;
+    -fx-font-family: "Bebas Neue Regular";
     -fx-border-width: 0;
     -fx-padding: 0;
+}
+.button:hover{
+    -fx-text-fill: #BBBBBB;
+}
+
+.scoreboard-text{
+    -fx-font-family: "BebasNeuePro-Regular";
+    -fx-fill: #FFFFFF;
+    -fx-font-size: 20;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #0D0D0D;
+}
+
+.scroll-pane .scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+}
+
+.scroll-pane .scroll-bar:vertical .track,
+.scroll-pane .scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button,
+.scroll-pane .scroll-bar:horizontal .increment-button,
+.scroll-pane .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
 }
