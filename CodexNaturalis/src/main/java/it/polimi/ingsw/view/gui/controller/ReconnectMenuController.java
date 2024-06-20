@@ -6,6 +6,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.GetMyOfflineGamesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
@@ -107,15 +108,26 @@ public class ReconnectMenuController extends FXMLController {
                 }
                 break;
             case RECONNECT_TO_GAME:
+                System.out.println(message);
                 if(feedback == Feedback.SUCCESS){
                     if(!controller.isInSetup()) {
-                        Platform.runLater(() -> {
-                            try {
-                                switchScreen("InGamev2");
-                            } catch (IOException exception) {
-                                throw new RuntimeException(exception);
-                            }
-                        });
+                        if (controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                            Platform.runLater(() -> {
+                                try {
+                                    switchScreen("InGamev2");
+                                } catch (IOException exception) {
+                                    throw new RuntimeException(exception);
+                                }
+                            });
+                        } else if (controller.getGameStatus().equals(GameStatus.ENDED)) {
+                            Platform.runLater(() -> {
+                                try {
+                                    switchScreen("EndedGamev2");
+                                } catch (IOException exception) {
+                                    throw new RuntimeException(exception);
+                                }
+                            });
+                        }
                     }
                     else if(controller.isInSetup()){
                         Platform.runLater(() -> {

@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.ViewState;
 
 public class WaitingReconnectState extends GameState {
     public WaitingReconnectState(View view) {

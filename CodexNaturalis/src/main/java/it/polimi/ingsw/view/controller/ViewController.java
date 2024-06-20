@@ -401,6 +401,9 @@ public class ViewController implements ViewEventReceiver {
             model = event.getModel();
         }
         if (view.inGame()) {
+            if (model.getGameStatus().equals(GameStatus.WAITING) && playersOnline() == 1 && playersStatus.size() > 1) {
+                previousGameStatus = new Pair<>(GameStatus.RUNNING, null);
+            }
             view.handleResponse(event.getID(), null, "Game started!");
         } else {
             System.out.println("Game state: event in wrong state");

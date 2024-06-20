@@ -439,7 +439,12 @@ public class InGameController extends FXMLController {
                 });
                 break;
             case NEW_GAME_STATUS:
-                Platform.runLater(() -> updateAboveLabel());
+                Platform.runLater(() -> {
+                    if (controller.getGameStatus().equals(GameStatus.RUNNING)) {
+                        gameUpdatesArea.appendText(message + "\n");
+                    }
+                    updateAboveLabel();
+                });
                 break;
             case UPDATE_GAME_PLAYERS:
                 Platform.runLater(() -> {
@@ -947,11 +952,7 @@ public class InGameController extends FXMLController {
      * If it's the player's turn, and they have to draw a card, it sets the text to "Now draw a card to your hand".
      * If it's not the player's turn, it sets the text to "Waiting for your turn".
      */
-    private void updateAboveLabel(){
-        if(controller.getModel().isDetectedLC()){
-            gameUpdatesArea.appendText("The last circle will start with " + controller.getBlackTokenPlayer() + "'s turn\n");
-        }
-
+    private void updateAboveLabel() {
         if(controller.getGameStatus() == GameStatus.WAITING){
             aboveLabel.setText("Waiting for a player to join back or for the timer to run out");
             gameScrollPane.setManaged(false);
