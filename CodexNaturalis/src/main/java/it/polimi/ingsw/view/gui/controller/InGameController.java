@@ -19,6 +19,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.immutableCard.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -319,9 +320,8 @@ public class InGameController extends FXMLController {
 
     private List<ImageView> opponentCardImages;
 
-    private final double relativePercentage = 0.09;
-
     public void initialize(){
+        double relativePercentage = 0.09;
 
         List<ImageView> imageViews = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
                 goldDeck, visibleGoldCard0, visibleGoldCard1,
@@ -521,7 +521,6 @@ public class InGameController extends FXMLController {
      */
     private void addHandChoiceSelection(){
         int i = 0;
-        double increase = 1.51;
         // Setups drag and select for each card ImageView in the hand
         for(ImageView cardImageView : this.handCardImages) {
             if(i < controller.getModel().getSelfPlayer().getPlayArea().getHand().size()) {
@@ -534,8 +533,8 @@ public class InGameController extends FXMLController {
 
                     //This is to set the Width and Height of the ImageView original
                     ImageView dragImageView = new ImageView(cardImageView.getImage());
-                    dragImageView.fitWidthProperty().bind(cardImageView.fitWidthProperty().multiply(increase));
-                    dragImageView.fitHeightProperty().bind(cardImageView.fitHeightProperty().multiply(increase));
+                    dragImageView.fitWidthProperty().bind(cardImageView.fitWidthProperty());
+                    dragImageView.fitHeightProperty().bind(cardImageView.fitHeightProperty());
                     dragImageView.setPreserveRatio(true);
 
                     SnapshotParameters parameters = new SnapshotParameters();

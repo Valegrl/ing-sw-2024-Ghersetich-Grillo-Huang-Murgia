@@ -3,6 +3,11 @@
     -fx-font-family: "BebasNeuePro-Regular";
     -fx-font-size: 20;
 }
+
+.labelItem{
+    -fx-font-size: 14;
+}
+
 #aboveLabel{
     -fx-font-size: 30;
 }
