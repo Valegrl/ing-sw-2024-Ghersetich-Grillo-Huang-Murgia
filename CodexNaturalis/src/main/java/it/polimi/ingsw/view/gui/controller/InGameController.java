@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.gui.controller;
 
-
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.ChatGMEvent;
@@ -621,7 +620,7 @@ public class InGameController extends FXMLController {
                 }
             }
             else{
-                this.visibleGoldCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", 150, 100, true, true));
+                this.visibleGoldCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
             }
         }
 
@@ -637,7 +636,7 @@ public class InGameController extends FXMLController {
                 }
             }
             else{
-                this.visibleResourceCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png",150, 100, true, true));
+                this.visibleResourceCards.get(i).setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
             }
         }
 
@@ -653,7 +652,7 @@ public class InGameController extends FXMLController {
             }
         }
         else{
-            goldDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", 150, 100, true, true));
+            goldDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
         }
 
         Item itemResourceDeck = controller.getModel().getTopResourceDeck();
@@ -668,7 +667,7 @@ public class InGameController extends FXMLController {
             }
         }
         else{
-            resourceDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", 150, 100, true, true));
+            resourceDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
         }
         addDeckChoiceSelection();
     }
@@ -807,7 +806,7 @@ public class InGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", 150, 100, true, true);
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", getWCardRes(), getHCardRes(), true, true);
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -819,7 +818,7 @@ public class InGameController extends FXMLController {
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 
-            Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png", 150, 100, true, true);
+            Image image = new Image("it/polimi/ingsw/images/cards/playable/Available.png", getWCardRes(), getHCardRes(), true, true);
             StackPane availableStackPane = stackPaneBuilder(image);
             Node nodeToRemove = emptyPanesMap.get(new Coordinate(k, j));
             gridPane.getChildren().remove(nodeToRemove);
@@ -855,9 +854,9 @@ public class InGameController extends FXMLController {
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         } else {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         startStackPane = stackPaneBuilder(image);
         //Placing in the middle of the grid pane
@@ -912,7 +911,7 @@ public class InGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", 150, 100, true, true);
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", getWCardRes(), getHCardRes(), true, true);
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 opponentGridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -924,9 +923,9 @@ public class InGameController extends FXMLController {
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         } else {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         startStackPane = stackPaneBuilder(image);
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
@@ -1104,8 +1103,8 @@ public class InGameController extends FXMLController {
         ImmObjectiveCard[] objectiveCards = controller.getModel().getCommonObjectives();
         ImmObjectiveCard objectiveCard0 = objectiveCards[0];
         ImmObjectiveCard objectiveCard1 = objectiveCards[1];
-        commonObjectiveCard0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png", 150, 100, true, true));
-        commonObjectiveCard1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", 150, 100, true, true));
+        commonObjectiveCard0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
+        commonObjectiveCard1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
     /**
@@ -1114,7 +1113,7 @@ public class InGameController extends FXMLController {
      */
     private void showSecretObjective(){
         ImmObjectiveCard secretObjCard = controller.getModel().getSelfPlayer().getSecretObjective();
-        secretObjectiveCard.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", 150, 100, true, true));
+        secretObjectiveCard.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
     /**

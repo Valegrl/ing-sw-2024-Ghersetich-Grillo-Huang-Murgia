@@ -46,6 +46,16 @@ public abstract class FXMLController {
     protected final Object viewLock = new Object();
 
     /**
+     * This is the width that will be used when displaying a card in the GUI.
+     */
+    private final int wCardRes = 300;
+
+    /**
+     * This is the height that will be used when displaying a card in the GUI.
+     */
+    private final int hCardRes = 150;
+
+    /**
      * Default constructor for FXMLController. FXMLLoader only accepts parameter-less constructors.
      */
     public FXMLController() {
@@ -137,32 +147,32 @@ public abstract class FXMLController {
         if(type == CardType.GOLD){
             switch (item){
                 case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
             }
         }
         else{
             switch (item){
                 case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
                 case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", 150, 100, true, true);
+                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", getWCardRes(), getHCardRes(), true, true);
                     break;
             }
         }
@@ -180,10 +190,10 @@ public abstract class FXMLController {
     public Image getFrontCardImage(String ID, CardType type){
         Image image = null;
         if(type == CardType.GOLD){
-            image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         else{
-            image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/resource/front/" + ID + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         return image;
     }
@@ -315,5 +325,17 @@ public abstract class FXMLController {
         return maxY;
     }
 
+    /**
+     * @return The width resolution that will be used when displaying a card in the GUI.
+     */
+    public int getWCardRes() {
+        return wCardRes;
+    }
 
+    /**
+     * @return The height resolution that will be used when displaying a card in the GUI.
+     */
+    public int getHCardRes() {
+        return hCardRes;
+    }
 }

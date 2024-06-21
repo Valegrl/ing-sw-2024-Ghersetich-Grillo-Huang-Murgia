@@ -588,8 +588,8 @@ public class GameSetupController extends FXMLController {
         ImmObjectiveCard[] commonObjectives = setup.getCommonObjectives();
         ImmObjectiveCard commonObjective0 = commonObjectives[0];
         ImmObjectiveCard commonObjective1 = commonObjectives[1];
-        Image commonObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective0.getId() + ".png");
-        Image commonObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective1.getId() + ".png");
+        Image commonObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective0.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
+        Image commonObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + commonObjective1.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         this.commonObjectiveCard0.setImage(commonObjectiveImage0);
         this.commonObjectiveCard1.setImage(commonObjectiveImage1);
     }
@@ -604,8 +604,8 @@ public class GameSetupController extends FXMLController {
         ImmObjectiveCard[] secretObjectives = setup.getSecretObjectiveCards();
         objectiveChoice0 = secretObjectives[0];
         objectiveChoice1 = secretObjectives[1];
-        Image secretObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice0.getId() + ".png");
-        Image secretObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice1.getId() + ".png");
+        Image secretObjectiveImage0 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice0.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
+        Image secretObjectiveImage1 = new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveChoice1.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         this.secretObjectiveCard0.setImage(secretObjectiveImage0);
         this.secretObjectiveCard1.setImage(secretObjectiveImage1);
     }
@@ -619,8 +619,8 @@ public class GameSetupController extends FXMLController {
     private void showStartCard(){
         ImmStartCard startCard = setup.getStartCard();
         System.out.println(startCard.getId());
-        Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png");
-        Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png");
+        Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
+        Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         this.startCardFront.setImage(startCardFront);
         this.startCardBack.setImage(startCardBack);
     }

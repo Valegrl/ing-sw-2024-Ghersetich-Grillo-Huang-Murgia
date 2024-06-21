@@ -10,6 +10,7 @@ import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -28,6 +29,9 @@ import java.util.Map;
 public class EndedGameController extends FXMLController {
 
     @FXML
+    public BorderPane borderPane;
+
+    @FXML
     private ImageView topGoldCard;
 
     @FXML
@@ -44,9 +48,6 @@ public class EndedGameController extends FXMLController {
 
     @FXML
     private ImageView visibleResourceCard1;
-
-    @FXML
-    private Label gameName;
 
     @FXML
     private ImageView handCard0;
@@ -141,6 +142,24 @@ public class EndedGameController extends FXMLController {
 
     private Map<Coordinate, Node> emptyPanesMap;
 
+    public void initialize(){
+        double relativePercentage = 0.09;
+
+        List<ImageView> imageViews = Arrays.asList(topResourceCard, visibleResourceCard0, visibleResourceCard1,
+                topGoldCard, visibleGoldCard0, visibleGoldCard1,
+                handCard0, handCard1, handCard2,
+                commonObjective0, commonObjective1, secretObjective);
+
+        for (ImageView imageView : imageViews) {
+            imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * relativePercentage, borderPane.widthProperty()
+            ));
+
+            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getHeight() * relativePercentage, borderPane.heightProperty()
+            ));
+        }
+    }
 
     public EndedGameController(){
         super();
@@ -162,7 +181,6 @@ public class EndedGameController extends FXMLController {
         points = Arrays.asList(points1, points2, points3, points4);
         tokens = Arrays.asList(token1, token2, token3, token4);
 
-        setGameName();
         updateVisiblePlayAreasOptions();
 
         showDecks();
@@ -201,7 +219,7 @@ public class EndedGameController extends FXMLController {
         //Add empty slots
         for(int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
-                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", 150, 100, true, true);
+                Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", getWCardRes(), getHCardRes(), true, true);
                 StackPane emptyStackPane = stackPaneBuilder(image);
                 gridPane.add(emptyStackPane, k, j);
                 emptyPanesMap.put(new Coordinate(k, j), emptyStackPane);
@@ -213,9 +231,9 @@ public class EndedGameController extends FXMLController {
         StackPane startStackPane;
         Image image;
         if (!immStartCard.isFlipped()) {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         } else {
-            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", 150, 100, true, true);
+            image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         startStackPane = stackPaneBuilder(image);
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
@@ -270,9 +288,9 @@ public class EndedGameController extends FXMLController {
         }
 
         ImmObjectiveCard objectiveCard0 = endedGameData.getCommonObjectives()[0];
-        commonObjective0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png", 150, 100, true, true));
+        commonObjective0.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard0.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
         ImmObjectiveCard objectiveCard1 = endedGameData.getCommonObjectives()[1];
-        commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", 150, 100, true, true));
+        commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
     private void showPlayers(){
@@ -299,7 +317,7 @@ public class EndedGameController extends FXMLController {
             i++;
         }
         ImmObjectiveCard secretObjCard = endedGameData.getSecretObjectives().get(username);
-        secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", 150, 100, true, true));
+        secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
     private void updateVisiblePlayAreasOptions(){
@@ -313,10 +331,6 @@ public class EndedGameController extends FXMLController {
                 playAreaSelection.getItems().add("Opponent: " + user);
             }
         }
-    }
-
-    private void setGameName() {
-        this.gameName.setText("GAME:" + controller.getLobbyId());
     }
 
     @FXML
