@@ -256,26 +256,15 @@ public class GUI extends Application implements View {
     public void serverDisconnected(){
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/ServerDisconnectionMenu.fxml"));
-                Parent root = loader.load();
-                stage.getScene().setRoot(root);
-                FXMLController.run(this, stage);
+                FXMLController.switchScreen("ServerDisconnectionMenu");
             }
             catch (IOException e){
-                e.printStackTrace();
+                throw new RuntimeException("FXML Exception: failed to load ServerDisconnectionMenu", e);
             }
         });
     }
 
-    /**
-     * Method to close the GUI.
-     * Calls Platform.exit() and System.exit(0) to close the application.
-     */
-    @FXML
-    public void closeGui() {
-        Platform.exit();
-        System.exit(0);
-    }
+
 
     @Override
     public void clearInput() {
