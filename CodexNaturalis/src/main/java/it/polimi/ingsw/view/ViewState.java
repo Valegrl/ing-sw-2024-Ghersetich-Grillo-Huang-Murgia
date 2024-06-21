@@ -5,7 +5,6 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.view.tui.state.MenuState;
-
 import java.util.Arrays;
 import java.util.List;
 

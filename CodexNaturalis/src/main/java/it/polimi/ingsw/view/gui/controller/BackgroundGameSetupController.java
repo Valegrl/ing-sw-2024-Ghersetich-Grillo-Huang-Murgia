@@ -7,7 +7,6 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 /**

@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.controller.ViewController;
-import it.polimi.ingsw.view.gui.controller.MenuController;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -15,10 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Map;
 

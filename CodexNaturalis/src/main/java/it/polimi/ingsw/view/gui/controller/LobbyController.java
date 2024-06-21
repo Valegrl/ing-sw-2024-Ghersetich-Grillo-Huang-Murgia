@@ -29,7 +29,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
