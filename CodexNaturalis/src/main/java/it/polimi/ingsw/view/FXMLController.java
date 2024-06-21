@@ -8,6 +8,8 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.controller.ViewController;
 import it.polimi.ingsw.view.gui.controller.MenuController;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -224,18 +226,36 @@ public abstract class FXMLController {
     public StackPane stackPaneBuilder(Image image){
         //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
 
-        StackPane stackPane = new StackPane();
-        stackPane.setMaxWidth(116);
-        stackPane.setMinWidth(116);
-        stackPane.setMaxHeight(60);
-        stackPane.setMinHeight(60);
+        double relativePercentage = 0.09;
+        double relativeStackW = 0.77;
+        double relativeStackH = 0.58;
 
         ImageView imageView = new ImageView();
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(150);
+        imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                stage.getWidth() * relativePercentage, stage.widthProperty()
+        ));
+        imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
+                stage.getHeight() * relativePercentage, stage.heightProperty()
+        ));
         imageView.setImage(image);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
+
+        StackPane stackPane = new StackPane();
+
+        DoubleBinding imageViewWidthBinding = Bindings.createDoubleBinding(
+                () -> imageView.getLayoutBounds().getWidth(),
+                imageView.layoutBoundsProperty()
+        );
+        stackPane.maxWidthProperty().bind(imageViewWidthBinding.multiply(relativeStackW));
+        stackPane.minWidthProperty().bind(imageViewWidthBinding.multiply(relativeStackW));
+
+        DoubleBinding imageViewHeightBinding = Bindings.createDoubleBinding(
+                () -> imageView.getLayoutBounds().getHeight(),
+                imageView.layoutBoundsProperty()
+        );
+        stackPane.maxHeightProperty().bind(imageViewHeightBinding.multiply(relativeStackH));
+        stackPane.minHeightProperty().bind(imageViewHeightBinding.multiply(relativeStackH));
 
         stackPane.getChildren().add(imageView);
 

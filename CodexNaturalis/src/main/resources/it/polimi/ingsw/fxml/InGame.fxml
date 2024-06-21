@@ -24,15 +24,8 @@
    <top>
       <AnchorPane maxHeight="50.0" minHeight="50.0" BorderPane.alignment="CENTER" >
          <children>
-            <HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="200.0">
-               <Label id="gameName" fx:id="gameName" text="Game:">
-                  <HBox.margin>
-                     <Insets/>
-                  </HBox.margin>
-               </Label>
-            </HBox>
-            <HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="270.0">
-               <Label id="aboveLabel" fx:id="aboveLabel" text="Action:">
+            <HBox alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <Label alignment="CENTER" id="aboveLabel" fx:id="aboveLabel" text="Action:">
                   <HBox.margin>
                      <Insets/>
                   </HBox.margin>
@@ -42,7 +35,7 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane minWidth="160.0" BorderPane.alignment="CENTER">
+      <AnchorPane minWidth="270.0" BorderPane.alignment="CENTER">
          <VBox BorderPane.alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                <VBox alignment="CENTER" spacing="10.0">

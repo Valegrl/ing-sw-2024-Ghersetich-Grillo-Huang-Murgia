@@ -273,9 +273,6 @@ public class InGameController extends FXMLController {
 
 
     @FXML
-    private Label gameName;
-
-    @FXML
     private Label aboveLabel;
 
     @FXML
@@ -322,8 +319,9 @@ public class InGameController extends FXMLController {
 
     private List<ImageView> opponentCardImages;
 
+    private final double relativePercentage = 0.09;
+
     public void initialize(){
-        double relativePercentage = 0.09;
 
         List<ImageView> imageViews = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
                 goldDeck, visibleGoldCard0, visibleGoldCard1,
@@ -367,7 +365,6 @@ public class InGameController extends FXMLController {
         quillOccurrences = Arrays.asList(quillOcc1, quillOcc2, quillOcc3, quillOcc4);
         manuscriptOccurrences = Arrays.asList(manuscriptOcc1, manuscriptOcc2, manuscriptOcc3, manuscriptOcc4);
 
-        setGameName();
         updateAboveLabel();
         updateDecks();
         updatePoints();
@@ -380,6 +377,7 @@ public class InGameController extends FXMLController {
         showPlayArea();
 
         chatInput.setOnAction(actionEvent -> submitMessage());
+        gameUpdatesArea.appendText("GAME: " + controller.getLobbyId() + "\n\n");
     }
 
     @Override
@@ -523,6 +521,7 @@ public class InGameController extends FXMLController {
      */
     private void addHandChoiceSelection(){
         int i = 0;
+        double increase = 1.51;
         // Setups drag and select for each card ImageView in the hand
         for(ImageView cardImageView : this.handCardImages) {
             if(i < controller.getModel().getSelfPlayer().getPlayArea().getHand().size()) {
@@ -535,8 +534,9 @@ public class InGameController extends FXMLController {
 
                     //This is to set the Width and Height of the ImageView original
                     ImageView dragImageView = new ImageView(cardImageView.getImage());
-                    dragImageView.setFitWidth(cardImageView.getFitWidth());
-                    dragImageView.setFitHeight(cardImageView.getFitHeight());
+                    dragImageView.fitWidthProperty().bind(cardImageView.fitWidthProperty().multiply(increase));
+                    dragImageView.fitHeightProperty().bind(cardImageView.fitHeightProperty().multiply(increase));
+                    dragImageView.setPreserveRatio(true);
 
                     SnapshotParameters parameters = new SnapshotParameters();
                     parameters.setFill(Color.TRANSPARENT);
@@ -986,13 +986,6 @@ public class InGameController extends FXMLController {
                 aboveLabel.setText("This is the last circle of the game, you'll be only able to place a card");
             }
         }
-    }
-
-    /**
-     * This method sets the game name label with the lobby ID from the controller.
-     */
-    private void setGameName() {
-        this.gameName.setText("GAME:" + controller.getLobbyId());
     }
 
     /**
