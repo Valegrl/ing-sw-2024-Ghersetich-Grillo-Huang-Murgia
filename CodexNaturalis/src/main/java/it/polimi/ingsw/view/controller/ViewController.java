@@ -958,7 +958,7 @@ public class ViewController implements ViewEventReceiver {
         StringBuilder m = new StringBuilder();
         m.append("Choose your colored token from the following available ones:\n");
         for(int i = 0; i < availableTokens.size(); i++) {
-            m.append("  ").append(i + 1).append("- ").append(availableTokens.get(i)).append("\n");
+            m.append("  ").append(i + 1).append("- ").append(availableTokens.get(i).toColorledString()).append("\n");
         }
         return m.toString();
     }
@@ -1139,12 +1139,7 @@ public class ViewController implements ViewEventReceiver {
     private void handleDetectedLastCircle(boolean old) {
         if (!old && model.isDetectedLC()) {
             String p = getBlackTokenPlayer();
-            String token;
-            if (p.equals(username))
-                token = model.getSelfPlayer().getToken().getColorCode();
-            else
-                token = model.getOpponent(p).getToken().getColorCode();
-            view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, "Last circle will start with " + token + p + AnsiCodes.RESET + "'s turn!");
+            view.handleResponse(EventID.NEW_GAME_STATUS.getID(), null, "Last circle will start with " + p + "'s turn!");
         }
     }
 

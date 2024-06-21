@@ -40,7 +40,7 @@ public enum Token implements Serializable {
      * Constructs a new Token with the given color.
      * @param color The color of the token.
      */
-    private Token(String color, String colorCode) {
+    Token(String color, String colorCode) {
         this.color = color;
         this.colorCode = colorCode;
     }
@@ -72,6 +72,10 @@ public enum Token implements Serializable {
 
     @Override
     public String toString() {
+        return color;
+    }
+
+    public String toColorledString() {
         return colorCode + color + AnsiCodes.RESET;
     }
 }
