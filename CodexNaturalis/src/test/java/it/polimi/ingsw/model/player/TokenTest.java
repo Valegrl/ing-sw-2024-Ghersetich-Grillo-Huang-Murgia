@@ -30,9 +30,9 @@ class TokenTest {
 
     @Test
     void testToString() {
-        assertEquals(AnsiCodes.RED_TOKEN + "red" + AnsiCodes.RESET, Token.RED.toString());
-        assertEquals(AnsiCodes.BLUE_TOKEN + "blue" + AnsiCodes.RESET, Token.BLUE.toString());
-        assertEquals(AnsiCodes.GREEN_TOKEN + "green" + AnsiCodes.RESET, Token.GREEN.toString());
-        assertEquals(AnsiCodes.YELLOW_TOKEN + "yellow" + AnsiCodes.RESET, Token.YELLOW.toString());
+        assertEquals("red", Token.RED.toString());
+        assertEquals("blue", Token.BLUE.toString());
+        assertEquals("green", Token.GREEN.toString());
+        assertEquals("yellow", Token.YELLOW.toString());
     }
 }
