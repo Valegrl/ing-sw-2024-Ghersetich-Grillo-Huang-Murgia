@@ -53,6 +53,18 @@ public class InGameController extends FXMLController {
     public BorderPane borderPane;
 
     @FXML
+    public ImageView offline1;
+
+    @FXML
+    public ImageView offline2;
+
+    @FXML
+    public ImageView offline3;
+
+    @FXML
+    public ImageView offline4;
+
+    @FXML
     private GridPane gridPane;
 
     @FXML
@@ -293,6 +305,9 @@ public class InGameController extends FXMLController {
 
     private List<ImageView> visibleResourceCards;
 
+
+    private List<ImageView> offlineIcons;
+
     private List<Label> playerPoints;
 
     private List<Label> animalOccurrences;
@@ -318,7 +333,7 @@ public class InGameController extends FXMLController {
     private List<ImageView> opponentCardImages;
 
     public void initialize(){
-        double relativePercentage = 0.09;
+        double relativePercentageW = 0.07;
 
         List<ImageView> imageViews = Arrays.asList(resourceDeck, visibleResourceCard0, visibleResourceCard1,
                 goldDeck, visibleGoldCard0, visibleGoldCard1,
@@ -328,11 +343,7 @@ public class InGameController extends FXMLController {
 
         for (ImageView imageView : imageViews) {
             imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getWidth() * relativePercentage, borderPane.widthProperty()
-            ));
-
-            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getHeight() * relativePercentage, borderPane.heightProperty()
+                    borderPane.getWidth() * relativePercentageW, borderPane.widthProperty()
             ));
         }
     }
@@ -354,6 +365,7 @@ public class InGameController extends FXMLController {
         visibleResourceCards = Arrays.asList(visibleResourceCard0, visibleResourceCard1);
 
         playerPoints = Arrays.asList(playerPoints1, playerPoints2, playerPoints3, playerPoints4);
+        offlineIcons = Arrays.asList(offline1, offline2, offline3, offline4);
         animalOccurrences = Arrays.asList(animalOcc1, animalOcc2, animalOcc3, animalOcc4);
         fungiOccurrences = Arrays.asList(fungiOcc1, fungiOcc2, fungiOcc3, fungiOcc4);
         plantOccurrences = Arrays.asList(plantOcc1, plantOcc2, plantOcc3, plantOcc4);
@@ -1039,13 +1051,9 @@ public class InGameController extends FXMLController {
         //Cycles through the users in game, even the ones who got disconnected
         for(String user : controller.getInMatchPlayerUsernames()){
             uncoveredList.get(i).setVisible(true);
-            //Disconnected users have an offline tag
-            if(controller.isOnline(user)) {
-                uncoveredUsernames.get(i).setText(user);
-            }
-            else{
-                uncoveredUsernames.get(i).setText(user + " (offline)");
-            }
+            uncoveredUsernames.get(i).setText(user);
+            //Disconnected users have an offline icon
+            offlineIcons.get(i).setVisible(!controller.isOnline(user));
 
             //Takes the points of the current user
             currPoints = scoreboard.get(user);

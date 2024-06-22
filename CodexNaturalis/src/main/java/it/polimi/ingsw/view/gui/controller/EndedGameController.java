@@ -143,7 +143,7 @@ public class EndedGameController extends FXMLController {
     private Map<Coordinate, Node> emptyPanesMap;
 
     public void initialize(){
-        double relativePercentage = 0.09;
+        double relativePercentageW = 0.07;
 
         List<ImageView> imageViews = Arrays.asList(topResourceCard, visibleResourceCard0, visibleResourceCard1,
                 topGoldCard, visibleGoldCard0, visibleGoldCard1,
@@ -152,11 +152,7 @@ public class EndedGameController extends FXMLController {
 
         for (ImageView imageView : imageViews) {
             imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getWidth() * relativePercentage, borderPane.widthProperty()
-            ));
-
-            imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                    borderPane.getHeight() * relativePercentage, borderPane.heightProperty()
+                    borderPane.getWidth() * relativePercentageW, borderPane.widthProperty()
             ));
         }
     }

@@ -233,16 +233,13 @@ public abstract class FXMLController {
     public StackPane stackPaneBuilder(Image image){
         //Border border = new Border(new BorderStroke(javafx.scene.paint.Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10)));
 
-        double relativePercentage = 0.09;
+        double relativePercentageW = 0.07;
         double relativeStackW = 0.77;
         double relativeStackH = 0.58;
 
         ImageView imageView = new ImageView();
         imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                stage.getWidth() * relativePercentage, stage.widthProperty()
-        ));
-        imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                stage.getHeight() * relativePercentage, stage.heightProperty()
+                stage.getWidth() * relativePercentageW, stage.widthProperty()
         ));
         imageView.setImage(image);
         imageView.setPickOnBounds(true);
