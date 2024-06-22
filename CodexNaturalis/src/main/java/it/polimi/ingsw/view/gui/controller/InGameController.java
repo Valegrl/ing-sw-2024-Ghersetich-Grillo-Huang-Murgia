@@ -990,6 +990,9 @@ public class InGameController extends FXMLController {
             if(controller.hasTurn()){
                 aboveLabel.setText("This is the last circle of the game, you can only play a card");
             }
+            else if(controller.getModel().getSelfPlayer().getPlayArea().getHand().size() < 3){
+                aboveLabel.setText("You played your card in the last circle, wait for the other players to finish");
+            }
             else{
                 aboveLabel.setText("This is the last circle of the game, you'll be only able to place a card");
             }

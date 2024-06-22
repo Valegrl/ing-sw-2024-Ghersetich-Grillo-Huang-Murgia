@@ -13,7 +13,7 @@
 }
 
 #errorLabel{
-    -fx-font-size: 20px;
+    -fx-font-size: 30px;
     -fx-font-family: "Bebas Neue Regular";
     -fx-text-fill: rgb(255, 0, 0);
 }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.JoinLobbyEvent;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -105,7 +108,9 @@ public class EnterLobbiesController extends FXMLController {
                 else{
                     Platform.runLater(() -> {
                         errorLobbies.setText("Failed to join lobby: " + message);
-                        refreshLobbies();
+                        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                        pause.setOnFinished(event -> refreshLobbies());
+                        pause.play();
                     });
                 }
                 break;
@@ -160,6 +165,10 @@ public class EnterLobbiesController extends FXMLController {
 
         if(lobbyName.isEmpty()){
           errorLobbies.setText("Lobby name can't be left empty!");
+        }
+        else if(lobbyName.length() > 32){
+            //TODO config
+            errorLobbies.setText("Lobby name can't be longer than 32 characters!");
         }
         else {
             Event event = new CreateLobbyEvent(lobbyName, requiredNumber);

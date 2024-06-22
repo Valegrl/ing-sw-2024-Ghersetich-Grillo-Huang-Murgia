@@ -100,6 +100,10 @@ public class LoginController extends FXMLController {
         if(registerUsername.isEmpty() || registerPassword.isEmpty()){
             errorRegistration.setText("Username and password fields can't be left empty!");
         }
+        else if(registerUsername.length() > 16 || registerPassword.length() > 16){
+            //TODO config
+            errorRegistration.setText("Username and password can't be longer than 16 characters!");
+        }
         else{
             registerUsernameField.clear();
             registerPasswordField.clear();
@@ -209,7 +213,10 @@ public class LoginController extends FXMLController {
                         }
                     });
                 } else {
-                     Platform.runLater(() -> errorLogin.setText("Error " + message));
+                     Platform.runLater(() -> {
+                         errorLogin.setText("Error " + message);
+                         loginUsernameField.requestFocus();
+                     });
                 }
                 break;
             case REGISTER:
@@ -221,7 +228,10 @@ public class LoginController extends FXMLController {
                         loginSubmitMenuFX.setManaged(true);
                     });
                 } else {
-                    Platform.runLater(() -> errorRegistration.setText("Error " + message));
+                    Platform.runLater(() -> {
+                        errorRegistration.setText("Error " + message);
+                        registerUsernameField.requestFocus();
+                    });
                 }
                 break;
         }

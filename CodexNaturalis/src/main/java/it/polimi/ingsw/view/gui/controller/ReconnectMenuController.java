@@ -9,6 +9,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.menu.ReconnectToGameEvent;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -148,7 +151,12 @@ public class ReconnectMenuController extends FXMLController {
                     }
                 }
                 else{
-                    Platform.runLater(() -> errorLabel.setText(message));
+                    Platform.runLater(() -> {
+                        errorLabel.setText(message);
+                        PauseTransition pause = new PauseTransition(Duration.seconds(20));
+                        pause.setOnFinished(event -> refreshLobbies());
+                        pause.play();
+                    });
                 }
                 break;
             case ENDED_GAME:
@@ -192,7 +200,6 @@ public class ReconnectMenuController extends FXMLController {
                 }
                 else {
                     Platform.runLater(() -> {
-                        errorLabel.setVisible(true);
                         errorLabel.setText("Can't quit from the reconnection");
                     });
                 }

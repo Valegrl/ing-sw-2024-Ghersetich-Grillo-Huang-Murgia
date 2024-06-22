@@ -88,6 +88,7 @@ public class ChooseConnectionController extends FXMLController {
 
         if (!ClientManager.validateAddress(IpSocket)) {
             errorSocket.setText("Invalid IP address. Please provide a valid one:");
+            ipSocketField.clear();
         } else if(IpSocket.isEmpty()){
             errorSocket.setText("Socket address can't be left empty!");
         } else {
@@ -118,6 +119,7 @@ public class ChooseConnectionController extends FXMLController {
             errorRmi.setText("Invalid IP address. Please provide a valid one:");
         } else if (IpRmi.isEmpty()) {
             errorRmi.setText("RMI address can't be left empty!");
+            ipRmiField.clear();
         } else {
             ipRmiField.clear();
             errorRmi.setText("");
