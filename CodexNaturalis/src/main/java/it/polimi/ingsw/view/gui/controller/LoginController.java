@@ -246,7 +246,6 @@ public class LoginController extends FXMLController {
     private void login(String loginUsername, String loginPassword){
         Event event = new LoginEvent(loginUsername, loginPassword);
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**
@@ -258,7 +257,6 @@ public class LoginController extends FXMLController {
     private void register(String registerUsername, String registerPassword){
         Event event = new RegisterEvent(registerUsername, registerPassword);
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**

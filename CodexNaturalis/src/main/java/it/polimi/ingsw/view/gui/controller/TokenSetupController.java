@@ -374,13 +374,12 @@ public class TokenSetupController extends FXMLController {
 
     /**
      * This method is used to quit the game.
-     * It sends a {@link QuitGameEvent} to the server and waits for a response.
+     * It sends a {@link QuitGameEvent} to the server.
      */
     @FXML
     public void quitGame(){
         Event event = new QuitGameEvent();
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**

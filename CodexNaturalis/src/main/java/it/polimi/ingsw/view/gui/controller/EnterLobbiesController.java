@@ -173,13 +173,12 @@ public class EnterLobbiesController extends FXMLController {
         else {
             Event event = new CreateLobbyEvent(lobbyName, requiredNumber);
             controller.newViewEvent(event);
-            waitForResponse();
+
         }
     }
 
     private void joinLobby(String lobbyID){
         Event event = new JoinLobbyEvent(lobbyID);
         controller.newViewEvent(event);
-        waitForResponse();
     }
 }

@@ -254,8 +254,10 @@ public class GUI extends Application implements View {
      * This method could be called in any menu.
      */
     public void serverDisconnected(){
+        System.out.println("Provo a fare load platform run later di  ServerDisconnection");
         Platform.runLater(() -> {
             try {
+                System.out.println("Provo a loader ServerDisconnection");
                 FXMLController.switchScreen("ServerDisconnectionMenu");
             }
             catch (IOException e){
@@ -277,6 +279,7 @@ public class GUI extends Application implements View {
                 setFXMLController(loader.getController());
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.setFullScreen(true);
                 FXMLController.run(this, stage);
             } catch (IOException e) {
                 throw new RuntimeException("FXML Exception: Failed to load main menu", e);

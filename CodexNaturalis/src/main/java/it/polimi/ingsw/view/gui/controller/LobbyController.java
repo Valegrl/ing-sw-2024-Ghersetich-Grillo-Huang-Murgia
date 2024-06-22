@@ -489,17 +489,16 @@ public class LobbyController extends FXMLController {
 
     /**
      * This method is used to quit the lobby.
-     * It sends a {@link QuitLobbyEvent} to the server and waits for a response.
+     * It sends a {@link QuitLobbyEvent} to the server.
      */
     private void quitLobby() {
         Event event = new QuitLobbyEvent();
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**
      * This method is used to kick a player from the lobby.
-     * It sends a {@link KickFromLobbyEvent} to the server and waits for a response.
+     * It sends a {@link KickFromLobbyEvent} to the server.
      * This method can only be used by lobby admins.
      *
      * @param userToKick The username of the player to be kicked.
@@ -508,7 +507,6 @@ public class LobbyController extends FXMLController {
         if (controller.getPlayersStatus().size() > 1) {
             Event event = new KickFromLobbyEvent(userToKick);
             controller.newViewEvent(event);
-            waitForResponse();
         }
         else{
             System.out.println("Nobody here but us chickens");
@@ -576,7 +574,6 @@ public class LobbyController extends FXMLController {
             event = new PlayerReadyEvent();
         }
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**

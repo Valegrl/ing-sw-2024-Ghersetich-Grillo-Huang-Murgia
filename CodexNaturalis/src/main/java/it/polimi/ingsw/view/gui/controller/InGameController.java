@@ -513,13 +513,11 @@ public class InGameController extends FXMLController {
     /**
      * This method is used to quit the current game.
      * It creates a new QuitGameEvent and sends it to the server through the controller.
-     * After sending the event, it waits for a response from the server.
      */
     @FXML
     public void quit(){
         Event event = new QuitGameEvent();
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**
@@ -563,7 +561,6 @@ public class InGameController extends FXMLController {
      * This method adds click event listeners to the deck and visible cards.
      * If the player has a turn and needs to draw a card, it sets up the click event listeners.
      * When a deck or a visible card is clicked, it creates a new DrawCardEvent and sends it to the server through the controller.
-     * After sending the event, it waits for a response from the server.
      * The method iterates over the visible gold and resource cards and sets up the click event listeners for each card.
      */
     private void addDeckChoiceSelection(){
@@ -572,13 +569,13 @@ public class InGameController extends FXMLController {
             if(controller.getModel().getTopResourceDeck() != null){
                 resourceDeck.setOnMouseClicked(event -> {
                     controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
-                    waitForResponse();
+                    //waitForResponse();
                 });
             }
             if(controller.getModel().getTopGoldDeck() != null){
                 goldDeck.setOnMouseClicked(event -> {
                 controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
-                waitForResponse();
+                //waitForResponse();
                 });
             }
 
@@ -851,8 +848,8 @@ public class InGameController extends FXMLController {
                         success = true;
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         //For debugging purposes
-                        System.out.println("Waiting for server response on card " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
-                        waitForResponse();
+                        System.out.println("Placed card: " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
+                        //waitForResponse();
                         return;
                     }
                     event.setDropCompleted(success);

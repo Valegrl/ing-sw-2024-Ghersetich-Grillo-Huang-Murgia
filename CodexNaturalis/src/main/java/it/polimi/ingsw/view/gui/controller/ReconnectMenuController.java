@@ -225,13 +225,11 @@ public class ReconnectMenuController extends FXMLController {
     /**
      * The quit method is called when the quit button is clicked.
      * It creates a new {@link QuitGameEvent} and sends it to the controller.
-     * After sending the event, it waits for a response from the server.
      */
     @FXML
     public void quit(){
         QuitGameEvent event = new QuitGameEvent();
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**
@@ -268,7 +266,6 @@ public class ReconnectMenuController extends FXMLController {
     private void reconnectToGame(String lobbyID){
         Event event = new ReconnectToGameEvent(lobbyID);
         controller.newViewEvent(event);
-        waitForResponse();
     }
 
     /**

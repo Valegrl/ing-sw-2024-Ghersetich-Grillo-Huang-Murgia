@@ -142,19 +142,16 @@ public class MenuController extends FXMLController {
         Event event = new LogoutEvent();
         controller.newViewEvent(event);
 
-        waitForResponse();
     }
 
     /**
      * The {@code deleteAccount} method is used to send a {@link DeleteAccountEvent} to the server.
      * It creates a new DeleteAccountEvent and sends it to the server via the controller.
-     * After sending the event, it waits for a response from the server.
      */
     private void deleteAccount() {
         Event event = new DeleteAccountEvent();
         controller.newViewEvent(event);
 
-        waitForResponse();
     }
 
     /**
