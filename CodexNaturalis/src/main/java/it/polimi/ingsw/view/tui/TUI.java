@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 
 public class TUI implements View {
 
-    private final BufferedReader in;
+    private BufferedReader in;
 
     private boolean waitingForInput;
 
@@ -25,13 +25,13 @@ public class TUI implements View {
 
     private boolean serverDisconnected = false;
 
-    private final PrintStream out;
+    private PrintStream out;
 
-    private final ExecutorService executor;
+    private ExecutorService executor;
 
     private String username;
 
-    private final ViewController controller;
+    private ViewController controller;
 
     private ViewState state;
 
@@ -70,7 +70,7 @@ public class TUI implements View {
         } else {
             state.notifyResponse();
             state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
-            MainClient.restartTUI();
+            this.resetUI();
         }
     }
 
@@ -107,7 +107,7 @@ public class TUI implements View {
             if (serverDisconnected) {
                 clearConsole();
                 state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
-                MainClient.restartTUI();
+                this.resetUI();
             }
             return "$stop";
         }
@@ -137,7 +137,7 @@ public class TUI implements View {
             if (serverDisconnected) {
                 clearConsole();
                 state.showResponseMessage("Disconnected from server. Please try connecting again.", 2000);
-                MainClient.restartTUI();
+                this.resetUI();
             }
             return "$stop";
         }
@@ -206,6 +206,16 @@ public class TUI implements View {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void resetUI() {
+        this.in = new BufferedReader(new InputStreamReader(System.in));
+        this.out = new PrintStream(System.out, true);
+        this.controller = new ViewController(this);
+        this.state = new ChooseConnectionState(this);
+        this.executor = Executors.newCachedThreadPool();
+        run();
     }
 
     public boolean isInputReadStopped() {

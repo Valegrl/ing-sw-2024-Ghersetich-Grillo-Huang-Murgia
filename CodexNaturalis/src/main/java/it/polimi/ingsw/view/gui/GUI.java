@@ -35,17 +35,17 @@ public class GUI extends Application implements View {
     /**
      * A Scanner object for reading input from the user.
      */
-    private final Scanner in;
+    private Scanner in;
 
     /**
      * A PrintStream object for outputting messages to the user.
      */
-    private final PrintStream out;
+    private PrintStream out;
 
     /**
      * Executor for managing threads.
      */
-    private final ExecutorService executor;
+    private ExecutorService executor;
 
     /**
      * The username of the user who is using this instance of GUI.
@@ -55,7 +55,7 @@ public class GUI extends Application implements View {
     /**
      * The {@link ViewController} this GUI is associated with which is used for handling view events.
      */
-    private final ViewController controller;
+    private ViewController controller;
 
     /**
      * The current {@link FXMLController} for managing the current FXML scene.
@@ -264,7 +264,25 @@ public class GUI extends Application implements View {
         });
     }
 
-
+    @Override
+    public void resetUI() {
+        Platform.runLater(() -> {
+            try {
+                this.in = new Scanner(System.in);
+                this.out = new PrintStream(System.out, true);
+                this.controller = new ViewController(this);
+                this.executor = Executors.newCachedThreadPool();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
+                Parent root = loader.load();
+                setFXMLController(loader.getController());
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                FXMLController.run(this, stage);
+            } catch (IOException e) {
+                throw new RuntimeException("FXML Exception: Failed to load main menu", e);
+            }
+        });
+    }
 
     @Override
     public void clearInput() {

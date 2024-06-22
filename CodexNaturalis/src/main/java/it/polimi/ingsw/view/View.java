@@ -126,4 +126,9 @@ public interface View {
      * Method to clear the input.
      */
     void clearInput();
+
+    /**
+     * Method to reset the UI after a server disconnection.
+     */
+    void resetUI();
 }
