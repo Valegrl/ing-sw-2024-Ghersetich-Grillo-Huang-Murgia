@@ -46,14 +46,19 @@ public abstract class FXMLController {
     protected final Object viewLock = new Object();
 
     /**
-     * This is the width that will be used when displaying a card in the GUI.
+     * This is the width that will be used when displaying a card in InGame and EndedGame.
      */
     private final int wCardRes = 300;
 
     /**
-     * This is the height that will be used when displaying a card in the GUI.
+     * This is the height that will be used when displaying a card in InGame and EndedGame.
      */
     private final int hCardRes = 150;
+
+    /**
+     * This is the height that will be used when displaying a token in InGame and EndedGame.
+     */
+    private final int tokenW = 100;
 
     /**
      * Default constructor for FXMLController. FXMLLoader only accepts parameter-less constructors.
@@ -212,12 +217,16 @@ public abstract class FXMLController {
      */
     public Image getTokenImage(Token token){
         return switch (token) {
-            case RED -> new Image("/it/polimi/ingsw/images/icons/RedToken.png");
-            case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png");
-            case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png");
-            case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png");
+            case RED -> new Image("/it/polimi/ingsw/images/icons/RedToken.png", tokenW, 0, true, true);
+            case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png", tokenW, 0, true, true);
+            case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png", tokenW, 0, true, true);
+            case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png", tokenW, 0, true, true);
             default -> null;
         };
+    }
+
+    public Image getBlackToken() {
+        return new Image("/it/polimi/ingsw/images/icons/BlackToken.png", tokenW, 0, true, true);
     }
 
     /**

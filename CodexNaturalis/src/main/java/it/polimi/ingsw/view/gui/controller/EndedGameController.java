@@ -236,6 +236,29 @@ public class EndedGameController extends FXMLController {
         gridPane.getChildren().remove(startNodeToRemove);
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
 
+        //Add token on start card
+        Token userToken = controller.getEndedGameData().getPlayerTokens().get(username);
+        Image imageToken = getTokenImage(userToken);
+        ImageView newImageView = new ImageView(imageToken);
+        newImageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                borderPane.getWidth() * 0.02, borderPane.widthProperty()
+        ));
+        newImageView.setPreserveRatio(true);
+        newImageView.translateXProperty().bind(startStackPane.widthProperty().multiply(0.2));
+        startStackPane.getChildren().add(newImageView);
+
+        //Add black token if the turn-circle start from user
+        if (username.equals(controller.getPlayerUsernames().getFirst())){
+            Image blackToken = getBlackToken();
+            ImageView tokenView = new ImageView(blackToken);
+            tokenView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * 0.02, borderPane.widthProperty()
+            ));
+            tokenView.setPreserveRatio(true);
+            tokenView.translateXProperty().bind(startStackPane.widthProperty().multiply(-0.2));
+            startStackPane.getChildren().add(tokenView);
+        }
+
         //Adds the played cards in the grid
         for(Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()) {
             int k = coordinate.getX() - minX + 1;

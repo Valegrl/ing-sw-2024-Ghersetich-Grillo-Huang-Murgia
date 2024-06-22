@@ -574,8 +574,8 @@ public class InGameController extends FXMLController {
             }
             if(controller.getModel().getTopGoldDeck() != null){
                 goldDeck.setOnMouseClicked(event -> {
-                controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
-                //waitForResponse();
+                    controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
+                    //waitForResponse();
                 });
             }
 
@@ -868,10 +868,35 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         startStackPane = stackPaneBuilder(image);
+
         //Placing in the middle of the grid pane
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
         gridPane.getChildren().remove(startNodeToRemove);
         gridPane.add(startStackPane, -minX + 1, maxY + 1);
+
+        //Add token on start card
+        Token currToken = controller.getModel().getSelfPlayer().getToken();
+        Image imageToken = getTokenImage(currToken);
+        ImageView newImageView = new ImageView(imageToken);
+        newImageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                borderPane.getWidth() * 0.02, borderPane.widthProperty()
+        ));
+        newImageView.setPreserveRatio(true);
+        newImageView.translateXProperty().bind(startStackPane.widthProperty().multiply(0.2));
+        startStackPane.getChildren().add(newImageView);
+
+        //Add black token if the turn-circle start from user
+        String user = controller.getModel().getSelfPlayer().getUsername();
+        if (user.equals(controller.getPlayerUsernames().getFirst())){
+            Image blackToken = getBlackToken();
+            ImageView tokenView = new ImageView(blackToken);
+            tokenView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * 0.02, borderPane.widthProperty()
+            ));
+            tokenView.setPreserveRatio(true);
+            tokenView.translateXProperty().bind(startStackPane.widthProperty().multiply(-0.2));
+            startStackPane.getChildren().add(tokenView);
+        }
 
         //Adds the played cards in the grid
         for(Coordinate coordinate : controller.getModel().getSelfPlayer().getPlayArea().getPlayedCards().keySet()) {
@@ -937,9 +962,34 @@ public class InGameController extends FXMLController {
             image = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + immStartCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         }
         startStackPane = stackPaneBuilder(image);
+
+        //Placing in the middle of the grid pane
         Node startNodeToRemove = emptyPanesMap.get(new Coordinate(-minX + 1, maxY + 1));
         opponentGridPane.getChildren().remove(startNodeToRemove);
         opponentGridPane.add(startStackPane, -minX + 1, maxY + 1);
+
+        //Add token on start card
+        Token oppToken = controller.getModel().getOpponent(opponent).getToken();
+        Image imageToken = getTokenImage(oppToken);
+        ImageView newImageView = new ImageView(imageToken);
+        newImageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                borderPane.getWidth() * 0.02, borderPane.widthProperty()
+        ));
+        newImageView.setPreserveRatio(true);
+        newImageView.translateXProperty().bind(startStackPane.widthProperty().multiply(0.2));
+        startStackPane.getChildren().add(newImageView);
+
+        //Add black token if the turn-circle start from user
+        if (opponent.equals(controller.getPlayerUsernames().getFirst())){
+            Image blackToken = getBlackToken();
+            ImageView tokenView = new ImageView(blackToken);
+            tokenView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
+                    borderPane.getWidth() * 0.02, borderPane.widthProperty()
+            ));
+            tokenView.setPreserveRatio(true);
+            tokenView.translateXProperty().bind(startStackPane.widthProperty().multiply(-0.2));
+            startStackPane.getChildren().add(tokenView);
+        }
 
         //Adds the opponent played cards in the grid
         for(Coordinate coordinate : controller.getModel().getOpponent(opponent).getPlayArea().getPlayedCards().keySet()) {
@@ -1192,5 +1242,4 @@ public class InGameController extends FXMLController {
      */
     @Override
     public boolean inChat(){ return true;}
-
 }

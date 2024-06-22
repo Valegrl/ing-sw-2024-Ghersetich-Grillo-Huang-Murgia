@@ -27,5 +27,4 @@ public class ServerDisconnectionController extends FXMLController {
     public void resetGui() {
         view.resetUI();
     }
-
 }

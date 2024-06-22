@@ -254,10 +254,8 @@ public class GUI extends Application implements View {
      * This method could be called in any menu.
      */
     public void serverDisconnected(){
-        System.out.println("Provo a fare load platform run later di  ServerDisconnection");
         Platform.runLater(() -> {
             try {
-                System.out.println("Provo a loader ServerDisconnection");
                 FXMLController.switchScreen("ServerDisconnectionMenu");
             }
             catch (IOException e){
@@ -290,5 +288,4 @@ public class GUI extends Application implements View {
     @Override
     public void clearInput() {
     }
-
 }
