@@ -3,6 +3,7 @@ package it.polimi.ingsw.main;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class used to start the client.
@@ -25,6 +26,7 @@ public class MainClient {
 
     public static void main(String[] args) {
         System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
+        AnsiConsole.systemInstall();
         MainClient.view = (( args.length>0 ) && args[0].equals("-cli")) ? new TUI() : new GUI();
         view.run();
     }
