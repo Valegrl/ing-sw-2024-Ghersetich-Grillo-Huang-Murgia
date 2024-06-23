@@ -8,10 +8,10 @@ import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -111,6 +111,8 @@ public class GUI extends Application implements View {
         stage.setScene(scene);
         stage.setMinHeight(720);
         stage.setMinWidth(1280);
+
+        stage.getIcons().add(new Image("it/polimi/ingsw/images/icons/gameIcon.png"));
 
         stage.setOnCloseRequest(event -> {
             Platform.exit();
