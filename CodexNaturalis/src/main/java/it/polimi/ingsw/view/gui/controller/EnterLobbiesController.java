@@ -22,6 +22,11 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class is responsible for controlling the GUI during the lobby selection phase.
+ * It handles the display of available lobbies, creation of new lobbies, and joining existing lobbies.
+ * It also provides options to refresh the list of available lobbies and to go back to the main menu.
+ */
 public class EnterLobbiesController extends FXMLController {
 
     @FXML
@@ -45,7 +50,16 @@ public class EnterLobbiesController extends FXMLController {
     @FXML
     private Slider requiredNumSlider;
 
-
+    /**
+     * This method is the entry point for the controller when the GUI is run.
+     * It sets up the view, stage, and controller, and initializes the error message and table placeholder.
+     * It also sets up event handlers for the lobby name field and the lobbies table.
+     * When the enter key is pressed in the lobby name field, it triggers the creation of a new lobby.
+     * When a lobby in the lobbies table is double-clicked, it triggers the joining of the selected lobby.
+     *
+     * @param view The view associated with this controller.
+     * @param stage The stage on which the GUI is displayed.
+     */
     @Override
     public void run(View view, Stage stage) {
         this.view = view;
@@ -72,6 +86,16 @@ public class EnterLobbiesController extends FXMLController {
         refreshLobbies();
     }
 
+    /**
+     * This method handles the response from the server after a request has been made.
+     * It checks the feedback and the event ID to determine the appropriate action.
+     * If the feedback is successful, it will perform the corresponding action (e.g., print available lobbies, switch screen to "LobbyMenu").
+     * If the feedback is not successful, it will display an error message on the GUI.
+     *
+     * @param feedback The feedback from the server indicating the success or failure of the request.
+     * @param message The message from the server providing additional information about the request.
+     * @param eventID The ID of the event that triggered the request.
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
@@ -120,11 +144,22 @@ public class EnterLobbiesController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to check if the current controller is in the menu.
+     * In this case, it always returns true as the EnterLobbiesController is part of the menu.
+     *
+     * @return true, indicating that the controller is in the menu.
+     */
     @Override
     public boolean inMenu() {
         return true;
     }
 
+
+    /**
+     * Handles the action of going back to the main menu. It loads a new FXML scene.
+     * @throws RuntimeException if there is an IOException when switching the screen.
+     */
     @FXML
     public void goBack(){
         try {
@@ -136,6 +171,9 @@ public class EnterLobbiesController extends FXMLController {
         }
     }
 
+    /**
+     * Refreshes the list of available lobbies.
+     */
     @FXML
     public void refreshLobbies(){
         errorLobbies.setText("");
@@ -160,7 +198,10 @@ public class EnterLobbiesController extends FXMLController {
         }
     }
 
-    @FXML
+    /**
+     * Submits a request to create a new lobby.
+     * @param e The action event associated with the button click.
+     */
     private void submitCreateLobby(ActionEvent e) {
         String lobbyName = lobbyNameField.getText();
         int requiredNumber = (int) requiredNumSlider.getValue();
@@ -180,6 +221,10 @@ public class EnterLobbiesController extends FXMLController {
         }
     }
 
+    /**
+     * Joins a selected lobby.
+     * @param lobbyID The ID of the selected lobby.
+     */
     private void joinLobby(String lobbyID){
         Event event = new JoinLobbyEvent(lobbyID);
         controller.newViewEvent(event);

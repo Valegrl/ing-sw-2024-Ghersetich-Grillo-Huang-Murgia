@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.controller;
 
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -16,6 +15,11 @@ import java.io.IOException;
  */
 public class BackgroundGameSetupController extends FXMLController {
 
+    /**
+     * Initializes the controller with the given view and stage.
+     * @param view The view associated with this controller
+     * @param stage The stage in which the FXML view is shown
+     */
     @Override
     public void run(View view, Stage stage) {
         this.view = view;
@@ -24,8 +28,8 @@ public class BackgroundGameSetupController extends FXMLController {
     }
 
     /**
-     * This method is responsible for handling the only event of {@code ChooseCardsSetup}, it checks if the {@link it.polimi.ingsw.view.controller.ViewController}
-     * setup is not null, in this case it creates the screen for GameSetup and creates the controller for it.
+     * This method is responsible for handling the events, it loads the {@link it.polimi.ingsw.view.controller.ViewController}
+     * setup, then it switches to the actual GameSetup screen
      * @param feedback The feedback from the view
      * @param message The message associated with the feedback
      * @param eventID The ID of the event
@@ -55,6 +59,10 @@ public class BackgroundGameSetupController extends FXMLController {
         }
     }
 
+    /**
+     * Indicates whether the user is in the game.
+     * @return true since the user is in the game when this controller is active.
+     */
     @Override
     public boolean inGame(){
         return true;

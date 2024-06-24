@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * Abstract class FXMLController.
- * This class provides a structure for controllers used in the FXML views.
+ * This class provides a structure for controllers used in the FXML views of the GUI.
  */
 public abstract class FXMLController {
 
@@ -40,10 +40,6 @@ public abstract class FXMLController {
      */
     protected ViewController controller;
 
-    /**
-     * An object for thread synchronization
-     */
-    protected final Object viewLock = new Object();
 
     /**
      * This is the width that will be used when displaying a card in InGame and EndedGame.
@@ -67,7 +63,7 @@ public abstract class FXMLController {
     }
 
     /**
-     * Transitions to the next controller.
+     * Transitions to the next controller for the GUI.
      * @param nextController The next FXMLController
      */
     public void transition(FXMLController nextController) {
@@ -83,25 +79,41 @@ public abstract class FXMLController {
     abstract public void run(View view, Stage stage);
 
     /**
-     * Abstract method to handle responses.
+     * Abstract method to handle responses from the server.
      * @param feedback The feedback from the view
      * @param message The message associated with the feedback
      * @param eventID The ID of the event
      */
     abstract public void handleResponse(Feedback feedback, String message, String eventID);
 
-    public boolean inMenu() {return false;};
+    /**
+     * Checks if the application is currently in the menu state.
+     * @return false as this is an abstract implementation. The actual implementation should be in the subclass.
+     */
+    public boolean inMenu() {return false;}
 
-    public boolean inLobby() {return false;};
+    /**
+     * Checks if the application is currently in the lobby state.
+     * @return false as this is an abstract implementation. The actual implementation should be in the subclass.
+     */
+    public boolean inLobby() {return false;}
 
-    public boolean inGame() {return false;};
+    /**
+     * Checks if the application is currently in the game state.
+     * @return false as this is an abstract implementation. The actual implementation should be in the subclass.
+     */
+    public boolean inGame() {return false;}
 
-    public boolean inChat() {return false;};
+    /**
+     * Checks if the application is currently in the chat state.
+     * @return false as this is an abstract implementation. The actual implementation should be in the subclass.
+     */
+    public boolean inChat() {return false;}
 
     /**
      * The {@code switchScreen} method is used to switch the current screen to a new one.
      * It loads the FXML file of the new screen, gets the controller of the new screen, and sets the root of the current scene to the root of the new screen.
-     * It then transitions to the new controller.
+     * It then transitions to the new controller for the GUI.
      *
      * @param FXML The name of the FXML file of the new screen.
      * @throws IOException If an input or output exception occurred.
@@ -127,36 +139,30 @@ public abstract class FXMLController {
     public Image getBackCardImage(Item item, CardType type){
         Image image = null;
         if(type == CardType.GOLD){
-            switch (item){
-                case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-            }
+            image = switch (item) {
+                case FUNGI ->
+                        new Image("it/polimi/ingsw/images/cards/playable/gold/back/FB.png", getWCardRes(), getHCardRes(), true, true);
+                case ANIMAL ->
+                        new Image("it/polimi/ingsw/images/cards/playable/gold/back/AB.png", getWCardRes(), getHCardRes(), true, true);
+                case INSECT ->
+                        new Image("it/polimi/ingsw/images/cards/playable/gold/back/IB.png", getWCardRes(), getHCardRes(), true, true);
+                case PLANT ->
+                        new Image("it/polimi/ingsw/images/cards/playable/gold/back/PB.png", getWCardRes(), getHCardRes(), true, true);
+                default -> image;
+            };
         }
         else{
-            switch (item){
-                case FUNGI :
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case ANIMAL:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case INSECT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-                case PLANT:
-                    image = new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", getWCardRes(), getHCardRes(), true, true);
-                    break;
-            }
+            image = switch (item) {
+                case FUNGI ->
+                        new Image("it/polimi/ingsw/images/cards/playable/resource/back/FB.png", getWCardRes(), getHCardRes(), true, true);
+                case ANIMAL ->
+                        new Image("it/polimi/ingsw/images/cards/playable/resource/back/AB.png", getWCardRes(), getHCardRes(), true, true);
+                case INSECT ->
+                        new Image("it/polimi/ingsw/images/cards/playable/resource/back/IB.png", getWCardRes(), getHCardRes(), true, true);
+                case PLANT ->
+                        new Image("it/polimi/ingsw/images/cards/playable/resource/back/PB.png", getWCardRes(), getHCardRes(), true, true);
+                default -> image;
+            };
         }
         return image;
     }
@@ -170,7 +176,7 @@ public abstract class FXMLController {
      * @return An Image object representing the front of the card.
      */
     public Image getFrontCardImage(String ID, CardType type){
-        Image image = null;
+        Image image;
         if(type == CardType.GOLD){
             image = new Image("it/polimi/ingsw/images/cards/playable/gold/front/" + ID + ".png", getWCardRes(), getHCardRes(), true, true);
         }
@@ -198,10 +204,13 @@ public abstract class FXMLController {
             case BLUE -> new Image("/it/polimi/ingsw/images/icons/BlueToken.png", tokenW, 0, true, true);
             case GREEN -> new Image("/it/polimi/ingsw/images/icons/GreenToken.png", tokenW, 0, true, true);
             case YELLOW -> new Image("/it/polimi/ingsw/images/icons/YellowToken.png", tokenW, 0, true, true);
-            default -> null;
         };
     }
 
+    /**
+     * This method returns an Image object of the black token.
+     *
+     */
     public Image getBlackToken() {
         return new Image("/it/polimi/ingsw/images/icons/BlackToken.png", tokenW, 0, true, true);
     }
@@ -209,8 +218,6 @@ public abstract class FXMLController {
     /**
      * This method creates a StackPane with an ImageView as its child.
      * The ImageView is set with the provided Image.
-     * The StackPane is set with a fixed width of 113 and a fixed height of 60.
-     * The ImageView is set with a fit height of 100 and a fit width of 150, and its pickOnBounds and preserveRatio properties are set to true.
      * The ImageView is then added to the StackPane's children.
      *
      * @param image The Image to be set on the ImageView.
@@ -252,6 +259,14 @@ public abstract class FXMLController {
         return stackPane;
     }
 
+    /**
+     * Calculates the length of the grid based on the coordinates of the played cards.
+     * The length is determined by finding the maximum and minimum X coordinates among the played cards,
+     * and then subtracting the minimum from the maximum and adding 2.
+     *
+     * @param playedCards A map of the coordinates and the corresponding played cards.
+     * @return The length of the grid.
+     */
     public int calculateGridLength(Map<Coordinate, ImmPlayableCard> playedCards){
         int maxX, minX;
         maxX = 0;
@@ -268,6 +283,14 @@ public abstract class FXMLController {
         return (maxX + 1) - (minX - 1);
     }
 
+    /**
+     * Calculates the height of the grid based on the coordinates of the played cards.
+     * The height is determined by finding the maximum and minimum Y coordinates among the played cards,
+     * and then subtracting the minimum from the maximum and adding 2.
+     *
+     * @param playedCards A map of the coordinates and the corresponding played cards.
+     * @return The height of the grid.
+     */
     public int calculateGridHeight(Map<Coordinate, ImmPlayableCard> playedCards){
         int maxY, minY;
         maxY = 0;
@@ -284,6 +307,14 @@ public abstract class FXMLController {
         return (maxY + 1) - (minY - 1);
     }
 
+    /**
+     * Calculates the minimum X coordinate among the played cards.
+     * The minimum X coordinate is determined by iterating over the coordinates of the played cards
+     * and updating the minimum X coordinate whenever a smaller one is found.
+     *
+     * @param playedCards A map of the coordinates and the corresponding played cards.
+     * @return The minimum X coordinate among the played cards.
+     */
     public int calculateMinX(Map<Coordinate, ImmPlayableCard> playedCards){
         int minX;
         minX = 0;
@@ -296,6 +327,14 @@ public abstract class FXMLController {
         return minX;
     }
 
+    /**
+     * Calculates the maximum Y coordinate among the played cards.
+     * The maximum Y coordinate is determined by iterating over the coordinates of the played cards
+     * and updating the maximum Y coordinate whenever a larger one is found.
+     *
+     * @param playedCards A map of the coordinates and the corresponding played cards.
+     * @return The maximum Y coordinate among the played cards.
+     */
     public int calculateMaxY(Map<Coordinate, ImmPlayableCard> playedCards){
         int maxY;
         maxY = 0;

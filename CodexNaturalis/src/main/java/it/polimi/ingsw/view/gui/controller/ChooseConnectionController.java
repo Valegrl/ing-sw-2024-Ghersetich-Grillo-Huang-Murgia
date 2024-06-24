@@ -136,8 +136,7 @@ public class ChooseConnectionController extends FXMLController {
     }
 
     /**
-     * Handles the action of going back to the main menu. It loads a new FXML scene, creates the associated
-     * FXMLController and transitions to the new scene.
+     * Handles the action of going back to the main menu. It loads a new FXML scene.
      */
     @FXML
     public void goBackMain(){

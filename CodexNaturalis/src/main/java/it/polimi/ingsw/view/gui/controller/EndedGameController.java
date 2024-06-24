@@ -11,7 +11,6 @@ import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -26,6 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is responsible for controlling the GUI during the end game phase.
+ * It extends the FXMLController class and overrides its methods to provide the specific functionality needed for the end game phase.
+ * It handles the display of the game board, the players' scores, the decks of cards, and the players' hands.
+ * It also provides options to view different play areas.
+ */
 public class EndedGameController extends FXMLController {
 
     @FXML
@@ -118,7 +123,6 @@ public class EndedGameController extends FXMLController {
     @FXML
     private ComboBox<String> playAreaSelection;
 
-
     @FXML
     private GridPane gridPane;
 
@@ -138,10 +142,23 @@ public class EndedGameController extends FXMLController {
 
     private List<ImageView> visibleGoldCards;
 
+    /**
+     * The data for the ended game. It includes information
+     * such as the players' scores, the state of the play areas, the visible and top cards of the decks,
+     * and the common and secret objectives. This data is used to update the GUI during the end game phase.
+     */
     private EndedGameData endedGameData;
 
+    /**
+     * A map that associates each empty pane in the grid with its corresponding coordinate.
+     * This is used to keep track of the empty panes in the grid, allowing for efficient updates
+     * when cards are played or moved.
+     */
     private Map<Coordinate, Node> emptyPanesMap;
 
+    /**
+     * Initializes the controller. Sets up the bindings for the image views.
+     */
     public void initialize(){
         double relativePercentageW = 0.07;
 
@@ -161,6 +178,11 @@ public class EndedGameController extends FXMLController {
         super();
     }
 
+    /**
+     * Runs the controller. Sets up the view, stage, and controller. Retrieves the ended game data and calls the methods to update the play areas.
+     * @param view The view associated with this controller
+     * @param stage The stage in which the FXML view is shown
+     */
     @Override
     public void run(View view, Stage stage){
         this.view = view;
@@ -184,11 +206,20 @@ public class EndedGameController extends FXMLController {
         showPlayArea();
     }
 
+    /**
+     * Handles the response from the server. This method is not used in this controller.
+     * @param feedback The feedback from the server
+     * @param message The message associated with the feedback
+     * @param eventID The ID of the event
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
 
     }
 
+    /**
+     * Shows the play area of the selected player.
+     */
     @FXML
     public void showPlayArea(){
         String playAreaChoice = playAreaSelection.getValue();
@@ -203,6 +234,12 @@ public class EndedGameController extends FXMLController {
         }
     }
 
+    /**
+     * Displays the grid pane for a given user's play area. This includes the empty slots, the start card,
+     * the user's token on the start card, a black token if the turn starts from the user, and the played cards.
+     *
+     * @param username The username of the player whose play area is to be displayed.
+     */
     private void showGridPane(String username){
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
@@ -278,6 +315,9 @@ public class EndedGameController extends FXMLController {
         }
     }
 
+    /**
+     * Shows the decks of cards.
+     */
     private void showDecks(){
         ImmPlayableCard[] visibleGoldCards = endedGameData.getVisibleGoldCards();
         ImmPlayableCard[] visibleResourceCards = endedGameData.getVisibleResourceCards();
@@ -312,6 +352,9 @@ public class EndedGameController extends FXMLController {
         commonObjective1.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + objectiveCard1.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
+    /**
+     * Shows the players and their scores.
+     */
     private void showPlayers(){
         int i = 0;
         for(String username : endedGameData.getResults()){
@@ -324,6 +367,10 @@ public class EndedGameController extends FXMLController {
         }
     }
 
+    /**
+     * Shows the hand of the selected player.
+     * @param username The username of the selected player
+     */
     private void showHand(String username){
         int i = 0;
         for(ImmPlayableCard card : endedGameData.getPlayAreas().get(username).getHand()){
@@ -339,6 +386,9 @@ public class EndedGameController extends FXMLController {
         secretObjective.setImage(new Image("it/polimi/ingsw/images/cards/objective/front/" + secretObjCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true));
     }
 
+    /**
+     * Updates the options to view which play area.
+     */
     private void updateVisiblePlayAreasOptions(){
         playAreaSelection.getItems().clear();
 
@@ -352,8 +402,12 @@ public class EndedGameController extends FXMLController {
         }
     }
 
+    /**
+     * Handles the action of going back to the main menu. It loads a new FXML scene.
+     * @throws RuntimeException if there is an IOException when switching the screen.
+     */
     @FXML
-    public void goMainMenu(ActionEvent e) {
+    public void goMainMenu() {
         try {
             switchScreen("Menu");
         }
@@ -362,6 +416,10 @@ public class EndedGameController extends FXMLController {
         }
     }
 
+    /**
+     * Indicates whether the user is in the game.
+     * @return true since the user is in the ended game when this controller is active.
+     */
     @Override
     public boolean inGame(){
         return true;
