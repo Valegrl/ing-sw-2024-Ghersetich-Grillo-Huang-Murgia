@@ -280,8 +280,6 @@ public class GameSetupController extends FXMLController {
 
         //To load the chat from the lobby
         controller.newViewEvent(new GetChatMessagesEvent());
-        waitForResponse();
-        chatArea.appendText("You're playing in the lobby: " + controller.getLobbyId() + "\n");
         chatInput.setOnAction(actionEvent -> submitMessage());
     }
 
@@ -301,7 +299,8 @@ public class GameSetupController extends FXMLController {
         switch(EventID.getByID(eventID)) {
             case GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
-                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"));
+                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"
+                        + "You're playing in the lobby: " + controller.getLobbyId() + "\n"));
                 break;
             case CHOSEN_CARDS_SETUP:
                 Platform.runLater(() ->{
@@ -349,7 +348,6 @@ public class GameSetupController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     /**

@@ -99,29 +99,6 @@ public abstract class FXMLController {
     public boolean inChat() {return false;};
 
     /**
-     * Waits for a response from the view.
-     * This method blocks the thread until a response is received.
-     */
-    protected void waitForResponse() {
-        synchronized (viewLock) {
-            try {
-                viewLock.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Notifies all waiting threads of a response.
-     */
-    public void notifyResponse() {
-        synchronized (viewLock) {
-            viewLock.notifyAll();
-        }
-    }
-
-    /**
      * The {@code switchScreen} method is used to switch the current screen to a new one.
      * It loads the FXML file of the new screen, gets the controller of the new screen, and sets the root of the current scene to the root of the new screen.
      * It then transitions to the new controller.

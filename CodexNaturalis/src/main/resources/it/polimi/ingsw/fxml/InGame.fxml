@@ -36,7 +36,7 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane minWidth="270.0" BorderPane.alignment="CENTER">
+      <AnchorPane minWidth="200.0" BorderPane.alignment="CENTER">
          <VBox BorderPane.alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                <VBox alignment="CENTER" spacing="10.0">
@@ -98,6 +98,7 @@
                   <Insets top="10.0" />
                </padding>
             </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
             <VBox alignment="TOP_CENTER" spacing="10.0">
                <padding>
                   <Insets top="10.0" />

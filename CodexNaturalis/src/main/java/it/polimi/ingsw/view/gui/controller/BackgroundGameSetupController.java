@@ -48,7 +48,6 @@ public class BackgroundGameSetupController extends FXMLController {
                     System.out.println("Error, setup not initialized !");
                     QuitGameEvent event = new QuitGameEvent();
                     controller.newViewEvent(event);
-                    waitForResponse();
                 }
                 break;
             case EventID.QUIT_GAME:
@@ -61,7 +60,6 @@ public class BackgroundGameSetupController extends FXMLController {
                 });
                 break;
         }
-        notifyResponse();
     }
 
     @Override

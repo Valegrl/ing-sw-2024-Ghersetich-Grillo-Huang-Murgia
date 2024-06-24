@@ -199,7 +199,6 @@ public class LoginController extends FXMLController {
     @Override
     @FXML
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        notifyResponse();
         switch (EventID.getByID(eventID)) {
             case LOGIN:
                 if (feedback == Feedback.SUCCESS) {

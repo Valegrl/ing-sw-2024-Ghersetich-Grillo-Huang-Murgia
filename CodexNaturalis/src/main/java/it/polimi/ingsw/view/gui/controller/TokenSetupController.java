@@ -178,8 +178,6 @@ public class TokenSetupController extends FXMLController {
         addChoiceSelection();
         addHoverEffect();
         controller.newViewEvent(new GetChatMessagesEvent());
-        waitForResponse();
-
         chatInput.setOnAction(actionEvent -> submitMessage());
     }
 
@@ -274,7 +272,6 @@ public class TokenSetupController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     /**

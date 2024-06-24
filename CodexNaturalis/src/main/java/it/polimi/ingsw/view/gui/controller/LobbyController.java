@@ -321,7 +321,6 @@ public class LobbyController extends FXMLController {
                 transition(nextController);
                 break;
         }
-        notifyResponse();
     }
 
     /**

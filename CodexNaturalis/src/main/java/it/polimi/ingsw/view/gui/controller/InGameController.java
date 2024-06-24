@@ -498,7 +498,6 @@ public class InGameController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     /**
@@ -569,13 +568,11 @@ public class InGameController extends FXMLController {
             if(controller.getModel().getTopResourceDeck() != null){
                 resourceDeck.setOnMouseClicked(event -> {
                     controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
-                    //waitForResponse();
                 });
             }
             if(controller.getModel().getTopGoldDeck() != null){
                 goldDeck.setOnMouseClicked(event -> {
                     controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
-                    //waitForResponse();
                 });
             }
 
@@ -849,7 +846,6 @@ public class InGameController extends FXMLController {
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         //For debugging purposes
                         System.out.println("Placed card: " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
-                        //waitForResponse();
                         return;
                     }
                     event.setDropCompleted(success);

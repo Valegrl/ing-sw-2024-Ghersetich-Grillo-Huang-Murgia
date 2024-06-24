@@ -125,7 +125,10 @@ public class ReconnectMenuController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)){
             case GET_MY_OFFLINE_GAMES :
-                if(feedback == Feedback.FAILURE){
+                if (feedback == Feedback.SUCCESS) {
+                Platform.runLater(this::printOfflineGames);
+                }
+                else {
                     Platform.runLater(() -> errorLabel.setText("Failed to get offline games"));
                 }
                 break;
@@ -205,7 +208,6 @@ public class ReconnectMenuController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     /**
@@ -242,8 +244,9 @@ public class ReconnectMenuController extends FXMLController {
 
         Event event = new GetMyOfflineGamesEvent();
         controller.newViewEvent(event);
-        waitForResponse();
+    }
 
+    private void printOfflineGames() {
         if(!controller.getOfflineGames().isEmpty()){
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));
             numPlayers.setCellValueFactory(new PropertyValueFactory<>("onlinePlayers"));

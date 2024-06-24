@@ -76,8 +76,11 @@ public class EnterLobbiesController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case EventID.AVAILABLE_LOBBIES:
-                if(feedback == Feedback.FAILURE) {
-                    Platform.runLater(() ->errorLobbies.setText("Failed to get available lobbies from server: " + message));
+                if (feedback == Feedback.SUCCESS) {
+                    Platform.runLater(this::printAvailableLobbies);
+                }
+                else {
+                    Platform.runLater(() -> errorLobbies.setText("Failed to get available lobbies from server: " + message));
                 }
                 break;
             case EventID.CREATE_LOBBY:
@@ -115,7 +118,6 @@ public class EnterLobbiesController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     @Override
@@ -141,8 +143,9 @@ public class EnterLobbiesController extends FXMLController {
 
         Event event = new AvailableLobbiesEvent();
         controller.newViewEvent(event);
-        waitForResponse();
+    }
 
+    private void printAvailableLobbies() {
         if(!controller.getLobbies().isEmpty()){
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));
             numPlayers.setCellValueFactory(new PropertyValueFactory<>("onlinePlayers"));

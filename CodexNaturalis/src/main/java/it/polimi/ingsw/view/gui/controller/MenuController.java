@@ -215,7 +215,6 @@ public class MenuController extends FXMLController {
                 }
                 break;
         }
-        notifyResponse();
     }
 
     /**
