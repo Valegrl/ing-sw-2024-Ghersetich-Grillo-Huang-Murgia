@@ -34,21 +34,14 @@ public class BackgroundGameSetupController extends FXMLController {
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)){
             case EventID.CHOOSE_CARDS_SETUP :
-                if(controller.getSetup() != null) {
-                    Platform.runLater(() -> {
-                        try {
-                            switchScreen("GameSetup");
-                        }
-                        catch (IOException exception) {
-                            throw new RuntimeException("FXML Exception: failed to load GameSetup", exception);
-                        }
-                    });
-                }
-                else{
-                    System.out.println("Error, setup not initialized !");
-                    QuitGameEvent event = new QuitGameEvent();
-                    controller.newViewEvent(event);
-                }
+                Platform.runLater(() -> {
+                    try {
+                        switchScreen("GameSetup");
+                    }
+                    catch (IOException exception) {
+                        throw new RuntimeException("FXML Exception: failed to load GameSetup", exception);
+                    }
+                });
                 break;
             case EventID.QUIT_GAME:
                 Platform.runLater(() -> {

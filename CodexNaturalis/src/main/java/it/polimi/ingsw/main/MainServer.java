@@ -17,6 +17,11 @@ public class MainServer {
     public static void main(String[] args) {
         MainServer server = new MainServer();
 
+        if(args.length < 1) {
+            System.out.println("Usage: java -jar CodexNaturalis.jar <server_ip> [-cli]");
+            System.exit(1);
+        }
+
         Thread socketThread = new Thread(
                 () -> {
                     int port = 1098;
@@ -34,7 +39,7 @@ public class MainServer {
                     int port = 1099;
                     System.out.println("Starting RMI server on port " + port + "...");
                     try {
-                        server.startRMI(port); // TODO port, config file?
+                        server.startRMI(args[0].substring(1), port); // TODO port, config file?
                         System.out.println("Server rmi ready on port: " + port);
                     } catch (RemoteException e) {
                         System.err.println("Cannot start RMI server, RMI protocol will ne disabled");
@@ -79,11 +84,12 @@ public class MainServer {
 
     /**
      * Starts an RMI server on the given port.
+     * @param ip The IP address of the machine executing the mainServer.
      * @param port The port number used to establish a connection.
      * @throws RemoteException If any I/O error occurs.
      */
-    private void startRMI(int port) throws RemoteException {
-        System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
+    private void startRMI(String ip, int port) throws RemoteException {
+        System.setProperty("java.rmi.server.hostname", ip);
         Registry registry = LocateRegistry.createRegistry(port);
         registry.rebind("CodexNaturalisServer51", ServerManager.getInstance()); // TODO config?
     }

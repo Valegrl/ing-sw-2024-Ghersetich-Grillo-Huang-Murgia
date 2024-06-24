@@ -25,9 +25,13 @@ public class MainClient {
     }
 
     public static void main(String[] args) {
-        System.setProperty("java.rmi.server.hostname","127.0.0.1"); // TODO config?
+        if(args.length < 1) {
+            System.out.println("Usage: java -jar JARNAME.jar -<own_ip> [-cli]");
+            System.exit(1);
+        }
+        System.setProperty("java.rmi.server.hostname", args[0].substring(1));
         AnsiConsole.systemInstall();
-        MainClient.view = (( args.length>0 ) && args[0].equals("-cli")) ? new TUI() : new GUI();
+        MainClient.view = (args.length > 1 && args[1].equals("-cli")) ? new TUI() : new GUI();
         view.run();
     }
 }
