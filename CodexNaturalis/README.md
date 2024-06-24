@@ -10,7 +10,7 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 
 ## The Team
 * [Pietro Ghersetich](https://github.com/PietroGhersetich) | pietro.ghersetich@mail.polimi.it
-* [Grillo Valerio](https://github.com/Valegrl) | valerio.grillo@mail.polimi.it
+* [Valerio Grillo](https://github.com/Valegrl) | valerio.grillo@mail.polimi.it
 * [Jerry Huang](https://github.com/polimiJHuang) | jerry.huang@mail.polimi.it
 * [Filippo Murgia](https://github.com/filippomurgia) | filippo.murgia@mail.polimi.it
 
@@ -22,6 +22,7 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 | Basic rules                      |   ✅    |
 | Complete rules                   |   ✅    |
 | Socket                           |   ✅    |
+| RMI                              |   ✅    |
 | TUI _(Terminal User Interface)_  |   ✅    |
 | GUI _(Graphical User Interface)_ |   ✅    |
 
@@ -49,26 +50,25 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 Regardless of the operating system, you must have installed the following programs:
 - Java 21
 - JavaFX 21
-- Maven 4.0.0
 
 ### Instructions
 1. Move to the directory where you have the JAR files and execute the server:
     ```shell
-    java -jar PSP51_Codex_Naturalis_Server.jar
+    java -jar PSP51_Codex_Naturalis_Server.jar -server_ip
     ```
 2. Then execute the client:
     ```shell
-    java -jar PSP51_Codex_Naturalis_Client.jar
+    java -jar PSP51_Codex_Naturalis_Client.jar -self_ip
     ```
 
    Note that the client also accepts arguments at startup. In fact, it can also be started as:
     1. For TUI version:
 
         ```shell
-        java -jar PSP51_Codex_Naturalis_Client.jar -cli
+        java -jar PSP51_Codex_Naturalis_Client.jar -self_ip -cli 
         ```
     2. For GUI version:
 
         ```shell
-        java -jar PSP51_Codex_Naturalis_Client.jar
+        java -jar PSP51_Codex_Naturalis_Client.jar -self_ip
         ```
