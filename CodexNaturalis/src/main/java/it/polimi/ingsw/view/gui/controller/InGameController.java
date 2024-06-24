@@ -659,6 +659,7 @@ public class InGameController extends FXMLController {
         }
         else{
             goldDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
+            goldDeck.setEffect(null);
         }
 
         Item itemResourceDeck = controller.getModel().getTopResourceDeck();
@@ -674,6 +675,7 @@ public class InGameController extends FXMLController {
         }
         else{
             resourceDeck.setImage(new Image("it/polimi/ingsw/images/cards/playable/NoCard.png", getWCardRes(), getHCardRes(), true, true));
+            resourceDeck.setEffect(null);
         }
         addDeckChoiceSelection();
     }
