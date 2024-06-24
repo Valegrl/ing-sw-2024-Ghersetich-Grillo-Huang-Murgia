@@ -4,14 +4,19 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
-import it.polimi.ingsw.model.GameStatus;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the view when the user is in the main menu.
+ */
 public class MenuState extends ViewState {
+    /**
+     * Constructor for the MenuState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public MenuState(View view) {
         super(view);
     }
@@ -113,6 +118,9 @@ public class MenuState extends ViewState {
         notifyResponse();
     }
 
+    /**
+     * Handles the creation of a new lobby.
+     */
     private void createLobby() {
         String lobbyName;
         while (true) {
@@ -123,7 +131,10 @@ public class MenuState extends ViewState {
                 return;
             }
             if (!lobbyName.isEmpty()) {
-                break;
+                if(lobbyName.length() <= 32)
+                    break;
+                else
+                    view.printMessage("Lobby name must be 32 characters or less.");
             } else {
                 view.printMessage("Lobby name cannot be empty.");
             }
@@ -153,6 +164,9 @@ public class MenuState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Handles the request for available lobbies.
+     */
     private void availableLobbies() {
         Event event = new AvailableLobbiesEvent();
         controller.newViewEvent(event);
@@ -167,6 +181,9 @@ public class MenuState extends ViewState {
         }
     }
 
+    /**
+     * Handles the choice of a lobby to join.
+     */
     private void chooseLobby() {
         view.printMessage("Choose a lobby ('-1' to exit):");
         int choice = readIntFromInput(1, controller.getLobbies().size());
@@ -179,6 +196,9 @@ public class MenuState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Handles the reconnection to a game.
+     */
     private void reconnect() {
         Event event = new GetMyOfflineGamesEvent();
         controller.newViewEvent(event);
@@ -192,6 +212,9 @@ public class MenuState extends ViewState {
         }
     }
 
+    /**
+     * Handles the choice of a game to reconnect to.
+     */
     private void chooseReconnect() {
         view.printMessage("Choose the game to reconnect to ('-1' to exit):");
         int choice = readIntFromInput(1, controller.getOfflineGames().size());
@@ -204,6 +227,9 @@ public class MenuState extends ViewState {
         controller.newViewEvent(event);
     }
 
+    /**
+     * Handles the profile settings.
+     */
     private void profileSettings() {
         transition(new ProfileSettingsState(view));
     }

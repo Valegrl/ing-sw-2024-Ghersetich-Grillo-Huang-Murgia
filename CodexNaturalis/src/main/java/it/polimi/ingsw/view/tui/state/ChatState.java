@@ -13,12 +13,26 @@ import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the TUI when the user is in the chat overlay.
+ */
 public class ChatState extends ViewState {
 
+    /**
+     * The previous state of the TUI before entering the chat.
+     */
     private ViewState previousState;
 
+    /**
+     * Boolean that represents if the user is in the chat.
+     */
     private boolean inChat = false;
 
+    /**
+     * Constructor for the ChatState.
+     * @param view The TUI instance that this state belongs to.
+     * @param previousState The previous state of the TUI.
+     */
     public ChatState(View view, ViewState previousState) {
         super(view);
         this.previousState = previousState;
@@ -152,6 +166,10 @@ public class ChatState extends ViewState {
         inputMessageBox();
     }
 
+    /**
+     * Sends a private message to another player.
+     * @param message The message to send.
+     */
     private void sendPrivateMessage(String message) {
         String[] split = message.split(" ");
         if (split.length < 3) {
@@ -172,23 +190,33 @@ public class ChatState extends ViewState {
         }
     }
 
+    /**
+     * Prints the input message box.
+     */
     private void inputMessageBox() {
         view.print("[" + view.getUsername() + "]: "); // wait for a message to send
     }
 
+    /**
+     * Prints a chat message to the console.
+     * @param message The message to print.
+     */
     private void printMessage(String message) {
         clearLine();
         view.printMessage(message);
     }
 
+    @Override
     public boolean inChat() {
         return inChat;
     }
 
+    @Override
     public boolean inGame() {
         return previousState.inGame();
     }
 
+    @Override
     public boolean inLobby() {
         return previousState.inLobby();
     }

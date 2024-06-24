@@ -3,15 +3,20 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.DeleteAccountEvent;
-import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LogoutEvent;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the view when the user is in the profile settings menu.
+ */
 public class ProfileSettingsState extends ViewState {
-
+    /**
+     * Constructor for the ProfileSettingsState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public ProfileSettingsState(View view) {
         super(view);
     }
@@ -77,6 +82,9 @@ public class ProfileSettingsState extends ViewState {
         }
     }
 
+    /**
+     * Logs the user out of his account.
+     */
     private void logout() {
         Event event = new LogoutEvent();
         controller.newViewEvent(event);
@@ -84,6 +92,9 @@ public class ProfileSettingsState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Deletes the user's account.
+     */
     private void deleteAccount() {
         Event event = new DeleteAccountEvent();
         controller.newViewEvent(event);

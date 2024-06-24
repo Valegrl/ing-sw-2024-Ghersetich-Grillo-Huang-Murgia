@@ -6,7 +6,14 @@ import it.polimi.ingsw.view.View;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the view when the user is waiting for their turn.
+ */
 public class WaitForTurnState extends GameState {
+    /**
+     * Constructor for the WaitForTurnState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public WaitForTurnState(View view) {
         super(view);
     }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tui.state;
 
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.utils.AnsiCodes;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 import it.polimi.ingsw.view.controller.ViewController;
@@ -17,14 +16,27 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Abstract class that represents the state of the game.
+ */
 public abstract class GameState extends ViewState {
 
+    /**
+     * The username of the player whose play area is currently being shown.
+     */
     private String currentPlayAreaUsername = view.getUsername();
 
+    /**
+     * Class constructor.
+     * @param view The TUI instance that this state belongs to.
+     */
     public GameState(View view) {
         super(view);
     }
 
+    /**
+     * Shows the visible decks and waits for the user's input to go back.
+     */
     protected void showVisibleDecks() {
         clearConsole();
         view.printMessage(controller.decksToString());
@@ -32,6 +44,10 @@ public abstract class GameState extends ViewState {
             run();
     }
 
+    /**
+     * Prompts the user to choose a player to see its {@link it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea ViewPlayArea}
+     * and waits for the user's input to go back.
+     */
     protected void showOtherPlayerPlayArea() {
         clearConsole();
         List<String> players = new ArrayList<>(controller.getInMatchPlayerUsernames());
@@ -55,6 +71,9 @@ public abstract class GameState extends ViewState {
         seeDetailedCard();
     }
 
+    /**
+     * Shows the objective cards and waits for the user's input to go back.
+     */
     protected void showObjectiveCards() {
         clearConsole();
         view.printMessage(controller.objectiveCardsToString());
@@ -62,6 +81,10 @@ public abstract class GameState extends ViewState {
             run();
     }
 
+    /**
+     * Method to show an info message during the game.
+     * @param message The message to show.
+     */
     protected void showInfoMessage(String message) {
         clearConsole();
         view.stopInputRead(true);
@@ -70,12 +93,9 @@ public abstract class GameState extends ViewState {
         run();
     }
 
-    protected List<String> rangeList(int size) {
-        return IntStream.rangeClosed(1, size)
-                .mapToObj(Integer::toString)
-                .collect(Collectors.toList());
-    }
-
+    /**
+     * Prompts the user to choose a card to see its details and waits for the user's input to go back.
+     */
     protected void seeDetailedCard() {
         view.printMessage("Write the id of the card you want to see: (type '$exit' to go back)");
         String id = view.getInput();
@@ -124,6 +144,10 @@ public abstract class GameState extends ViewState {
         }
     }
 
+    /**
+     * Method to handle the {@link it.polimi.ingsw.eventUtils.event.fromView.game.local.NewGameStatusEvent NewGameStatusEvent}.
+     * @param message The message for this event.
+     */
     protected void handleNewGameStatus(String message) {
         clearConsole();
         view.stopInputRead(true);
@@ -136,6 +160,10 @@ public abstract class GameState extends ViewState {
         }
     }
 
+    /**
+     * Method to handle the {@link it.polimi.ingsw.eventUtils.event.fromModel.EndedGameEvent EndedGameEvent}.
+     * @param message The message for this event.
+     */
     protected void handleGameEndedEvent(String message) {
         clearConsole();
         view.stopInputRead(true);
@@ -144,6 +172,10 @@ public abstract class GameState extends ViewState {
         transition(new EndedGameState(view));
     }
 
+    /**
+     * Sets the username of the player whose play area is currently being shown.
+     * @param username The username to set.
+     */
     protected void setCurrentPlayAreaUsername(String username) {
         currentPlayAreaUsername = username;
     }

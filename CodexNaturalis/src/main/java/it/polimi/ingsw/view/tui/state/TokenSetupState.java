@@ -13,16 +13,34 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents the state of the view when the user needs to choose a token for the current game.
+ */
 public class TokenSetupState extends ViewState {
-
+    /**
+     * The message containing the available tokens that the user can choose from.
+     */
     private String tokensMessage;
 
+    /**
+     * The number of available tokens.
+     */
     private int numTokens;
 
+    /**
+     * A boolean that represents if the user has already chosen a token.
+     */
     private boolean choseToken = false;
 
+    /**
+     * A boolean that represents if the user is currently choosing a token.
+     */
     private boolean choosingToken = false;
 
+    /**
+     * Constructor for the TokenSetupState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public TokenSetupState(View view) {
         super(view);
     }
@@ -134,6 +152,9 @@ public class TokenSetupState extends ViewState {
         }
     }
 
+    /**
+     * Shows the available tokens that the user can choose from.
+     */
     private void showAvailableTokens() {
         choosingToken = true;
         clearConsole();
@@ -155,6 +176,11 @@ public class TokenSetupState extends ViewState {
         controller.newViewEvent(new ChosenTokenSetupEvent(chosenToken));
     }
 
+    /**
+     * Extracts the token from the choice made by the user, removing any color codes associated with it.
+     * @param choice The choice made by the user.
+     * @return The token chosen by the user.
+     */
     private Token extractTokenFromChoice(int choice) {
         String regex = choice + "- \\033\\[38;2;\\d+;\\d+;\\d+m(.*?)\\u001B\\[0m";
         Pattern pattern = Pattern.compile(regex);

@@ -15,35 +15,21 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * GUI class extends Application and implements View.
- * It represents the graphical user interface of the application.
+ * Class that represents the Graphical User Interface of the application.
  */
 public class GUI extends Application implements View {
 
     /**
      * The main stage of the application where all scenes are displayed.
-     * The GUI never changes its stage during its time.
      */
     private Stage stage;
 
     /**
-     * A Scanner object for reading input from the user.
-     */
-    private Scanner in;
-
-    /**
-     * A PrintStream object for outputting messages to the user.
-     */
-    private PrintStream out;
-
-    /**
-     * Executor for managing threads.
+     * The {@link ExecutorService} used to manage the handling of responses from server.
      */
     private ExecutorService executor;
 
@@ -70,8 +56,6 @@ public class GUI extends Application implements View {
      * Initializes the Scanner, PrintStream, ViewController, and ExecutorService.
      */
     public GUI() {
-        this.in = new Scanner(System.in);
-        this.out = new PrintStream(System.out, true);
         this.controller = new ViewController(this);
         this.executor = Executors.newCachedThreadPool();
     }
@@ -186,9 +170,7 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void printMessage(String message){
-        out.println(message);
-    }
+    public void printMessage(String message){}
 
     @Override
     public void print(String message) {}
@@ -204,7 +186,7 @@ public class GUI extends Application implements View {
 
     @Override
     public String getInput(){
-        return in.nextLine();
+        return "";
     }
 
     @Override
@@ -219,7 +201,6 @@ public class GUI extends Application implements View {
 
     @Override
     public ViewState getState() {
-        //return state;
         return null;
     }
 
@@ -229,9 +210,7 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void setState(ViewState state) {
-        // this.state = state;
-    }
+    public void setState(ViewState state) {}
 
     /**
      * Sets the username for this GUI
@@ -248,8 +227,7 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void stopInputRead(boolean stopInputRead) {
-    }
+    public void stopInputRead(boolean stopInputRead) {}
 
     /**
      * Handles server disconnection by loading the server disconnection menu.
@@ -270,8 +248,6 @@ public class GUI extends Application implements View {
     public void resetUI() {
         Platform.runLater(() -> {
             try {
-                this.in = new Scanner(System.in);
-                this.out = new PrintStream(System.out, true);
                 this.controller = new ViewController(this);
                 this.executor = Executors.newCachedThreadPool();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/fxml/MainMenu.fxml"));
@@ -288,6 +264,5 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void clearInput() {
-    }
+    public void clearInput() {}
 }

@@ -10,8 +10,15 @@ import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the view when the user needs to register or login.
+ */
 public class LoginState extends ViewState {
 
+    /**
+     * Constructor for the LoginState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public LoginState(View view) {
         super(view);
     }
@@ -50,7 +57,7 @@ public class LoginState extends ViewState {
                     transition(new MenuState(view));
                 } else {
                     showResponseMessage("Login failed: " + message, 2000);
-                    login();
+                    run();
                 }
                 break;
             case REGISTER:
@@ -64,10 +71,17 @@ public class LoginState extends ViewState {
         }
     }
 
-
+    /**
+     * Handles the login process.
+     */
     private void login(){
         view.printMessage("Please provide your username:");
         String user = view.getInput();
+        while (user.isEmpty() || user.length() > 16) {
+            view.printMessage("Username must be between 1 and 16 characters long.");
+            view.printMessage("Please provide your username:");
+            user = view.getInput();
+        }
         if (user.startsWith("$")) {
             if (user.equals("$exit")) backToStateStart();
             return;
@@ -85,9 +99,17 @@ public class LoginState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Handles the registration process.
+     */
     private void register(){
         view.printMessage("Please choose your username:");
         String user = view.getInput();
+        while (user.isEmpty() || user.length() > 16) {
+            view.printMessage("Username must be between 1 and 16 characters long.");
+            view.printMessage("Please choose your username:");
+            user = view.getInput();
+        }
         if (user.startsWith("$")) {
             if (user.equals("$exit")) backToStateStart();
             return;

@@ -7,8 +7,14 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
+/**
+ * Represents the state of the view when the user is reconnecting to a game.
+ */
 public class ReconnectToGameState extends ViewState {
-
+    /**
+     * Constructor for the ReconnectToGameState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public ReconnectToGameState(View view) {
         super(view);
     }
@@ -105,6 +111,7 @@ public class ReconnectToGameState extends ViewState {
         }
     }
 
+    @Override
     public boolean inGame() {
         return true;
     }

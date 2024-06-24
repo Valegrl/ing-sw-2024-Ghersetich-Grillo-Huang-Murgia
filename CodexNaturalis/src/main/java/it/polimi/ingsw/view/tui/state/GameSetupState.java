@@ -8,20 +8,44 @@ import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Class that represents the state of the game setup phase.
+ */
 public class GameSetupState extends ViewState {
-
+    /**
+     * Boolean that represents if it is the first time the state is shown.
+     */
     private boolean notFirstStart = false;
 
+    /**
+     * String that represents the message of the setup.
+     */
     private String setupMessage;
 
+    /**
+     * String that represents the hand message.
+     */
     private String handMessage;
 
+    /**
+     * String that represents the common objectives message.
+     */
     private String commObjectivesMessage;
 
+    /**
+     * String that represents the decks message.
+     */
     private String decksMessage;
 
+    /**
+     * String that represents the opponents' hands message.
+     */
     private String opponentsHandsMessage;
 
+    /**
+     * Class constructor.
+     * @param view The TUI instance that this state belongs to.
+     */
     public GameSetupState(View view) {
         super(view);
     }
@@ -135,6 +159,9 @@ public class GameSetupState extends ViewState {
         }
     }
 
+    /**
+     * Method that shows the choices available during the setup phase.
+     */
     private void showSetupChoices() {
         clearConsole();
         view.printMessage(setupMessage);
@@ -150,6 +177,9 @@ public class GameSetupState extends ViewState {
         handleInput(choice);
     }
 
+    /**
+     * Method that allows the player to choose the setup.
+     */
     private void chooseSetup() {
         view.printMessage("Choose the showing face of the start card: ");
         int chosenFace = readChoiceFromInput(Arrays.asList("Front", "Back"));

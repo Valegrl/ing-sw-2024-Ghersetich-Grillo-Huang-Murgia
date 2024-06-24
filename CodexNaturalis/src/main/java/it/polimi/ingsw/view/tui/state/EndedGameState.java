@@ -3,16 +3,24 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.utils.AnsiCodes;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.ViewState;
-import it.polimi.ingsw.viewModel.EndedGameData;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class that represents the state of the game when it has ended.
+ */
 public class EndedGameState extends GameState {
 
+    /**
+     * Boolean that represents if this is the first time the state is run.
+     */
     private boolean firstRun = true;
 
+    /**
+     * Constructor for the EndedGameState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public EndedGameState(View view) {
         super(view);
     }
@@ -64,11 +72,9 @@ public class EndedGameState extends GameState {
 
     }
 
-    @Override
-    public boolean inGame() {
-        return true;
-    }
-
+    /**
+     * Method that shows a specific play area to the user.
+     */
     private void showSpecificPlayArea() {
         view.printMessage("Choose a play area to see:");
         List<String> usernames = controller.getEndedGameData().getPlayAreas().keySet().stream().toList();
@@ -83,5 +89,10 @@ public class EndedGameState extends GameState {
             if (waitInputToGoBack())
                 run();
         }
+    }
+
+    @Override
+    public boolean inGame() {
+        return true;
     }
 }

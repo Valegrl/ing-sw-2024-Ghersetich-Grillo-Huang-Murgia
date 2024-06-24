@@ -3,15 +3,20 @@ package it.polimi.ingsw.view.tui.state;
 import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.DrawCardEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.CardType;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class that represents the state of the game where the player has to draw a card.
+ */
 public class DrawCardState extends GameState {
+    /**
+     * Constructor for the DrawCardState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public DrawCardState(View view) {
         super(view);
     }
@@ -108,6 +113,11 @@ public class DrawCardState extends GameState {
         }
     }
 
+    /**
+     * Prompts the user to choose a card to be drawn.
+     * The user can choose between the gold deck and the resource deck.
+     * The user can choose to draw from the top of the deck or from a visible card.
+     */
     private void drawCard() {
         view.printMessage("Choose the " + boldText("deck") + " you want to draw a card from: ");
         int chosenDeckIndex = readChoiceFromInput(Arrays.asList("GOLD", "RESOURCE"));

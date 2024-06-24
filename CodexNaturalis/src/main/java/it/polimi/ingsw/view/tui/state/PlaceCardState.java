@@ -4,7 +4,6 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.game.PlaceCardEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.game.local.AvailablePositionsEvent;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.view.View;
@@ -12,10 +11,19 @@ import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 
 import java.util.Arrays;
 
+/**
+ * Represents the state of the view when the user needs to place a card.
+ */
 public class PlaceCardState extends GameState {
-
+    /**
+     * The message containing the available positions where the user can place a card.
+     */
     private String availablePositions;
 
+    /**
+     * Constructor for the PlaceCardState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public PlaceCardState(View view) {
         super(view);
     }
@@ -121,6 +129,9 @@ public class PlaceCardState extends GameState {
         }
     }
 
+    /**
+     * Handles the process of placing a card.
+     */
     private void placeCard(){
         view.printMessage("Choose the card you want to place from your hand: ");
         int chosenCardIndex = readChoiceFromInput(controller.getSelfHandCardIds());
@@ -156,6 +167,10 @@ public class PlaceCardState extends GameState {
         }
     }
 
+    /**
+     * Handles the process of choosing a coordinate to place a card in.
+     * @return The coordinate chosen by the user.
+     */
     private Coordinate chooseCoordinate() {
         Coordinate c = null;
         String x, y;

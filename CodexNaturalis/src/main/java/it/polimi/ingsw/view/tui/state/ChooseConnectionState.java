@@ -9,7 +9,14 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
+/**
+ * Class that represents the state where the user chooses the connection type with the server.
+ */
 public class ChooseConnectionState extends ViewState {
+    /**
+     * Constructor for the ChooseConnectionState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public ChooseConnectionState(TUI view) {
         super(view);
     }
@@ -68,6 +75,10 @@ public class ChooseConnectionState extends ViewState {
         // Not used
     }
 
+    /**
+     * Method that asks the user to choose the connection type.
+     * @return true if the connection is established, false otherwise.
+     */
     private boolean chooseConnection(){
         view.printMessage("Choose the connection type:");
         int choice = readChoiceFromInput(Arrays.asList("SOCKET", "RMI"));

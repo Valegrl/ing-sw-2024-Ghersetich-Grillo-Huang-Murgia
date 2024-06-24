@@ -4,7 +4,14 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.view.View;
 
+/**
+ * Represents the state of the view when the user is waiting for at least one player to reconnect.
+ */
 public class WaitingReconnectState extends GameState {
+    /**
+     * Constructor for the WaitingReconnectState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public WaitingReconnectState(View view) {
         super(view);
     }

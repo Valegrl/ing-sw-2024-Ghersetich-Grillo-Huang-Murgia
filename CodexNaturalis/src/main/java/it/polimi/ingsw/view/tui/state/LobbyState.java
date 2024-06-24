@@ -13,7 +13,14 @@ import it.polimi.ingsw.view.ViewState;
 
 import java.util.Arrays;
 
+/**
+ * Class that represents the state of the view when the user is in a lobby.
+ */
 public class LobbyState extends ViewState {
+    /**
+     * Constructor for the LobbyState.
+     * @param view The TUI instance that this state belongs to.
+     */
     public LobbyState(View view) {
         super(view);
     }
@@ -113,6 +120,9 @@ public class LobbyState extends ViewState {
         return true;
     }
 
+    /**
+     * Method that shows the options available to the lobby leader.
+     */
     private void lobbyLeaderOptions() {
         String readyStatusString = controller.getLobbyLeader().getValue() ? "Unready" : "Ready";
 
@@ -126,6 +136,9 @@ public class LobbyState extends ViewState {
         handleInput(choice);
     }
 
+    /**
+     * Method that shows the options available to a player in the lobby.
+     */
     private void playerOptions() {
         String readyStatusString = controller.getPlayersStatus().get(view.getUsername()) ? "Unready" : "Ready";
 
@@ -138,6 +151,9 @@ public class LobbyState extends ViewState {
         handleInput(choice);
     }
 
+    /**
+     * Method that toggles the ready status of the player.
+     */
     private void toggleReadyStatus() {
         Event event;
         if(controller.getPlayersStatus().get(view.getUsername())) {
@@ -149,12 +165,18 @@ public class LobbyState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Method that quits the lobby.
+     */
     private void quitLobby() {
         Event event = new QuitLobbyEvent();
         controller.newViewEvent(event);
         waitForResponse();
     }
 
+    /**
+     * Method that prompts the lobby leader for a player to be kicked.
+     */
     private void kickPlayer() {
         view.printMessage("\nChoose a player to kick:");
         int choice = -1;
@@ -183,6 +205,9 @@ public class LobbyState extends ViewState {
         waitForResponse();
     }
 
+    /**
+     * Method that shows the lobby info.
+     */
     private void showLobbyInfo() {
         Event event = new GetLobbyInfoEvent();
         controller.newViewEvent(event);

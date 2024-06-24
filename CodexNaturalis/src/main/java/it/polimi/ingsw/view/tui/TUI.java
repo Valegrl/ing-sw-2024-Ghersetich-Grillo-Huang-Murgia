@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
-import it.polimi.ingsw.main.MainClient;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
@@ -15,26 +14,59 @@ import java.io.PrintStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Class that represents the Terminal User Interface of the application.
+ */
 public class TUI implements View {
 
+    /**
+     * The {@link BufferedReader} used to read input from the user.
+     */
     private BufferedReader in;
 
-    private boolean waitingForInput;
-
-    private boolean stopInputRead = false;
-
-    private boolean serverDisconnected = false;
-
+    /**
+     * The {@link PrintStream} used to print output to the user.
+     */
     private PrintStream out;
 
+    /**
+     * The {@link ExecutorService} used to manage the handling of responses from server.
+     */
     private ExecutorService executor;
 
+    /**
+     * The username of the user who is logged in this instance of TUI.
+     */
     private String username;
 
+    /**
+     * The {@link ViewController} this TUI is associated with which is used for handling view events.
+     */
     private ViewController controller;
 
+    /**
+     * The {@link ViewState} this TUI is currently in.
+     */
     private ViewState state;
 
+    /**
+     * The boolean that represents if the TUI is waiting for input.
+     */
+    private boolean waitingForInput;
+
+    /**
+     * The boolean that represents if the TUI should stop reading input.
+     */
+    private boolean stopInputRead = false;
+
+    /**
+     * The boolean that represents if the server is disconnected.
+     */
+    private boolean serverDisconnected = false;
+
+    /**
+     * Constructor for the TUI class.
+     */
     public TUI() {
         this.in = new BufferedReader(new InputStreamReader(System.in));
         this.out = new PrintStream(System.out, true);
@@ -43,6 +75,7 @@ public class TUI implements View {
         this.executor = Executors.newCachedThreadPool();
     }
 
+    @Override
     public void run() {
         clearConsole();
         // ChooseConnectionState
@@ -54,6 +87,9 @@ public class TUI implements View {
         executor.execute(() -> state.handleResponse(feedback, message, eventID));
     }
 
+    /**
+     * Method to clear the console.
+     */
     public void clearConsole() {
         try {
             if( System.getProperty("os.name").contains("Windows") )
@@ -63,6 +99,7 @@ public class TUI implements View {
         } catch (Exception ignored) {}
     }
 
+    @Override
     public void serverDisconnected() {
         if (isWaitingForInput()) {
             serverDisconnected = true;
@@ -115,6 +152,7 @@ public class TUI implements View {
         return input;
     }
 
+    @Override
     public String getIntFromInput() {
         waitingForInput = true;
         stopInputRead = false;
@@ -145,8 +183,8 @@ public class TUI implements View {
         return input;
     }
 
-    public void setFXMLController(FXMLController controller){
-    }
+    @Override
+    public void setFXMLController(FXMLController controller){}
 
     @Override
     public boolean inGame() {
@@ -168,10 +206,12 @@ public class TUI implements View {
         return state.inChat();
     }
 
+    @Override
     public ViewController getController() {
         return controller;
     }
 
+    @Override
     public void setUsername(String username) {
         this.username = username;
     }
@@ -191,14 +231,20 @@ public class TUI implements View {
         this.state = state;
     }
 
+    @Override
     public void stopInputRead(boolean stopInputRead) {
         this.stopInputRead = stopInputRead;
     }
 
+    /**
+     * Method to check if the TUI is waiting for input.
+     * @return true if the TUI is waiting for input, false otherwise.
+     */
     public boolean isWaitingForInput() {
         return waitingForInput;
     }
 
+    @Override
     public void clearInput() {
         try {
             in.mark(100);
@@ -218,6 +264,7 @@ public class TUI implements View {
         run();
     }
 
+    @Override
     public boolean isInputReadStopped() {
         return stopInputRead;
     }
