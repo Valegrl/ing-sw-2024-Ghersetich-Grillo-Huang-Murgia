@@ -50,19 +50,19 @@ import java.util.Map;
 public class InGameController extends FXMLController {
 
     @FXML
-    public BorderPane borderPane;
+    private BorderPane borderPane;
 
     @FXML
-    public ImageView offline1;
+    private ImageView offline1;
 
     @FXML
-    public ImageView offline2;
+    private ImageView offline2;
 
     @FXML
-    public ImageView offline3;
+    private ImageView offline3;
 
     @FXML
-    public ImageView offline4;
+    private ImageView offline4;
 
     @FXML
     private GridPane gridPane;
@@ -289,13 +289,25 @@ public class InGameController extends FXMLController {
     private ComboBox<String> playAreaSelection;
 
 
-
+    /**
+     * A map that associates each empty slot in the {@code gridPane} with its corresponding coordinate.
+     * This is used to manage the placement of cards in the gridPane during the game.
+     */
     private Map<Coordinate, Node> emptyPanesMap;
 
+    /**
+     * The selected card that the player intends to play. This card is chosen from the player's hand.
+     */
     private ImmPlayableCard selectedPlayableCard;
 
+    /**
+     * A boolean indicating whether the selected card should be played flipped. If true, the card will be played flipped.
+     */
     private boolean playFlipped;
 
+    /**
+     * A boolean indicating whether the player has to draw a card. If true, the player is required to draw a card.
+     */
     private boolean hasToDraw;
 
     //Collection of JavaFX objects for ease of use
@@ -332,6 +344,11 @@ public class InGameController extends FXMLController {
 
     private List<ImageView> opponentCardImages;
 
+    /**
+     * This method is used to initialize the GUI components of the in-game view.
+     * It sets the width properties of various ImageView components relative to the borderPane's width.
+     * The relative sizes are defined by the relativePercentageW variable.
+     */
     public void initialize(){
         double relativePercentageW = 0.07;
 
@@ -348,6 +365,17 @@ public class InGameController extends FXMLController {
         }
     }
 
+    /**
+     * This method is used to initialize the InGameController with the given view and stage.
+     * It sets up the controller, view, stage, and various GUI components.
+     * It also initializes the emptyPanesMap and sets the hasToDraw flag to false.
+     * The method then updates the above label, decks, points, chat options, and visible play areas.
+     * It also displays the common objectives, secret objective, and play area.
+     * Finally, it sets an action event for the chat input field and appends the game ID to the game updates area.
+     *
+     * @param view The view associated with this controller
+     * @param stage The stage in which the FXML view is shown
+     */
     @Override
     public void run(View view, Stage stage){
         this.view = view;
@@ -389,6 +417,17 @@ public class InGameController extends FXMLController {
         gameUpdatesArea.appendText("GAME: " + controller.getLobbyId() + "\n\n");
     }
 
+    /**
+     * This method is used to handle the response from the server based on the event ID.
+     * It updates the GUI and game state based on the feedback and message received from the server.
+     * The method handles various events such as placing a card, drawing a card, ending the game, updating the game status, and quitting the game.
+     * It also handles chat events and updates the chat area with the received message.
+     * The method uses the Platform.runLater method to ensure that the GUI updates are performed on the JavaFX application thread.
+     *
+     * @param feedback The feedback received from the server. It can be SUCCESS or FAILURE.
+     * @param message The message received from the server. It can be a chat message or a game update message.
+     * @param eventID The ID of the event that triggered the response.
+     */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch(EventID.getByID(eventID)){
@@ -511,7 +550,7 @@ public class InGameController extends FXMLController {
 
     /**
      * This method is used to quit the current game.
-     * It creates a new QuitGameEvent and sends it to the server through the controller.
+     * It creates a new {@code QuitGameEvent} and sends it to the server through the controller.
      */
     @FXML
     public void quit(){
@@ -521,7 +560,7 @@ public class InGameController extends FXMLController {
 
     /**
      * This method sets up drag and drop functionality for each card ImageView in the player's hand and each card in the Decks.
-     * When a card is dragged, it sets the selectedPlayableCard to the current card,
+     * When a card is dragged, it sets the {@code selectedPlayableCard} to the current card,
      * creates a new Dragboard and ClipboardContent, and adds the card's image and ID to the ClipboardContent.
      * The Dragboard then consumes the drag event.
      */
@@ -566,14 +605,10 @@ public class InGameController extends FXMLController {
         if(controller.hasTurn() && hasToDraw && controller.getModel().getGameStatus().equals(GameStatus.RUNNING)) {
             //These can't be interacted with if there is no card
             if(controller.getModel().getTopResourceDeck() != null){
-                resourceDeck.setOnMouseClicked(event -> {
-                    controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2));
-                });
+                resourceDeck.setOnMouseClicked(event -> controller.newViewEvent(new DrawCardEvent(CardType.RESOURCE, 2)));
             }
             if(controller.getModel().getTopGoldDeck() != null){
-                goldDeck.setOnMouseClicked(event -> {
-                    controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2));
-                });
+                goldDeck.setOnMouseClicked(event -> controller.newViewEvent(new DrawCardEvent(CardType.GOLD, 2)));
             }
 
             ImmPlayableCard[] visibleGoldCards = controller.getModel().getVisibleGoldCards();
@@ -598,10 +633,10 @@ public class InGameController extends FXMLController {
     /**
      * This method updates the decks by getting the visible gold and resource cards from the viewModel.
      * It sets the images of the visible cards and the top cards of the decks.
-     * If there are less than 2 visible cards in either deck, it sets the remaining card slots to invisible.
+     * If there are less than 2 visible cards in either deck, it sets the remaining card slots to "No Card Available".
      * It also checks if there are cards left in the gold and resource decks.
      * If there are, it sets the image of the top card of the deck.
-     * If there aren't, it sets the deck to invisible.
+     * If there aren't, it sets the deck to "No Card Available".
      * After updating the decks, it adds the deck choice selection to the GUI.
      */
     private void updateDecks(){
@@ -847,8 +882,8 @@ public class InGameController extends FXMLController {
                         success = true;
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
                         //For debugging purposes
-                        System.out.println("Placed card: " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
-                        return;
+                        //System.out.println("Placed card: " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
+                        //return;
                     }
                     event.setDropCompleted(success);
                     event.consume();
@@ -1013,6 +1048,7 @@ public class InGameController extends FXMLController {
      * If it's the player's turn, and they don't have to draw a card, it sets the text to "It's your turn, play a card".
      * If it's the player's turn, and they have to draw a card, it sets the text to "Now draw a card to your hand".
      * If it's not the player's turn, it sets the text to "Waiting for your turn".
+     * It also warns if the next turn is the last circle.
      */
     private void updateAboveLabel() {
         if(controller.getGameStatus() == GameStatus.WAITING){
@@ -1079,7 +1115,7 @@ public class InGameController extends FXMLController {
     /**
      * This method updates the points and item occurrences for each player in the game.
      * It first hides all the uncovered items, then for each player in the game, it makes the player's uncovered items visible.
-     * If the player is online, it sets the player's username, otherwise it adds an offline tag to the username.
+     * If the player is online, it sets the player's username, otherwise it adds an image to represent the player being offline.
      * It then gets the points of the current player from the scoreboard and sets the player's points.
      * It checks whether the current user is this user and then gets the right map of uncovered items accordingly.
      * It also gets the current token of the player and sets the image of the token.
@@ -1196,7 +1232,7 @@ public class InGameController extends FXMLController {
     }
 
     /**
-     * This method is used to submit a private message if the selected radio button for chat is a specific user.
+     * This method is used to submit a private message if a specific user is selected.
      */
     private void sendPrivateMessage(String username, String message){
         if(controller.getPlayersStatus().containsKey(username)) {
@@ -1208,12 +1244,16 @@ public class InGameController extends FXMLController {
     }
 
     /**
-     * This method is used to submit a private message if the selected radio button for chat is general.
+     * This method is used to submit a private message if the general button is selected.
      */
     private void sendPublicMessage(String message){
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
+    /**
+     * This method is used to hide the waiting pane and make the game scroll pane visible.
+     * It sets the visibility and management of the game scroll pane to true and the waiting pane to false.
+     */
     @FXML
     public void hideWaitingPane(){
         this.gameScrollPane.setVisible(true);
@@ -1221,6 +1261,7 @@ public class InGameController extends FXMLController {
         this.waitingPane.setVisible(false);
         this.waitingPane.setManaged(false);
     }
+
     /**
      * This method is used to check if the user is in a game.
      * It always returns true, indicating that the user is always in a game.

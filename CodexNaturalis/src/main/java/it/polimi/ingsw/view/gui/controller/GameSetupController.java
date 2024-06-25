@@ -40,28 +40,28 @@ import java.util.Map;
 public class GameSetupController extends FXMLController {
 
     @FXML
-    public BorderPane mainAnchor;
+    private BorderPane mainAnchor;
 
     @FXML
-    public Text text0;
+    private Text text0;
 
     @FXML
-    public Text text1;
+    private Text text1;
 
     @FXML
-    public Text text2;
+    private Text text2;
 
     @FXML
-    public Text text3;
+    private Text text3;
 
     @FXML
-    public Text text4;
+    private Text text4;
 
     @FXML
-    public VBox vboxChat;
+    private VBox vboxChat;
 
     @FXML
-    public VBox deckBox;
+    private VBox deckBox;
 
     @FXML
     private Label lobbyName;
@@ -163,15 +163,29 @@ public class GameSetupController extends FXMLController {
     @FXML
     private Button setupButton3;
 
-
+    /**
+     * The setup object for the view. It contains the state of the game setup, including the player's hand, the visible cards, the decks, and the objectives.
+     */
     private ViewStartSetup setup;
 
+    /**
+     * The first choice for the secret objective card. The player will choose between this card and {@code objectiveChoice1} during the game setup.
+     */
     private ImmObjectiveCard objectiveChoice0;
 
+    /**
+     * The second choice for the secret objective card. The player will choose between this card and {@code objectiveChoice0} during the game setup.
+     */
     private ImmObjectiveCard objectiveChoice1;
 
+    /**
+     * The secret objective card chosen by the player during the game setup. It will be either {@code objectiveChoice0} or {@code objectiveChoice1}.
+     */
     private ImmObjectiveCard objectiveChosen;
 
+    /**
+     * A boolean indicating whether the player has chosen to flip the start card during the game setup. If true, the start card will be played flipped.
+     */
     private Boolean flippedChoice;
 
     private List<Button> setupButtons;
@@ -192,6 +206,12 @@ public class GameSetupController extends FXMLController {
         super();
     }
 
+    /**
+     * This method is used to initialize the GUI components of the game setup view.
+     * It sets the width and height properties of various ImageView and Text components relative to the mainAnchor's width and height.
+     * The relative sizes are defined by the relativePercentage variables.
+     * The method also sets the minimum height property of the {@code vboxChat} component relative to the {@code mainAnchor}'s height.
+     */
     public void initialize(){
         double relativePercentage = 0.12;
         double relativePercentage1 = 0.10;
@@ -284,8 +304,8 @@ public class GameSetupController extends FXMLController {
     }
 
     /**
-     * This method processes server responses based on the event ID. The events encapsulate various stages of the game setup and progression.
-     * These stages include the following scenarios:
+     * This method processes server responses based on the event ID.
+     * These events include the following scenarios:
      * - Player finalizing their game setup choices.
      * - Receipt of a new chat message.
      * - A player exiting the game.
@@ -367,28 +387,24 @@ public class GameSetupController extends FXMLController {
             secretObjectiveCard0.setEffect(highlight);
             secretObjectiveCard1.setEffect(null);
             objectiveChosen = objectiveChoice0;
-            //System.out.println("Chosen objective card " + objectiveChosen.getId());
         });
 
         secretObjectiveCard1.setOnMouseClicked(event -> {
             secretObjectiveCard1.setEffect(highlight);
             secretObjectiveCard0.setEffect(null);
             objectiveChosen = objectiveChoice1;
-            //System.out.println("Chosen objective card " + objectiveChosen.getId());
         });
 
         startCardFront.setOnMouseClicked(event -> {
             startCardFront.setEffect(highlight);
             startCardBack.setEffect(null);
             flippedChoice = false;
-            //System.out.println("Chosen start card on front");
         });
 
         startCardBack.setOnMouseClicked(event -> {
             startCardBack.setEffect(highlight);
             startCardFront.setEffect(null);
             flippedChoice = true;
-            //System.out.println("Chosen start card on back");
         });
     }
 
@@ -468,7 +484,7 @@ public class GameSetupController extends FXMLController {
     /**
      * This method is responsible for displaying the current player's setup in the GUI.
      * It makes the secret objectives and start card visible and manages their visibility.
-     * It also iterates over the ImageView objects in the handCardImages list, making them visible and managed.
+     * It also iterates over the ImageView objects in the {@code handCardImages} list, making them visible and managed.
      * Conversely, it makes the ImageView objects in the {@code opponentsHandCardImages} list invisible and unmanaged.
      */
     @FXML
@@ -616,7 +632,6 @@ public class GameSetupController extends FXMLController {
      */
     private void showStartCard(){
         ImmStartCard startCard = setup.getStartCard();
-        System.out.println(startCard.getId());
         Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         this.startCardFront.setImage(startCardFront);
@@ -634,7 +649,7 @@ public class GameSetupController extends FXMLController {
     /**
      * This method is used to finalize the game setup choices.
      * If the player has chosen an objective and decided whether to flip the start card, it sends the choices to the controller.
-     * If the player has not made their choices, it prints a message to the console.
+     * If the player has not made their choices, it appends a message on the chat.
      */
     @FXML
     public void readySetup(){
@@ -647,7 +662,7 @@ public class GameSetupController extends FXMLController {
             }
         }
         else{
-            System.out.println("You didn't choose your setup!");
+            chatArea.appendText("GAME: You didn't choose your setup!\n");
         }
     }
 
@@ -744,9 +759,6 @@ public class GameSetupController extends FXMLController {
     private void sendPrivateMessage(String username, String message){
         if(controller.getPlayersStatus().containsKey(username)) {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
-        }
-        else{
-            System.out.println("Error: player not in match");
         }
     }
 

@@ -157,7 +157,7 @@ public class EnterLobbiesController extends FXMLController {
 
 
     /**
-     * Handles the action of going back to the main menu. It loads a new FXML scene.
+     * Handles the action of going back to the menu. It loads a new FXML scene.
      * @throws RuntimeException if there is an IOException when switching the screen.
      */
     @FXML
@@ -183,6 +183,12 @@ public class EnterLobbiesController extends FXMLController {
         controller.newViewEvent(event);
     }
 
+    /**
+     * This method is used to display the available lobbies in the table view.
+     * It first checks if there are any lobbies available from the controller.
+     * If there are, it adds all the lobbies to the table view.
+     * If there are no lobbies available, it sets the error message to indicate that no lobbies are available at the moment.
+     */
     private void printAvailableLobbies() {
         if(!controller.getLobbies().isEmpty()){
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -202,6 +208,7 @@ public class EnterLobbiesController extends FXMLController {
      * Submits a request to create a new lobby.
      * @param e The action event associated with the button click.
      */
+    @FXML
     private void submitCreateLobby(ActionEvent e) {
         String lobbyName = lobbyNameField.getText();
         int requiredNumber = (int) requiredNumSlider.getValue();
@@ -211,7 +218,6 @@ public class EnterLobbiesController extends FXMLController {
           errorLobbies.setText("Lobby name can't be left empty!");
         }
         else if(lobbyName.length() > 32){
-            //TODO config
             errorLobbies.setText("Lobby name can't be longer than 32 characters!");
         }
         else {

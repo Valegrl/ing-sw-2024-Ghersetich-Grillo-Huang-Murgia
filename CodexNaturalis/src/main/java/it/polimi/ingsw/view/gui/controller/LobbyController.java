@@ -41,33 +41,18 @@ import java.util.List;
  */
 public class LobbyController extends FXMLController {
 
-    /**
-     * A list of StackPane objects representing the possible players in the lobby.
-     */
     private List<StackPane> playerStackPanes;
 
-    /**
-     * A list of Text objects representing the usernames of the players in the lobby.
-     */
     private List<Text> usernames;
 
-    /**
-     * A list of Button objects representing the buttons associated with each player in the lobby.
-     */
     private List<Button> playerButtons;
 
-    /**
-     * A list of RadioButton objects representing the radio buttons for chat options in the lobby.
-     */
     private List<RadioButton> radioButtons;
 
-    /**
-     * A list of Text objects representing the ready status of each player in the lobby.
-     */
     private List<Text> readyStatuses;
 
     @FXML
-    public AnchorPane mainAnchor;
+    private AnchorPane mainAnchor;
 
     @FXML
     private TextField chatInput;
@@ -142,7 +127,7 @@ public class LobbyController extends FXMLController {
     private Button readyButton;
 
     @FXML
-    public VBox vBox;
+    private VBox vBox;
 
     @FXML
     private VBox vBox0;
@@ -178,7 +163,13 @@ public class LobbyController extends FXMLController {
         super();
     }
 
-
+    /**
+     * This method is used to initialize the GUI components of the lobby view.
+     * It sets the width and height properties of various ImageView and VBox components relative to their parent's dimensions.
+     * The relative sizes are defined by the relativePercentage and maxPercentageVBox variables.
+     * It also sets the wrapping width property of the username Text components.
+     * The vboxChat's preferred width and height are also set relative to its parent's dimensions.
+     */
     public void initialize() {
         double maxPercentageVBox = 0.12;
         double relativePercentage = 0.75;
@@ -267,7 +258,6 @@ public class LobbyController extends FXMLController {
      * @param message The message received from the server.
      * @param eventID The event ID of the event that triggered the response.
      */
-    @FXML
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
@@ -507,9 +497,6 @@ public class LobbyController extends FXMLController {
             Event event = new KickFromLobbyEvent(userToKick);
             controller.newViewEvent(event);
         }
-        else{
-            System.out.println("Nobody here but us chickens");
-        }
     }
 
     /**
@@ -546,7 +533,7 @@ public class LobbyController extends FXMLController {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
         }
         else{
-            System.out.println("Error: player not in match");
+            chatArea.appendText("Error: player not in match");
         }
     }
 

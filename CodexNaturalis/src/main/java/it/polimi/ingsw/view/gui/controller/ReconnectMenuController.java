@@ -34,10 +34,10 @@ import java.util.List;
 public class ReconnectMenuController extends FXMLController {
 
     @FXML
-    public AnchorPane mainAnchor;
+    private AnchorPane mainAnchor;
 
     @FXML
-    public VBox vBox;
+    private VBox vBox;
 
     @FXML
     private Button backButton;
@@ -63,6 +63,11 @@ public class ReconnectMenuController extends FXMLController {
     @FXML
     private TableColumn<LobbyState, Integer> numRequired;
 
+    /**
+     * This method is used to initialize the VBox dimensions in the GUI.
+     * It sets the preferred width and height properties of the VBox relative to the width and height of the mainAnchor.
+     * The relative sizes are defined by the vBoxWidthPercentage and vBoxHeightPercentage variables.
+     */
     public void initialize(){
         double vBoxWidthPercentage = 0.90;
         double vBoxHeightPercentage = 0.80;
@@ -133,7 +138,6 @@ public class ReconnectMenuController extends FXMLController {
                 }
                 break;
             case RECONNECT_TO_GAME:
-                System.out.println(message);
                 if(feedback == Feedback.SUCCESS){
                     if(!controller.isInSetup()) {
                         Platform.runLater(() -> {
@@ -202,9 +206,7 @@ public class ReconnectMenuController extends FXMLController {
                     });
                 }
                 else {
-                    Platform.runLater(() -> {
-                        errorLabel.setText("Can't quit from the reconnection");
-                    });
+                    Platform.runLater(() -> errorLabel.setText("Can't quit from the reconnection"));
                 }
                 break;
         }
@@ -246,6 +248,13 @@ public class ReconnectMenuController extends FXMLController {
         controller.newViewEvent(event);
     }
 
+    /**
+     * This method is used to display the offline games available for reconnection in the lobbies table.
+     * It first checks if there are any offline games available.
+     * If there are, it sets the cell value factories for the lobbyName, numPlayers, and numRequired columns,
+     * retrieves the list of offline games from the controller, and adds them to the lobbies table.
+     * If there are no offline games available, it sets the text of the errorLabel to indicate that there are no games to reconnect to.
+     */
     private void printOfflineGames() {
         if(!controller.getOfflineGames().isEmpty()){
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));

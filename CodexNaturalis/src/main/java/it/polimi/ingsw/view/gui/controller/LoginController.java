@@ -101,7 +101,6 @@ public class LoginController extends FXMLController {
             errorRegistration.setText("Username and password fields can't be left empty!");
         }
         else if(registerUsername.length() > 16 || registerPassword.length() > 16){
-            //TODO config
             errorRegistration.setText("Username and password can't be longer than 16 characters!");
         }
         else{
@@ -197,7 +196,6 @@ public class LoginController extends FXMLController {
      * @param eventID the ID of the event that triggered the response
      */
     @Override
-    @FXML
     public void handleResponse(Feedback feedback, String message, String eventID) {
         switch (EventID.getByID(eventID)) {
             case LOGIN:

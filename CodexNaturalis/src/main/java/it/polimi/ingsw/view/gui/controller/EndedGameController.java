@@ -34,7 +34,7 @@ import java.util.Map;
 public class EndedGameController extends FXMLController {
 
     @FXML
-    public BorderPane borderPane;
+    private BorderPane borderPane;
 
     @FXML
     private ImageView topGoldCard;

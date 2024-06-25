@@ -23,7 +23,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -39,23 +38,14 @@ import java.util.Map;
  * This class is the controller for the Token Setup phase of the game.
  * It handles the user interactions during the token selection and game setup phase.
  * It extends the FXMLController class and overrides its methods to provide the specific functionality needed for this phase.
- * The class uses JavaFX annotations to link the controller to the corresponding FXML file and its components.
- * It also uses the JavaFX Platform.runLater method to ensure that UI updates are performed on the JavaFX Application Thread.
- * The class provides methods to handle user interactions, such as choosing a token, sending chat messages, and quitting the game.
- * It also provides methods to update the UI based on the current game state, such as updating the available tokens and chat options.
- * The class also provides methods to handle responses from the server, such as feedback on the chosen token and chat messages.
- * These methods use the Platform.runLater method to ensure that the UI updates are performed on the JavaFX Application Thread.
  */
 public class TokenSetupController extends FXMLController {
 
     @FXML
-    public AnchorPane mainAnchor;
+    private VBox vboxChat;
 
     @FXML
-    public VBox vboxChat;
-
-    @FXML
-    public VBox vBox;
+    private VBox vBox;
 
     @FXML
     private Text lobbyName;
@@ -99,13 +89,21 @@ public class TokenSetupController extends FXMLController {
     @FXML
     private Label chooseLabel;
 
-
     private List<RadioButton> radioButtons;
 
     private Map<String, ImageView> visibleTokens;
 
+    /**
+     * This boolean is used if the player has chosen a token, they can't choose a token again.
+     */
     boolean tokenChosen;
 
+    /**
+     * This method is used to initialize the TokenSetupController.
+     * It sets the width and height properties of the ImageView objects for the tokens and the VBox for the chat.
+     * The width and height of the ImageView objects are set to be a certain percentage of the width and height of the VBox.
+     * The maximum width and height of the VBox for the chat are also set to be a certain percentage of the width and height of the VBox.
+     */
     public void initialize() {
         double relativePercentage = 0.15;
 
@@ -132,7 +130,10 @@ public class TokenSetupController extends FXMLController {
         ));
     }
 
-
+    /**
+     * This is the constructor for the TokenSetupController class.
+     * It calls the superclass constructor.
+     */
     public TokenSetupController(){
         super();
     }
@@ -140,18 +141,6 @@ public class TokenSetupController extends FXMLController {
     /**
      * Initializes the controller and sets up the user interface for the token setup phase.
      * This method is called when the token setup view is loaded.
-     * The method performs the following operations:
-     * - Stores the view and stage instances.
-     * - Retrieves the {@link it.polimi.ingsw.view.controller.ViewController} from the view.
-     * - Sets the lobby name.
-     * - Initializes the radio buttons for chat options.
-     * - Initializes the visible tokens map for token selection.
-     * - Starts a countdown of 30 seconds for token selection.
-     * - Updates the UI.
-     * - Adds choice selection and hover effect to the token images.
-     * - Sends a request to get past chat messages.
-     * - Waits for a response from the server.
-     * - Sets an action event handler for the chat input field. When the user presses Enter, the chat message is submitted.
      *
      * @param view The view instance associated with this controller.
      * @param stage The stage on which the token setup scene is shown.
