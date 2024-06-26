@@ -150,7 +150,7 @@ public class PlayArea {
         //Corresponding corners of the cards covered by played card
         int[] arrayCorners = {2, 3, 0, 1};
 
-        /*Updating the player's items inventory depending on the cards that have their corner covered*/
+        //Updating the player's items inventory depending on the cards that have their corner covered
         for(CornerIndex i : CornerIndex.values()){
             j = i.getIndex();
             check = coveredCoordinates[j];
@@ -227,7 +227,7 @@ public class PlayArea {
 
         boolean flag = false;
 
-        /*The way it's implemented I check the corners of the selected card starting from the TL and ending in BL*/
+        //This code checks the corners of the selected card starting from the TL and ending in BL
         for(int i = 0; i < coordinateArray.length; i++){
             Coordinate coordinateCheck = pos.sum(coordinateArray[i]);
             if(this.playedCards.containsKey(coordinateCheck) || coordinateCheck.equals(startCoordinate)){
@@ -241,7 +241,6 @@ public class PlayArea {
         return coveredCoordinates;
     }
 
-    /*Exception if there is no card at the parameter coordinate ?*/
     /**
      * Retrieves the player's already played card if passed its matching coordinates.
      * @param pos The coordinates with which it retrieves the associated card.
@@ -259,7 +258,6 @@ public class PlayArea {
      * @return A list of coordinates.
      */
     public List<Coordinate> getAvailablePos() {
-        /*To be used only AFTER the PlayArea has a StartCard*/
         Coordinate[] arrayCoordinate = {
                 new Coordinate(-1,1),
                 new Coordinate(1,1),
@@ -277,7 +275,7 @@ public class PlayArea {
         temp = !sc.isFlipped() ? sc.getFrontCorners() : sc.getBackCorners();
         notOkPos.add(startCoordinate);
 
-        /*check startCard's corners*/
+        //This code checks startCard's corners
         for(CornerIndex i : CornerIndex.values()) {
             j = i.getIndex();
             if(temp[j] != Item.HIDDEN && temp[j] != Item.COVERED)

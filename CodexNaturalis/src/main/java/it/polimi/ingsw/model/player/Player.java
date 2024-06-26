@@ -142,7 +142,6 @@ public class Player {
 
         this.playArea = new PlayArea(hand, c);
     }
-    /*Removed the methods: chooseToken() and chooseSecret()*/
 
     @Override
     public String toString() {
