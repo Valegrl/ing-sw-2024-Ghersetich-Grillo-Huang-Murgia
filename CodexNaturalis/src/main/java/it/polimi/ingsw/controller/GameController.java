@@ -360,8 +360,8 @@ public class GameController {
             for (PlayerCardsSetup p : setupData) {
                 String username = p.getUsername();
                 if (!p.isChosen()) {
-                    //FIXME config file
-                    boolean done = game.setupPlayerCards(username, p.getObjectiveCards()[0], false);
+                    Random rand = new Random();
+                    boolean done = game.setupPlayerCards(username, p.getObjectiveCards()[rand.nextBoolean() ? 1 : 0], rand.nextBoolean());
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + username);
                     p.setChosen(true);
@@ -373,8 +373,8 @@ public class GameController {
         else {
             for (PlayerCardsSetup p : setupData)
                 if (!p.isChosen() && !isPlayerOnline(p.getUsername())){
-                    //FIXME config file
-                    boolean done = game.setupPlayerCards(p.getUsername(), p.getObjectiveCards()[0], false);
+                    Random rand = new Random();
+                    boolean done = game.setupPlayerCards(p.getUsername(), p.getObjectiveCards()[rand.nextBoolean() ? 1 : 0], rand.nextBoolean());
                     if (!done)
                         throw new RuntimeException("A fatal error occurred with the player's username: " + p.getUsername());
                     p.setChosen(true);
@@ -766,7 +766,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000); //FIXME config file
+            timer.schedule(task, JsonConfig.getInstance().getSetupCardsTimerMs());
             return new Pair<>(timer, task);
         }
         else return null;
@@ -793,7 +793,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 30000); //FIXME config file
+            timer.schedule(task, JsonConfig.getInstance().getSetupTokensTimerMs());
             return new Pair<>(timer, task);
         }
         else return null;
@@ -832,7 +832,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000 * 2); //FIXME config file
+            timer.schedule(task, JsonConfig.getInstance().getPlayerActionTimerMs());
             return timer;
         }
         else return null;
@@ -860,7 +860,7 @@ public class GameController {
                     }
                 }
             };
-            timer.schedule(task, 60000 * 2); //FIXME config file
+            timer.schedule(task, JsonConfig.getInstance().getWaitingForPlayersTimerMs());
             return timer;
         }
         else return null;

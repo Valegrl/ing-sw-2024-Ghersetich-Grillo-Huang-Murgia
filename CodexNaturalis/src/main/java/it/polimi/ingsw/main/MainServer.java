@@ -2,6 +2,7 @@ package it.polimi.ingsw.main;
 
 import it.polimi.ingsw.network.serverSide.RemoteClientSocket;
 import it.polimi.ingsw.network.serverSide.ServerManager;
+import it.polimi.ingsw.utils.JsonConfig;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +17,7 @@ import java.rmi.registry.Registry;
 public class MainServer {
     public static void main(String[] args) {
         MainServer server = new MainServer();
+        JsonConfig.loadConfig();
 
         if(args.length < 1) {
             System.out.println("Usage: java -jar CodexNaturalis.jar <server_ip> [-cli]");
@@ -24,10 +26,10 @@ public class MainServer {
 
         Thread socketThread = new Thread(
                 () -> {
-                    int port = 1098;
+                    int port = JsonConfig.getInstance().getServerSocketPort();
                     System.out.println("Starting Socket server on port " + port + "...");
                     try {
-                        server.startSocket(port); // TODO port, config file?
+                        server.startSocket(port);
                     } catch (RemoteException e) {
                         System.err.println("Cannot start socket server, socket protocol will ne disabled");
                     }
@@ -36,10 +38,10 @@ public class MainServer {
 
         Thread rmiThread = new Thread(
                 () -> {
-                    int port = 1099;
+                    int port = JsonConfig.getInstance().getRmiRegistryPort();
                     System.out.println("Starting RMI server on port " + port + "...");
                     try {
-                        server.startRMI(args[0].substring(1), port); // TODO port, config file?
+                        server.startRMI(args[0].substring(1), port);
                         System.out.println("Server rmi ready on port: " + port);
                     } catch (RemoteException e) {
                         System.err.println("Cannot start RMI server, RMI protocol will ne disabled");
@@ -91,6 +93,6 @@ public class MainServer {
     private void startRMI(String ip, int port) throws RemoteException {
         System.setProperty("java.rmi.server.hostname", ip);
         Registry registry = LocateRegistry.createRegistry(port);
-        registry.rebind("CodexNaturalisServer51", ServerManager.getInstance()); // TODO config?
+        registry.rebind(JsonConfig.getInstance().getRmiRegistryName(), ServerManager.getInstance());
     }
 }

@@ -10,6 +10,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.game.QuitGameEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.local.GetChatMessagesEvent;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.ChatMessage;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
@@ -28,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -126,7 +128,7 @@ public class TokenSetupController extends FXMLController {
         ));
 
         vboxChat.maxHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                vBox.getHeight() * (1-vboxChatPercentage), vBox.heightProperty()
+                vBox.getHeight() * (1 - vboxChatPercentage), vBox.heightProperty()
         ));
     }
 
@@ -134,7 +136,7 @@ public class TokenSetupController extends FXMLController {
      * This is the constructor for the TokenSetupController class.
      * It calls the superclass constructor.
      */
-    public TokenSetupController(){
+    public TokenSetupController() {
         super();
     }
 
@@ -142,11 +144,11 @@ public class TokenSetupController extends FXMLController {
      * Initializes the controller and sets up the user interface for the token setup phase.
      * This method is called when the token setup view is loaded.
      *
-     * @param view The view instance associated with this controller.
+     * @param view  The view instance associated with this controller.
      * @param stage The stage on which the token setup scene is shown.
      */
     @Override
-    public void run(View view, Stage stage){
+    public void run(View view, Stage stage) {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
@@ -162,7 +164,7 @@ public class TokenSetupController extends FXMLController {
             put("yellow", yellow);
         }};
 
-        startCountdown(30);
+        startCountdown(JsonConfig.getInstance().getSetupTokensTimerMs() / 1000);
         update();
         addChoiceSelection();
         addHoverEffect();
@@ -189,9 +191,10 @@ public class TokenSetupController extends FXMLController {
      * ChosenTokenSetupEvent is used to let the user know their token was chosen successfully.
      * UpdateGamePlayersEvent is used to let the users know the status regarding the game, such as a user quitting or being disconnected.
      * UpdateLocalModel is used to update the token setup and move to the next screen which is the in game screen.
+     *
      * @param feedback The feedback received from the server. It can be SUCCESS or FAILURE.
-     * @param message The message received from the server. It can be an informational message or an error message.
-     * @param eventID The ID of the event that triggered the response. It is used to determine the appropriate action to take.
+     * @param message  The message received from the server. It can be an informational message or an error message.
+     * @param eventID  The ID of the event that triggered the response. It is used to determine the appropriate action to take.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -204,7 +207,7 @@ public class TokenSetupController extends FXMLController {
                 break;
 
             case CHOSEN_TOKEN_SETUP:
-                if(feedback == Feedback.SUCCESS){
+                if (feedback == Feedback.SUCCESS) {
                     tokenChosen = true;
                     Platform.runLater(() -> {
                         for (ImageView imageView : visibleTokens.values()) {
@@ -224,7 +227,7 @@ public class TokenSetupController extends FXMLController {
             case UPDATE_LOCAL_MODEL:
                 Platform.runLater(() -> {
                     try {
-                       switchScreen("InGame");
+                        switchScreen("InGame");
                     } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load InGame", exception);
                     }
@@ -232,12 +235,12 @@ public class TokenSetupController extends FXMLController {
                 break;
 
             case GET_CHAT_MESSAGES:
-                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
+                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
                 Platform.runLater(() -> chatArea.appendText(getChatFormattedMessages + "\n"));
                 break;
 
             case CHAT_GM, CHAT_PM:
-                String formattedMessage = message.replace("[1m", " ").replace("[0m","");
+                String formattedMessage = message.replace("[1m", " ").replace("[0m", "");
                 if (feedback.equals(Feedback.SUCCESS)) {
                     Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
@@ -246,17 +249,15 @@ public class TokenSetupController extends FXMLController {
                 break;
 
             case EventID.QUIT_GAME:
-                if(feedback == Feedback.SUCCESS){
+                if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("EnterLobbiesMenu");
-                        }
-                        catch (IOException exception){
+                        } catch (IOException exception) {
                             throw new RuntimeException("FXML Exception: failed to load EnterLobbiesMenu", exception);
                         }
                     });
-                }
-                else{
+                } else {
                     Platform.runLater(() -> chatArea.appendText(message));
                 }
                 break;
@@ -265,6 +266,7 @@ public class TokenSetupController extends FXMLController {
 
     /**
      * Method to set the name of the lobby so that the player can see the lobby's name.
+     *
      * @param lobbyName the name of the lobby
      */
     private void setLobbyName(String lobbyName) {
@@ -276,7 +278,7 @@ public class TokenSetupController extends FXMLController {
      * This method is called whenever there is a need to refresh the UI, such as after receiving a response from the server.
      * It calls the {@code updateTokenOptions} method to update the available tokens for selection and the {@code updateChatOptions} method to update the available chat options.
      */
-    private void update(){
+    private void update() {
         updateTokenOptions();
         updateChatOptions();
     }
@@ -288,13 +290,13 @@ public class TokenSetupController extends FXMLController {
      * When the mouse cursor exits the image, the effect is removed.
      * This gives a visual feedback to the user that the token image is selectable.
      */
-    private void addHoverEffect(){
+    private void addHoverEffect() {
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
         highlight.setOffsetX(0);
         highlight.setOffsetY(0);
-        for(ImageView imageView : visibleTokens.values()){
+        for (ImageView imageView : visibleTokens.values()) {
             imageView.setOnMouseEntered(event -> imageView.setEffect(highlight));
 
             imageView.setOnMouseExited(event -> imageView.setEffect(null));
@@ -307,7 +309,7 @@ public class TokenSetupController extends FXMLController {
      * When a token image is clicked, a new ChosenTokenSetupEvent is created with the corresponding token color and sent to the controller.
      * The controller then handles the event and updates the game state accordingly.
      */
-    private void addChoiceSelection(){
+    private void addChoiceSelection() {
         red.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.RED)));
         blue.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.BLUE)));
         green.setOnMouseClicked(event -> controller.newViewEvent(new ChosenTokenSetupEvent(Token.GREEN)));
@@ -324,8 +326,8 @@ public class TokenSetupController extends FXMLController {
      * - Sets the image view of the available token to be visible.
      * If a token has been chosen, it does not perform any operations.
      */
-    private void updateTokenOptions(){
-        if(!tokenChosen) {
+    private void updateTokenOptions() {
+        if (!tokenChosen) {
             for (ImageView imageView : visibleTokens.values()) {
                 imageView.setVisible(false);
             }
@@ -341,17 +343,17 @@ public class TokenSetupController extends FXMLController {
      * This method is used to update the chat options in the game setup view.
      * It iterates over the players' status and updates the radio buttons accordingly.
      */
-    private void updateChatOptions(){
+    private void updateChatOptions() {
         int i = 0;
         generalRadioButton.setSelected(true);
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(!controller.getUsername().equals(user)){
+        for (String user : controller.getPlayersStatus().keySet()) {
+            if (!controller.getUsername().equals(user)) {
                 radioButtons.get(i).setVisible(true);
                 radioButtons.get(i).setText(user);
                 i++;
             }
         }
-        while(i < radioButtons.size()){
+        while (i < radioButtons.size()) {
             radioButtons.get(i).setVisible(false);
             radioButtons.get(i).setText("");
             i++;
@@ -363,7 +365,7 @@ public class TokenSetupController extends FXMLController {
      * It sends a {@link QuitGameEvent} to the server.
      */
     @FXML
-    public void quitGame(){
+    public void quitGame() {
         Event event = new QuitGameEvent();
         controller.newViewEvent(event);
     }
@@ -373,13 +375,12 @@ public class TokenSetupController extends FXMLController {
      * It sends a {@link ChatGMEvent} or {@link ChatPMEvent} to the server based on the selected radio button.
      */
     @FXML
-    public void submitMessage(){
+    public void submitMessage() {
         String message = chatInput.getText();
 
-        if(message.isEmpty()){
+        if (message.isEmpty()) {
             return;
-        }
-        else {
+        } else {
             if (generalRadioButton.isSelected()) {
                 sendPublicMessage(message);
             } else {
@@ -397,11 +398,10 @@ public class TokenSetupController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is a specific user.
      */
-    private void sendPrivateMessage(String username, String message){
-        if(controller.getPlayersStatus().containsKey(username)) {
+    private void sendPrivateMessage(String username, String message) {
+        if (controller.getPlayersStatus().containsKey(username)) {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
-        }
-        else{
+        } else {
             System.out.println("Error: player not in match");
         }
     }
@@ -409,7 +409,7 @@ public class TokenSetupController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is general.
      */
-    private void sendPublicMessage(String message){
+    private void sendPublicMessage(String message) {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
@@ -418,7 +418,7 @@ public class TokenSetupController extends FXMLController {
      * It returns true as the player is in the game during the game setup phase.
      */
     @Override
-    public boolean inGame(){
+    public boolean inGame() {
         return true;
     }
 
@@ -427,7 +427,7 @@ public class TokenSetupController extends FXMLController {
      * It returns true as the player is in the chat during the game setup phase.
      */
     @Override
-    public boolean inChat(){
+    public boolean inChat() {
         return true;
     }
 }

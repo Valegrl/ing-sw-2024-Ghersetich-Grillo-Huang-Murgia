@@ -22,13 +22,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -159,7 +160,7 @@ public class LobbyController extends FXMLController {
     /**
      * Default constructor for the LobbyController class.
      */
-    public LobbyController(){
+    public LobbyController() {
         super();
     }
 
@@ -182,11 +183,11 @@ public class LobbyController extends FXMLController {
             VBox vBox = vBoxes.get(i);
 
             imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                            vBox.getWidth() * relativePercentage, vBox.widthProperty()
+                    vBox.getWidth() * relativePercentage, vBox.widthProperty()
             ));
 
             imageView.fitHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                            vBox.getHeight() * relativePercentage, vBox.heightProperty()
+                    vBox.getHeight() * relativePercentage, vBox.heightProperty()
             ));
         }
 
@@ -197,27 +198,27 @@ public class LobbyController extends FXMLController {
             VBox vBox = vBoxes.get(i);
 
             username.wrappingWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                            vBox.getWidth() * relativePercentage, vBox.widthProperty()
+                    vBox.getWidth() * relativePercentage, vBox.widthProperty()
             ));
         }
 
         double vboxChatPercentage = 0.32;
 
         vboxChat.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                        vBox.getWidth() * vboxChatPercentage, vBox.widthProperty()
+                vBox.getWidth() * vboxChatPercentage, vBox.widthProperty()
         ));
 
         vboxChat.prefHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                        vBox.getHeight() * (1-vboxChatPercentage), vBox.heightProperty()
+                vBox.getHeight() * (1 - vboxChatPercentage), vBox.heightProperty()
         ));
 
         for (VBox vBox : vBoxes) {
             vBox.prefWidthProperty().bind(Bindings.createDoubleBinding(() ->
-                            mainAnchor.getWidth() * maxPercentageVBox, mainAnchor.widthProperty()
+                    mainAnchor.getWidth() * maxPercentageVBox, mainAnchor.widthProperty()
             ));
 
             vBox.prefHeightProperty().bind(Bindings.createDoubleBinding(() ->
-                            mainAnchor.getHeight() * maxPercentageVBox, mainAnchor.heightProperty()
+                    mainAnchor.getHeight() * maxPercentageVBox, mainAnchor.heightProperty()
             ));
         }
     }
@@ -226,11 +227,11 @@ public class LobbyController extends FXMLController {
      * This method is called when the lobby view is run.
      * It initializes the lobby view and sets up the necessary event handlers.
      *
-     * @param view The view associated with this controller.
+     * @param view  The view associated with this controller.
      * @param stage The stage on which the lobby view is displayed.
      */
     @Override
-    public void run(View view, Stage stage){
+    public void run(View view, Stage stage) {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
@@ -255,8 +256,8 @@ public class LobbyController extends FXMLController {
      * It also receives the messages player write in chat.
      *
      * @param feedback The feedback received from the server.
-     * @param message The message received from the server.
-     * @param eventID The event ID of the event that triggered the response.
+     * @param message  The message received from the server.
+     * @param eventID  The event ID of the event that triggered the response.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -269,17 +270,15 @@ public class LobbyController extends FXMLController {
                 Platform.runLater(this::updateLobby);
                 break;
             case EventID.QUIT_LOBBY:
-                if(feedback == Feedback.SUCCESS){
+                if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
-                           switchScreen("EnterLobbiesMenu");
-                        }
-                        catch (IOException exception){
+                            switchScreen("EnterLobbiesMenu");
+                        } catch (IOException exception) {
                             throw new RuntimeException("FXML Exception: failed to load enter EnterLobbiesMenu", exception);
                         }
                     });
-                }
-                else{
+                } else {
                     Platform.runLater(() -> chatArea.appendText("Something bad happened, you can't quit!"));
                 }
                 break;
@@ -287,22 +286,21 @@ public class LobbyController extends FXMLController {
                 Platform.runLater(() -> {
                     try {
                         switchScreen("EnterLobbiesMenu");
-                    }
-                    catch (IOException exception){
+                    } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load enter EnterLobbiesMenu", exception);
                     }
                 });
                 break;
             case EventID.GET_CHAT_MESSAGES:
-                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m","");
-                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"));
+                String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
+                Platform.runLater(() -> chatArea.appendText(getChatFormattedMessages + "\n"));
                 break;
             case EventID.CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
-                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
-                    Platform.runLater(() ->chatArea.appendText(formattedMessage + "\n"));
+                    String formattedMessage = message.replace("[1m", " ").replace("[0m", "");
+                    Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
-                    Platform.runLater(() ->chatArea.appendText("Message unable to send!\n"));
+                    Platform.runLater(() -> chatArea.appendText("Message unable to send!\n"));
                 }
                 break;
 
@@ -319,11 +317,10 @@ public class LobbyController extends FXMLController {
      * or a change in the ready status of a player. The method is responsible for processing these updates and
      * reflecting the changes in the lobby accordingly to the user's role.
      */
-    private void updateLobby(){
+    private void updateLobby() {
         if (controller.isLobbyLeader()) {
             lobbyLeaderUpdate();
-        }
-        else if (!controller.isLobbyLeader()){
+        } else if (!controller.isLobbyLeader()) {
             lobbyUserUpdate();
         }
     }
@@ -332,7 +329,7 @@ public class LobbyController extends FXMLController {
      * This method is executed by the {@code updateLobby} method when the current user is identified as the lobby administrator.
      * Being the lobby administrator, the user possesses the authority to kick other users from the lobby.
      */
-    private void lobbyLeaderUpdate(){
+    private void lobbyLeaderUpdate() {
         int i = 0;
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
@@ -340,13 +337,12 @@ public class LobbyController extends FXMLController {
         highlight.setOffsetX(0);
         highlight.setOffsetY(0);
 
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(controller.getUsername().equals(user)){
+        for (String user : controller.getPlayersStatus().keySet()) {
+            if (controller.getUsername().equals(user)) {
 
-                if(controller.getPlayersStatus().get(user)){
+                if (controller.getPlayersStatus().get(user)) {
                     readyStatuses.get(i).setText("Ready");
-                }
-                else{
+                } else {
                     readyStatuses.get(i).setText("Not ready");
                 }
 
@@ -356,13 +352,11 @@ public class LobbyController extends FXMLController {
                 playerButtons.get(i).setVisible(true);
                 playerButtons.get(i).setText("Quit");
                 playerButtons.get(i).setOnAction(actionEvent -> quitLobby());
-            }
-            else{
+            } else {
 
-                if(controller.getPlayersStatus().get(user)){
+                if (controller.getPlayersStatus().get(user)) {
                     readyStatuses.get(i).setText("Ready");
-                }
-                else{
+                } else {
                     readyStatuses.get(i).setText("Not ready");
                 }
 
@@ -376,7 +370,7 @@ public class LobbyController extends FXMLController {
             }
             i++;
         }
-        while(i < playerStackPanes.size()){
+        while (i < playerStackPanes.size()) {
             playerStackPanes.get(i).setVisible(false);
             playerStackPanes.get(i).setEffect(null);
             playerButtons.get(i).setVisible(false);
@@ -391,7 +385,7 @@ public class LobbyController extends FXMLController {
      * This method is executed by the {@code updateLobby} method when the current user is identified as a lobby user.
      * Unlike the lobby administrator, the user does not possess the authority to kick other users from the lobby.
      */
-    private void lobbyUserUpdate(){
+    private void lobbyUserUpdate() {
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
@@ -399,13 +393,12 @@ public class LobbyController extends FXMLController {
         highlight.setOffsetY(0);
 
         int i = 0;
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(controller.getUsername().equals(user)){
+        for (String user : controller.getPlayersStatus().keySet()) {
+            if (controller.getUsername().equals(user)) {
 
-                if(controller.getPlayersStatus().get(user)){
+                if (controller.getPlayersStatus().get(user)) {
                     readyStatuses.get(i).setText("Ready");
-                }
-                else{
+                } else {
                     readyStatuses.get(i).setText("Not ready");
                 }
 
@@ -416,13 +409,11 @@ public class LobbyController extends FXMLController {
                 playerButtons.get(i).setVisible(true);
                 playerButtons.get(i).setText("Quit");
                 playerButtons.get(i).setOnAction(actionEvent -> quitLobby());
-            }
-            else{
+            } else {
 
-                if(controller.getPlayersStatus().get(user)){
+                if (controller.getPlayersStatus().get(user)) {
                     readyStatuses.get(i).setText("Ready");
-                }
-                else{
+                } else {
                     readyStatuses.get(i).setText("Not ready");
                 }
 
@@ -433,7 +424,7 @@ public class LobbyController extends FXMLController {
             }
             i++;
         }
-        while( i < playerStackPanes.size()){
+        while (i < playerStackPanes.size()) {
             playerStackPanes.get(i).setVisible(false);
             playerStackPanes.get(i).setEffect(null);
             usernames.get(i).setText("");
@@ -449,17 +440,17 @@ public class LobbyController extends FXMLController {
      * This method is executed by the {@code updateLobby} method. It updates the radio buttons for the chat.
      * Hiding the options for users who are no longer in the lobby and showing the ones for user who just joined.
      */
-    private void updateChatOptions(){
+    private void updateChatOptions() {
         int i = 0;
         generalRadioButton.setSelected(true);
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(!controller.getUsername().equals(user)){
+        for (String user : controller.getPlayersStatus().keySet()) {
+            if (!controller.getUsername().equals(user)) {
                 radioButtons.get(i).setVisible(true);
                 radioButtons.get(i).setText(user);
                 i++;
             }
         }
-        while(i < radioButtons.size()){
+        while (i < radioButtons.size()) {
             radioButtons.get(i).setVisible(false);
             radioButtons.get(i).setText("");
             i++;
@@ -504,13 +495,12 @@ public class LobbyController extends FXMLController {
      * It sends a {@link ChatGMEvent} or {@link ChatPMEvent} to the server based on the selected radio button.
      */
     @FXML
-    public void submitMessage(){
+    public void submitMessage() {
         String message = chatInput.getText();
 
-        if(message.isEmpty()){
+        if (message.isEmpty()) {
             return;
-        }
-        else {
+        } else {
             if (generalRadioButton.isSelected()) {
                 sendPublicMessage(message);
             } else {
@@ -528,11 +518,10 @@ public class LobbyController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is a specific user.
      */
-    private void sendPrivateMessage(String username, String message){
-        if(controller.getPlayersStatus().containsKey(username)) {
+    private void sendPrivateMessage(String username, String message) {
+        if (controller.getPlayersStatus().containsKey(username)) {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
-        }
-        else{
+        } else {
             chatArea.appendText("Error: player not in match");
         }
     }
@@ -540,7 +529,7 @@ public class LobbyController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is general.
      */
-    private void sendPublicMessage(String message){
+    private void sendPublicMessage(String message) {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
@@ -549,13 +538,12 @@ public class LobbyController extends FXMLController {
      * It sends a {@link PlayerReadyEvent} or {@link PlayerUnreadyEvent} to the server based on the current ready status.
      */
     @FXML
-    public void toggleReadyStatus(){
+    public void toggleReadyStatus() {
         Event event;
-        if(controller.getPlayersStatus().get(view.getUsername())){
+        if (controller.getPlayersStatus().get(view.getUsername())) {
             readyButton.setText("Ready");
             event = new PlayerUnreadyEvent();
-        }
-        else{
+        } else {
             readyButton.setText("Unready");
             event = new PlayerReadyEvent();
         }
@@ -564,19 +552,17 @@ public class LobbyController extends FXMLController {
 
     /**
      * This method states that the player is in a lobby.
-     *
      */
     @Override
-    public boolean inLobby(){
+    public boolean inLobby() {
         return true;
     }
 
     /**
      * This method states that the player is in a chat.
-     *
      */
     @Override
-    public boolean inChat(){
+    public boolean inChat() {
         return true;
     }
 

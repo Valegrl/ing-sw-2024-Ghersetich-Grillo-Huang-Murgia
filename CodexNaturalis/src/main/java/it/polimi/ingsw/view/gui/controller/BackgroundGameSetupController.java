@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 /**
@@ -17,7 +18,8 @@ public class BackgroundGameSetupController extends FXMLController {
 
     /**
      * Initializes the controller with the given view and stage.
-     * @param view The view associated with this controller
+     *
+     * @param view  The view associated with this controller
      * @param stage The stage in which the FXML view is shown
      */
     @Override
@@ -30,19 +32,19 @@ public class BackgroundGameSetupController extends FXMLController {
     /**
      * This method is responsible for handling the events, it loads the {@link it.polimi.ingsw.view.controller.ViewController}
      * setup, then it switches to the actual GameSetup screen
+     *
      * @param feedback The feedback from the view
-     * @param message The message associated with the feedback
-     * @param eventID The ID of the event
+     * @param message  The message associated with the feedback
+     * @param eventID  The ID of the event
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        switch (EventID.getByID(eventID)){
-            case EventID.CHOOSE_CARDS_SETUP :
+        switch (EventID.getByID(eventID)) {
+            case EventID.CHOOSE_CARDS_SETUP:
                 Platform.runLater(() -> {
                     try {
                         switchScreen("GameSetup");
-                    }
-                    catch (IOException exception) {
+                    } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load GameSetup", exception);
                     }
                 });
@@ -52,7 +54,7 @@ public class BackgroundGameSetupController extends FXMLController {
                     try {
                         switchScreen("Menu");
                     } catch (IOException exception) {
-                        throw new RuntimeException("FXML Exception: failed to load Menu",exception);
+                        throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                     }
                 });
                 break;
@@ -61,10 +63,11 @@ public class BackgroundGameSetupController extends FXMLController {
 
     /**
      * Indicates whether the user is in the game.
+     *
      * @return true since the user is in the game when this controller is active.
      */
     @Override
-    public boolean inGame(){
+    public boolean inGame() {
         return true;
     }
 }

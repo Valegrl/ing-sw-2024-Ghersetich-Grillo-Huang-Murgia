@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 /**
@@ -45,7 +46,7 @@ public class MenuController extends FXMLController {
      * The run method is called to initialize the view and stage for the controller.
      * It also sets the username text.
      *
-     * @param view the view to be set up
+     * @param view  the view to be set up
      * @param stage the stage to be set up
      */
     @Override
@@ -63,11 +64,10 @@ public class MenuController extends FXMLController {
      * It loads the ReconnectMenu view and transitions to the ReconnectMenuController.
      */
     @FXML
-    public void goReconnectGames(){
+    public void goReconnectGames() {
         try {
             switchScreen("ReconnectMenu");
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             throw new RuntimeException("FXML Exception: failed to load ReconnectMenu", exception);
         }
     }
@@ -77,11 +77,10 @@ public class MenuController extends FXMLController {
      * It loads the EnterLobbiesMenu view and transitions to the EnterLobbiesController.
      */
     @FXML
-    public void goEnterLobbies(){
+    public void goEnterLobbies() {
         try {
             switchScreen("EnterLobbiesMenu");
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             throw new RuntimeException("FXML Exception: failed to load EnterLobbiesMenu", exception);
         }
     }
@@ -91,7 +90,7 @@ public class MenuController extends FXMLController {
      * It hides the main menu and shows the profile settings view.
      */
     @FXML
-    public void goProfileSettings(){
+    public void goProfileSettings() {
         errorProfileSettings.setText("");
         menuFX.setManaged(false);
         menuFX.setVisible(false);
@@ -104,7 +103,7 @@ public class MenuController extends FXMLController {
      * It hides the profile settings view and shows the delete account confirmation view.
      */
     @FXML
-    public void notifyDeleteAccount(){
+    public void notifyDeleteAccount() {
         profileSettingsVBox.setManaged(false);
         profileSettingsVBox.setVisible(false);
         confirmDeleteVBox.setManaged(true);
@@ -116,7 +115,7 @@ public class MenuController extends FXMLController {
      * It sends a {@code DeleteAccountEvent} to the server.
      */
     @FXML
-    public void confirmDeleteAccount(){
+    public void confirmDeleteAccount() {
         deleteAccount();
     }
 
@@ -125,7 +124,7 @@ public class MenuController extends FXMLController {
      * It hides the delete account confirmation view and shows the profile settings view.
      */
     @FXML
-    public void rejectDeleteAccount(){
+    public void rejectDeleteAccount() {
         errorProfileSettings.setText("Your account was not deleted.");
         profileSettingsVBox.setManaged(true);
         profileSettingsVBox.setVisible(true);
@@ -138,7 +137,7 @@ public class MenuController extends FXMLController {
      * It sends a LogoutEvent to the server.
      */
     @FXML
-    public void logout(){
+    public void logout() {
         Event event = new LogoutEvent();
         controller.newViewEvent(event);
 
@@ -159,7 +158,7 @@ public class MenuController extends FXMLController {
      * It exits the application.
      */
     @FXML
-    public void exit(){
+    public void exit() {
         Platform.exit();
         System.exit(0);
     }
@@ -169,8 +168,8 @@ public class MenuController extends FXMLController {
      * It updates the user interface based on the feedback received.
      *
      * @param feedback the feedback received from the server
-     * @param message the message received from the server
-     * @param eventID the ID of the event that triggered the response
+     * @param message  the message received from the server
+     * @param eventID  the ID of the event that triggered the response
      */
     @FXML
     @Override
@@ -181,8 +180,7 @@ public class MenuController extends FXMLController {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("LoginMenu");
-                        }
-                        catch (IOException exception){
+                        } catch (IOException exception) {
                             errorProfileSettings.setText("Account deletion failed " + message);
                             confirmDeleteVBox.setManaged(false);
                             confirmDeleteVBox.setVisible(false);
@@ -205,8 +203,7 @@ public class MenuController extends FXMLController {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("LoginMenu");
-                        }
-                        catch (IOException exception){
+                        } catch (IOException exception) {
                             Platform.runLater(() -> errorProfileSettings.setText("Logout failed " + message));
                         }
                     });
@@ -222,7 +219,7 @@ public class MenuController extends FXMLController {
      * It hides the profile settings view and shows the main menu.
      */
     @FXML
-    public void goBack(){
+    public void goBack() {
         menuFX.setManaged(true);
         menuFX.setVisible(true);
         profileSettingsMenuFX.setVisible(false);
@@ -236,8 +233,8 @@ public class MenuController extends FXMLController {
      * @return true
      */
     @Override
-    public boolean inMenu(){
-        return  true;
+    public boolean inMenu() {
+        return true;
     }
 
 }

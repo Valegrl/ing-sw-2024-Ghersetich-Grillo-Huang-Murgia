@@ -17,7 +17,7 @@ public class ServerDisconnectionController extends FXMLController {
      * This method is used to initialize the ServerDisconnectionController with the given View and Stage.
      * It sets the view, stage, and controller properties of this class.
      *
-     * @param view The View object to be associated with this controller.
+     * @param view  The View object to be associated with this controller.
      * @param stage The Stage object to be associated with this controller.
      */
     @Override
@@ -32,8 +32,8 @@ public class ServerDisconnectionController extends FXMLController {
      * Currently, it is not used in this controller.
      *
      * @param feedback The feedback from the server.
-     * @param message The message from the server.
-     * @param eventID The ID of the event.
+     * @param message  The message from the server.
+     * @param eventID  The ID of the event.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {

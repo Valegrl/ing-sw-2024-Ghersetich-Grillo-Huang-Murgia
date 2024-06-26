@@ -8,6 +8,7 @@ import it.polimi.ingsw.eventUtils.event.internal.PingEvent;
 import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.Pair;
 
 import java.rmi.RemoteException;
@@ -107,7 +108,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                                     clientDisconnected(client);
                                 }
                             };
-                            clientTimers.get(client).schedule(task, 3000); // TODO config file?
+                            clientTimers.get(client).schedule(task, JsonConfig.getInstance().getPingTimeoutMs());
                         }
 
                         // sending PingEvent
@@ -116,7 +117,8 @@ public class ServerManager extends UnicastRemoteObject implements Server {
                     } catch (RemoteException ignored) {}
                 }
                 try {
-                    Thread.sleep(3000 * 2);
+                    int timeout = JsonConfig.getInstance().getPingTimeoutMs() * 2;
+                    Thread.sleep(timeout);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -166,7 +168,6 @@ public class ServerManager extends UnicastRemoteObject implements Server {
      * @param client The client to send the {@link PongEvent} to.
      */
     private void sendPong(Client client) {
-        System.out.println("Server received ping, sending pong...");
         try {
             client.report(new PongEvent());
         } catch (RemoteException e) {
@@ -185,7 +186,6 @@ public class ServerManager extends UnicastRemoteObject implements Server {
             client.closeConnection();
         } catch (RemoteException ignored){} // ignored because rmi will always throw an exception when the client is offline
 
-        System.out.println("Client disconnected.");
         leave(client);
     }
 

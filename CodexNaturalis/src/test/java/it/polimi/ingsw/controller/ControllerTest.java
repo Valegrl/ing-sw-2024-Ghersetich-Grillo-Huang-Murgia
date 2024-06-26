@@ -4,6 +4,7 @@ import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.utils.Account;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ class ControllerTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         controller = Controller.getInstance();
         gameListener1 = (event)-> System.out.println("1: "+ event.getID());
         gameListener2 = (event)-> System.out.println("2: "+ event.getID());

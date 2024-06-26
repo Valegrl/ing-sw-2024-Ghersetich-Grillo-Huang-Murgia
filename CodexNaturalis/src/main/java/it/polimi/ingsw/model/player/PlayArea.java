@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.NonConstraintCardException;
 import it.polimi.ingsw.model.exceptions.FullHandException;
 import it.polimi.ingsw.model.exceptions.MissingCardFromHandException;
 import it.polimi.ingsw.model.exceptions.NoCoveredCardsException;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.Pair;
 
 /**
@@ -16,7 +17,6 @@ import it.polimi.ingsw.utils.Pair;
  * It contains played cards and methods for the game's execution.
  */
 public class PlayArea {
-//{@link it.polimi.ingsw.model.evaluator.evaluator }
     /**
      * The list of cards the player holds and can play.
      */
@@ -26,7 +26,6 @@ public class PlayArea {
      * The StartCard chosen at the start.
      * Its Coordinate is (0,0).
      */
-    /*Remember that we consider the coordinate (0,0) for this card.*/
     private final StartCard startCard;
 
     /**
@@ -148,7 +147,6 @@ public class PlayArea {
         int j;
         PlayableCard currCard;
 
-        //TODO up to review the two letters standard for corners
         //Corresponding corners of the cards covered by played card
         int[] arrayCorners = {2, 3, 0, 1};
 
@@ -261,7 +259,6 @@ public class PlayArea {
      * @return A list of coordinates.
      */
     public List<Coordinate> getAvailablePos() {
-        //TODO code review
         /*To be used only AFTER the PlayArea has a StartCard*/
         Coordinate[] arrayCoordinate = {
                 new Coordinate(-1,1),
@@ -310,7 +307,7 @@ public class PlayArea {
      * @param c The card to be added.
      */
     public void addToHand(PlayableCard c) {
-        if(this.hand.size() >= 3){
+        if(this.hand.size() >= JsonConfig.getInstance().getHandSize()){
             throw new FullHandException();
         }
         else {

@@ -4,6 +4,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.utils.Account;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.utils.Pair;
 
@@ -160,7 +161,7 @@ public class Controller {
         if (!virtualViewAccounts.containsKey(vv))
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "You must log in first."), null);
 
-        if (lobbyID == null || lobbyID.isEmpty() || lobbyID.length() > 32) //FIXME config file
+        if (lobbyID == null || lobbyID.isEmpty() || lobbyID.length() > JsonConfig.getInstance().getMaxLobbyIdLength())
             return new Pair<>(new CreateLobbyEvent(Feedback.FAILURE, "The provided lobby ID is not allowed."), null);
 
         if (nRequiredPlayers < 2 || nRequiredPlayers > 4)

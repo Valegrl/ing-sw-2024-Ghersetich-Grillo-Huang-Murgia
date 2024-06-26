@@ -3,7 +3,9 @@ package it.polimi.ingsw.viewModel.immutableCard;
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.Pair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ImmObjectiveCardTest {
+    @BeforeEach
+    void setUp() {
+        JsonConfig.loadConfig();
+    }
+
     @Test
     void testPrintCardUpwardsDiagonalPattern() {
         ObjectiveCard objectiveCard = Mockito.mock(ObjectiveCard.class);

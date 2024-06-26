@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
 import it.polimi.ingsw.viewModel.EndedGameData;
 import it.polimi.ingsw.viewModel.ViewModel;
@@ -199,9 +200,10 @@ public class Game {
 
         for (Player p : players) {
             List<PlayableCard> hand = new ArrayList<>();
-            hand.add(resourceDeck.drawTop());
-            hand.add(resourceDeck.drawTop());
-            hand.add(goldDeck.drawTop());
+            for (int i = 0; i < JsonConfig.getInstance().getHandResourceCards(); i++)
+                hand.add(resourceDeck.drawTop());
+            for (int i = 0; i < JsonConfig.getInstance().getHandGoldCards(); i++)
+                hand.add(goldDeck.drawTop());
             Collections.shuffle(hand);
 
             StartCard start = startDeck.drawTop();

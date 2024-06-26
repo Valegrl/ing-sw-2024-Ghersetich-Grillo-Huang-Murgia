@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.evaluator.ItemEvaluator;
 import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayArea;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ public class SelfViewPlayAreaTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         List<Item> backPermanentResources = Arrays.asList(Item.PLANT, Item.PLANT);
         Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};
         Item[] backCorners = new Item[]{Item.EMPTY, Item.PLANT, Item.EMPTY, Item.INSECT};

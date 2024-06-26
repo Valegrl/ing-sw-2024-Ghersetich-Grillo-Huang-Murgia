@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.utils.JsonConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,7 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         player = new Player(username);
         token = Token.GREEN;
         playArea = mock(PlayArea.class);

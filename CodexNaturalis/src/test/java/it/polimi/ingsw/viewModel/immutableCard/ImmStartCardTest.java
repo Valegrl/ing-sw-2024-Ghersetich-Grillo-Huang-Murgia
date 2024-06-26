@@ -2,6 +2,8 @@ package it.polimi.ingsw.viewModel.immutableCard;
 
 import it.polimi.ingsw.model.card.Item;
 import it.polimi.ingsw.model.card.StartCard;
+import it.polimi.ingsw.utils.JsonConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -12,6 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ImmStartCardTest {
+    @BeforeEach
+    void setUp() {
+        JsonConfig.loadConfig();
+    }
+
     @Test
     void testPrintCardSingleBackResource() {
         StartCard startCard = Mockito.mock(StartCard.class);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.utils.AnsiCodes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

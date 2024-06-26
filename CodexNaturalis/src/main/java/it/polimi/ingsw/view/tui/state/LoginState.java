@@ -5,6 +5,7 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -105,8 +106,8 @@ public class LoginState extends ViewState {
     private void register(){
         view.printMessage("Please choose your username:");
         String user = view.getInput();
-        while (user.isEmpty() || user.length() > 16) {
-            view.printMessage("Username must be between 1 and 16 characters long.");
+        while (user.isEmpty() || user.length() > JsonConfig.getInstance().getMaxUsernameLength()) {
+            view.printMessage("Username must be between 1 and " + JsonConfig.getInstance().getMaxUsernameLength() + " characters long.");
             view.printMessage("Please choose your username:");
             user = view.getInput();
         }

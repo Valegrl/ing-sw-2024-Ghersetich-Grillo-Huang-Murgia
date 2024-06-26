@@ -5,7 +5,9 @@ import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.player.Token;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.PlayerCardsSetup;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -19,6 +21,11 @@ class GameTest {
     private final String username1 = "player1";
     private final String username2 = "player2";
     private final String externalPlayer = "other";
+
+    @BeforeEach
+    void setUp() {
+        JsonConfig.loadConfig();
+    }
 
     @Test
     void matchSimulation() {

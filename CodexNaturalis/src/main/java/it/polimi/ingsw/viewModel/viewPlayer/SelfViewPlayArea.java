@@ -39,7 +39,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
     /**
      * The selected card in the play area and its coordinate.
      */
-    private final Pair<Coordinate, ImmEvaluableCard> selectedCard; //TODO card converter (similar to ImmPlayableCard)
+    private final Pair<Coordinate, ImmEvaluableCard> selectedCard;
 
     /**
      * Constructs an immutable representation of the given {@link PlayArea}.
@@ -65,7 +65,7 @@ public final class SelfViewPlayArea implements Serializable, CardConverter {
         if (playArea.getSelectedCard().key() == null)
             this.selectedCard = new Pair<>(null, null);
         else
-            this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value())); // FIXME Dynamic type issue
+            this.selectedCard = new Pair<>(playArea.getSelectedCard().key(), new ImmEvaluableCard(playArea.getSelectedCard().value()));
     }
 
     /**

@@ -4,6 +4,7 @@ import it.polimi.ingsw.eventUtils.EventID;
 import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.*;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.ViewState;
 
@@ -142,16 +143,17 @@ public class MenuState extends ViewState {
 
         int numPlayers;
         while (true) {
-            view.printMessage("Number of required players (2-4):");
+            int maxPlayers = JsonConfig.getInstance().getMaxLobbySize();
+            view.printMessage("Number of required players (2-"+ maxPlayers+"):");
             try {
-                numPlayers = readIntFromInput(2, 4);
-                if (numPlayers >= 2 && numPlayers <= 4) {
+                numPlayers = readIntFromInput(2, maxPlayers);
+                if (numPlayers >= 2 && numPlayers <= maxPlayers) {
                     break;
                 } else if (numPlayers == -1) { // exit
                     createLobby();
                     return;
                 } else {
-                    view.printMessage("Number of players must be between 2 and 4.");
+                    view.printMessage("Number of players must be between 2 and " + maxPlayers + ".");
                 }
             } catch (NumberFormatException ex) {
                 view.printMessage("Invalid input. Please enter a number.");

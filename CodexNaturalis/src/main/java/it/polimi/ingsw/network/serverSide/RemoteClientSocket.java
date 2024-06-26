@@ -88,10 +88,6 @@ public class RemoteClientSocket implements Client {
             if (!socket.isClosed()) {
                 String jsonString = gson.toJson(event);
 
-                String id = event.getID();//FIXME just for testing
-                if (!(id.equals("PONG") || id.equals("PING")))
-                    System.out.println(socket.getPort() + " OUT: "+ id);
-
                 outputStream.writeUTF(jsonString);
                 outputStream.flush();
             }
@@ -109,9 +105,6 @@ public class RemoteClientSocket implements Client {
             String jsonString = inputStream.readUTF();
             Event event;
             event = gson.fromJson(jsonString, Event.class);
-            String id = event.getID(); // FIXME just for testing
-            if (!(id.equals("PONG") || id.equals("PING")))
-                System.out.println(socket.getPort() + " IN: "+ id);
 
             server.direct(event, this);
         } catch (IOException e) {

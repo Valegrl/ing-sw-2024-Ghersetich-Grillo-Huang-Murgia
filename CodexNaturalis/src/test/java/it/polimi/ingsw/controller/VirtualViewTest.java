@@ -34,6 +34,7 @@ class VirtualViewTest {
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
+        JsonConfig.loadConfig();
         controller = Mockito.mock(Controller.class);
         gameListener = Mockito.mock(GameListener.class);
         gameController = Mockito.mock(GameController.class);

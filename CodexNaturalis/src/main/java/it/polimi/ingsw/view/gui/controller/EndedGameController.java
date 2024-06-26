@@ -13,12 +13,16 @@ import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -127,7 +131,6 @@ public class EndedGameController extends FXMLController {
     private GridPane gridPane;
 
 
-
     private List<ImageView> hand;
 
     private List<ImageView> tokens;
@@ -159,7 +162,7 @@ public class EndedGameController extends FXMLController {
     /**
      * Initializes the controller. Sets up the bindings for the image views.
      */
-    public void initialize(){
+    public void initialize() {
         double relativePercentageW = 0.07;
 
         List<ImageView> imageViews = Arrays.asList(topResourceCard, visibleResourceCard0, visibleResourceCard1,
@@ -174,17 +177,18 @@ public class EndedGameController extends FXMLController {
         }
     }
 
-    public EndedGameController(){
+    public EndedGameController() {
         super();
     }
 
     /**
      * Runs the controller. Sets up the view, stage, and controller. Retrieves the ended game data and calls the methods to update the play areas.
-     * @param view The view associated with this controller
+     *
+     * @param view  The view associated with this controller
      * @param stage The stage in which the FXML view is shown
      */
     @Override
-    public void run(View view, Stage stage){
+    public void run(View view, Stage stage) {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
@@ -208,9 +212,10 @@ public class EndedGameController extends FXMLController {
 
     /**
      * Handles the response from the server. This method is not used in this controller.
+     *
      * @param feedback The feedback from the server
-     * @param message The message associated with the feedback
-     * @param eventID The ID of the event
+     * @param message  The message associated with the feedback
+     * @param eventID  The ID of the event
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -221,13 +226,12 @@ public class EndedGameController extends FXMLController {
      * Shows the play area of the selected player.
      */
     @FXML
-    public void showPlayArea(){
+    public void showPlayArea() {
         String playAreaChoice = playAreaSelection.getValue();
-        if(playAreaChoice.equals("Your board")){
+        if (playAreaChoice.equals("Your board")) {
             showHand(controller.getUsername());
             showGridPane(controller.getUsername());
-        }
-        else{
+        } else {
             String username = playAreaChoice.substring(10);
             showHand(username);
             showGridPane(username);
@@ -240,7 +244,7 @@ public class EndedGameController extends FXMLController {
      *
      * @param username The username of the player whose play area is to be displayed.
      */
-    private void showGridPane(String username){
+    private void showGridPane(String username) {
         gridPane.getChildren().clear();
         emptyPanesMap.clear();
 
@@ -250,7 +254,7 @@ public class EndedGameController extends FXMLController {
         int maxY = calculateMaxY(endedGameData.getPlayAreas().get(username).getPlayedCards());
 
         //Add empty slots
-        for(int j = 0; j <= gridHeight; j++) {
+        for (int j = 0; j <= gridHeight; j++) {
             for (int k = 0; k <= gridLength; k++) {
                 Image image = new Image("it/polimi/ingsw/images/cards/playable/Empty2.png", getWCardRes(), getHCardRes(), true, true);
                 StackPane emptyStackPane = stackPaneBuilder(image);
@@ -285,7 +289,7 @@ public class EndedGameController extends FXMLController {
         startStackPane.getChildren().add(newImageView);
 
         //Add black token if the turn-circle start from user
-        if (username.equals(controller.getPlayerUsernames().getFirst())){
+        if (username.equals(controller.getPlayerUsernames().getFirst())) {
             Image blackToken = getBlackToken();
             ImageView tokenView = new ImageView(blackToken);
             tokenView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
@@ -297,7 +301,7 @@ public class EndedGameController extends FXMLController {
         }
 
         //Adds the played cards in the grid
-        for(Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()) {
+        for (Coordinate coordinate : endedGameData.getPlayAreas().get(username).getPlayedCards().keySet()) {
             int k = coordinate.getX() - minX + 1;
             int j = maxY - coordinate.getY() + 1;
 
@@ -318,30 +322,28 @@ public class EndedGameController extends FXMLController {
     /**
      * Shows the decks of cards.
      */
-    private void showDecks(){
+    private void showDecks() {
         ImmPlayableCard[] visibleGoldCards = endedGameData.getVisibleGoldCards();
         ImmPlayableCard[] visibleResourceCards = endedGameData.getVisibleResourceCards();
 
-        for(int i = 0; i < visibleGoldCards.length; i++){
-            if(visibleGoldCards[i] != null){
+        for (int i = 0; i < visibleGoldCards.length; i++) {
+            if (visibleGoldCards[i] != null) {
                 this.visibleGoldCards.get(i).setVisible(true);
                 this.visibleGoldCards.get(i).setImage(getFrontCardImage(visibleGoldCards[i].getId(), visibleGoldCards[i].getType()));
-            }
-            else this.visibleGoldCards.get(i).setVisible(false);
+            } else this.visibleGoldCards.get(i).setVisible(false);
         }
 
-        for(int i = 0; i < visibleResourceCards.length; i++){
-            if(visibleResourceCards[i] != null){
+        for (int i = 0; i < visibleResourceCards.length; i++) {
+            if (visibleResourceCards[i] != null) {
                 this.visibleResourceCards.get(i).setVisible(true);
                 this.visibleResourceCards.get(i).setImage(getFrontCardImage(visibleResourceCards[i].getId(), visibleResourceCards[i].getType()));
-            }
-            else this.visibleResourceCards.get(i).setVisible(false);
+            } else this.visibleResourceCards.get(i).setVisible(false);
         }
-        if(endedGameData.getTopGoldDeck() != null){
+        if (endedGameData.getTopGoldDeck() != null) {
             topGoldCard.setVisible(true);
             topGoldCard.setImage(getBackCardImage(endedGameData.getTopGoldDeck(), CardType.GOLD));
         }
-        if(endedGameData.getTopResourceDeck() != null){
+        if (endedGameData.getTopResourceDeck() != null) {
             topResourceCard.setVisible(true);
             topResourceCard.setImage(getBackCardImage(endedGameData.getTopResourceDeck(), CardType.RESOURCE));
         }
@@ -355,9 +357,9 @@ public class EndedGameController extends FXMLController {
     /**
      * Shows the players and their scores.
      */
-    private void showPlayers(){
+    private void showPlayers() {
         int i = 0;
-        for(String username : endedGameData.getResults()){
+        for (String username : endedGameData.getResults()) {
             players.get(i).setVisible(true);
             usernames.get(i).setText(username);
             points.get(i).setText(endedGameData.getScoreboard().get(username).toString());
@@ -369,16 +371,17 @@ public class EndedGameController extends FXMLController {
 
     /**
      * Shows the hand of the selected player.
+     *
      * @param username The username of the selected player
      */
-    private void showHand(String username){
+    private void showHand(String username) {
         int i = 0;
-        for(ImmPlayableCard card : endedGameData.getPlayAreas().get(username).getHand()){
+        for (ImmPlayableCard card : endedGameData.getPlayAreas().get(username).getHand()) {
             this.hand.get(i).setVisible(true);
             this.hand.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
             i++;
         }
-        while(i < this.hand.size()){
+        while (i < this.hand.size()) {
             hand.get(i).setVisible(false);
             i++;
         }
@@ -389,14 +392,14 @@ public class EndedGameController extends FXMLController {
     /**
      * Updates the options to view which play area.
      */
-    private void updateVisiblePlayAreasOptions(){
+    private void updateVisiblePlayAreasOptions() {
         playAreaSelection.getItems().clear();
 
         playAreaSelection.getItems().add("Your board");
         playAreaSelection.getSelectionModel().select("Your board");
 
-        for(String user : endedGameData.getResults()){
-            if(!controller.getUsername().equals(user)){
+        for (String user : endedGameData.getResults()) {
+            if (!controller.getUsername().equals(user)) {
                 playAreaSelection.getItems().add("Opponent: " + user);
             }
         }
@@ -404,24 +407,25 @@ public class EndedGameController extends FXMLController {
 
     /**
      * Handles the action of going back to the main menu. It loads a new FXML scene.
+     *
      * @throws RuntimeException if there is an IOException when switching the screen.
      */
     @FXML
     public void goMainMenu() {
         try {
             switchScreen("Menu");
-        }
-        catch (IOException exception){
-            throw new RuntimeException("FXML Exception: failed to load Menu",exception);
+        } catch (IOException exception) {
+            throw new RuntimeException("FXML Exception: failed to load Menu", exception);
         }
     }
 
     /**
      * Indicates whether the user is in the game.
+     *
      * @return true since the user is in the ended game when this controller is active.
      */
     @Override
-    public boolean inGame(){
+    public boolean inGame() {
         return true;
     }
 }

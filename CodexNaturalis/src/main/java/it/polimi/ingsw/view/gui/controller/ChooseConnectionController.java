@@ -5,13 +5,14 @@ import it.polimi.ingsw.network.clientSide.ClientManager;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
+
 import java.io.IOException;
 
 
@@ -52,7 +53,8 @@ public class ChooseConnectionController extends FXMLController {
     /**
      * Initializes the controller with the given view and stage.
      * Sets up key press events for the IP address text fields.
-     * @param view The view associated with this controller
+     *
+     * @param view  The view associated with this controller
      * @param stage The stage in which the FXML view is shown
      */
     @Override
@@ -62,13 +64,13 @@ public class ChooseConnectionController extends FXMLController {
         this.controller = view.getController();
 
         ipSocketField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 submitSocket(new ActionEvent());
             }
         });
 
         ipRmiField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 submitRmi(new ActionEvent());
             }
         });
@@ -80,6 +82,7 @@ public class ChooseConnectionController extends FXMLController {
 
     /**
      * Sends the submission of the Socket connection form.
+     *
      * @param e The action event associated with the form submission.
      */
     @FXML
@@ -89,12 +92,12 @@ public class ChooseConnectionController extends FXMLController {
         if (!ClientManager.validateAddress(IpSocket)) {
             errorSocket.setText("Invalid IP address. Please provide a valid one:");
             ipSocketField.clear();
-        } else if(IpSocket.isEmpty()){
+        } else if (IpSocket.isEmpty()) {
             errorSocket.setText("Socket address can't be left empty!");
         } else {
             ipSocketField.clear();
             errorSocket.setText("");
-            Platform.runLater(() ->{
+            Platform.runLater(() -> {
                 try {
                     ClientManager.getInstance().initSocket(IpSocket, 1098);
                     switchScreen("LoginMenu");
@@ -109,10 +112,11 @@ public class ChooseConnectionController extends FXMLController {
 
     /**
      * Sends the submission of the Socket connection form.
+     *
      * @param e The action event associated with the form submission.
      */
     @FXML
-    public void submitRmi(ActionEvent e){
+    public void submitRmi(ActionEvent e) {
         String IpRmi = ipRmiField.getText();
 
         if (!ClientManager.validateAddress(IpRmi)) {
@@ -139,7 +143,7 @@ public class ChooseConnectionController extends FXMLController {
      * Handles the action of going back to the main menu. It loads a new FXML scene.
      */
     @FXML
-    public void goBackMain(){
+    public void goBackMain() {
         try {
             switchScreen("MainMenu");
         } catch (IOException exception) {
@@ -151,7 +155,7 @@ public class ChooseConnectionController extends FXMLController {
      * Handles the action of going back to the connection choice menu.
      */
     @FXML
-    public void goBackConnection(){
+    public void goBackConnection() {
         chooseConnectionMenuFX.setVisible(true);
         chooseConnectionMenuFX.setManaged(true);
         socketMenuFX.setVisible(false);
@@ -164,7 +168,7 @@ public class ChooseConnectionController extends FXMLController {
      * Handles the action of choosing the Socket connection type.
      */
     @FXML
-    public void setSocket(){
+    public void setSocket() {
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
         socketMenuFX.setVisible(true);
@@ -175,7 +179,7 @@ public class ChooseConnectionController extends FXMLController {
      * Handles the action of choosing the RMI connection type.
      */
     @FXML
-    public void setRmi(){
+    public void setRmi() {
         chooseConnectionMenuFX.setVisible(false);
         chooseConnectionMenuFX.setManaged(false);
         rmiMenuFX.setVisible(true);
@@ -185,9 +189,10 @@ public class ChooseConnectionController extends FXMLController {
     /**
      * Handles the response from the server.
      * This method is not used in this controller.
+     *
      * @param feedback The feedback from the server
-     * @param message The message associated with the feedback
-     * @param eventID The ID of the event
+     * @param message  The message associated with the feedback
+     * @param eventID  The ID of the event
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -196,6 +201,7 @@ public class ChooseConnectionController extends FXMLController {
 
     /**
      * Indicates whether the user is in the menu.
+     *
      * @return true since the user is in the menu when this controller is active
      */
     @Override

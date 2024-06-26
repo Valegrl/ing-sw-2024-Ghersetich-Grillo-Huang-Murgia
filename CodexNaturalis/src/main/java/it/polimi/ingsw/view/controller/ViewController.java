@@ -91,15 +91,15 @@ public class ViewController implements ViewEventReceiver {
 
     /**
      * The list of global chat messages for the current game.
-     * A maximum of 50 messages is stored.
+     * A limited number of messages is stored.
      */
-    private final ChatMessagesList<ChatMessage> chatMessages = new ChatMessagesList<>(50); // FIXME config
+    private final ChatMessagesList<ChatMessage> chatMessages = new ChatMessagesList<>(JsonConfig.getInstance().getMaxGlobalChatSize());
 
     /**
      * The list of private chat messages received by the user.
-     * A maximum of 50 messages is stored.
+     * A limited number of messages is stored.
      */
-    private final ChatMessagesList<PrivateChatMessage> privateChatMessages = new ChatMessagesList<>(50); // FIXME config
+    private final ChatMessagesList<PrivateChatMessage> privateChatMessages = new ChatMessagesList<>(JsonConfig.getInstance().getMaxPrivateChatSize());
 
     /**
      * The {@link ViewStartSetup} of the game.

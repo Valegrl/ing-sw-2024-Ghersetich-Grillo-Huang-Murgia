@@ -14,10 +14,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.lobby.PlayerUnreadyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.lobby.QuitLobbyEvent;
 import it.polimi.ingsw.model.card.CardType;
 import it.polimi.ingsw.model.player.Token;
-import it.polimi.ingsw.utils.Account;
-import it.polimi.ingsw.utils.ChatMessage;
-import it.polimi.ingsw.utils.Coordinate;
-import it.polimi.ingsw.utils.PrivateChatMessage;
+import it.polimi.ingsw.utils.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,6 +41,7 @@ public class GameControllerTest {
 
     @BeforeEach
     public void setup() {
+        JsonConfig.loadConfig();
         gl1 = (event)-> System.out.println("1: "+ event.getID());
         gl2 = (event)-> System.out.println("2: "+ event.getID());
         gl3 = (event)-> System.out.println("3: "+ event.getID());

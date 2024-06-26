@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.deck.factory;
 
 import com.google.gson.*;
+import it.polimi.ingsw.utils.JsonConfig;
 import org.junit.jupiter.api.Test;
 import it.polimi.ingsw.model.evaluator.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ class EvaluatorTypeAdapterTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         evaluatorTypeAdapter = new EvaluatorTypeAdapter();
         context = Mockito.mock(JsonDeserializationContext.class);
         jsonElement = Mockito.mock(JsonElement.class);

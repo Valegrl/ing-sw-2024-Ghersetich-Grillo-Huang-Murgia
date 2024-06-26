@@ -68,7 +68,7 @@ public class ReconnectMenuController extends FXMLController {
      * It sets the preferred width and height properties of the VBox relative to the width and height of the mainAnchor.
      * The relative sizes are defined by the vBoxWidthPercentage and vBoxHeightPercentage variables.
      */
-    public void initialize(){
+    public void initialize() {
         double vBoxWidthPercentage = 0.90;
         double vBoxHeightPercentage = 0.80;
 
@@ -84,7 +84,7 @@ public class ReconnectMenuController extends FXMLController {
      * The constructor for the ReconnectMenuController class.
      * Calls the superclass constructor.
      */
-    public ReconnectMenuController(){
+    public ReconnectMenuController() {
         super();
     }
 
@@ -92,19 +92,18 @@ public class ReconnectMenuController extends FXMLController {
      * The run method is called to initialize the view and stage for the controller.
      * It also sets up a mouse click event for the lobbies table.
      *
-     * @param view the view to be set up
+     * @param view  the view to be set up
      * @param stage the stage to be set up
      */
     @Override
-    public void run(View view, Stage stage){
+    public void run(View view, Stage stage) {
         this.view = view;
         this.stage = stage;
         this.controller = view.getController();
         lobbiesTable.setPlaceholder(new Label(""));
 
         lobbiesTable.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2 && (!lobbiesTable.getSelectionModel().isEmpty()))
-            {
+            if (event.getClickCount() == 2 && (!lobbiesTable.getSelectionModel().isEmpty())) {
                 LobbyState selectedLobby = lobbiesTable.getSelectionModel().getSelectedItem();
                 String lobbyID = selectedLobby.getId();
                 reconnectToGame(lobbyID);
@@ -123,31 +122,30 @@ public class ReconnectMenuController extends FXMLController {
      * they will be able to reconnect at the stage of the{@link InGameController}.
      *
      * @param feedback the feedback received from the server
-     * @param message the message received from the server
-     * @param eventID the ID of the event that triggered the response
+     * @param message  the message received from the server
+     * @param eventID  the ID of the event that triggered the response
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        switch (EventID.getByID(eventID)){
-            case GET_MY_OFFLINE_GAMES :
+        switch (EventID.getByID(eventID)) {
+            case GET_MY_OFFLINE_GAMES:
                 if (feedback == Feedback.SUCCESS) {
-                Platform.runLater(this::printOfflineGames);
-                }
-                else {
+                    Platform.runLater(this::printOfflineGames);
+                } else {
                     Platform.runLater(() -> errorLabel.setText("Failed to get offline games"));
                 }
                 break;
             case RECONNECT_TO_GAME:
-                if(feedback == Feedback.SUCCESS){
-                    if(!controller.isInSetup()) {
+                if (feedback == Feedback.SUCCESS) {
+                    if (!controller.isInSetup()) {
                         Platform.runLater(() -> {
                             try {
                                 switchScreen("InGame");
                             } catch (IOException exception) {
-                                throw new RuntimeException("FXML Exception: failed to load InGame",exception);
+                                throw new RuntimeException("FXML Exception: failed to load InGame", exception);
                             }
                         });
-                    } else if(controller.isInSetup()) {
+                    } else if (controller.isInSetup()) {
                         Platform.runLater(() -> {
                             reconnectLabel.setText("Wait, we are connecting you to the game.");
                             backButton.setVisible(false);
@@ -156,8 +154,7 @@ public class ReconnectMenuController extends FXMLController {
                             quitButton.setManaged(true);
                         });
                     }
-                }
-                else{
+                } else {
                     Platform.runLater(() -> {
                         errorLabel.setText(message);
                         PauseTransition pause = new PauseTransition(Duration.seconds(20));
@@ -176,7 +173,7 @@ public class ReconnectMenuController extends FXMLController {
                 });
                 break;
             case CHOOSE_TOKEN_SETUP:
-                if(!controller.isInTokenSetup()) {
+                if (!controller.isInTokenSetup()) {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("TokenSetup");
@@ -191,12 +188,12 @@ public class ReconnectMenuController extends FXMLController {
                     try {
                         switchScreen("InGame");
                     } catch (IOException exception) {
-                        throw new RuntimeException("FXML Exception: failed to load InGame",exception);
+                        throw new RuntimeException("FXML Exception: failed to load InGame", exception);
                     }
                 });
                 break;
             case QUIT_GAME:
-                if (feedback == Feedback.SUCCESS){
+                if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("Menu");
@@ -204,8 +201,7 @@ public class ReconnectMenuController extends FXMLController {
                             throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                         }
                     });
-                }
-                else {
+                } else {
                     Platform.runLater(() -> errorLabel.setText("Can't quit from the reconnection"));
                 }
                 break;
@@ -217,11 +213,10 @@ public class ReconnectMenuController extends FXMLController {
      * It loads the menu view and transitions to the {@link MenuController}.
      */
     @FXML
-    public void goBack(){
+    public void goBack() {
         try {
             switchScreen("Menu");
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             throw new RuntimeException("FXML Exception: failed to load Menu", exception);
         }
     }
@@ -231,7 +226,7 @@ public class ReconnectMenuController extends FXMLController {
      * It creates a new {@link QuitGameEvent} and sends it to the controller.
      */
     @FXML
-    public void quit(){
+    public void quit() {
         QuitGameEvent event = new QuitGameEvent();
         controller.newViewEvent(event);
     }
@@ -256,15 +251,14 @@ public class ReconnectMenuController extends FXMLController {
      * If there are no offline games available, it sets the text of the errorLabel to indicate that there are no games to reconnect to.
      */
     private void printOfflineGames() {
-        if(!controller.getOfflineGames().isEmpty()){
+        if (!controller.getOfflineGames().isEmpty()) {
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));
             numPlayers.setCellValueFactory(new PropertyValueFactory<>("onlinePlayers"));
             numRequired.setCellValueFactory(new PropertyValueFactory<>("requiredPlayers"));
 
             List<LobbyState> offlineGames = controller.getOfflineGames();
             lobbiesTable.getItems().addAll(offlineGames);
-        }
-        else{
+        } else {
             errorLabel.setText("There's no game to reconnect to");
         }
     }
@@ -275,7 +269,7 @@ public class ReconnectMenuController extends FXMLController {
      *
      * @param lobbyID the ID of the lobby to reconnect to
      */
-    private void reconnectToGame(String lobbyID){
+    private void reconnectToGame(String lobbyID) {
         Event event = new ReconnectToGameEvent(lobbyID);
         controller.newViewEvent(event);
     }
@@ -287,7 +281,7 @@ public class ReconnectMenuController extends FXMLController {
      * @return true
      */
     @Override
-    public boolean inMenu(){
+    public boolean inMenu() {
         return true;
     }
 
@@ -298,7 +292,7 @@ public class ReconnectMenuController extends FXMLController {
      * @return true
      */
     @Override
-    public boolean inGame(){
+    public boolean inGame() {
         return true;
     }
 }

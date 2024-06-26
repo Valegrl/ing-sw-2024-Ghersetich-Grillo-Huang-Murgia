@@ -6,6 +6,7 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.AvailableLobbiesEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.CreateLobbyEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.JoinLobbyEvent;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.utils.LobbyState;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
@@ -57,7 +58,7 @@ public class EnterLobbiesController extends FXMLController {
      * When the enter key is pressed in the lobby name field, it triggers the creation of a new lobby.
      * When a lobby in the lobbies table is double-clicked, it triggers the joining of the selected lobby.
      *
-     * @param view The view associated with this controller.
+     * @param view  The view associated with this controller.
      * @param stage The stage on which the GUI is displayed.
      */
     @Override
@@ -75,8 +76,7 @@ public class EnterLobbiesController extends FXMLController {
         });
 
         lobbiesTable.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2 && (!lobbiesTable.getSelectionModel().isEmpty()))
-            {
+            if (event.getClickCount() == 2 && (!lobbiesTable.getSelectionModel().isEmpty())) {
                 LobbyState selectedLobby = lobbiesTable.getSelectionModel().getSelectedItem();
                 String lobbyID = selectedLobby.getId();
                 joinLobby(lobbyID);
@@ -93,8 +93,8 @@ public class EnterLobbiesController extends FXMLController {
      * If the feedback is not successful, it will display an error message on the GUI.
      *
      * @param feedback The feedback from the server indicating the success or failure of the request.
-     * @param message The message from the server providing additional information about the request.
-     * @param eventID The ID of the event that triggered the request.
+     * @param message  The message from the server providing additional information about the request.
+     * @param eventID  The ID of the event that triggered the request.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -102,8 +102,7 @@ public class EnterLobbiesController extends FXMLController {
             case EventID.AVAILABLE_LOBBIES:
                 if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(this::printAvailableLobbies);
-                }
-                else {
+                } else {
                     Platform.runLater(() -> errorLobbies.setText("Failed to get available lobbies from server: " + message));
                 }
                 break;
@@ -114,25 +113,24 @@ public class EnterLobbiesController extends FXMLController {
                             switchScreen("LobbyMenu");
                         } catch (IOException exception) {
                             errorLobbies.setText("Lobby creation failed");
-                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu",exception);
+                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu", exception);
                         }
                     });
                 } else {
                     Platform.runLater(() -> errorLobbies.setText("Lobby creation failed: " + message));
                 }
                 break;
-            case  EventID.JOIN_LOBBY:
-                if (feedback == Feedback.SUCCESS){
+            case EventID.JOIN_LOBBY:
+                if (feedback == Feedback.SUCCESS) {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("LobbyMenu");
                         } catch (IOException exception) {
                             errorLobbies.setText("Failed to join lobby");
-                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu",exception);
+                            throw new RuntimeException("FXML Exception: failed to load LobbyMenu", exception);
                         }
                     });
-                }
-                else{
+                } else {
                     Platform.runLater(() -> {
                         errorLobbies.setText("Failed to join lobby: " + message);
                         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -158,14 +156,14 @@ public class EnterLobbiesController extends FXMLController {
 
     /**
      * Handles the action of going back to the menu. It loads a new FXML scene.
+     *
      * @throws RuntimeException if there is an IOException when switching the screen.
      */
     @FXML
-    public void goBack(){
+    public void goBack() {
         try {
             switchScreen("Menu");
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             errorLobbies.setText("Error occurred, can't go back to menu");
             throw new RuntimeException("FXML Exception: failed to load Menu", exception);
         }
@@ -175,7 +173,7 @@ public class EnterLobbiesController extends FXMLController {
      * Refreshes the list of available lobbies.
      */
     @FXML
-    public void refreshLobbies(){
+    public void refreshLobbies() {
         errorLobbies.setText("");
         lobbiesTable.getItems().clear();
 
@@ -190,15 +188,14 @@ public class EnterLobbiesController extends FXMLController {
      * If there are no lobbies available, it sets the error message to indicate that no lobbies are available at the moment.
      */
     private void printAvailableLobbies() {
-        if(!controller.getLobbies().isEmpty()){
+        if (!controller.getLobbies().isEmpty()) {
             lobbyName.setCellValueFactory(new PropertyValueFactory<>("id"));
             numPlayers.setCellValueFactory(new PropertyValueFactory<>("onlinePlayers"));
             numRequired.setCellValueFactory(new PropertyValueFactory<>("requiredPlayers"));
 
             List<LobbyState> lobbies = controller.getLobbies();
             lobbiesTable.getItems().addAll(lobbies);
-        }
-        else{
+        } else {
             //showResponseMessage("No lobbies available.", 1000);
             errorLobbies.setText("No lobbies are available at the moment.");
         }
@@ -206,6 +203,7 @@ public class EnterLobbiesController extends FXMLController {
 
     /**
      * Submits a request to create a new lobby.
+     *
      * @param e The action event associated with the button click.
      */
     @FXML
@@ -214,13 +212,11 @@ public class EnterLobbiesController extends FXMLController {
         int requiredNumber = (int) requiredNumSlider.getValue();
         lobbyNameField.clear();
 
-        if(lobbyName.isEmpty()){
-          errorLobbies.setText("Lobby name can't be left empty!");
-        }
-        else if(lobbyName.length() > 32){
-            errorLobbies.setText("Lobby name can't be longer than 32 characters!");
-        }
-        else {
+        if (lobbyName.isEmpty()) {
+            errorLobbies.setText("Lobby name can't be left empty!");
+        } else if (lobbyName.length() > JsonConfig.getInstance().getMaxLobbyIdLength()) {
+            errorLobbies.setText("Lobby name can't be longer than "+JsonConfig.getInstance().getMaxLobbyIdLength()+" characters!");
+        } else {
             Event event = new CreateLobbyEvent(lobbyName, requiredNumber);
             controller.newViewEvent(event);
 
@@ -229,9 +225,10 @@ public class EnterLobbiesController extends FXMLController {
 
     /**
      * Joins a selected lobby.
+     *
      * @param lobbyID The ID of the selected lobby.
      */
-    private void joinLobby(String lobbyID){
+    private void joinLobby(String lobbyID) {
         Event event = new JoinLobbyEvent(lobbyID);
         controller.newViewEvent(event);
     }

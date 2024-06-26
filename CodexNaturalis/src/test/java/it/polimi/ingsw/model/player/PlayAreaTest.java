@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.JsonConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,6 +17,7 @@ class PlayAreaTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         startCard = Mockito.mock(StartCard.class);
         Mockito.when(startCard.getId()).thenReturn("SC01");
         Mockito.when(startCard.getBackPermanentResources()).thenReturn(Collections.singletonList(Item.INSECT));

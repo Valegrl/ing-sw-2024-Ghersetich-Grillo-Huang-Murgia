@@ -15,7 +15,10 @@ import it.polimi.ingsw.utils.PrivateChatMessage;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.viewModel.ViewStartSetup;
-import it.polimi.ingsw.viewModel.immutableCard.*;
+import it.polimi.ingsw.viewModel.immutableCard.BackPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmObjectiveCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
+import it.polimi.ingsw.viewModel.immutableCard.ImmStartCard;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -24,10 +27,13 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -202,7 +208,7 @@ public class GameSetupController extends FXMLController {
     /**
      * Default constructor for the GameSetupController class.
      */
-    public GameSetupController(){
+    public GameSetupController() {
         super();
     }
 
@@ -212,17 +218,17 @@ public class GameSetupController extends FXMLController {
      * The relative sizes are defined by the relativePercentage variables.
      * The method also sets the minimum height property of the {@code vboxChat} component relative to the {@code mainAnchor}'s height.
      */
-    public void initialize(){
+    public void initialize() {
         double relativePercentage = 0.12;
         double relativePercentage1 = 0.10;
         double relativePercentageChoose = 0.50;
         double relativePercentageText = 0.20;
 
         List<ImageView> imageViews = Arrays.asList(handCard0, handCard1, handCard2,
-                                                   opponentHandCard0, opponentHandCard1, opponentHandCard2,
-                                                   commonObjectiveCard0, commonObjectiveCard1,
-                                                   secretObjectiveCard0, secretObjectiveCard1,
-                                                   startCardFront, startCardBack);
+                opponentHandCard0, opponentHandCard1, opponentHandCard2,
+                commonObjectiveCard0, commonObjectiveCard1,
+                secretObjectiveCard0, secretObjectiveCard1,
+                startCardFront, startCardBack);
 
         for (ImageView imageView : imageViews) {
             imageView.fitWidthProperty().bind(Bindings.createDoubleBinding(() ->
@@ -269,7 +275,8 @@ public class GameSetupController extends FXMLController {
      * The initialization includes setting up the chat, the buttons for viewing other players' setup, the radio buttons in chat, one for each
      * specific player in the game, the images for showing other player's back cards in the hand, the images for showing this player's hand,
      * the cards in the resource deck and in the gold deck, the common objectives and the secret objectives.
-     * @param view The view associated with this controller.
+     *
+     * @param view  The view associated with this controller.
      * @param stage The stage that this controller controls.
      */
     @Override
@@ -310,20 +317,21 @@ public class GameSetupController extends FXMLController {
      * - Receipt of a new chat message.
      * - A player exiting the game.
      * - Transition to the subsequent game phase, specifically the selection of colored tokens.
+     *
      * @param feedback The feedback from the server.
-     * @param message The message from the server.
-     * @param eventID The event ID of the response.
+     * @param message  The message from the server.
+     * @param eventID  The event ID of the response.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
-        switch(EventID.getByID(eventID)) {
+        switch (EventID.getByID(eventID)) {
             case GET_CHAT_MESSAGES:
                 String getChatFormattedMessages = message.replace("[1m", " ").replace("[0m", "");
-                Platform.runLater(() ->chatArea.appendText(getChatFormattedMessages + "\n"
+                Platform.runLater(() -> chatArea.appendText(getChatFormattedMessages + "\n"
                         + "You're playing in the lobby: " + controller.getLobbyId() + "\n"));
                 break;
             case CHOSEN_CARDS_SETUP:
-                Platform.runLater(() ->{
+                Platform.runLater(() -> {
                     chatArea.appendText("\n" + message + "\n");
                     readyButton.setVisible(false);
                 });
@@ -337,9 +345,8 @@ public class GameSetupController extends FXMLController {
             case CHOOSE_TOKEN_SETUP:
                 Platform.runLater(() -> {
                     try {
-                       switchScreen("TokenSetup");
-                    }
-                    catch (IOException exception){
+                        switchScreen("TokenSetup");
+                    } catch (IOException exception) {
                         throw new RuntimeException("FXML Exception: failed to load TokenSetup", exception);
                     }
                 });
@@ -349,19 +356,17 @@ public class GameSetupController extends FXMLController {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("EnterLobbiesMenu");
-                        }
-                        catch (IOException exception){
+                        } catch (IOException exception) {
                             throw new RuntimeException("FXML Exception: failed to load EnterLobbies", exception);
                         }
                     });
-                }
-                else{
+                } else {
                     Platform.runLater(() -> chatArea.appendText("Something bad happened, you can't quit!"));
                 }
                 break;
             case CHAT_GM, CHAT_PM:
                 if (feedback.equals(Feedback.SUCCESS)) {
-                    String formattedMessage = message.replace("[1m", " ").replace("[0m","");
+                    String formattedMessage = message.replace("[1m", " ").replace("[0m", "");
                     Platform.runLater(() -> chatArea.appendText(formattedMessage + "\n"));
                 } else {
                     Platform.runLater(() -> chatArea.appendText("Message unable to send!\n"));
@@ -376,7 +381,7 @@ public class GameSetupController extends FXMLController {
      * It also handles when the player wants to play the start card flipped or not flipped by adding the same effect.
      * The method uses a DropShadow effect to highlight the chosen card.
      */
-    private void addChoiceSelection(){
+    private void addChoiceSelection() {
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
@@ -415,7 +420,7 @@ public class GameSetupController extends FXMLController {
      * For the cards in the player's hand, the method changes the image of the card to its back side when the mouse enters its area,
      * and changes it back to the front side when the mouse exits its area.
      */
-    private void addHoverEffect(){
+    private void addHoverEffect() {
         DropShadow highlight = new DropShadow();
         highlight.setColor(Color.WHITE);
         highlight.setRadius(10.0);
@@ -423,46 +428,46 @@ public class GameSetupController extends FXMLController {
         highlight.setOffsetY(0);
 
         secretObjectiveCard0.setOnMouseEntered(event ->
-            secretObjectiveCard0.setEffect(highlight));
+                secretObjectiveCard0.setEffect(highlight));
         secretObjectiveCard0.setOnMouseExited(event -> {
-            if(objectiveChosen == null || (!objectiveChosen.equals(objectiveChoice0))) {
+            if (objectiveChosen == null || (!objectiveChosen.equals(objectiveChoice0))) {
                 secretObjectiveCard0.setEffect(null);
             }
         });
 
         secretObjectiveCard1.setOnMouseEntered(event ->
-            secretObjectiveCard1.setEffect(highlight));
+                secretObjectiveCard1.setEffect(highlight));
         secretObjectiveCard1.setOnMouseExited(event -> {
-            if(objectiveChosen == null || (!objectiveChosen.equals(objectiveChoice1))) {
+            if (objectiveChosen == null || (!objectiveChosen.equals(objectiveChoice1))) {
                 secretObjectiveCard1.setEffect(null);
             }
         });
 
         startCardFront.setOnMouseEntered(event ->
-            startCardFront.setEffect(highlight));
+                startCardFront.setEffect(highlight));
         startCardFront.setOnMouseExited(event -> {
-            if(flippedChoice == null || flippedChoice) {
+            if (flippedChoice == null || flippedChoice) {
                 startCardFront.setEffect(null);
             }
         });
 
         startCardBack.setOnMouseEntered(event ->
-            startCardBack.setEffect(highlight));
+                startCardBack.setEffect(highlight));
         startCardBack.setOnMouseExited(event -> {
-            if(flippedChoice == null || !flippedChoice) {
+            if (flippedChoice == null || !flippedChoice) {
                 startCardBack.setEffect(null);
             }
         });
 
         int i = 0;
-        for(ImmPlayableCard card : myHand){
+        for (ImmPlayableCard card : myHand) {
             Image backCardImage = getBackCardImage(card.getPermanentResource(), card.getType());
             Image frontCardImage = handCardImages.get(i).getImage();
             ImageView currHandImage = handCardImages.get(i);
             currHandImage.setOnMouseEntered(event ->
-                currHandImage.setImage(backCardImage));
+                    currHandImage.setImage(backCardImage));
             currHandImage.setOnMouseExited(event ->
-                currHandImage.setImage(frontCardImage));
+                    currHandImage.setImage(frontCardImage));
             i++;
         }
     }
@@ -473,9 +478,9 @@ public class GameSetupController extends FXMLController {
      * The Image object is created based on the card's ID and type (gold or resource).
      * The image is then set to the corresponding ImageView in the handCardImages list.
      */
-    private void showMyHand(){
+    private void showMyHand() {
         int i = 0;
-        for(ImmPlayableCard card : myHand){
+        for (ImmPlayableCard card : myHand) {
             handCardImages.get(i).setImage(getFrontCardImage(card.getId(), card.getType()));
             i++;
         }
@@ -488,7 +493,7 @@ public class GameSetupController extends FXMLController {
      * Conversely, it makes the ImageView objects in the {@code opponentsHandCardImages} list invisible and unmanaged.
      */
     @FXML
-    public void showYourSetup(){
+    public void showYourSetup() {
         text4.setVisible(true);
         text3.setVisible(true);
         text0.setText("Choose a side to play the start card and one secret objective card.");
@@ -497,11 +502,11 @@ public class GameSetupController extends FXMLController {
         startCardHBox.setManaged(true);
         startCardHBox.setVisible(true);
 
-        for(ImageView imageView : handCardImages){
+        for (ImageView imageView : handCardImages) {
             imageView.setManaged(true);
             imageView.setVisible(true);
         }
-        for(ImageView imageView : opponentsHandCardImages){
+        for (ImageView imageView : opponentsHandCardImages) {
             imageView.setManaged(false);
             imageView.setVisible(false);
         }
@@ -514,14 +519,14 @@ public class GameSetupController extends FXMLController {
      * It then calls the showOthersHand method with the text of setupButton as the argument.
      */
     @FXML
-    public void showPlayerSetup(ActionEvent e){
+    public void showPlayerSetup(ActionEvent e) {
         text3.setVisible(false);
         text4.setVisible(false);
-        for(ImageView imageView : handCardImages){
+        for (ImageView imageView : handCardImages) {
             imageView.setManaged(false);
             imageView.setVisible(false);
         }
-        for(ImageView imageView : opponentsHandCardImages){
+        for (ImageView imageView : opponentsHandCardImages) {
             imageView.setManaged(true);
             imageView.setVisible(true);
         }
@@ -541,17 +546,17 @@ public class GameSetupController extends FXMLController {
      *
      * @param user The username of the player whose hand is to be displayed.
      */
-    private void showOthersHand(String user){
+    private void showOthersHand(String user) {
         secretObjectiveHBox.setManaged(false);
         secretObjectiveHBox.setVisible(false);
         startCardHBox.setManaged(false);
         startCardHBox.setVisible(false);
 
         Map<String, List<BackPlayableCard>> opponentsBackHandCards = setup.getOpponentsBackHandCards();
-        for(String username : opponentsBackHandCards.keySet()){
-            if(username.equals(user)){
+        for (String username : opponentsBackHandCards.keySet()) {
+            if (username.equals(user)) {
                 int i = 0;
-                for(BackPlayableCard bpc : opponentsBackHandCards.get(user)){
+                for (BackPlayableCard bpc : opponentsBackHandCards.get(user)) {
                     Image backCardImage = getBackCardImage(bpc.getItem(), bpc.getCardType());
                     opponentsHandCardImages.get(i).setImage(backCardImage);
                     i++;
@@ -566,9 +571,9 @@ public class GameSetupController extends FXMLController {
      * Then, it creates an Image object for the back of the gold deck based on the item type and sets it to the ImageView of the gold deck.
      * It also creates Image objects for the front of the visible gold cards based on their IDs and sets them to the corresponding ImageViews.
      */
-    private void showGoldDeck(){
+    private void showGoldDeck() {
         Item itemGoldDeck = setup.getGoldDeck();
-        ImmPlayableCard[] visibleGoldCards  = setup.getVisibleGoldCards();
+        ImmPlayableCard[] visibleGoldCards = setup.getVisibleGoldCards();
         Image image = getBackCardImage(itemGoldDeck, CardType.GOLD);
         goldDeck.setImage(image);
 
@@ -582,7 +587,7 @@ public class GameSetupController extends FXMLController {
      * Then, it creates an Image object for the back of the resource deck based on the item type and sets it to the ImageView of the resource deck.
      * It also creates Image objects for the front of the visible resource cards based on their IDs and sets them to the corresponding ImageViews.
      */
-    private void showResourceDeck(){
+    private void showResourceDeck() {
         Item itemResourceDeck = setup.getResourceDeck();
         ImmPlayableCard[] visibleResourceCards = setup.getVisibleResourceCards();
         Image image = getBackCardImage(itemResourceDeck, CardType.RESOURCE);
@@ -598,7 +603,7 @@ public class GameSetupController extends FXMLController {
      * Then, it creates an Image object for each common objective card based on the card's ID.
      * The image is then set to the corresponding ImageView in the GUI.
      */
-    private void showCommonObjectives(){
+    private void showCommonObjectives() {
         ImmObjectiveCard[] commonObjectives = setup.getCommonObjectives();
         ImmObjectiveCard commonObjective0 = commonObjectives[0];
         ImmObjectiveCard commonObjective1 = commonObjectives[1];
@@ -614,7 +619,7 @@ public class GameSetupController extends FXMLController {
      * Then, it creates an Image object for each secret objective card based on the card's ID.
      * The image is then set to the corresponding ImageView in the GUI.
      */
-    private void showSecretObjectives(){
+    private void showSecretObjectives() {
         ImmObjectiveCard[] secretObjectives = setup.getSecretObjectiveCards();
         objectiveChoice0 = secretObjectives[0];
         objectiveChoice1 = secretObjectives[1];
@@ -630,7 +635,7 @@ public class GameSetupController extends FXMLController {
      * Then, it creates two Image objects for the front and back of the start card based on the card's ID.
      * The images are then set to the corresponding ImageViews in the GUI.
      */
-    private void showStartCard(){
+    private void showStartCard() {
         ImmStartCard startCard = setup.getStartCard();
         Image startCardFront = new Image("it/polimi/ingsw/images/cards/playable/start/front/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
         Image startCardBack = new Image("it/polimi/ingsw/images/cards/playable/start/back/" + startCard.getId() + ".png", getWCardRes(), getHCardRes(), true, true);
@@ -640,6 +645,7 @@ public class GameSetupController extends FXMLController {
 
     /**
      * Method to set the name of the lobby so that the player can see the lobby's name.
+     *
      * @param lobbyName the name of the lobby
      */
     private void setLobbyName(String lobbyName) {
@@ -652,16 +658,15 @@ public class GameSetupController extends FXMLController {
      * If the player has not made their choices, it appends a message on the chat.
      */
     @FXML
-    public void readySetup(){
-        if(objectiveChosen != null && flippedChoice != null) {
+    public void readySetup() {
+        if (objectiveChosen != null && flippedChoice != null) {
             if (objectiveChosen.equals(objectiveChoice0)) {
                 controller.chosenSetup(1, flippedChoice);
             }
             if (objectiveChosen.equals(objectiveChoice1)) {
                 controller.chosenSetup(2, flippedChoice);
             }
-        }
-        else{
+        } else {
             chatArea.appendText("GAME: You didn't choose your setup!\n");
         }
     }
@@ -670,7 +675,7 @@ public class GameSetupController extends FXMLController {
      * This method is used to update the game setup view when a player leaves the game setup phase.
      * It updates the players'  buttons, chat options, and shows the current player's setup.
      */
-    private void update(){
+    private void update() {
         updatePlayers();
         updateChatOptions();
         showYourSetup();
@@ -680,16 +685,16 @@ public class GameSetupController extends FXMLController {
      * This method is used to update the players' view in the game setup.
      * It iterates over the players' status and updates the setup buttons accordingly.
      */
-    private void updatePlayers(){
+    private void updatePlayers() {
         int i = 0;
-        for(String user : controller.getPlayersStatus().keySet()) {
+        for (String user : controller.getPlayersStatus().keySet()) {
             if (!controller.getUsername().equals(user)) {
                 setupButtons.get(i).setVisible(true);
                 setupButtons.get(i).setText(user);
                 i++;
             }
         }
-        while(i < setupButtons.size()){
+        while (i < setupButtons.size()) {
             setupButtons.get(i).setVisible(false);
             setupButtons.get(i).setText("");
             i++;
@@ -700,17 +705,17 @@ public class GameSetupController extends FXMLController {
      * This method is used to update the chat options in the game setup view.
      * It iterates over the players' status and updates the radio buttons accordingly.
      */
-    private void updateChatOptions(){
+    private void updateChatOptions() {
         int i = 0;
         generalRadioButton.setSelected(true);
-        for(String user : controller.getPlayersStatus().keySet()){
-            if(!controller.getUsername().equals(user)){
+        for (String user : controller.getPlayersStatus().keySet()) {
+            if (!controller.getUsername().equals(user)) {
                 radioButtons.get(i).setVisible(true);
                 radioButtons.get(i).setText(user);
                 i++;
             }
         }
-        while(i < radioButtons.size()){
+        while (i < radioButtons.size()) {
             radioButtons.get(i).setVisible(false);
             radioButtons.get(i).setText("");
             i++;
@@ -722,7 +727,7 @@ public class GameSetupController extends FXMLController {
      * It sends a {@link QuitGameEvent} to the server.
      */
     @FXML
-    public void quitGame(){
+    public void quitGame() {
         Event event = new QuitGameEvent();
         controller.newViewEvent(event);
     }
@@ -732,13 +737,12 @@ public class GameSetupController extends FXMLController {
      * It sends a {@link ChatGMEvent} or {@link ChatPMEvent} to the server based on the selected radio button.
      */
     @FXML
-    public void submitMessage(){
+    public void submitMessage() {
         String message = chatInput.getText();
 
-        if(message.isEmpty()){
+        if (message.isEmpty()) {
             return;
-        }
-        else {
+        } else {
             if (generalRadioButton.isSelected()) {
                 sendPublicMessage(message);
             } else {
@@ -756,8 +760,8 @@ public class GameSetupController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is a specific user.
      */
-    private void sendPrivateMessage(String username, String message){
-        if(controller.getPlayersStatus().containsKey(username)) {
+    private void sendPrivateMessage(String username, String message) {
+        if (controller.getPlayersStatus().containsKey(username)) {
             controller.newViewEvent(new ChatPMEvent(new PrivateChatMessage(username, message)));
         }
     }
@@ -765,7 +769,7 @@ public class GameSetupController extends FXMLController {
     /**
      * This method is used to submit a private message if the selected radio button for chat is general.
      */
-    private void sendPublicMessage(String message){
+    private void sendPublicMessage(String message) {
         controller.newViewEvent(new ChatGMEvent(new ChatMessage(message)));
     }
 
@@ -774,7 +778,7 @@ public class GameSetupController extends FXMLController {
      * It returns true as the player is in the game during the game setup phase.
      */
     @Override
-    public boolean inGame(){
+    public boolean inGame() {
         return true;
     }
 
@@ -783,7 +787,7 @@ public class GameSetupController extends FXMLController {
      * It returns true as the player is in the chat during the game setup phase.
      */
     @Override
-    public boolean inChat(){
+    public boolean inChat() {
         return true;
     }
 }

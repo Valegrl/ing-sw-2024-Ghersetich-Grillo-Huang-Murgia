@@ -1,0 +1,18 @@
+{
+  "serverSocketPort": 1098,
+  "rmiRegistryPort": 1099,
+  "rmiRegistryName": "CodexNaturalisServer51",
+  "pingTimeoutMs": 3000,
+  "maxUsernameLength": 16,
+  "maxLobbySize": 4,
+  "maxLobbyIdLength": 32,
+  "maxGlobalChatSize": 50,
+  "maxPrivateChatSize": 50,
+  "setupCardsTimerMs": 60000,
+  "setupTokensTimerMs": 30000,
+  "playerActionTimerMs": 120000,
+  "waitingForPlayersTimerMs": 120000,
+  "handSize": 3,
+  "handResourceCards": 2,
+  "handGoldCards": 1
+}

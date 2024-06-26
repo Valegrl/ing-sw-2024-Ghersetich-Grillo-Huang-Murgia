@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.card.Card;
+import it.polimi.ingsw.utils.JsonConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,6 +18,7 @@ class DeckTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         card1 = Mockito.mock(Card.class);
         card2 = Mockito.mock(Card.class);
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.eventUtils.GameListener;
 import it.polimi.ingsw.eventUtils.event.Event;
+import it.polimi.ingsw.utils.JsonConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,7 @@ class GameListenersManagerTest {
 
     @BeforeEach
     void setUp() {
+        JsonConfig.loadConfig();
         gameMock = mock(Game.class);
         listenerMock1 = mock(GameListener.class);
         listenerMock2 = mock(GameListener.class);

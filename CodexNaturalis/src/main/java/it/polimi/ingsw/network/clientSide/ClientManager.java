@@ -7,6 +7,7 @@ import it.polimi.ingsw.eventUtils.event.internal.PongEvent;
 import it.polimi.ingsw.eventUtils.event.internal.ServerDisconnectedEvent;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.view.controller.ViewController;
 
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
      */
     public void initRMI(String registryAddress) throws RemoteException {
         try {
-            server = (Server) Naming.lookup("rmi://"+registryAddress+"/CodexNaturalisServer51"); // TODO config?
+            server = (Server) Naming.lookup("rmi://"+registryAddress+"/"+JsonConfig.getInstance().getRmiRegistryName());
             server.join(this);
             connectionOpen = true;
             startPing();
@@ -240,7 +241,7 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                                 serverDisconnected();
                             }
                         };
-                        timer.schedule(task, 3000); // TODO config file?
+                        timer.schedule(task, JsonConfig.getInstance().getPingTimeoutMs());
                     }
 
                     // sending PingEvent
@@ -249,7 +250,8 @@ public class ClientManager extends UnicastRemoteObject implements Client {
                     System.err.println("\nCannot send ping to server.");
                 }
                 try {
-                    Thread.sleep(3000 * 2);
+                    int timeout = JsonConfig.getInstance().getPingTimeoutMs() * 2;
+                    Thread.sleep(timeout);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

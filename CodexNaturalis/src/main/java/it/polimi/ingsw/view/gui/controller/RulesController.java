@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 /**
@@ -19,7 +20,7 @@ import java.io.IOException;
  * It contains methods to initialize the view, switch the rule pages and go back to the main menu.
  * The class also contains a constructor that initializes an array of Image objects with the images of the rules.
  */
-public class RulesController extends FXMLController{
+public class RulesController extends FXMLController {
 
     @FXML
     private ImageView imageView;
@@ -46,7 +47,7 @@ public class RulesController extends FXMLController{
      * It initializes an array of Image objects with the images of the rules.
      * The images are loaded from the specified paths.
      */
-    public RulesController(){
+    public RulesController() {
         super();
         images[0] = new Image("/it/polimi/ingsw/images/rules/rules1.png");
         images[1] = new Image("/it/polimi/ingsw/images/rules/rules2.png");
@@ -62,7 +63,7 @@ public class RulesController extends FXMLController{
      * It also sets the initial image of the imageView and the page factory of the pagination.
      * An event listener is added to the currentPageIndexProperty of the pagination to update the image of the imageView when the page changes.
      *
-     * @param view The View object to be associated with this controller.
+     * @param view  The View object to be associated with this controller.
      * @param stage The Stage object to be associated with this controller.
      */
     @Override
@@ -80,6 +81,7 @@ public class RulesController extends FXMLController{
     /**
      * This method is used to create a new page for the Pagination control.
      * It currently returns a new VBox object for each page.
+     *
      * @param pageIndex The index of the page to be created.
      * @return a new VBox object.
      */
@@ -92,8 +94,8 @@ public class RulesController extends FXMLController{
      * Currently, it is not used in this controller.
      *
      * @param feedback The feedback from the server.
-     * @param message The message from the server.
-     * @param eventID The ID of the event.
+     * @param message  The message from the server.
+     * @param eventID  The ID of the event.
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -117,11 +119,10 @@ public class RulesController extends FXMLController{
      * If there is an IOException when switching the screen, it throws a RuntimeException.
      */
     @FXML
-    public void goBackMain(){
+    public void goBackMain() {
         try {
             switchScreen("MainMenu");
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             throw new RuntimeException("FXML Exception: failed to load MainMenu", exception);
         }
     }

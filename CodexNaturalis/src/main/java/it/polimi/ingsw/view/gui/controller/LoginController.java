@@ -5,6 +5,7 @@ import it.polimi.ingsw.eventUtils.event.Event;
 import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.LoginEvent;
 import it.polimi.ingsw.eventUtils.event.fromView.menu.RegisterEvent;
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.view.FXMLController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 /**
@@ -64,7 +66,7 @@ public class LoginController extends FXMLController {
      * The run method is called to initialize the view and stage for the controller.
      * It also sets up key press events for the password fields.
      *
-     * @param view the view to be set up
+     * @param view  the view to be set up
      * @param stage the stage to be set up
      */
     @Override
@@ -93,17 +95,15 @@ public class LoginController extends FXMLController {
      * @param e the action event
      */
     @FXML
-    public void submitRegister(ActionEvent e){
+    public void submitRegister(ActionEvent e) {
         String registerUsername = registerUsernameField.getText();
         String registerPassword = registerPasswordField.getText();
 
-        if(registerUsername.isEmpty() || registerPassword.isEmpty()){
+        if (registerUsername.isEmpty() || registerPassword.isEmpty()) {
             errorRegistration.setText("Username and password fields can't be left empty!");
-        }
-        else if(registerUsername.length() > 16 || registerPassword.length() > 16){
-            errorRegistration.setText("Username and password can't be longer than 16 characters!");
-        }
-        else{
+        } else if (registerUsername.length() > JsonConfig.getInstance().getMaxUsernameLength() || registerPassword.length() > JsonConfig.getInstance().getMaxUsernameLength()) {
+            errorRegistration.setText("Username and password can't be longer than "+JsonConfig.getInstance().getMaxUsernameLength()+" characters!");
+        } else {
             registerUsernameField.clear();
             registerPasswordField.clear();
             errorRegistration.setText("");
@@ -118,14 +118,13 @@ public class LoginController extends FXMLController {
      * @param e the action event
      */
     @FXML
-    public void submitLogin(ActionEvent e){
+    public void submitLogin(ActionEvent e) {
         String loginUsername = loginUsernameField.getText();
         String loginPassword = loginPasswordField.getText();
 
-        if(loginUsername.isEmpty() || loginPassword.isEmpty()){
+        if (loginUsername.isEmpty() || loginPassword.isEmpty()) {
             errorLogin.setText("Username and password fields can't be left empty!");
-        }
-        else{
+        } else {
             loginUsernameField.clear();
             loginPasswordField.clear();
             errorLogin.setText("");
@@ -140,7 +139,7 @@ public class LoginController extends FXMLController {
      * @param e the action event
      */
     @FXML
-    public void goLogin(ActionEvent e){
+    public void goLogin(ActionEvent e) {
 
         loginMenuFX.setVisible(false);
         loginMenuFX.setManaged(false);
@@ -155,7 +154,7 @@ public class LoginController extends FXMLController {
      * @param e the action event
      */
     @FXML
-    public void goRegister(ActionEvent e){
+    public void goRegister(ActionEvent e) {
 
         loginMenuFX.setVisible(false);
         loginMenuFX.setManaged(false);
@@ -170,7 +169,7 @@ public class LoginController extends FXMLController {
      * @param e the action event
      */
     @FXML
-    public void goBack(ActionEvent e){
+    public void goBack(ActionEvent e) {
 
         loginUsernameField.clear();
         loginPasswordField.clear();
@@ -192,8 +191,8 @@ public class LoginController extends FXMLController {
      * It updates the user interface based on the feedback received.
      *
      * @param feedback the feedback received from the server
-     * @param message the message received from the server
-     * @param eventID the ID of the event that triggered the response
+     * @param message  the message received from the server
+     * @param eventID  the ID of the event that triggered the response
      */
     @Override
     public void handleResponse(Feedback feedback, String message, String eventID) {
@@ -203,17 +202,16 @@ public class LoginController extends FXMLController {
                     Platform.runLater(() -> {
                         try {
                             switchScreen("Menu");
-                        }
-                        catch (IOException exception){
+                        } catch (IOException exception) {
                             errorLogin.setText("Login failed");
                             throw new RuntimeException("FXML Exception: failed to load Menu", exception);
                         }
                     });
                 } else {
-                     Platform.runLater(() -> {
-                         errorLogin.setText("Error " + message);
-                         loginUsernameField.requestFocus();
-                     });
+                    Platform.runLater(() -> {
+                        errorLogin.setText("Error " + message);
+                        loginUsernameField.requestFocus();
+                    });
                 }
                 break;
             case REGISTER:
@@ -240,7 +238,7 @@ public class LoginController extends FXMLController {
      * @param loginUsername the username to log in with
      * @param loginPassword the password to log in with
      */
-    private void login(String loginUsername, String loginPassword){
+    private void login(String loginUsername, String loginPassword) {
         Event event = new LoginEvent(loginUsername, loginPassword);
         controller.newViewEvent(event);
     }
@@ -251,7 +249,7 @@ public class LoginController extends FXMLController {
      * @param registerUsername the username to register with
      * @param registerPassword the password to register with
      */
-    private void register(String registerUsername, String registerPassword){
+    private void register(String registerUsername, String registerPassword) {
         Event event = new RegisterEvent(registerUsername, registerPassword);
         controller.newViewEvent(event);
     }

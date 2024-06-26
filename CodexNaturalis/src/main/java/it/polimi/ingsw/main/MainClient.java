@@ -1,5 +1,6 @@
 package it.polimi.ingsw.main;
 
+import it.polimi.ingsw.utils.JsonConfig;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
@@ -29,6 +30,7 @@ public class MainClient {
             System.out.println("Usage: java -jar JARNAME.jar -<own_ip> [-cli]");
             System.exit(1);
         }
+        JsonConfig.loadConfig();
         System.setProperty("java.rmi.server.hostname", args[0].substring(1));
         AnsiConsole.systemInstall();
         MainClient.view = (args.length > 1 && args[1].equals("-cli")) ? new TUI() : new GUI();

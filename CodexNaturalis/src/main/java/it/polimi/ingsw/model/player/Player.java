@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.exceptions.IllegalFirstHandException;
+import it.polimi.ingsw.utils.JsonConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -119,7 +120,7 @@ public class Player {
      * @throws IllegalFirstHandException If the player's starting hand isn't composed of 1 {@link GoldCard gold card} and 2 {@link ResourceCard resource cards}.
      */
     public void initPlayArea(List<PlayableCard> hand, StartCard c) {
-        if(hand.size() != 3){ // TODO constants ?
+        if(hand.size() != JsonConfig.getInstance().getHandSize()){
             throw new IllegalFirstHandException();
         }
 
@@ -135,7 +136,7 @@ public class Player {
             }
         }
 
-        if(goldCounter != 1 || resourceCounter != 2){
+        if(goldCounter != JsonConfig.getInstance().getHandGoldCards() || resourceCounter != JsonConfig.getInstance().getHandResourceCards()){
             throw new IllegalFirstHandException();
         }
 
