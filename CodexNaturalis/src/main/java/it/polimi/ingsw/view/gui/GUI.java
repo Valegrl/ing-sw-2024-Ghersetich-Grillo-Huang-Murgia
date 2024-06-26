@@ -221,6 +221,16 @@ public class GUI extends Application implements View {
         this.username = username;
     }
 
+    /**
+     * Handles the response from the server.
+     * This method is called when a response is received from the server.
+     * It uses an ExecutorService to run the handling of the response in a separate thread.
+     * The handling of the response is delegated to the current FXMLController.
+     *
+     * @param eventID The ID of the event that the response is associated with.
+     * @param feedback The feedback received from the server.
+     * @param message The message received from the server.
+     */
     @Override
     public void handleResponse(String eventID, Feedback feedback, String message) {
         executor.execute(() -> FXMLController.handleResponse(feedback, message, eventID));
@@ -244,6 +254,14 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * Resets the user interface to its initial state.
+     * This method is called when the user interface needs to be reset, for example, after a disconnection from the server.
+     * It creates a new ViewController and ExecutorService, loads the main menu FXML file, sets the FXMLController to the controller of the loaded FXML file,
+     * creates a new Scene with the loaded FXML file, sets the scene of the stage to the new scene, sets the stage to full screen, and runs the FXMLController.
+     *
+     * @throws RuntimeException If there is an IOException when loading the FXML file.
+     */
     @Override
     public void resetUI() {
         Platform.runLater(() -> {

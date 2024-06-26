@@ -207,7 +207,7 @@ public class EnterLobbiesController extends FXMLController {
      * @param e The action event associated with the button click.
      */
     @FXML
-    private void submitCreateLobby(ActionEvent e) {
+    public void submitCreateLobby(ActionEvent e) {
         String lobbyName = lobbyNameField.getText();
         int requiredNumber = (int) requiredNumSlider.getValue();
         lobbyNameField.clear();
