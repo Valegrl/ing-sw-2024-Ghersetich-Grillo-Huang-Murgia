@@ -41,7 +41,7 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 | Package    | Class, %     | Method, %     | Line, %       | Branches, %   |
 |:-----------|:-------------|:--------------|:--------------|:--------------|
 | Model      | 100% (30/30) | 98% (147/150) | 97% (643/662) | 84% (311/370) |
-| Controller | 100% (3/3)   | 95% (90/94)   | 86% (652/753) | 70% (423/598) |
+| Controller | 100% (3/3)   | 95% (91/95)   | 86% (674/777) | 70% (432/614) |
 
 ## Execution Instructions
 

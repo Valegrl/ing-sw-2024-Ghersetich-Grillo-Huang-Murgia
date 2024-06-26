@@ -217,10 +217,17 @@ class VirtualViewTest {
     @Test
     void testEvaluateEventDeleteAccountEvent() {
         DeleteAccountEvent event = new DeleteAccountEvent();
+        DeleteAccountEvent response = new DeleteAccountEvent(Feedback.SUCCESS, "Success");
+        String username = "testUser";
+
+        when(controller.getVirtualViewUsername(virtualView)).thenReturn(username);
+        when(controller.deleteAccount(virtualView)).thenReturn(response);
 
         virtualView.evaluateEvent(event);
 
+        verify(controller, times(1)).getVirtualViewUsername(virtualView);
         verify(controller, times(1)).deleteAccount(virtualView);
+        verify(gameListener, times(1)).update(response);
     }
 
     @Test
@@ -262,10 +269,17 @@ class VirtualViewTest {
     @Test
     void testEvaluateEventLogoutEvent() {
         LogoutEvent event = new LogoutEvent();
+        LogoutEvent response = new LogoutEvent(Feedback.SUCCESS, "Success");
+        String username = "testUser";
+
+        when(controller.getVirtualViewUsername(virtualView)).thenReturn(username);
+        when(controller.logout(virtualView)).thenReturn(response);
 
         virtualView.evaluateEvent(event);
 
+        verify(controller, times(1)).getVirtualViewUsername(virtualView);
         verify(controller, times(1)).logout(virtualView);
+        verify(gameListener, times(1)).update(response);
     }
 
     @Test
@@ -318,9 +332,13 @@ class VirtualViewTest {
     @Test
     void testEvaluateEventClientDisconnectedEvent() {
         ClientDisconnectedEvent event = new ClientDisconnectedEvent();
+        String username = "testUser";
+
+        when(controller.getVirtualViewUsername(virtualView)).thenReturn(username);
 
         virtualView.evaluateEvent(event);
 
+        verify(controller, times(1)).getVirtualViewUsername(virtualView);
         verify(controller, times(1)).clientDisconnected(virtualView);
     }
 }

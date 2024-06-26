@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ControllerTest {
     private Controller controller;
@@ -115,7 +115,7 @@ class ControllerTest {
 
     @Test
     void testLogoutWithoutLogin() {
-        VirtualView virtualView = Mockito.mock(VirtualView.class);
+        VirtualView virtualView = mock(VirtualView.class);
 
         LogoutEvent result = controller.logout(virtualView);
 
@@ -127,7 +127,7 @@ class ControllerTest {
     void testLogoutWhenGameNotStarted() throws NoSuchFieldException, IllegalAccessException {
         controller.login(virtualView1, account1);
 
-        GameController gameController = Mockito.mock(GameController.class);
+        GameController gameController = mock(GameController.class);
         when(gameController.getPlayers()).thenReturn(Collections.singletonList(account1.getUsername()));
         when(gameController.isGameStarted()).thenReturn(false);
 
@@ -147,7 +147,7 @@ class ControllerTest {
     void testLogoutWhenGameStarted() throws NoSuchFieldException, IllegalAccessException {
         controller.login(virtualView1, account1);
 
-        GameController gameController = Mockito.mock(GameController.class);
+        GameController gameController = mock(GameController.class);
         when(gameController.getPlayers()).thenReturn(Collections.singletonList(account1.getUsername()));
         when(gameController.isGameStarted()).thenReturn(true);
 
@@ -613,5 +613,13 @@ class ControllerTest {
         assertEquals(1, controller.getGameControllers().getFirst().nOnlinePlayers());
         LogoutEvent logout = controller.logout(virtualView2);
         assertEquals(Feedback.SUCCESS, logout.getFeedback());
+    }
+
+    @Test
+    void testGetVirtualViewUsername() {
+        controller.login(virtualView1, account1);
+        assertEquals(username1, controller.getVirtualViewUsername(virtualView1));
+        assertEquals("", controller.getVirtualViewUsername(virtualView2));
+        controller.logout(virtualView1);
     }
 }

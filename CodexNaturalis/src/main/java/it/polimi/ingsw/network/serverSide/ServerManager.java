@@ -139,7 +139,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
      * @param event The {@link Event} to manage.
      * @param client The {@link Client} that sent the {@link Event}.
      */
-    private void manage(Event event, Client client) {
+    private synchronized void manage(Event event, Client client) {
         synchronized (virtualViews) {
            VirtualView virtualView = virtualViews.get(client);
            virtualView.handle(event);
