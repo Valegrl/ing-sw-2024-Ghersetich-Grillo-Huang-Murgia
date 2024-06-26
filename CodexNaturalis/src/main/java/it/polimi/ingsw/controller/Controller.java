@@ -363,7 +363,7 @@ public class Controller {
      * @return true if the format is invalid, false otherwise.
      */
     private boolean isFormatInvalid(String input) {
-        return input == null || input.isEmpty() || input.contains(" ") || input.length() > 16; //FIXME config file
+        return input == null || input.isEmpty() || input.contains(" ") || input.length() > JsonConfig.getInstance().getMaxUsernameLength();
     }
 
     /**

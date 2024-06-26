@@ -201,9 +201,9 @@ public class VirtualView {
      * @param event The QuitGameEvent to be evaluated.
      */
     public void evaluateEvent(QuitGameEvent event){
-        if(gameController != null)
+        if(gameController != null) {
             listener.update(gameController.quitGame(this));
-        else
+        } else
             listener.update(new QuitLobbyEvent(Feedback.FAILURE, "An unexpected action occurred."));
     }
 
