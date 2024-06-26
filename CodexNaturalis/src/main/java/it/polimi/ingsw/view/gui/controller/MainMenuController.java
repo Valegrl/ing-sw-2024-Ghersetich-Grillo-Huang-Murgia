@@ -81,12 +81,10 @@ public class MainMenuController extends FXMLController {
      */
     @FXML
     public void goOptions() {
-
         mainMenuFX.setVisible(false);
         mainMenuFX.setManaged(false);
         optionsMenuFX.setVisible(true);
         optionsMenuFX.setManaged(true);
-
     }
 
     /**
@@ -94,8 +92,6 @@ public class MainMenuController extends FXMLController {
      */
     @FXML
     public void setFullscreen() {
-        //stage.setResizable(false);
-        //stage.setResizable(false);
         stage.setFullScreen(!stage.isFullScreen());
     }
 
@@ -104,14 +100,12 @@ public class MainMenuController extends FXMLController {
      */
     @FXML
     public void goBack() {
-
         mainMenuFX.setVisible(true);
         mainMenuFX.setManaged(true);
         optionsMenuFX.setVisible(false);
         optionsMenuFX.setManaged(false);
         creditsMenuFX.setVisible(false);
         creditsMenuFX.setManaged(false);
-
     }
 
     /**
@@ -156,6 +150,5 @@ public class MainMenuController extends FXMLController {
     public boolean inMenu() {
         return true;
     }
-
 
 }
