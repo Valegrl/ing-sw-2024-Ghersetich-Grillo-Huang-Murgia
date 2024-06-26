@@ -181,7 +181,7 @@ public class ServerManager extends UnicastRemoteObject implements Server {
      */
     private void clientDisconnected(Client client) {
         Event disconnectedEvent = new ClientDisconnectedEvent();
-        disconnectedEvent.receiveEvent(virtualViews.get(client));
+        manage(disconnectedEvent, client);
         try {
             client.closeConnection();
         } catch (RemoteException ignored){} // ignored because rmi will always throw an exception when the client is offline

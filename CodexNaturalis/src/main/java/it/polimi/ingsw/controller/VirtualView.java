@@ -93,7 +93,6 @@ public class VirtualView {
                 }
                 eventToManage.receiveEvent(this);
             }
-            logger.log(Level.INFO, "Disconnected.");
         }).start();
     }
 
@@ -282,6 +281,9 @@ public class VirtualView {
             response = controller.createLobby(this, listener, lobbyID, event.getRequiredPlayers());
             gameController = response.value();
             listener.update(response.key());
+            if(response.key().getFeedback().equals(Feedback.SUCCESS)) {
+                logger.log(Level.INFO, "New lobby " + event.getLobbyID() + " created.");
+            }
         } else
             listener.update(new CreateLobbyEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
     }
@@ -291,8 +293,13 @@ public class VirtualView {
      *
      * @param event The DeleteAccountEvent to be evaluated.
      */
-    public void evaluateEvent(DeleteAccountEvent event){
-        listener.update(controller.deleteAccount(this));
+    public void evaluateEvent(DeleteAccountEvent event) {
+        String username = controller.getVirtualViewUsername(this);
+        DeleteAccountEvent deleteAccountEvent = controller.deleteAccount(this);
+        listener.update(deleteAccountEvent);
+        if (deleteAccountEvent.getFeedback().equals(Feedback.SUCCESS)) {
+            logger.log(Level.INFO, "Account " + username + " deleted.");
+        }
     }
 
     /**
@@ -315,6 +322,9 @@ public class VirtualView {
             Pair<JoinLobbyEvent, GameController> response = controller.joinLobby(this, listener, lobbyID);
             gameController = response.value();
             listener.update(response.key());
+            if (response.key().getFeedback().equals(Feedback.SUCCESS)) {
+                logger.log(Level.INFO, "User " + controller.getVirtualViewUsername(this) + " joined " + event.getLobbyID() + " lobby.");
+            }
         } else
             listener.update(new JoinLobbyEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
     }
@@ -329,6 +339,9 @@ public class VirtualView {
         if (account != null) {
             LoginEvent response = controller.login(this, account);
             listener.update(response);
+            if (response.getFeedback().equals(Feedback.SUCCESS)) {
+                logger.log(Level.INFO, "User " + controller.getVirtualViewUsername(this) + " logged in.");
+            }
         } else
             listener.update(new LoginEvent(Feedback.FAILURE, null, "Some of the event's parameters are null."));
     }
@@ -338,8 +351,13 @@ public class VirtualView {
      *
      * @param event The LogoutEvent to be evaluated.
      */
-    public void evaluateEvent(LogoutEvent event){
-        listener.update(controller.logout(this));
+    public void evaluateEvent(LogoutEvent event) {
+        String username = controller.getVirtualViewUsername(this);
+        LogoutEvent response = controller.logout(this);
+        listener.update(response);
+        if (response.getFeedback().equals(Feedback.SUCCESS)) {
+            logger.log(Level.INFO, "User " + username + " logged out.");
+        }
     }
 
     /**
@@ -355,6 +373,8 @@ public class VirtualView {
             gameController = response.value();
             if(response.key().getFeedback() == Feedback.FAILURE)
                 listener.update(response.key());
+            else
+                logger.log(Level.INFO, "User " + controller.getVirtualViewUsername(this) + " reconnected to " + event.getGameID() + " game.");
         } else
             listener.update(new ReconnectToGameEvent(Feedback.FAILURE, null, "Some of the event's parameters are null."));
     }
@@ -366,9 +386,13 @@ public class VirtualView {
      */
     public void evaluateEvent(RegisterEvent event){
         Account account = event.getAccount();
-        if (account != null)
-            listener.update(controller.register(account));
-        else
+        if (account != null) {
+            RegisterEvent response = controller.register(account);
+            listener.update(response);
+            if (response.getFeedback().equals(Feedback.SUCCESS)) {
+                logger.log(Level.INFO, "New user " + account.getUsername() + " registered.");
+            }
+        } else
             listener.update(new RegisterEvent(Feedback.FAILURE, "Some of the event's parameters are null."));
     }
 
@@ -426,6 +450,12 @@ public class VirtualView {
      */
     public void evaluateEvent(ClientDisconnectedEvent event){
         disconnected = true;
+        String message;
+        String username =  controller.getVirtualViewUsername(this);
         controller.clientDisconnected(this);
+        if(!username.isEmpty())
+            message = "Client " + username + " disconnected.";
+        else message = "Unlogged client disconnected";
+        logger.log(Level.INFO, message);
     }
 }

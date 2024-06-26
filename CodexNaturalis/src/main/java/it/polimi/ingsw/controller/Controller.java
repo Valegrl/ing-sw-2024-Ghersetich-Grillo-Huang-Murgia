@@ -388,4 +388,14 @@ public class Controller {
     protected synchronized List<GameController> getGameControllers() {
         return this.gameControllers;
     }
+
+    /**
+     * Retrieves the username associated with the given {@link VirtualView}, if logged in.
+     * @param vv The {@link VirtualView} for which to get the username.
+     * @return The username associated, an empty string otherwise.
+     */
+    protected synchronized String getVirtualViewUsername(VirtualView vv) {
+        Account account = virtualViewAccounts.get(vv);
+        return (account != null) ? account.getUsername() : "";
+    }
 }
