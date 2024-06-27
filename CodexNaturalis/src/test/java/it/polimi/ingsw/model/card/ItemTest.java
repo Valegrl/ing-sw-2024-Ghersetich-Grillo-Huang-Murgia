@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.card;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.utils.AnsiCodes.*;
-import static it.polimi.ingsw.utils.AnsiCodes.RESET;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemTest {

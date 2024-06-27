@@ -20,7 +20,6 @@ import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.viewModel.ViewModel;
 
 import java.util.*;
-import java.util.Timer;
 
 /**
  * This class is responsible for managing the game logic.

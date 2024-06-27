@@ -23,5 +23,5 @@ public interface Client extends Remote {
      * Method to close the connection between the server and the client.
      * @throws RemoteException If a remote communication error occurs.
      */
-    default void closeConnection() throws RemoteException {};
+    default void closeConnection() throws RemoteException {}
 }

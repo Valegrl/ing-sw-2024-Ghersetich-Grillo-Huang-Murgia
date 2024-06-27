@@ -28,10 +28,7 @@ import it.polimi.ingsw.viewModel.ViewStartSetup;
 import it.polimi.ingsw.viewModel.immutableCard.ImmPlayableCard;
 import it.polimi.ingsw.viewModel.turnAction.draw.DrawCardData;
 import it.polimi.ingsw.viewModel.turnAction.place.PlaceCardData;
-import it.polimi.ingsw.viewModel.viewPlayer.AbstractViewPlayer;
 import it.polimi.ingsw.viewModel.viewPlayer.SelfViewPlayer;
-import it.polimi.ingsw.viewModel.viewPlayer.ViewPlayArea;
-import javafx.scene.image.Image;
 
 import java.rmi.RemoteException;
 import java.util.*;

@@ -19,5 +19,5 @@ public interface CardToString {
      */
     default String printCardBack() {
         return "";
-    };
+    }
 }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.viewModel.viewPlayer;
 
-import it.polimi.ingsw.model.player.PlayArea;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.AnsiCodes;
 

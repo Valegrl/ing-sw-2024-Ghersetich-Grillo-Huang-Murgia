@@ -38,7 +38,7 @@ class StartCardTest {
 
     @Test
     void testGetFrontCorners() {
-        Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};;
+        Item[] frontCorners = new Item[]{Item.PLANT, Item.ANIMAL, Item.FUNGI, Item.INSECT};
         assertArrayEquals(frontCorners, card.getFrontCorners());
     }
 

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.card;
 
 import it.polimi.ingsw.model.evaluator.Evaluator;
-import it.polimi.ingsw.model.player.PlayArea;
 
 import java.util.Map;
 

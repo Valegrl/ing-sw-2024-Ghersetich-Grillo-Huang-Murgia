@@ -71,31 +71,31 @@ public abstract class ViewState {
      * Returns whether the state is in the menu.
      * @return true if the state is in the menu, false otherwise.
      */
-    public boolean inMenu() {return false;};
+    public boolean inMenu() {return false;}
 
     /**
      * Returns whether the state is in the lobby.
      * @return true if the state is in the lobby, false otherwise.
      */
-    public boolean inLobby() {return false;};
+    public boolean inLobby() {return false;}
 
     /**
      * Returns whether the state is in the game.
      * @return true if the state is in the game, false otherwise.
      */
-    public boolean inGame() {return false;};
+    public boolean inGame() {return false;}
 
     /**
      * Returns whether the state is in the chat.
      * @return true if the state is in the chat, false otherwise.
      */
-    public boolean inChat() {return false;};
+    public boolean inChat() {return false;}
 
     /**
      * Returns the state of the view.
      * @return The state of the view.
      */
-    public ViewState getState() {return this;};
+    public ViewState getState() {return this;}
 
     /**
      * Prints the possible choices of input and reads an integer representing the user's choice.

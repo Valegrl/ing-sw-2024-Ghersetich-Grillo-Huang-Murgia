@@ -13,8 +13,6 @@ import it.polimi.ingsw.viewModel.viewPlayer.ViewPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Abstract class that represents the state of the game.

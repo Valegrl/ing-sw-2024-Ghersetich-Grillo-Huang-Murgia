@@ -871,9 +871,6 @@ public class InGameController extends FXMLController {
                     if (db.hasString()) {
                         success = true;
                         controller.newViewEvent(new PlaceCardEvent(selectedPlayableCard.getId(), coordinate, playFlipped));
-                        //For debugging purposes
-                        //System.out.println("Placed card: " + selectedPlayableCard.getId() + " " + coordinate.getX() + " " + coordinate.getY() );
-                        //return;
                     }
                     event.setDropCompleted(success);
                     event.consume();
