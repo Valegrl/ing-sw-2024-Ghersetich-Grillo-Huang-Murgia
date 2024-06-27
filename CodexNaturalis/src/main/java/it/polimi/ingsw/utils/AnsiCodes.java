@@ -1,5 +1,9 @@
 package it.polimi.ingsw.utils;
 
+/**
+ * This class provides ANSI escape codes for use in console output.
+ * These codes can be used to clear lines, move the cursor, and change the color and style of text.
+ */
 public class AnsiCodes {
     // ANSI escape codes for clearing lines
     public static final String CLEAR_LINE = "\u001B[2K";

@@ -6,6 +6,9 @@ import it.polimi.ingsw.eventUtils.event.fromView.Feedback;
 import it.polimi.ingsw.eventUtils.event.fromView.FeedbackEvent;
 import it.polimi.ingsw.view.controller.ViewEventReceiver;
 
+/**
+ * This class represents an event that requests the chat messages.
+ */
 public class GetChatMessagesEvent extends FeedbackEvent {
 
     private final static String id = EventID.GET_CHAT_MESSAGES.getID();

@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 
 import java.io.*;
 
+/**
+ * This class is a singleton that provides access to the configuration parameters of the application.
+ * The configuration parameters are loaded from a JSON file.
+ */
 public class JsonConfig {
     private static JsonConfig instance;
     private static final String DEFAULT_CONFIG_PATH = "it/polimi/ingsw/json/config.json";
@@ -25,9 +29,17 @@ public class JsonConfig {
     private int handResourceCards;
     private int handGoldCards;
 
-
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private JsonConfig() { }
 
+    /**
+     * Returns the singleton instance of this class.
+     * If the instance does not exist, it is created.
+     *
+     * @return The singleton instance of this class.
+     */
     public static synchronized JsonConfig getInstance() {
         if (instance == null) {
             instance = new JsonConfig();
@@ -35,6 +47,10 @@ public class JsonConfig {
         return instance;
     }
 
+    /**
+     * Loads the configuration parameters from a JSON file.
+     * If the file is not found, an IllegalArgumentException is thrown.
+     */
     public static synchronized void loadConfig() {
         InputStream resource = JsonConfig.class.getClassLoader().getResourceAsStream(DEFAULT_CONFIG_PATH);
         if (resource == null) {
