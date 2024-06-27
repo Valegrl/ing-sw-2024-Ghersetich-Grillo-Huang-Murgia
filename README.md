@@ -1,6 +1,6 @@
 # Codex Naturalis - Software Engineering Project
 
-<img src="src/main/resources/it/polimi/ingsw/images/background/CodexNaturalisBackground.jpg" width="200" align="right" />
+<img src="CodexNaturalis/src/main/resources/it/polimi/ingsw/images/background/CodexNaturalisBackground.jpg" width="200" align="right" />
 
 Codex Naturalis Game is the final test of **"Software Engineering"** course of **"Engineering of Computing Systems"** held at Politecnico di Milano (2023/2024).
 
