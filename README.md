@@ -6,6 +6,8 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 
 **Teacher**: San Pietro Pierluigi
 
+Grade: 30/30 cum laude
+
 &nbsp;
 ## The Team
 * [Pietro Ghersetich](https://github.com/PietroGhersetich) | pietro.ghersetich@mail.polimi.it
