@@ -6,14 +6,14 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 
 **Teacher**: San Pietro Pierluigi
 
-<br>
-
+&nbsp;
 ## The Team
 * [Pietro Ghersetich](https://github.com/PietroGhersetich) | pietro.ghersetich@mail.polimi.it
 * [Valerio Grillo](https://github.com/Valegrl) | valerio.grillo@mail.polimi.it
 * [Jerry Huang](https://github.com/polimiJHuang) | jerry.huang@mail.polimi.it
 * [Filippo Murgia](https://github.com/filippomurgia) | filippo.murgia@mail.polimi.it
 
+&nbsp;
 ## Implemented functionalities
 
 ### Main functionalities
@@ -37,12 +37,14 @@ Codex Naturalis Game is the final test of **"Software Engineering"** course of *
 
 ⛔ Not implemented &nbsp;&nbsp;&nbsp;&nbsp; ✅ Implemented
 
+&nbsp;
 ## Test cases
 | Package    | Class, %     | Method, %     | Line, %       | Branches, %   |
 |:-----------|:-------------|:--------------|:--------------|:--------------|
 | Model      | 100% (30/30) | 98% (147/150) | 97% (643/662) | 84% (311/370) |
 | Controller | 100% (3/3)   | 95% (91/95)   | 86% (674/777) | 70% (432/614) |
 
+&nbsp;
 ## Execution Instructions
 
 ### Requirements
@@ -72,3 +74,13 @@ Regardless of the operating system, you must have installed the following progra
         ```shell
         java -jar PSP51_Codex_Naturalis_Client.jar -self_ip
         ```
+
+&nbsp;
+### Copyright and License:
+
+Codex Naturalis is an intellectual property of Cranio Creations. All content, including but not limited to, game
+mechanics, design, artwork, and assets, is protected under copyright law.
+Unauthorized reproduction, distribution, or modification of this material is prohibited
+without prior written consent from Cranio Creations. This project is released under the  **[MIT License](LICENSE.txt)**.
+Please refer to the LICENSE file for detailed information regarding the terms and conditions of use, reproduction, and
+distribution of the game.
