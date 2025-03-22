@@ -78,11 +78,6 @@ Regardless of the operating system, you must have installed the following progra
         ```
 
 &nbsp;
-### Copyright and License:
+## ⚠️ Disclaimer:
 
-Codex Naturalis is an intellectual property of Cranio Creations. All content, including but not limited to, game
-mechanics, design, artwork, and assets, is protected under copyright law.
-Unauthorized reproduction, distribution, or modification of this material is prohibited
-without prior written consent from Cranio Creations. This project is released under the  **[MIT License](LICENSE.txt)**.
-Please refer to the LICENSE file for detailed information regarding the terms and conditions of use, reproduction, and
-distribution of the game.
+Codex Naturalis is a board game developed and published by Cranio Creations Srl. All graphical content of this project that are associated with the official board game have been used under Cranio Creations Srl. approval and only for educational purposes. Distribution, copying or reproduction of these contents and images out of this project is forbidden, as well as publishing these contents for other purposes. Commercial use of the aforementioned content is as well forbidden.
